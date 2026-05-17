@@ -5,7 +5,6 @@ import { useAppStore, setCurrentPage, type ToolPage, toolInfo } from '@/store/ap
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Progress } from '@/components/ui/progress'
@@ -339,7 +338,7 @@ export function UserPanel() {
                     </p>
                   </div>
                 ) : (
-                  <ScrollArea className="max-h-64">
+                  <div className="overflow-y-auto max-h-64">
                     <div className="space-y-2 pr-2">
                       {favorites.map((fav) => {
                         const info = toolInfo[fav.toolId]
@@ -376,7 +375,7 @@ export function UserPanel() {
                         )
                       })}
                     </div>
-                  </ScrollArea>
+                  </div>
                 )}
               </CardContent>
             </Card>
@@ -412,7 +411,7 @@ export function UserPanel() {
                     </p>
                   </div>
                 ) : (
-                  <ScrollArea className="max-h-64">
+                  <div className="overflow-y-auto max-h-64">
                     <div className="space-y-2 pr-2">
                       {calculationHistory.map((entry, idx) => (
                         <div key={entry.id}>
@@ -443,7 +442,7 @@ export function UserPanel() {
                         </div>
                       ))}
                     </div>
-                  </ScrollArea>
+                  </div>
                 )}
               </CardContent>
             </Card>

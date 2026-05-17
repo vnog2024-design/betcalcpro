@@ -8,7 +8,6 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import {
   Search, BarChart3, AlertTriangle, TrendingUp, Flame, Snowflake,
   Star, Copy, Check, RotateCcw
@@ -481,7 +480,7 @@ export function SequenceAnalyzer() {
                     )}
 
                     {/* Streak table */}
-                    <ScrollArea className="max-h-48 mt-4">
+                    <div className="overflow-y-auto max-h-48 mt-4">
                       <table className="w-full text-sm">
                         <thead>
                           <tr className="border-b border-border">
@@ -505,13 +504,13 @@ export function SequenceAnalyzer() {
                             ))}
                         </tbody>
                       </table>
-                    </ScrollArea>
+                    </div>
                   </CardContent>
                 </Card>
               </TabsContent>
 
               <TabsContent value="patterns" className="mt-4">
-                <Card className="border-border/50 bg-card/50 backdrop-blur overflow-hidden">
+                <Card className="border-border/50 bg-card/50 backdrop-blur">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-base flex items-center gap-2">
                       <Search className="h-4 w-4 text-neon" /> Detecção de Padrões
@@ -544,7 +543,7 @@ export function SequenceAnalyzer() {
                       {/* 3-length patterns */}
                       <div>
                         <h3 className="text-sm font-semibold text-muted-foreground mb-3">Padrões de 3 Resultados</h3>
-                        <ScrollArea className="max-h-64">
+                        <div className="overflow-y-auto max-h-64">
                           <div className="space-y-2">
                             {analysis.patternData3.slice(0, 15).map((p, i) => (
                               <div key={i} className="flex items-center justify-between p-2 rounded-lg bg-muted/20">
@@ -562,7 +561,7 @@ export function SequenceAnalyzer() {
                               </div>
                             ))}
                           </div>
-                        </ScrollArea>
+                        </div>
                       </div>
                     </div>
                   </CardContent>

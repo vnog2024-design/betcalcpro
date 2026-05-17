@@ -1,15 +1,14 @@
 'use client'
 
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import { useAppStore } from '@/store/app-store'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import {
-  Wallet, Target, Shield, Copy, Download, RotateCcw,
+  Wallet, Target, Shield, Copy, RotateCcw,
   Check, AlertTriangle, TrendingUp, TrendingDown, Info
 } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
@@ -33,9 +32,9 @@ interface RiskResult {
 }
 
 const RISK_LEVELS: RiskLevel[] = [
-  { name: 'Conservative', percent: 1, color: 'text-neon', borderColor: 'border-neon/20', bgColor: 'bg-neon/5' },
-  { name: 'Moderate', percent: 1.5, color: 'text-neon-blue', borderColor: 'border-neon-blue/20', bgColor: 'bg-neon-blue/5' },
-  { name: 'Aggressive', percent: 2, color: 'text-amber-500', borderColor: 'border-amber-500/20', bgColor: 'bg-amber-500/5' },
+  { name: 'Conservador', percent: 1, color: 'text-neon', borderColor: 'border-neon/20', bgColor: 'bg-neon/5' },
+  { name: 'Moderado', percent: 1.5, color: 'text-neon-blue', borderColor: 'border-neon-blue/20', bgColor: 'bg-neon-blue/5' },
+  { name: 'Agressivo', percent: 2, color: 'text-amber-500', borderColor: 'border-amber-500/20', bgColor: 'bg-amber-500/5' },
 ]
 
 export function BankrollCalculator() {
@@ -104,32 +103,32 @@ export function BankrollCalculator() {
   const handleCopy = () => {
     if (!calculations) return
     const text = [
-      `Bankroll Management Report`,
-      `Bankroll: R$ ${calculations.bankroll.toFixed(2)}`,
-      `Risk: ${calculations.riskPercent}%`,
+      `Relatório de Gerenciamento de Banca`,
+      `Banca: R$ ${calculations.bankroll.toFixed(2)}`,
+      `Risco: ${calculations.riskPercent}%`,
       ``,
       ...RISK_LEVELS.map((level, i) => {
         const r = calculations.results[i]
         return [
           `--- ${level.name} (${level.percent}%) ---`,
-          `Recommended Bet: R$ ${r.betSize.toFixed(2)}`,
-          `Max Daily Loss: R$ ${r.maxDailyLossAmount.toFixed(2)}`,
-          `Profit Target: R$ ${r.profitTarget.toFixed(2)}`,
-          `Bets Before Bust: ${r.betsBeforeBust}`,
+          `Aposta Recomendada: R$ ${r.betSize.toFixed(2)}`,
+          `Perda Máxima Diária: R$ ${r.maxDailyLossAmount.toFixed(2)}`,
+          `Lucro Alvo: R$ ${r.profitTarget.toFixed(2)}`,
+          `Apostas até Quebrar: ${r.betsBeforeBust}`,
         ].join('\n')
       }),
       ``,
-      `--- Custom (${calculations.riskPercent}%) ---`,
-      `Recommended Bet: R$ ${calculations.custom.betSize.toFixed(2)}`,
-      `Max Daily Loss: R$ ${calculations.custom.maxDailyLossAmount.toFixed(2)}`,
-      `Profit Target: R$ ${calculations.custom.profitTarget.toFixed(2)}`,
-      `Bets Before Bust: ${calculations.custom.betsBeforeBust}`,
+      `--- Personalizado (${calculations.riskPercent}%) ---`,
+      `Aposta Recomendada: R$ ${calculations.custom.betSize.toFixed(2)}`,
+      `Perda Máxima Diária: R$ ${calculations.custom.maxDailyLossAmount.toFixed(2)}`,
+      `Lucro Alvo: R$ ${calculations.custom.profitTarget.toFixed(2)}`,
+      `Apostas até Quebrar: ${calculations.custom.betsBeforeBust}`,
     ].join('\n')
 
     navigator.clipboard.writeText(text)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
-    toast({ title: 'Copied!', description: 'Bankroll report copied to clipboard' })
+    toast({ title: 'Copiado!', description: 'Relatório copiado para a área de transferência' })
   }
 
   const handleSave = () => {
@@ -146,7 +145,7 @@ export function BankrollCalculator() {
       timestamp: Date.now(),
     })
     unlockAchievement('first-calc')
-    toast({ title: 'Saved!', description: 'Calculation saved to history' })
+    toast({ title: 'Salvo!', description: 'Cálculo salvo no histórico' })
   }
 
   const handleReset = () => {
@@ -163,10 +162,10 @@ export function BankrollCalculator() {
         <div>
           <h1 className="text-2xl sm:text-3xl font-black flex items-center gap-2">
             <Wallet className="h-7 w-7 text-neon" />
-            Bankroll <span className="gradient-neon-text">Management</span>
+            Gerenciamento de <span className="gradient-neon-text">Banca</span>
           </h1>
           <p className="text-base text-muted-foreground mt-1">
-            Calculate your optimal bet size and manage risk like a professional
+            Calcule o tamanho ideal da aposta e gerencie o risco como um profissional
           </p>
         </div>
       </div>
@@ -177,12 +176,12 @@ export function BankrollCalculator() {
           <Card className="border-border/50 bg-card/50 backdrop-blur">
             <CardHeader className="pb-3">
               <CardTitle className="text-base font-semibold flex items-center gap-2">
-                <Target className="h-4 w-4 text-neon" /> Configuration
+                <Target className="h-4 w-4 text-neon" /> Configurações
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label className="text-sm text-muted-foreground">Current Bankroll (R$)</Label>
+                <Label className="text-sm text-muted-foreground">Banca Atual (R$)</Label>
                 <Input
                   type="number"
                   value={bankroll}
@@ -194,7 +193,7 @@ export function BankrollCalculator() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-sm text-muted-foreground">Risk Percentage (%)</Label>
+                <Label className="text-sm text-muted-foreground">Percentual de Risco (%)</Label>
                 <Input
                   type="number"
                   value={riskPercent}
@@ -207,7 +206,7 @@ export function BankrollCalculator() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-sm text-muted-foreground">Target Profit (%)</Label>
+                <Label className="text-sm text-muted-foreground">Lucro Alvo (%)</Label>
                 <Input
                   type="number"
                   value={targetProfit}
@@ -220,7 +219,7 @@ export function BankrollCalculator() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-sm text-muted-foreground">Max Daily Loss (%)</Label>
+                <Label className="text-sm text-muted-foreground">Perda Máxima Diária (%)</Label>
                 <Input
                   type="number"
                   value={maxDailyLoss}
@@ -235,8 +234,8 @@ export function BankrollCalculator() {
               <div className="p-3 rounded-lg bg-muted/20 border border-border/50">
                 <p className="text-[10px] text-muted-foreground">
                   <Info className="h-3 w-3 inline mr-1" />
-                  The 1-2% rule recommends betting only 1-2% of your total bankroll per bet.
-                  This protects against downswings and ensures long-term sustainability.
+                  A regra de 1-2% recomenda apostar apenas 1-2% da banca total por aposta.
+                  Isso protege contra sequências de perdas e garante sustentabilidade a longo prazo.
                 </p>
               </div>
             </CardContent>
@@ -248,7 +247,7 @@ export function BankrollCalculator() {
               <Card className="border-neon/20 bg-neon/5">
                 <CardContent className="p-3 text-center">
                   <Wallet className="h-4 w-4 text-neon mx-auto mb-1" />
-                  <p className="text-[10px] text-muted-foreground">Recommended Bet ({calculations.riskPercent}%)</p>
+                  <p className="text-[10px] text-muted-foreground">Aposta Recomendada ({calculations.riskPercent}%)</p>
                   <p className="text-xl font-black gradient-neon-text">
                     R$ {calculations.custom.betSize.toFixed(2)}
                   </p>
@@ -257,7 +256,7 @@ export function BankrollCalculator() {
               <Card className="border-red-500/20 bg-red-500/5">
                 <CardContent className="p-3 text-center">
                   <TrendingDown className="h-4 w-4 text-red-500 mx-auto mb-1" />
-                  <p className="text-[10px] text-muted-foreground">Max Daily Loss</p>
+                  <p className="text-[10px] text-muted-foreground">Perda Máxima Diária</p>
                   <p className="text-xl font-black text-red-400">
                     R$ {calculations.custom.maxDailyLossAmount.toFixed(2)}
                   </p>
@@ -266,7 +265,7 @@ export function BankrollCalculator() {
               <Card className="border-neon-blue/20 bg-neon-blue/5">
                 <CardContent className="p-3 text-center">
                   <TrendingUp className="h-4 w-4 text-neon-blue mx-auto mb-1" />
-                  <p className="text-[10px] text-muted-foreground">Daily Profit Target</p>
+                  <p className="text-[10px] text-muted-foreground">Lucro Diário Alvo</p>
                   <p className="text-xl font-black neon-text-blue">
                     R$ {calculations.custom.profitTarget.toFixed(2)}
                   </p>
@@ -279,10 +278,10 @@ export function BankrollCalculator() {
           <div className="grid grid-cols-2 gap-2">
             <Button onClick={handleCopy} variant="outline" size="sm" className="border-border text-sm">
               {copied ? <Check className="h-3 w-3 mr-1" /> : <Copy className="h-3 w-3 mr-1" />}
-              {copied ? 'Copied!' : 'Copy'}
+              {copied ? 'Copiado!' : 'Copiar'}
             </Button>
             <Button onClick={handleReset} variant="outline" size="sm" className="border-border text-sm">
-              <RotateCcw className="h-3 w-3 mr-1" /> Reset
+              <RotateCcw className="h-3 w-3 mr-1" /> Limpar
             </Button>
           </div>
         </div>
@@ -305,25 +304,25 @@ export function BankrollCalculator() {
                     </CardHeader>
                     <CardContent className="space-y-2">
                       <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">Bet Size</span>
+                        <span className="text-muted-foreground">Tamanho da Aposta</span>
                         <span className={`font-mono font-bold ${result.level.color}`}>
                           R$ {result.betSize.toFixed(2)}
                         </span>
                       </div>
                       <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">Max Daily Loss</span>
+                        <span className="text-muted-foreground">Perda Máxima Diária</span>
                         <span className="font-mono text-red-400">
                           R$ {result.maxDailyLossAmount.toFixed(2)}
                         </span>
                       </div>
                       <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">Profit Target</span>
+                        <span className="text-muted-foreground">Lucro Alvo</span>
                         <span className="font-mono text-neon-blue">
                           R$ {result.profitTarget.toFixed(2)}
                         </span>
                       </div>
                       <div className="flex justify-between text-sm border-t border-border/30 pt-2">
-                        <span className="text-muted-foreground">Bets Before Bust</span>
+                        <span className="text-muted-foreground">Apostas até Quebrar</span>
                         <span className={`font-mono font-bold ${result.betsBeforeBust >= 10 ? 'text-neon' : result.betsBeforeBust >= 5 ? 'text-amber-500' : 'text-red-400'}`}>
                           {result.betsBeforeBust}
                         </span>
@@ -334,23 +333,23 @@ export function BankrollCalculator() {
               </div>
 
               {/* Detailed Comparison Table */}
-              <Card className="border-border/50 bg-card/50 backdrop-blur overflow-hidden">
+              <Card className="border-border/50 bg-card/50 backdrop-blur">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-base font-semibold flex items-center gap-2">
-                    <Target className="h-4 w-4 text-neon" /> Risk Level Comparison
+                    <Target className="h-4 w-4 text-neon" /> Comparação de Níveis de Risco
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <ScrollArea className="max-h-[400px]">
+                  <div className="overflow-y-auto max-h-[400px]">
                     <table className="w-full text-sm">
                       <thead className="sticky top-0 bg-card">
                         <tr className="border-b border-border">
-                          <th className="text-left p-3 font-semibold text-muted-foreground">Risk Level</th>
-                          <th className="text-right p-3 font-semibold text-muted-foreground">Bet Size</th>
-                          <th className="text-right p-3 font-semibold text-muted-foreground">Max Daily Loss</th>
-                          <th className="text-right p-3 font-semibold text-muted-foreground">Profit Target</th>
-                          <th className="text-right p-3 font-semibold text-muted-foreground">Bets Before Bust</th>
-                          <th className="text-center p-3 font-semibold text-muted-foreground">Risk Rating</th>
+                          <th className="text-left p-3 font-semibold text-muted-foreground">Nível de Risco</th>
+                          <th className="text-right p-3 font-semibold text-muted-foreground">Tamanho da Aposta</th>
+                          <th className="text-right p-3 font-semibold text-muted-foreground">Perda Máxima Diária</th>
+                          <th className="text-right p-3 font-semibold text-muted-foreground">Lucro Alvo</th>
+                          <th className="text-right p-3 font-semibold text-muted-foreground">Apostas até Quebrar</th>
+                          <th className="text-center p-3 font-semibold text-muted-foreground">Classificação</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -391,7 +390,7 @@ export function BankrollCalculator() {
                                   ? 'bg-neon-blue/10 text-neon-blue border-0'
                                   : 'bg-amber-500/10 text-amber-500 border-0'
                               }`}>
-                                {i === 0 ? 'Low' : i === 1 ? 'Medium' : 'High'}
+                                {i === 0 ? 'Baixo' : i === 1 ? 'Médio' : 'Alto'}
                               </Badge>
                             </td>
                           </tr>
@@ -401,7 +400,7 @@ export function BankrollCalculator() {
                           <td className="p-3 font-bold">
                             <div className="flex items-center gap-2">
                               <Target className="h-3 w-3 text-neon" />
-                              <span className="gradient-neon-text">Custom</span>
+                              <span className="gradient-neon-text">Personalizado</span>
                               <Badge className="bg-neon/10 text-neon text-[10px] border-0">{calculations.riskPercent}%</Badge>
                             </div>
                           </td>
@@ -435,31 +434,31 @@ export function BankrollCalculator() {
                                 ? 'bg-amber-500/10 text-amber-500 border-0'
                                 : 'bg-red-500/10 text-red-400 border-0'
                             }`}>
-                              {calculations.riskPercent <= 1 ? 'Low' : calculations.riskPercent <= 1.5 ? 'Medium' : calculations.riskPercent <= 2 ? 'High' : 'Danger'}
+                              {calculations.riskPercent <= 1 ? 'Baixo' : calculations.riskPercent <= 1.5 ? 'Médio' : calculations.riskPercent <= 2 ? 'Alto' : 'Perigo'}
                             </Badge>
                           </td>
                         </tr>
                       </tbody>
                     </table>
-                  </ScrollArea>
+                  </div>
                 </CardContent>
               </Card>
 
               {/* Bankroll Survival Analysis */}
-              <Card className="border-border/50 bg-card/50 backdrop-blur overflow-hidden">
+              <Card className="border-border/50 bg-card/50 backdrop-blur">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-base font-semibold flex items-center gap-2">
-                    <Wallet className="h-4 w-4 text-neon-blue" /> Bankroll Survival Analysis
+                    <Wallet className="h-4 w-4 text-neon-blue" /> Análise de Sobrevivência da Banca
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <ScrollArea className="max-h-[300px]">
+                  <div className="overflow-y-auto max-h-[300px]">
                     <table className="w-full text-sm">
                       <thead className="sticky top-0 bg-card">
                         <tr className="border-b border-border">
-                          <th className="text-left p-3 font-semibold text-muted-foreground">Consecutive Losses</th>
-                          <th className="text-right p-3 font-semibold text-muted-foreground">Bankroll Remaining</th>
-                          <th className="text-right p-3 font-semibold text-muted-foreground">Loss Amount</th>
+                          <th className="text-left p-3 font-semibold text-muted-foreground">Perdas Consecutivas</th>
+                          <th className="text-right p-3 font-semibold text-muted-foreground">Banca Restante</th>
+                          <th className="text-right p-3 font-semibold text-muted-foreground">Valor Perdido</th>
                           <th className="text-center p-3 font-semibold text-muted-foreground">Status</th>
                         </tr>
                       </thead>
@@ -482,7 +481,7 @@ export function BankrollCalculator() {
                                   : 'hover:bg-muted/20'
                               }`}>
                                 <td className="p-3 font-mono font-bold">
-                                  {i} {i === 1 ? 'loss' : 'losses'}
+                                  {i} {i === 1 ? 'perda' : 'perdas'}
                                 </td>
                                 <td className={`text-right p-3 font-mono font-bold ${
                                   remaining <= 0
@@ -504,7 +503,7 @@ export function BankrollCalculator() {
                                       ? 'bg-amber-500/10 text-amber-500 border-0'
                                       : 'bg-neon/10 text-neon border-0'
                                   }`}>
-                                    {remaining <= 0 ? 'BUST' : lossPercent >= 50 ? 'DANGER' : 'SAFE'}
+                                    {remaining <= 0 ? 'QUEBRA' : lossPercent >= 50 ? 'PERIGO' : 'SEGURO'}
                                   </Badge>
                                 </td>
                               </tr>
@@ -515,7 +514,7 @@ export function BankrollCalculator() {
                         })()}
                       </tbody>
                     </table>
-                  </ScrollArea>
+                  </div>
                 </CardContent>
               </Card>
             </>
@@ -528,11 +527,11 @@ export function BankrollCalculator() {
             <CardContent className="p-4 flex gap-3">
               <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-semibold text-amber-500">Warning</p>
+                <p className="text-sm font-semibold text-amber-500">Aviso</p>
                 <p className="text-sm text-muted-foreground leading-relaxed mt-1">
-                  No betting strategy can guarantee profits. The 1-2% rule is a risk management guideline,
-                  not a profit guarantee. Always gamble responsibly and never bet more than you can afford to lose.
-                  Past results do not guarantee future outcomes.
+                  Nenhuma estratégia de apostas pode garantir lucros. A regra de 1-2% é uma orientação
+                  de gerenciamento de risco, não uma garantia de lucro. Sempre aposte com responsabilidade
+                  e nunca aposte mais do que pode perder. Resultados passados não garantem resultados futuros.
                 </p>
               </div>
             </CardContent>

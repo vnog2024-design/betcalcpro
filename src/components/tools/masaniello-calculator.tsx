@@ -7,7 +7,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import {
   Calculator, Target, Copy, Download, RotateCcw,
   Check, AlertTriangle, TrendingUp, TrendingDown, Info, Shield
@@ -183,23 +182,23 @@ export function MasanielloCalculator() {
   const handleCopy = () => {
     if (!calculations) return
     const text = [
-      `Masaniello Calculator Report`,
-      `Total Events: ${totalEvents} | Hits Needed: ${eventsToHit} | Odds: ${odds}`,
-      `Bankroll: R$ ${bankroll}`,
+      `Relatório Masaniello`,
+      `Total de Eventos: ${totalEvents} | Acertos Necessários: ${eventsToHit} | Odds: ${odds}`,
+      `Banca: R$ ${bankroll}`,
       ``,
       ...calculations.events.map((e) =>
-        `Event ${e.event}: Bet R$${e.betAmount.toFixed(2)} | If Win: R$${e.ifWinBankroll.toFixed(2)} | If Lose: R$${e.ifLoseBankroll.toFixed(2)}`
+        `Evento ${e.event}: Aposta R$${e.betAmount.toFixed(2)} | Se Ganhar: R$${e.ifWinBankroll.toFixed(2)} | Se Perder: R$${e.ifLoseBankroll.toFixed(2)}`
       ),
       ``,
-      `Best Case Final: R$ ${calculations.bestCase.finalBankroll.toFixed(2)}`,
-      `Worst Case Final: R$ ${calculations.worstCase.finalBankroll.toFixed(2)}`,
-      `Expected Final (M hits): R$ ${calculations.targetCase.finalBankroll.toFixed(2)}`,
+      `Melhor Cenário Final: R$ ${calculations.bestCase.finalBankroll.toFixed(2)}`,
+      `Pior Cenário Final: R$ ${calculations.worstCase.finalBankroll.toFixed(2)}`,
+      `Final Esperado (M acertos): R$ ${calculations.targetCase.finalBankroll.toFixed(2)}`,
     ].join('\n')
 
     navigator.clipboard.writeText(text)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
-    toast({ title: 'Copied!', description: 'Masaniello report copied to clipboard' })
+    toast({ title: 'Copiado!', description: 'Relatório Masaniello copiado para a área de transferência' })
   }
 
   const handleSave = () => {
@@ -216,7 +215,7 @@ export function MasanielloCalculator() {
       timestamp: Date.now(),
     })
     unlockAchievement('first-calc')
-    toast({ title: 'Saved!', description: 'Calculation saved to history' })
+    toast({ title: 'Salvo!', description: 'Cálculo salvo no histórico' })
   }
 
   const handleReset = () => {
@@ -234,10 +233,10 @@ export function MasanielloCalculator() {
         <div>
           <h1 className="text-2xl sm:text-3xl font-black flex items-center gap-2">
             <Calculator className="h-7 w-7 text-neon" />
-            Masaniello <span className="gradient-neon-text">Calculator</span>
+            Masaniello <span className="gradient-neon-text">Calculadora</span>
           </h1>
           <p className="text-base text-muted-foreground mt-1">
-            Distribute risk across events with the Masaniello progression system
+            Distribua o risco entre eventos com o sistema de progressão Masaniello
           </p>
         </div>
       </div>
@@ -248,12 +247,12 @@ export function MasanielloCalculator() {
           <Card className="border-border/50 bg-card/50 backdrop-blur">
             <CardHeader className="pb-3">
               <CardTitle className="text-base font-semibold flex items-center gap-2">
-                <Target className="h-4 w-4 text-neon" /> Configuration
+                <Target className="h-4 w-4 text-neon" /> Configurações
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label className="text-sm text-muted-foreground">Total Events (N)</Label>
+                <Label className="text-sm text-muted-foreground">Total de Eventos (N)</Label>
                 <Input
                   type="number"
                   value={totalEvents}
@@ -265,7 +264,7 @@ export function MasanielloCalculator() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-sm text-muted-foreground">Events to Hit (M)</Label>
+                <Label className="text-sm text-muted-foreground">Eventos a Acertar (M)</Label>
                 <Input
                   type="number"
                   value={eventsToHit}
@@ -277,7 +276,7 @@ export function MasanielloCalculator() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-sm text-muted-foreground">Odds (Decimal)</Label>
+                <Label className="text-sm text-muted-foreground">Odds (decimal)</Label>
                 <Input
                   type="number"
                   value={odds}
@@ -289,7 +288,7 @@ export function MasanielloCalculator() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-sm text-muted-foreground">Unit Stake (R$)</Label>
+                <Label className="text-sm text-muted-foreground">Unidade (R$)</Label>
                 <Input
                   type="number"
                   value={unitStake}
@@ -301,7 +300,7 @@ export function MasanielloCalculator() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-sm text-muted-foreground">Bankroll (R$)</Label>
+                <Label className="text-sm text-muted-foreground">Banca Inicial (R$)</Label>
                 <Input
                   type="number"
                   value={bankroll}
@@ -315,9 +314,9 @@ export function MasanielloCalculator() {
               <div className="p-3 rounded-lg bg-muted/20 border border-border/50">
                 <p className="text-[10px] text-muted-foreground">
                   <Info className="h-3 w-3 inline mr-1" />
-                  The Masaniello system distributes risk across N events where you need M correct hits.
-                  It calculates the optimal stake for each event based on remaining events and hits needed,
-                  using the formula: Stake = Bankroll × (M/N) / (Odds - 1).
+                  O sistema Masaniello distribui o risco entre N eventos onde você precisa de M acertos.
+                  Ele calcula a aposta ideal para cada evento com base nos eventos restantes e acertos necessários,
+                  usando a fórmula: Aposta = Banca × (M/N) / (Odds - 1).
                 </p>
               </div>
             </CardContent>
@@ -329,7 +328,7 @@ export function MasanielloCalculator() {
               <Card className="border-neon/20 bg-neon/5">
                 <CardContent className="p-3 text-center">
                   <TrendingUp className="h-4 w-4 text-neon mx-auto mb-1" />
-                  <p className="text-[10px] text-muted-foreground">Best Case (All Wins)</p>
+                  <p className="text-[10px] text-muted-foreground">Melhor Cenário (Todos Ganhos)</p>
                   <p className="text-xl font-black gradient-neon-text">
                     R$ {calculations.bestCase.finalBankroll.toFixed(2)}
                   </p>
@@ -338,7 +337,7 @@ export function MasanielloCalculator() {
               <Card className="border-neon-blue/20 bg-neon-blue/5">
                 <CardContent className="p-3 text-center">
                   <Target className="h-4 w-4 text-neon-blue mx-auto mb-1" />
-                  <p className="text-[10px] text-muted-foreground">Target (M Hits)</p>
+                  <p className="text-[10px] text-muted-foreground">Alvo (M Acertos)</p>
                   <p className="text-xl font-black neon-text-blue">
                     R$ {calculations.targetCase.finalBankroll.toFixed(2)}
                   </p>
@@ -347,7 +346,7 @@ export function MasanielloCalculator() {
               <Card className="border-red-500/20 bg-red-500/5">
                 <CardContent className="p-3 text-center">
                   <TrendingDown className="h-4 w-4 text-red-500 mx-auto mb-1" />
-                  <p className="text-[10px] text-muted-foreground">Worst Case (All Losses)</p>
+                  <p className="text-[10px] text-muted-foreground">Pior Cenário (Todas Perdas)</p>
                   <p className="text-xl font-black text-red-400">
                     R$ {calculations.worstCase.finalBankroll.toFixed(2)}
                   </p>
@@ -359,11 +358,11 @@ export function MasanielloCalculator() {
                 <CardContent className="p-3">
                   <div className="flex items-center gap-2 mb-2">
                     <Shield className="h-4 w-4 text-neon-blue" />
-                    <span className="text-sm font-semibold">Required Hit Rate</span>
+                    <span className="text-sm font-semibold">Taxa de Acerto Necessária</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground">
-                      {eventsToHit}/{totalEvents} events
+                      {eventsToHit}/{totalEvents} eventos
                     </span>
                     <Badge className="bg-neon-blue/10 text-neon-blue border-0">
                       {((parseInt(eventsToHit) / parseInt(totalEvents)) * 100).toFixed(1)}%
@@ -371,7 +370,7 @@ export function MasanielloCalculator() {
                   </div>
                   <div className="flex items-center justify-between mt-1">
                     <span className="text-sm text-muted-foreground">
-                      Break-even hit rate at {odds}x odds
+                      Taxa de empate com odds de {odds}x
                     </span>
                     <Badge className="bg-amber-500/10 text-amber-500 border-0">
                       {((1 / parseFloat(odds)) * 100).toFixed(1)}%
@@ -386,10 +385,10 @@ export function MasanielloCalculator() {
           <div className="grid grid-cols-2 gap-2">
             <Button onClick={handleCopy} variant="outline" size="sm" className="border-border text-sm">
               {copied ? <Check className="h-3 w-3 mr-1" /> : <Copy className="h-3 w-3 mr-1" />}
-              {copied ? 'Copied!' : 'Copy'}
+              {copied ? 'Copiado!' : 'Copiar'}
             </Button>
             <Button onClick={handleReset} variant="outline" size="sm" className="border-border text-sm">
-              <RotateCcw className="h-3 w-3 mr-1" /> Reset
+              <RotateCcw className="h-3 w-3 mr-1" /> Resetar
             </Button>
           </div>
         </div>
@@ -401,7 +400,7 @@ export function MasanielloCalculator() {
             <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardHeader className="pb-2">
                 <CardTitle className="text-base font-semibold flex items-center gap-2">
-                  <TrendingUp className="h-4 w-4 text-neon" /> Bankroll Scenario Analysis
+                  <TrendingUp className="h-4 w-4 text-neon" /> Análise de Cenários da Banca
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -415,9 +414,9 @@ export function MasanielloCalculator() {
                       labelStyle={{ color: "var(--foreground)" }}
                       formatter={(value: number, name: string) => {
                         const labels: Record<string, string> = {
-                          ifWin: 'If Win',
-                          ifLose: 'If Lose',
-                          bet: 'Bet Amount',
+                          ifWin: 'Se Ganhar',
+                          ifLose: 'Se Perder',
+                          bet: 'Valor da Aposta',
                         }
                         return [`R$ ${value.toFixed(2)}`, labels[name] || name]
                       }}
@@ -452,15 +451,15 @@ export function MasanielloCalculator() {
                 <div className="flex justify-center gap-4 mt-2">
                   <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
                     <div className="h-2 w-2 rounded-full bg-neon" />
-                    If Win Path
+                    Caminho Se Ganhar
                   </div>
                   <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
                     <div className="h-2 w-2 rounded-full bg-red-500" />
-                    If Lose Path
+                    Caminho Se Perder
                   </div>
                   <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
                     <div className="h-2 w-2 rounded-full bg-neon-blue" />
-                    Bet Amount
+                    Valor da Aposta
                   </div>
                 </div>
               </CardContent>
@@ -472,7 +471,7 @@ export function MasanielloCalculator() {
             <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardHeader className="pb-2">
                 <CardTitle className="text-base font-semibold flex items-center gap-2">
-                  <Calculator className="h-4 w-4 text-neon-blue" /> Bet Distribution per Event
+                  <Calculator className="h-4 w-4 text-neon-blue" /> Distribuição de Apostas por Evento
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -484,7 +483,7 @@ export function MasanielloCalculator() {
                     <Tooltip
                       contentStyle={{ background: "var(--card)", border: '1px solid var(--border)', borderRadius: '8px', fontSize: 12 }}
                       labelStyle={{ color: "var(--foreground)" }}
-                      formatter={(value: number) => [`R$ ${value.toFixed(2)}`, 'Bet']}
+                      formatter={(value: number) => [`R$ ${value.toFixed(2)}`, 'Aposta']}
                     />
                     <Bar dataKey="bet" fill="rgba(0, 212, 255, 0.6)" stroke="#00d4ff" radius={[4, 4, 0, 0]} />
                   </BarChart>
@@ -495,24 +494,24 @@ export function MasanielloCalculator() {
 
           {/* Detailed Table */}
           {calculations && (
-            <Card className="border-border/50 bg-card/50 backdrop-blur overflow-hidden">
+            <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardHeader className="pb-2">
                 <CardTitle className="text-base font-semibold flex items-center gap-2">
-                  <Target className="h-4 w-4 text-neon-blue" /> Event Progression Table
+                  <Target className="h-4 w-4 text-neon-blue" /> Tabela de Progressão
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0">
-                <ScrollArea className="max-h-[500px]">
+                <div className="overflow-y-auto max-h-[500px]">
                   <table className="w-full text-sm">
                     <thead className="sticky top-0 bg-card">
                       <tr className="border-b border-border">
-                        <th className="text-left p-3 font-semibold text-muted-foreground">Event</th>
-                        <th className="text-center p-3 font-semibold text-muted-foreground">Remaining</th>
-                        <th className="text-right p-3 font-semibold text-muted-foreground">Bet Amount</th>
-                        <th className="text-right p-3 font-semibold text-muted-foreground">If Win</th>
-                        <th className="text-right p-3 font-semibold text-muted-foreground">If Lose</th>
-                        <th className="text-right p-3 font-semibold text-muted-foreground">Bankroll (Win)</th>
-                        <th className="text-right p-3 font-semibold text-muted-foreground">Bankroll (Lose)</th>
+                        <th className="text-left p-3 font-semibold text-muted-foreground">Evento</th>
+                        <th className="text-center p-3 font-semibold text-muted-foreground">Restante</th>
+                        <th className="text-right p-3 font-semibold text-muted-foreground">Valor da Aposta</th>
+                        <th className="text-right p-3 font-semibold text-muted-foreground">Se Ganhar</th>
+                        <th className="text-right p-3 font-semibold text-muted-foreground">Se Perder</th>
+                        <th className="text-right p-3 font-semibold text-muted-foreground">Banca (Ganho)</th>
+                        <th className="text-right p-3 font-semibold text-muted-foreground">Banca (Perda)</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -523,15 +522,15 @@ export function MasanielloCalculator() {
                         >
                           <td className="p-3 font-bold">
                             {event.event === 1 ? (
-                              <Badge className="bg-neon/10 text-neon border-0 text-[10px]">Start</Badge>
+                              <Badge className="bg-neon/10 text-neon border-0 text-[10px]">Início</Badge>
                             ) : (
-                              <span>Event {event.event}</span>
+                              <span>Evento {event.event}</span>
                             )}
                           </td>
                           <td className="text-center p-3">
                             <div className="flex flex-col items-center gap-0.5">
                               <Badge className="bg-neon-blue/10 text-neon-blue text-[10px] border-0">
-                                {event.remainingHits}/{event.remainingEvents} hits
+                                {event.remainingHits}/{event.remainingEvents} acertos
                               </Badge>
                             </div>
                           </td>
@@ -554,7 +553,7 @@ export function MasanielloCalculator() {
                       ))}
                     </tbody>
                   </table>
-                </ScrollArea>
+                </div>
               </CardContent>
             </Card>
           )}
@@ -564,31 +563,31 @@ export function MasanielloCalculator() {
             <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardHeader className="pb-2">
                 <CardTitle className="text-base font-semibold flex items-center gap-2">
-                  <Shield className="h-4 w-4 text-amber-500" /> Probability Analysis
+                  <Shield className="h-4 w-4 text-amber-500" /> Análise de Probabilidade
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   <div className="text-center p-3 rounded-lg bg-muted/20 border border-border/30">
-                    <p className="text-[10px] text-muted-foreground">Total Combinations</p>
+                    <p className="text-[10px] text-muted-foreground">Combinações Totais</p>
                     <p className="text-base font-bold font-mono">
                       {combinations(parseInt(totalEvents), parseInt(eventsToHit)).toLocaleString()}
                     </p>
                   </div>
                   <div className="text-center p-3 rounded-lg bg-muted/20 border border-border/30">
-                    <p className="text-[10px] text-muted-foreground">Win Probability</p>
+                    <p className="text-[10px] text-muted-foreground">Probabilidade de Ganhar</p>
                     <p className="text-base font-bold font-mono text-neon">
                       {((1 / parseFloat(odds)) * 100).toFixed(1)}%
                     </p>
                   </div>
                   <div className="text-center p-3 rounded-lg bg-muted/20 border border-border/30">
-                    <p className="text-[10px] text-muted-foreground">Hit Rate Required</p>
+                    <p className="text-[10px] text-muted-foreground">Taxa de Acerto Necessária</p>
                     <p className="text-base font-bold font-mono text-neon-blue">
                       {((parseInt(eventsToHit) / parseInt(totalEvents)) * 100).toFixed(1)}%
                     </p>
                   </div>
                   <div className="text-center p-3 rounded-lg bg-muted/20 border border-border/30">
-                    <p className="text-[10px] text-muted-foreground">Edge</p>
+                    <p className="text-[10px] text-muted-foreground">Vantagem</p>
                     <p className={`text-base font-bold font-mono ${
                       calculations.expectedProfit > 0 ? 'text-neon' : 'text-red-400'
                     }`}>
@@ -607,12 +606,12 @@ export function MasanielloCalculator() {
             <CardContent className="p-4 flex gap-3">
               <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-semibold text-amber-500">Warning</p>
+                <p className="text-sm font-semibold text-amber-500">Aviso</p>
                 <p className="text-sm text-muted-foreground leading-relaxed mt-1">
-                  The Masaniello system distributes risk but does not eliminate it. If you fail to hit the
-                  required number of events, losses can still be significant. The system is designed for
-                  scenarios where you have a statistical edge. Always ensure the required hit rate is achievable
-                  given the odds, and never risk more than you can afford to lose.
+                  O sistema Masaniello distribui o risco, mas não o elimina. Se você não atingir o
+                  número necessário de eventos, as perdas ainda podem ser significativas. O sistema é projetado para
+                  cenários onde você tem uma vantagem estatística. Sempre verifique se a taxa de acerto necessária é alcançável
+                  considerando as odds, e nunca arrisque mais do que pode se dar ao luxo de perder.
                 </p>
               </div>
             </CardContent>

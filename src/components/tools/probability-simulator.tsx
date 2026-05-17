@@ -8,7 +8,6 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import {
   Percent, BarChart3, AlertTriangle, TrendingUp, Calculator,
   Star, Copy, Check, RotateCcw
@@ -336,14 +335,14 @@ export function ProbabilitySimulator() {
           </div>
 
           {/* Theoretical Probabilities */}
-          <Card className="border-border/50 bg-card/50 backdrop-blur overflow-hidden">
+          <Card className="border-border/50 bg-card/50 backdrop-blur">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-semibold flex items-center gap-2">
                 <TrendingUp className="h-4 w-4 text-neon" /> Probabilidades Teóricas
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <ScrollArea className="max-h-64">
+              <div className="overflow-y-auto max-h-64">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-border">
@@ -364,7 +363,7 @@ export function ProbabilitySimulator() {
                     ))}
                   </tbody>
                 </table>
-              </ScrollArea>
+              </div>
             </CardContent>
           </Card>
 

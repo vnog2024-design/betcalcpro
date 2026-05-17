@@ -7,7 +7,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
   Shield, Target, AlertTriangle, Copy, Download, Check, Info, ChevronDown, ChevronUp, RotateCcw,
@@ -188,7 +187,7 @@ export function RecoveryCalculator() {
           s.steps
             .map(
               (st) =>
-                `Step ${st.step}: Aposta R$${st.betAmount.toFixed(2)} | Se Ganhar R$${st.bankrollAfterWin.toFixed(2)} | Se Perder R$${st.bankrollAfterLoss.toFixed(2)}`
+                `Etapa ${st.step}: Aposta R$${st.betAmount.toFixed(2)} | Se Ganhar R$${st.bankrollAfterWin.toFixed(2)} | Se Perder R$${st.bankrollAfterLoss.toFixed(2)}`
             )
             .join('\n')
       )
@@ -410,7 +409,7 @@ export function RecoveryCalculator() {
                           <span className="font-bold font-mono">R$ {s.totalWagered.toFixed(2)}</span>
                         </div>
                         <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">Max Drawdown</span>
+                          <span className="text-muted-foreground">Drawdown Máximo</span>
                           <span className="font-bold font-mono text-red-400">R$ {s.maxDrawdown.toFixed(2)}</span>
                         </div>
                       </div>
@@ -420,14 +419,14 @@ export function RecoveryCalculator() {
               </div>
 
               {/* Comparison Table */}
-              <Card className="border-border/50 bg-card/50 backdrop-blur overflow-hidden">
+              <Card className="border-border/50 bg-card/50 backdrop-blur">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-base font-semibold flex items-center gap-2">
                     <Target className="h-4 w-4 text-neon" /> Comparação de Estratégias
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <ScrollArea className="max-h-[400px]">
+                  <div className="overflow-y-auto max-h-[400px]">
                     <table className="w-full text-sm">
                       <thead className="sticky top-0 bg-card">
                         <tr className="border-b border-border">
@@ -451,7 +450,7 @@ export function RecoveryCalculator() {
                           <td className="text-center p-3 font-mono">R$ {strategies[2]?.totalWagered.toFixed(2)}</td>
                         </tr>
                         <tr className="border-b border-border/30 hover:bg-muted/20">
-                          <td className="p-3 text-muted-foreground">Max Drawdown</td>
+                          <td className="p-3 text-muted-foreground">Drawdown Máximo</td>
                           <td className="text-center p-3 font-mono text-red-400">R$ {strategies[0]?.maxDrawdown.toFixed(2)}</td>
                           <td className="text-center p-3 font-mono text-red-400">R$ {strategies[1]?.maxDrawdown.toFixed(2)}</td>
                           <td className="text-center p-3 font-mono text-red-400">R$ {strategies[2]?.maxDrawdown.toFixed(2)}</td>
@@ -482,12 +481,12 @@ export function RecoveryCalculator() {
                         </tr>
                       </tbody>
                     </table>
-                  </ScrollArea>
+                  </div>
                 </CardContent>
               </Card>
 
               {/* Strategy Detail Tabs */}
-              <Card className="border-border/50 bg-card/50 backdrop-blur overflow-hidden">
+              <Card className="border-border/50 bg-card/50 backdrop-blur">
                 <CardContent className="p-4">
                   <Tabs defaultValue="flat" className="w-full">
                     <TabsList className="bg-muted/50 border border-border w-full">
@@ -506,7 +505,7 @@ export function RecoveryCalculator() {
                       const tabValue = idx === 0 ? 'flat' : idx === 1 ? 'progressive' : 'aggressive'
                       return (
                         <TabsContent key={tabValue} value={tabValue} className="mt-4">
-                          <ScrollArea className="max-h-[350px]">
+                          <div className="overflow-y-auto max-h-[350px]">
                             <table className="w-full text-sm">
                               <thead className="sticky top-0 bg-card">
                                 <tr className="border-b border-border">
@@ -535,7 +534,7 @@ export function RecoveryCalculator() {
                                             : 'bg-muted/50 text-muted-foreground'
                                         }`}
                                       >
-                                        Step {st.step}
+                                        Etapa {st.step}
                                       </Badge>
                                     </td>
                                     <td className="text-right p-3 font-mono text-amber-500">
@@ -554,7 +553,7 @@ export function RecoveryCalculator() {
                                 ))}
                               </tbody>
                             </table>
-                          </ScrollArea>
+                          </div>
                         </TabsContent>
                       )
                     })}

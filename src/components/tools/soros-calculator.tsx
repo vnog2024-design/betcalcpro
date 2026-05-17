@@ -7,7 +7,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import {
   Coins, TrendingUp, AlertTriangle, Copy, Download, Check, Info, ChevronDown, ChevronUp, RotateCcw,
 } from 'lucide-react'
@@ -83,7 +82,7 @@ export function SorosCalculator() {
   const chartData = [
     { name: 'Início', bankroll: parseFloat(initialBankroll) || 0 },
     ...steps.map((s) => ({
-      name: `Step ${s.step}`,
+      name: `Etapa ${s.step}`,
       bankroll: s.bankrollIfWin,
     })),
   ]
@@ -93,7 +92,7 @@ export function SorosCalculator() {
     const text = steps
       .map(
         (s) =>
-          `Step ${s.step}: Banca R$${s.startingBankroll.toFixed(2)} | Aposta R$${s.betAmount.toFixed(2)} | Ganho R$${s.profit.toFixed(2)} | Se Ganhar R$${s.bankrollIfWin.toFixed(2)}`
+          `Etapa ${s.step}: Banca R$${s.startingBankroll.toFixed(2)} | Aposta R$${s.betAmount.toFixed(2)} | Ganho R$${s.profit.toFixed(2)} | Se Ganhar R$${s.bankrollIfWin.toFixed(2)}`
       )
       .join('\n')
     navigator.clipboard.writeText(text)
@@ -303,14 +302,14 @@ export function SorosCalculator() {
               </Card>
 
               {/* Soros Steps Table */}
-              <Card className="border-border/50 bg-card/50 backdrop-blur overflow-hidden">
+              <Card className="border-border/50 bg-card/50 backdrop-blur">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-base font-semibold flex items-center gap-2">
                     <Coins className="h-4 w-4 text-neon" /> Progressão Soros
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <ScrollArea className="max-h-[400px]">
+                  <div className="overflow-y-auto max-h-[400px]">
                     <table className="w-full text-sm">
                       <thead className="sticky top-0 bg-card">
                         <tr className="border-b border-border">
@@ -336,7 +335,7 @@ export function SorosCalculator() {
                                     : 'bg-muted/50 text-muted-foreground'
                                 }`}
                               >
-                                Step {s.step}
+                                Etapa {s.step}
                               </Badge>
                             </td>
                             <td className="text-right p-3 font-mono">
@@ -358,7 +357,7 @@ export function SorosCalculator() {
                         ))}
                       </tbody>
                     </table>
-                  </ScrollArea>
+                  </div>
                 </CardContent>
               </Card>
 
@@ -376,7 +375,7 @@ export function SorosCalculator() {
                         key={s.step}
                         className="flex flex-col items-center p-3 rounded-xl border border-border/50 bg-muted/20 min-w-[90px] hover:border-neon/30 transition-colors"
                       >
-                        <span className="text-[10px] text-muted-foreground">Step {s.step}</span>
+                        <span className="text-[10px] text-muted-foreground">Etapa {s.step}</span>
                         <span className="text-base font-bold font-mono text-neon">
                           R${s.bankrollIfWin.toFixed(0)}
                         </span>

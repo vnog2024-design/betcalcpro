@@ -7,7 +7,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import {
   BarChart3, TrendingUp, Copy, Download, RotateCcw,
   Check, AlertTriangle, Info
@@ -86,7 +85,7 @@ export function FibonacciCalculator() {
   const chartData = useMemo(() => {
     if (!calculations) return []
     return calculations.fibLevels.map((l) => ({
-      name: `L${l.level}`,
+      name: `N${l.level}`,
       bet: l.betAmount,
       totalInvested: l.totalInvested,
       profit: l.profit,
@@ -97,20 +96,20 @@ export function FibonacciCalculator() {
   const handleCopy = () => {
     if (!calculations) return
     const text = [
-      `Fibonacci Progression Report`,
-      `Initial Bet: R$ ${initialBet}`,
-      `Levels: ${levels}`,
-      `Target Multiplier: ${targetMultiplier}x`,
+      `Relatório de Progressão Fibonacci`,
+      `Aposta Inicial: R$ ${initialBet}`,
+      `Níveis: ${levels}`,
+      `Multiplicador Alvo: ${targetMultiplier}x`,
       ``,
       ...calculations.fibLevels.map((l) =>
-        `Level ${l.level} (Fib:${l.fibNumber}): Bet R$${l.betAmount.toFixed(2)} | Invested R$${l.totalInvested.toFixed(2)} | Return R$${l.potentialReturn.toFixed(2)} | Profit R$${l.profit.toFixed(2)}`
+        `Nível ${l.level} (Fib:${l.fibNumber}): Aposta R$${l.betAmount.toFixed(2)} | Investido R$${l.totalInvested.toFixed(2)} | Retorno R$${l.potentialReturn.toFixed(2)} | Lucro R$${l.profit.toFixed(2)}`
       ),
     ].join('\n')
 
     navigator.clipboard.writeText(text)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
-    toast({ title: 'Copied!', description: 'Fibonacci table copied to clipboard' })
+    toast({ title: 'Copiado!', description: 'Tabela Fibonacci copiada para a área de transferência' })
   }
 
   const handleSave = () => {
@@ -127,7 +126,7 @@ export function FibonacciCalculator() {
       timestamp: Date.now(),
     })
     unlockAchievement('first-calc')
-    toast({ title: 'Saved!', description: 'Calculation saved to history' })
+    toast({ title: 'Salvo!', description: 'Cálculo salvo no histórico' })
   }
 
   const handleReset = () => {
@@ -146,7 +145,7 @@ export function FibonacciCalculator() {
             Fibonacci <span className="gradient-neon-text">Calculator</span>
           </h1>
           <p className="text-base text-muted-foreground mt-1">
-            Calculate your Fibonacci betting progression with visual analysis
+            Calcule sua progressão de apostas Fibonacci com análise visual
           </p>
         </div>
       </div>
@@ -157,12 +156,12 @@ export function FibonacciCalculator() {
           <Card className="border-border/50 bg-card/50 backdrop-blur">
             <CardHeader className="pb-3">
               <CardTitle className="text-base font-semibold flex items-center gap-2">
-                <TrendingUp className="h-4 w-4 text-neon" /> Configuration
+                <TrendingUp className="h-4 w-4 text-neon" /> Configurações
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label className="text-sm text-muted-foreground">Initial Bet (R$)</Label>
+                <Label className="text-sm text-muted-foreground">Aposta Inicial (R$)</Label>
                 <Input
                   type="number"
                   value={initialBet}
@@ -174,7 +173,7 @@ export function FibonacciCalculator() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-sm text-muted-foreground">Number of Levels</Label>
+                <Label className="text-sm text-muted-foreground">Quantidade de Níveis</Label>
                 <Input
                   type="number"
                   value={levels}
@@ -186,7 +185,7 @@ export function FibonacciCalculator() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-sm text-muted-foreground">Target Multiplier</Label>
+                <Label className="text-sm text-muted-foreground">Multiplicador Alvo</Label>
                 <Input
                   type="number"
                   value={targetMultiplier}
@@ -200,9 +199,9 @@ export function FibonacciCalculator() {
               <div className="p-3 rounded-lg bg-muted/20 border border-border/50">
                 <p className="text-[10px] text-muted-foreground">
                   <Info className="h-3 w-3 inline mr-1" />
-                  The Fibonacci sequence adds the two previous numbers: 1, 1, 2, 3, 5, 8, 13, 21, 34...
-                  Each level&apos;s bet = initial bet x Fibonacci number. The progression is less aggressive
-                  than Martingale but still requires careful bankroll management.
+                  A sequência Fibonacci soma os dois números anteriores: 1, 1, 2, 3, 5, 8, 13, 21, 34...
+                  A aposta de cada nível = aposta inicial × número Fibonacci. A progressão é menos agressiva
+                  que Martingale, mas ainda exige cuidado com o gerenciamento da banca.
                 </p>
               </div>
             </CardContent>
@@ -214,7 +213,7 @@ export function FibonacciCalculator() {
               <Card className="border-neon/20 bg-neon/5">
                 <CardContent className="p-3 text-center">
                   <BarChart3 className="h-4 w-4 text-neon mx-auto mb-1" />
-                  <p className="text-[10px] text-muted-foreground">Bankroll Needed</p>
+                  <p className="text-[10px] text-muted-foreground">Banca Necessária</p>
                   <p className="text-xl font-black gradient-neon-text">
                     R$ {calculations.totalBankrollNeeded.toFixed(2)}
                   </p>
@@ -223,7 +222,7 @@ export function FibonacciCalculator() {
               <Card className="border-neon-blue/20 bg-neon-blue/5">
                 <CardContent className="p-3 text-center">
                   <TrendingUp className="h-4 w-4 text-neon-blue mx-auto mb-1" />
-                  <p className="text-[10px] text-muted-foreground">Max Profit</p>
+                  <p className="text-[10px] text-muted-foreground">Lucro Máximo</p>
                   <p className="text-xl font-black neon-text-blue">
                     R$ {calculations.maxProfit.toFixed(2)}
                   </p>
@@ -231,7 +230,7 @@ export function FibonacciCalculator() {
               </Card>
               <Card className="border-amber-500/20 bg-amber-500/5 col-span-2">
                 <CardContent className="p-3 text-center">
-                  <p className="text-[10px] text-muted-foreground">Largest Bet (Level {calculations.fibLevels.length})</p>
+                  <p className="text-[10px] text-muted-foreground">Maior Aposta (Nível {calculations.fibLevels.length})</p>
                   <p className="text-xl font-black text-amber-500">
                     R$ {calculations.maxBet.toFixed(2)}
                   </p>
@@ -244,7 +243,7 @@ export function FibonacciCalculator() {
           {calculations && (
             <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-semibold text-muted-foreground">Fibonacci Sequence</CardTitle>
+                <CardTitle className="text-sm font-semibold text-muted-foreground">Sequência Fibonacci</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-1">
@@ -262,10 +261,10 @@ export function FibonacciCalculator() {
           <div className="grid grid-cols-2 gap-2">
             <Button onClick={handleCopy} variant="outline" size="sm" className="border-border text-sm">
               {copied ? <Check className="h-3 w-3 mr-1" /> : <Copy className="h-3 w-3 mr-1" />}
-              {copied ? 'Copied!' : 'Copy'}
+              {copied ? 'Copiado!' : 'Copiar'}
             </Button>
             <Button onClick={handleReset} variant="outline" size="sm" className="border-border text-sm">
-              <RotateCcw className="h-3 w-3 mr-1" /> Reset
+              <RotateCcw className="h-3 w-3 mr-1" /> Reiniciar
             </Button>
           </div>
         </div>
@@ -277,7 +276,7 @@ export function FibonacciCalculator() {
             <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardHeader className="pb-2">
                 <CardTitle className="text-base font-semibold flex items-center gap-2">
-                  <BarChart3 className="h-4 w-4 text-neon" /> Bet Progression Chart
+                  <BarChart3 className="h-4 w-4 text-neon" /> Gráfico de Progressão de Apostas
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -291,9 +290,9 @@ export function FibonacciCalculator() {
                       labelStyle={{ color: "var(--foreground)" }}
                       formatter={(value: number, name: string) => {
                         const labels: Record<string, string> = {
-                          bet: 'Bet Amount',
-                          totalInvested: 'Total Invested',
-                          profit: 'Profit',
+                          bet: 'Valor da Aposta',
+                          totalInvested: 'Total Investido',
+                          profit: 'Lucro',
                         }
                         return [`R$ ${value.toFixed(2)}`, labels[name] || name]
                       }}
@@ -327,15 +326,15 @@ export function FibonacciCalculator() {
                 <div className="flex justify-center gap-4 mt-2">
                   <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
                     <div className="h-2 w-2 rounded-full bg-neon-blue" />
-                    Bet Amount
+                    Valor da Aposta
                   </div>
                   <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
                     <div className="h-2 w-2 rounded-full bg-amber-500" />
-                    Total Invested
+                    Total Investido
                   </div>
                   <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
                     <div className="h-2 w-2 rounded-full bg-neon" />
-                    Profit
+                    Lucro
                   </div>
                 </div>
               </CardContent>
@@ -344,23 +343,23 @@ export function FibonacciCalculator() {
 
           {/* Detailed Table */}
           {calculations && (
-            <Card className="border-border/50 bg-card/50 backdrop-blur overflow-hidden">
+            <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardHeader className="pb-2">
                 <CardTitle className="text-base font-semibold flex items-center gap-2">
-                  <TrendingUp className="h-4 w-4 text-neon-blue" /> Progression Table
+                  <TrendingUp className="h-4 w-4 text-neon-blue" /> Tabela de Progressão
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0">
-                <ScrollArea className="max-h-[500px]">
+                <div className="overflow-y-auto max-h-[500px]">
                   <table className="w-full text-sm">
                     <thead className="sticky top-0 bg-card">
                       <tr className="border-b border-border">
-                        <th className="text-left p-3 font-semibold text-muted-foreground">Level</th>
+                        <th className="text-left p-3 font-semibold text-muted-foreground">Nível</th>
                         <th className="text-right p-3 font-semibold text-muted-foreground">Fibonacci #</th>
-                        <th className="text-right p-3 font-semibold text-muted-foreground">Bet Amount</th>
-                        <th className="text-right p-3 font-semibold text-muted-foreground">Total Invested</th>
-                        <th className="text-right p-3 font-semibold text-muted-foreground">Potential Return</th>
-                        <th className="text-right p-3 font-semibold text-muted-foreground">Profit</th>
+                        <th className="text-right p-3 font-semibold text-muted-foreground">Valor da Aposta</th>
+                        <th className="text-right p-3 font-semibold text-muted-foreground">Total Investido</th>
+                        <th className="text-right p-3 font-semibold text-muted-foreground">Retorno Potencial</th>
+                        <th className="text-right p-3 font-semibold text-muted-foreground">Lucro</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -373,9 +372,9 @@ export function FibonacciCalculator() {
                         >
                           <td className="p-3 font-bold">
                             {level.level === 1 ? (
-                              <Badge className="bg-neon/10 text-neon border-0 text-[10px]">Entry</Badge>
+                              <Badge className="bg-neon/10 text-neon border-0 text-[10px]">Entrada</Badge>
                             ) : (
-                              <span>Level {level.level}</span>
+                              <span>Nível {level.level}</span>
                             )}
                           </td>
                           <td className="text-right p-3 font-mono text-neon-blue font-bold">
@@ -397,7 +396,7 @@ export function FibonacciCalculator() {
                       ))}
                     </tbody>
                   </table>
-                </ScrollArea>
+                </div>
               </CardContent>
             </Card>
           )}
@@ -407,7 +406,7 @@ export function FibonacciCalculator() {
             <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardHeader className="pb-2">
                 <CardTitle className="text-base font-semibold flex items-center gap-2">
-                  <BarChart3 className="h-4 w-4 text-amber-500" /> Investment Growth
+                  <BarChart3 className="h-4 w-4 text-amber-500" /> Crescimento do Investimento
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -421,8 +420,8 @@ export function FibonacciCalculator() {
                       labelStyle={{ color: "var(--foreground)" }}
                       formatter={(value: number, name: string) => {
                         const labels: Record<string, string> = {
-                          totalInvested: 'Total Invested',
-                          bet: 'Bet Amount',
+                          totalInvested: 'Total Investido',
+                          bet: 'Valor da Aposta',
                         }
                         return [`R$ ${value.toFixed(2)}`, labels[name] || name]
                       }}
@@ -456,11 +455,11 @@ export function FibonacciCalculator() {
             <CardContent className="p-4 flex gap-3">
               <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-semibold text-amber-500">Warning</p>
+                <p className="text-sm font-semibold text-amber-500">Aviso</p>
                 <p className="text-sm text-muted-foreground leading-relaxed mt-1">
-                  The Fibonacci progression grows slower than Martingale but still requires a significant bankroll
-                  for deeper levels. Total invested increases with each level, and extended losing streaks
-                  can quickly deplete your bankroll. Always set strict loss limits.
+                  A progressão Fibonacci cresce mais devagar que Martingale, mas ainda exige uma banca
+                  significativa para níveis mais profundos. O total investido aumenta a cada nível, e sequências
+                  longas de perdas podem esgotar sua banca rapidamente. Sempre defina limites de perda rigorosos.
                 </p>
               </div>
             </CardContent>

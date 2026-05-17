@@ -8,7 +8,6 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import { AdInContent } from '@/components/shared/ad-banner'
 import { 
   TrendingUp, Copy, Star, RotateCcw, Play, Pause,
@@ -19,9 +18,6 @@ import {
   AreaChart, Area
 } from 'recharts'
 import { useToast } from '@/hooks/use-toast'
-
-// Stop calculating when bet exceeds this value
-const BET_LIMIT = 1e15
 
 interface GaleLevel {
   level: number
@@ -47,6 +43,7 @@ export function MartingaleCalculator() {
 
   const [initialBet, setInitialBet] = useState('10')
   const [multiplier, setMultiplier] = useState('2.0')
+  const [galeCount, setGaleCount] = useState('20')
   const [targetMultiplier, setTargetMultiplier] = useState('2.0')
 
   const [copied, setCopied] = useState(false)
@@ -54,18 +51,17 @@ export function MartingaleCalculator() {
   const [autoStep, setAutoStep] = useState(0)
   const [winAtGale, setWinAtGale] = useState<number | null>(null)
 
-  // Calculate ALL gales automatically until numbers overflow
   const levels = useMemo(() => {
     const bet = parseFloat(initialBet) || 0
     const mult = parseFloat(multiplier) || 2
+    const gales = parseInt(galeCount) || 0
     const target = parseFloat(targetMultiplier) || 2
 
     const result: GaleLevel[] = []
     let currentBet = bet
     let totalInvested = 0
 
-    // Calculate until bet exceeds limit or numbers become infinite
-    for (let i = 0; ; i++) {
+    for (let i = 0; i <= gales; i++) {
       totalInvested += currentBet
       const potentialWin = currentBet * target
       const profit = potentialWin - totalInvested
@@ -73,25 +69,20 @@ export function MartingaleCalculator() {
 
       result.push({ level: i, bet: currentBet, totalInvested, potentialWin, profit, profitPercent })
 
-      // Stop conditions
       if (!isFinite(currentBet) || !isFinite(totalInvested)) break
-      if (currentBet > BET_LIMIT) break
-      if (result.length > 500) break // Hard safety limit
 
       currentBet = currentBet * mult
     }
 
     return result
-  }, [initialBet, multiplier, targetMultiplier])
+  }, [initialBet, multiplier, galeCount, targetMultiplier])
 
   const totalBankroll = levels[levels.length - 1]?.totalInvested || 0
   const maxProfit = levels[levels.length - 1]?.profit || 0
-  const galeCount = levels.length - 1
 
-  // Limit chart data to avoid performance issues
   const chartData = useMemo(() => {
-    const maxChartPoints = 50
-    if (levels.length <= maxChartPoints) {
+    const maxPoints = 50
+    if (levels.length <= maxPoints) {
       return levels.map((l) => ({
         name: l.level === 0 ? 'Entrada' : `G${l.level}`,
         bet: l.bet,
@@ -99,9 +90,9 @@ export function MartingaleCalculator() {
         profit: l.profit,
       }))
     }
-    const step = (levels.length - 1) / (maxChartPoints - 1)
+    const step = (levels.length - 1) / (maxPoints - 1)
     const sampled = []
-    for (let i = 0; i < maxChartPoints; i++) {
+    for (let i = 0; i < maxPoints; i++) {
       const idx = Math.round(i * step)
       const l = levels[idx]
       sampled.push({
@@ -128,7 +119,7 @@ export function MartingaleCalculator() {
     addHistory({
       id: Math.random().toString(36).substring(7),
       tool: 'martingale',
-      params: { initialBet, multiplier, galeCount: String(galeCount), targetMultiplier },
+      params: { initialBet, multiplier, galeCount, targetMultiplier },
       result: { totalBankroll, maxProfit, levels: levels.length },
       timestamp: Date.now(),
     })
@@ -139,12 +130,14 @@ export function MartingaleCalculator() {
   const handleReset = () => {
     setInitialBet('10')
     setMultiplier('2.0')
+    setGaleCount('20')
     setTargetMultiplier('2.0')
     setAutoStep(0)
     setWinAtGale(null)
   }
 
   const toggleAutoMode = () => {
+    const gales = parseInt(galeCount) || 0
     if (autoMode) {
       setAutoMode(false)
       setAutoStep(0)
@@ -156,7 +149,7 @@ export function MartingaleCalculator() {
       let step = 0
       const interval = setInterval(() => {
         step++
-        if (step > galeCount) {
+        if (step > gales) {
           clearInterval(interval)
           setAutoMode(false)
           return
@@ -176,7 +169,7 @@ export function MartingaleCalculator() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+      {/* Cabeçalho */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl sm:text-4xl font-black flex items-center gap-3">
@@ -184,7 +177,7 @@ export function MartingaleCalculator() {
             Calculadora <span className="gradient-neon-text">Martingale</span>
           </h1>
           <p className="text-base text-muted-foreground mt-2">
-            Cálculo automático de todos os gales possíveis
+            Calcule sua progressão Martingale com quantos gales quiser
           </p>
         </div>
         <Button
@@ -199,7 +192,7 @@ export function MartingaleCalculator() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left: Inputs */}
+        {/* Esquerda: Configurações */}
         <div className="lg:col-span-1 space-y-4">
           <Card className="border-border/50 bg-card/50 backdrop-blur">
             <CardHeader className="pb-3">
@@ -215,14 +208,18 @@ export function MartingaleCalculator() {
                 <Input type="number" value={multiplier} onChange={(e) => setMultiplier(e.target.value)} className="bg-muted/50 border-border text-base h-11" min="1.1" step="0.1" />
               </div>
               <div className="space-y-2">
+                <Label className="text-sm">Quantidade de Gales</Label>
+                <Input type="number" value={galeCount} onChange={(e) => setGaleCount(e.target.value)} className="bg-muted/50 border-border text-base h-11" min="1" step="1" />
+              </div>
+              <div className="space-y-2">
                 <Label className="text-sm">Multiplicador Alvo</Label>
                 <Input type="number" value={targetMultiplier} onChange={(e) => setTargetMultiplier(e.target.value)} className="bg-muted/50 border-border text-base h-11" min="1.1" step="0.1" />
               </div>
             </CardContent>
           </Card>
 
-          {/* Summary */}
-          <div className="grid grid-cols-1 gap-3">
+          {/* Resumo */}
+          <div className="grid grid-cols-2 gap-3">
             <Card className="border-neon/20 bg-neon/5">
               <CardContent className="p-4 text-center">
                 <Wallet className="h-5 w-5 text-neon mx-auto mb-1" />
@@ -239,15 +236,7 @@ export function MartingaleCalculator() {
             </Card>
           </div>
 
-          {/* Gale count indicator */}
-          <Card className="border-border/30 bg-muted/10">
-            <CardContent className="p-3 flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Total de Gales Calculados</span>
-              <Badge className="bg-neon/10 text-neon border-0 text-sm font-bold">{galeCount} gales</Badge>
-            </CardContent>
-          </Card>
-
-          {/* Actions */}
+          {/* Ações */}
           <div className="grid grid-cols-2 gap-3">
             <Button onClick={handleCopy} variant="outline" className="border-border text-sm h-10">
               {copied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
@@ -283,19 +272,19 @@ export function MartingaleCalculator() {
           )}
         </div>
 
-        {/* Right: Results */}
+        {/* Direita: Resultados */}
         <div className="lg:col-span-2 space-y-4">
           <Tabs defaultValue="table">
             <TabsList className="bg-muted/50 border border-border">
-              <TabsTrigger value="table" className="text-sm">Tabela ({galeCount} gales)</TabsTrigger>
+              <TabsTrigger value="table" className="text-sm">Tabela</TabsTrigger>
               <TabsTrigger value="chart" className="text-sm">Gráfico</TabsTrigger>
               <TabsTrigger value="simulator" className="text-sm">Simulador</TabsTrigger>
             </TabsList>
 
             <TabsContent value="table" className="mt-4">
-              <Card className="border-border/50 bg-card/50 backdrop-blur overflow-hidden">
+              <Card className="border-border/50 bg-card/50 backdrop-blur">
                 <CardContent className="p-0">
-                  <ScrollArea className="max-h-[600px]">
+                  <div className="overflow-y-auto max-h-[600px]">
                     <table className="w-full text-sm">
                       <thead className="sticky top-0 bg-card z-10">
                         <tr className="border-b border-border">
@@ -324,7 +313,7 @@ export function MartingaleCalculator() {
                         })}
                       </tbody>
                     </table>
-                  </ScrollArea>
+                  </div>
                 </CardContent>
               </Card>
             </TabsContent>
@@ -336,7 +325,7 @@ export function MartingaleCalculator() {
                     <BarChart3 className="h-5 w-5 text-neon" /> Progressão
                   </CardTitle>
                   {levels.length > 50 && (
-                    <p className="text-xs text-muted-foreground mt-1">Gráfico mostra amostragem de {chartData.length} pontos de {levels.length} níveis</p>
+                    <p className="text-xs text-muted-foreground mt-1">Gráfico mostra {chartData.length} pontos de {levels.length} níveis</p>
                   )}
                 </CardHeader>
                 <CardContent>
@@ -385,7 +374,7 @@ export function MartingaleCalculator() {
             </TabsContent>
 
             <TabsContent value="simulator" className="mt-4">
-              <Card className="border-border/50 bg-card/50 backdrop-blur overflow-hidden">
+              <Card className="border-border/50 bg-card/50 backdrop-blur">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-lg flex items-center gap-2">
                     <Play className="h-5 w-5 text-neon" /> Simulador
@@ -393,9 +382,9 @@ export function MartingaleCalculator() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Clique em um nível para simular um acerte naquele gale.
+                    Clique em um nível para simular um acerto naquele gale.
                   </p>
-                  <ScrollArea className="max-h-[400px]">
+                  <div className="overflow-y-auto max-h-[400px]">
                     <div className="flex flex-wrap gap-2">
                       {levels.map((level) => (
                         <button
@@ -415,7 +404,7 @@ export function MartingaleCalculator() {
                         </button>
                       ))}
                     </div>
-                  </ScrollArea>
+                  </div>
 
                   {winAtGale !== null && (
                     <div className="mt-5 p-5 rounded-xl border border-neon/30 bg-neon/5 text-center neon-glow">
@@ -434,15 +423,15 @@ export function MartingaleCalculator() {
             </TabsContent>
           </Tabs>
 
-          {/* Ad between content */}
+          {/* Anúncio */}
           <AdInContent />
 
-          {/* Warning */}
+          {/* Aviso */}
           <Card className="border-amber-500/20 bg-amber-500/5">
             <CardContent className="p-4 flex gap-3">
               <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
               <p className="text-sm text-muted-foreground leading-relaxed">
-                O sistema Martingale pode gerar perdas exponenciais. A banca necessária cresce rapidamente. Sempre gerencie seu bankroll com responsabilidade.
+                O Martingale pode gerar perdas exponenciais. A banca necessária cresce muito rápido. Sempre jogue com responsabilidade.
               </p>
             </CardContent>
           </Card>

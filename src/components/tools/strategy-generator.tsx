@@ -8,7 +8,6 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import {
   Sparkles, Target, Shield, AlertTriangle, TrendingUp,
   Star, Copy, Check, RotateCcw, Zap, Dices
@@ -56,10 +55,10 @@ function generateStrategies(
   const betUnit = risk === 'low' ? bankrollAmount * 0.01 : risk === 'medium' ? bankrollAmount * 0.025 : bankrollAmount * 0.05
 
   if (game === 'crash') {
-    // Conservative crash strategy
+    // Estratégia conservadora para Crash
     strategies.push({
       id: 'crash-conservative',
-      name: 'Conservative Crash',
+      name: 'Crash Conservador',
       description: 'Estratégia conservadora para Crash com auto cashout baixo e gerenciamento rigoroso',
       riskLevel: 'low',
       riskScore: 2,
@@ -94,10 +93,10 @@ function generateStrategies(
       maxDrawdown: '-15% da banca',
     })
 
-    // Moderate crash strategy
+    // Estratégia moderada para Crash
     strategies.push({
       id: 'crash-moderate',
-      name: 'Moderate Crash',
+      name: 'Crash Moderado',
       description: 'Estratégia moderada com progressão leve e auto cashout intermediário',
       riskLevel: 'medium',
       riskScore: 5,
@@ -133,10 +132,10 @@ function generateStrategies(
       maxDrawdown: '-25% da banca',
     })
 
-    // Aggressive crash strategy
+    // Estratégia agressiva para Crash
     strategies.push({
       id: 'crash-aggressive',
-      name: 'Aggressive Crash',
+      name: 'Crash Agressivo',
       description: 'Estratégia agressiva com progressão Martingale e auto cashout variável',
       riskLevel: 'high',
       riskScore: 8,
@@ -175,10 +174,10 @@ function generateStrategies(
   }
 
   if (game === 'double') {
-    // Conservative double strategy
+    // Estratégia conservadora para Double
     strategies.push({
       id: 'double-conservative',
-      name: 'Conservative Double',
+      name: 'Double Conservador',
       description: 'Estratégia conservadora para Double com apostas fixas e gerenciamento rigoroso',
       riskLevel: 'low',
       riskScore: 2,
@@ -213,10 +212,10 @@ function generateStrategies(
       maxDrawdown: '-12% da banca',
     })
 
-    // Moderate double strategy
+    // Estratégia moderada para Double
     strategies.push({
       id: 'double-moderate',
-      name: 'Moderate Double (Fibonacci)',
+      name: 'Double Moderado (Fibonacci)',
       description: 'Estratégia moderada com progressão Fibonacci para recuperação controlada',
       riskLevel: 'medium',
       riskScore: 5,
@@ -252,10 +251,10 @@ function generateStrategies(
       maxDrawdown: '-25% da banca',
     })
 
-    // Aggressive double strategy
+    // Estratégia agressiva para Double
     strategies.push({
       id: 'double-aggressive',
-      name: 'Aggressive Double (Martingale)',
+      name: 'Double Agressivo (Martingale)',
       description: 'Estratégia agressiva com progressão Martingale - alto risco, alto retorno',
       riskLevel: 'high',
       riskScore: 9,
@@ -295,7 +294,7 @@ function generateStrategies(
   }
 
   if (game === 'other') {
-    // Generic strategies
+    // Estratégias genéricas
     strategies.push({
       id: 'generic-conservative',
       name: 'Gestão Conservadora',
@@ -409,7 +408,7 @@ function generateStrategies(
     })
   }
 
-  // Sort by risk/reward alignment with user preference
+  // Ordenar por alinhamento risco/recompensa com a preferência do usuário
   const riskOrder: Record<RiskTolerance, number> = { low: 0, medium: 1, high: 2 }
   strategies.sort((a, b) => {
     const aDiff = Math.abs(riskOrder[a.riskLevel] - riskOrder[risk])
@@ -532,7 +531,7 @@ export function StrategyGenerator() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+      {/* Cabeçalho */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl font-black flex items-center gap-2">
@@ -557,12 +556,12 @@ export function StrategyGenerator() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left: Input Panel */}
+        {/* Painel de Entrada */}
         <div className="lg:col-span-1 space-y-4">
           <Card className="border-border/50 bg-card/50 backdrop-blur">
             <CardHeader className="pb-3">
               <CardTitle className="text-base font-semibold flex items-center gap-2">
-                <Target className="h-4 w-4 text-neon" /> Perfil do Jogador
+                <Target className="h-4 w-4 text-neon" /> Perfil de Risco
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -641,7 +640,7 @@ export function StrategyGenerator() {
             </Button>
           </div>
 
-          {/* Strategy List */}
+          {/* Lista de Estratégias */}
           {generatedStrategies && (
             <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardHeader className="pb-2">
@@ -676,7 +675,7 @@ export function StrategyGenerator() {
           )}
         </div>
 
-        {/* Right: Strategy Details */}
+        {/* Detalhes da Estratégia */}
         <div className="lg:col-span-2 space-y-4">
           {currentStrategy ? (
             <Tabs defaultValue="steps" className="w-full">
@@ -700,7 +699,7 @@ export function StrategyGenerator() {
                     <p className="text-sm text-muted-foreground mt-1">{currentStrategy.description}</p>
                   </CardHeader>
                   <CardContent>
-                    {/* Quick Stats */}
+                    {/* Resumo Rápido */}
                     <div className="grid grid-cols-3 gap-3 mb-4">
                       <div className="text-center p-2 rounded-lg bg-muted/20">
                         <p className="text-[10px] text-muted-foreground">Progressão</p>
@@ -711,12 +710,12 @@ export function StrategyGenerator() {
                         <p className="text-sm font-bold text-neon-blue">R$ {currentStrategy.recommendedBetSize.toFixed(2)}</p>
                       </div>
                       <div className="text-center p-2 rounded-lg bg-muted/20">
-                        <p className="text-[10px] text-muted-foreground">Max Drawdown</p>
+                        <p className="text-[10px] text-muted-foreground">Queda Máxima</p>
                         <p className="text-sm font-bold text-red-500">{currentStrategy.maxDrawdown}</p>
                       </div>
                     </div>
 
-                    {/* Risk/Reward Bar */}
+                    {/* Barra Risco/Recompensa */}
                     <div className="mb-4 p-3 rounded-lg bg-muted/20 border border-border/30">
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-[10px] text-muted-foreground">Risco</span>
@@ -748,7 +747,7 @@ export function StrategyGenerator() {
                       </div>
                     </div>
 
-                    {/* Steps */}
+                    {/* Passos */}
                     <div className="space-y-3">
                       {currentStrategy.steps.map(step => (
                         <div
@@ -845,7 +844,7 @@ export function StrategyGenerator() {
                       <div className="p-4 rounded-lg bg-amber-500/5 border border-amber-500/20">
                         <div className="flex items-center gap-2 mb-2">
                           <AlertTriangle className="w-4 h-4 text-amber-500" />
-                          <span className="text-sm font-bold text-amber-500">Max Drawdown</span>
+                          <span className="text-sm font-bold text-amber-500">Queda Máxima</span>
                         </div>
                         <p className="text-base text-muted-foreground">{currentStrategy.maxDrawdown}</p>
                       </div>
@@ -874,7 +873,7 @@ export function StrategyGenerator() {
 
           <AdInContent />
 
-          {/* Warning */}
+          {/* Aviso */}
           <Card className="border-amber-500/20 bg-amber-500/5">
             <CardContent className="p-4 flex gap-3">
               <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />

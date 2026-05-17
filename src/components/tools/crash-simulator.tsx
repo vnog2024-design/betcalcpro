@@ -8,7 +8,6 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import {
   Zap, TrendingUp, Play, RotateCcw, AlertTriangle, Wallet, BarChart3,
   Star, Copy, Check
@@ -107,7 +106,7 @@ export function CrashSimulator() {
 
   const handleCopy = () => {
     const text = results
-      .map(r => `Round ${r.round}: Crash ${r.crashPoint}x | ${r.result.toUpperCase()} | Saldo: R$${r.balance.toFixed(2)}`)
+      .map(r => `Rodada ${r.round}: Crash ${r.crashPoint}x | ${r.result === 'green' ? 'GREEN' : 'RED'} | Saldo: R$${r.balance.toFixed(2)}`)
       .join('\n')
     navigator.clipboard.writeText(text)
     setCopied(true)
@@ -317,18 +316,18 @@ export function CrashSimulator() {
               </TabsList>
 
               <TabsContent value="table" className="mt-4">
-                <Card className="border-border/50 bg-card/50 backdrop-blur overflow-hidden">
+                <Card className="border-border/50 bg-card/50 backdrop-blur">
                   <CardContent className="p-0">
-                    <ScrollArea className="max-h-[500px]">
+                    <div className="overflow-y-auto max-h-[500px]">
                       <table className="w-full text-sm">
                         <thead className="sticky top-0 bg-card">
                           <tr className="border-b border-border">
-                            <th className="text-left p-3 font-semibold text-muted-foreground">Round</th>
+                            <th className="text-left p-3 font-semibold text-muted-foreground">Rodada</th>
                             <th className="text-right p-3 font-semibold text-muted-foreground">Crash</th>
                             <th className="text-right p-3 font-semibold text-muted-foreground">Cashout</th>
                             <th className="text-center p-3 font-semibold text-muted-foreground">Resultado</th>
                             <th className="text-right p-3 font-semibold text-muted-foreground">Aposta</th>
-                            <th className="text-right p-3 font-semibold text-muted-foreground">Payout</th>
+                            <th className="text-right p-3 font-semibold text-muted-foreground">Pagamento</th>
                             <th className="text-right p-3 font-semibold text-muted-foreground">Saldo</th>
                           </tr>
                         </thead>
@@ -367,7 +366,7 @@ export function CrashSimulator() {
                           ))}
                         </tbody>
                       </table>
-                    </ScrollArea>
+                    </div>
                   </CardContent>
                 </Card>
               </TabsContent>
@@ -418,7 +417,7 @@ export function CrashSimulator() {
                           <Tooltip
                             contentStyle={{ background: "var(--card)", border: '1px solid var(--border)', borderRadius: '8px', fontSize: 12 }}
                             labelStyle={{ color: "var(--foreground)" }}
-                            formatter={(value: number) => [`${value.toFixed(2)}x`, 'Crash Point']}
+                            formatter={(value: number) => [`${value.toFixed(2)}x`, 'Ponto Crash']}
                           />
                           <Line
                             type="monotone"
