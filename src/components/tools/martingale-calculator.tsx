@@ -12,13 +12,15 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { AdInContent } from '@/components/shared/ad-banner'
 import { 
   TrendingUp, Copy, Star, RotateCcw, Play, Pause,
-  BarChart3, Check, Wallet, AlertTriangle
+  BarChart3, Check, Wallet, AlertTriangle, ChevronDown
 } from 'lucide-react'
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   AreaChart, Area
 } from 'recharts'
 import { useToast } from '@/hooks/use-toast'
+
+const MAX_GALES = 200
 
 interface GaleLevel {
   level: number
@@ -29,13 +31,22 @@ interface GaleLevel {
   profitPercent: number
 }
 
+function formatCurrency(value: number): string {
+  if (!isFinite(value)) return '∞'
+  if (value >= 1e12) return `R$ ${(value / 1e12).toFixed(2)}T`
+  if (value >= 1e9) return `R$ ${(value / 1e9).toFixed(2)}B`
+  if (value >= 1e6) return `R$ ${(value / 1e6).toFixed(2)}M`
+  if (value >= 1e3) return `R$ ${value.toFixed(2)}`
+  return `R$ ${value.toFixed(2)}`
+}
+
 export function MartingaleCalculator() {
   const { toast } = useToast()
   const { addHistory, addFavorite, removeFavorite, isFavorite, unlockAchievement } = useAppStore()
 
   const [initialBet, setInitialBet] = useState('10')
   const [multiplier, setMultiplier] = useState('2.0')
-  const [galeCount, setGaleCount] = useState('5')
+  const [galeCount, setGaleCount] = useState('10')
   const [targetMultiplier, setTargetMultiplier] = useState('2.0')
 
   const [copied, setCopied] = useState(false)
@@ -43,10 +54,19 @@ export function MartingaleCalculator() {
   const [autoStep, setAutoStep] = useState(0)
   const [winAtGale, setWinAtGale] = useState<number | null>(null)
 
+  const handleGaleCountChange = (value: string) => {
+    const num = parseInt(value) || 0
+    if (num > MAX_GALES) {
+      setGaleCount(String(MAX_GALES))
+    } else {
+      setGaleCount(value)
+    }
+  }
+
   const calc = useCallback(() => {
     const bet = parseFloat(initialBet) || 0
     const mult = parseFloat(multiplier) || 2
-    const gales = parseInt(galeCount) || 0
+    const gales = Math.min(parseInt(galeCount) || 0, MAX_GALES)
     const target = parseFloat(targetMultiplier) || 2
 
     const levels: GaleLevel[] = []
@@ -57,10 +77,13 @@ export function MartingaleCalculator() {
       totalInvested += currentBet
       const potentialWin = currentBet * target
       const profit = potentialWin - totalInvested
-      const profitPercent = (profit / totalInvested) * 100
+      const profitPercent = totalInvested > 0 ? (profit / totalInvested) * 100 : 0
 
       levels.push({ level: i, bet: currentBet, totalInvested, potentialWin, profit, profitPercent })
       currentBet = currentBet * mult
+
+      // Safety: stop if numbers become infinite
+      if (!isFinite(currentBet) || !isFinite(totalInvested)) break
     }
 
     return levels
@@ -70,16 +93,36 @@ export function MartingaleCalculator() {
   const totalBankroll = levels[levels.length - 1]?.totalInvested || 0
   const maxProfit = levels[levels.length - 1]?.profit || 0
 
-  const chartData = levels.map((l) => ({
-    name: `Gale ${l.level}`,
-    bet: l.bet,
-    totalInvested: l.totalInvested,
-    profit: l.profit,
-  }))
+  // Limit chart data to avoid performance issues with many gales
+  const chartData = useMemo(() => {
+    const maxChartPoints = 50
+    if (levels.length <= maxChartPoints) {
+      return levels.map((l) => ({
+        name: l.level === 0 ? 'Entrada' : `G${l.level}`,
+        bet: l.bet,
+        totalInvested: l.totalInvested,
+        profit: l.profit,
+      }))
+    }
+    // Sample evenly for chart
+    const step = (levels.length - 1) / (maxChartPoints - 1)
+    const sampled = []
+    for (let i = 0; i < maxChartPoints; i++) {
+      const idx = Math.round(i * step)
+      const l = levels[idx]
+      sampled.push({
+        name: l.level === 0 ? 'Entrada' : `G${l.level}`,
+        bet: l.bet,
+        totalInvested: l.totalInvested,
+        profit: l.profit,
+      })
+    }
+    return sampled
+  }, [levels])
 
   const handleCopy = () => {
     const text = levels
-      .map((l) => `Gale ${l.level}: Aposta R$${l.bet.toFixed(2)} | Investido R$${l.totalInvested.toFixed(2)} | Lucro R$${l.profit.toFixed(2)}`)
+      .map((l) => `Gale ${l.level}: Aposta ${formatCurrency(l.bet)} | Investido ${formatCurrency(l.totalInvested)} | Lucro ${formatCurrency(l.profit)}`)
       .join('\n')
     navigator.clipboard.writeText(text)
     setCopied(true)
@@ -102,7 +145,7 @@ export function MartingaleCalculator() {
   const handleReset = () => {
     setInitialBet('10')
     setMultiplier('2.0')
-    setGaleCount('5')
+    setGaleCount('10')
     setTargetMultiplier('2.0')
     setAutoStep(0)
     setWinAtGale(null)
@@ -120,7 +163,7 @@ export function MartingaleCalculator() {
       let step = 0
       const interval = setInterval(() => {
         step++
-        if (step > parseInt(galeCount)) {
+        if (step > Math.min(parseInt(galeCount) || 0, MAX_GALES)) {
           clearInterval(interval)
           setAutoMode(false)
           return
@@ -148,7 +191,7 @@ export function MartingaleCalculator() {
             Calculadora <span className="gradient-neon-text">Martingale</span>
           </h1>
           <p className="text-base text-muted-foreground mt-2">
-            Calcule sua progressão Martingale
+            Calcule sua progressão Martingale — até {MAX_GALES} gales
           </p>
         </div>
         <Button
@@ -179,8 +222,8 @@ export function MartingaleCalculator() {
                 <Input type="number" value={multiplier} onChange={(e) => setMultiplier(e.target.value)} className="bg-muted/50 border-border text-base h-11" min="1.1" step="0.1" />
               </div>
               <div className="space-y-2">
-                <Label className="text-sm">Quantidade de Gales</Label>
-                <Input type="number" value={galeCount} onChange={(e) => setGaleCount(e.target.value)} className="bg-muted/50 border-border text-base h-11" min="0" max="50" />
+                <Label className="text-sm">Quantidade de Gales <span className="text-muted-foreground text-xs">(máx. {MAX_GALES})</span></Label>
+                <Input type="number" value={galeCount} onChange={(e) => handleGaleCountChange(e.target.value)} className="bg-muted/50 border-border text-base h-11" min="0" max={MAX_GALES} />
               </div>
               <div className="space-y-2">
                 <Label className="text-sm">Multiplicador Alvo</Label>
@@ -195,17 +238,25 @@ export function MartingaleCalculator() {
               <CardContent className="p-4 text-center">
                 <Wallet className="h-5 w-5 text-neon mx-auto mb-1" />
                 <p className="text-sm text-muted-foreground">Banca Necessária</p>
-                <p className="text-xl font-black gradient-neon-text">R$ {totalBankroll.toFixed(2)}</p>
+                <p className="text-xl font-black gradient-neon-text">{formatCurrency(totalBankroll)}</p>
               </CardContent>
             </Card>
             <Card className="border-neon-blue/20 bg-neon-blue/5">
               <CardContent className="p-4 text-center">
                 <BarChart3 className="h-5 w-5 text-neon-blue mx-auto mb-1" />
                 <p className="text-sm text-muted-foreground">Lucro Máximo</p>
-                <p className="text-xl font-black neon-text-blue">R$ {maxProfit.toFixed(2)}</p>
+                <p className="text-xl font-black neon-text-blue">{formatCurrency(maxProfit)}</p>
               </CardContent>
             </Card>
           </div>
+
+          {/* Gale count indicator */}
+          <Card className="border-border/30 bg-muted/10">
+            <CardContent className="p-3 flex items-center justify-between">
+              <span className="text-sm text-muted-foreground">Níveis calculados</span>
+              <Badge className="bg-neon/10 text-neon border-0 text-sm font-bold">{levels.length}</Badge>
+            </CardContent>
+          </Card>
 
           {/* Actions */}
           <div className="grid grid-cols-2 gap-3">
@@ -236,7 +287,7 @@ export function MartingaleCalculator() {
                 </div>
                 <p className="text-sm text-muted-foreground">Gale atual: <span className="text-neon font-bold">{autoStep}</span> / {galeCount}</p>
                 {winAtGale !== null && (
-                  <p className="text-sm text-neon font-bold mt-1">✅ GREEN no Gale {winAtGale}! Lucro: R$ {levels[winAtGale]?.profit.toFixed(2)}</p>
+                  <p className="text-sm text-neon font-bold mt-1">✅ GREEN no Gale {winAtGale}! Lucro: {formatCurrency(levels[winAtGale]?.profit || 0)}</p>
                 )}
               </CardContent>
             </Card>
@@ -255,9 +306,9 @@ export function MartingaleCalculator() {
             <TabsContent value="table" className="mt-4">
               <Card className="border-border/50 bg-card/50 backdrop-blur overflow-hidden">
                 <CardContent className="p-0">
-                  <ScrollArea className="max-h-[500px]">
+                  <ScrollArea className="max-h-[600px]">
                     <table className="w-full text-sm">
-                      <thead className="sticky top-0 bg-card">
+                      <thead className="sticky top-0 bg-card z-10">
                         <tr className="border-b border-border">
                           <th className="text-left p-3 font-semibold text-muted-foreground">Gale</th>
                           <th className="text-right p-3 font-semibold text-muted-foreground">Aposta</th>
@@ -275,10 +326,10 @@ export function MartingaleCalculator() {
                               <td className="p-3 font-bold">
                                 {level.level === 0 ? <Badge className="bg-neon/10 text-neon border-0 text-xs">Entrada</Badge> : <span>Gale {level.level}</span>}
                               </td>
-                              <td className="text-right p-3 font-mono">R$ {level.bet.toFixed(2)}</td>
-                              <td className="text-right p-3 font-mono text-amber-500">R$ {level.totalInvested.toFixed(2)}</td>
-                              <td className="text-right p-3 font-mono text-neon-blue">R$ {level.potentialWin.toFixed(2)}</td>
-                              <td className={`text-right p-3 font-mono font-bold ${level.profit >= 0 ? 'text-neon' : 'text-red-500'}`}>R$ {level.profit.toFixed(2)}</td>
+                              <td className="text-right p-3 font-mono">{formatCurrency(level.bet)}</td>
+                              <td className="text-right p-3 font-mono text-amber-500">{formatCurrency(level.totalInvested)}</td>
+                              <td className="text-right p-3 font-mono text-neon-blue">{formatCurrency(level.potentialWin)}</td>
+                              <td className={`text-right p-3 font-mono font-bold ${level.profit >= 0 ? 'text-neon' : 'text-red-500'}`}>{formatCurrency(level.profit)}</td>
                             </tr>
                           )
                         })}
@@ -295,6 +346,9 @@ export function MartingaleCalculator() {
                   <CardTitle className="text-lg flex items-center gap-2">
                     <BarChart3 className="h-5 w-5 text-neon" /> Progressão
                   </CardTitle>
+                  {levels.length > 50 && (
+                    <p className="text-xs text-muted-foreground mt-1">Gráfico mostra amostragem de {chartData.length} pontos de {levels.length} níveis</p>
+                  )}
                 </CardHeader>
                 <CardContent>
                   <Tabs defaultValue="invested" className="mb-4">
@@ -307,8 +361,8 @@ export function MartingaleCalculator() {
                       <ResponsiveContainer width="100%" height={300}>
                         <AreaChart data={chartData}>
                           <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                          <XAxis dataKey="name" tick={{ fontSize: 12, fill: 'var(--muted-foreground)' }} />
-                          <YAxis tick={{ fontSize: 12, fill: 'var(--muted-foreground)' }} />
+                          <XAxis dataKey="name" tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }} interval="preserveStartEnd" />
+                          <YAxis tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }} tickFormatter={(v) => typeof v === 'number' && v >= 1000 ? `${(v/1000).toFixed(0)}k` : v} />
                           <Tooltip contentStyle={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: '8px', fontSize: 13 }} />
                           <Area type="monotone" dataKey="totalInvested" stroke="#f59e0b" fill="rgba(245, 158, 11, 0.1)" strokeWidth={2} />
                         </AreaChart>
@@ -318,8 +372,8 @@ export function MartingaleCalculator() {
                       <ResponsiveContainer width="100%" height={300}>
                         <AreaChart data={chartData}>
                           <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                          <XAxis dataKey="name" tick={{ fontSize: 12, fill: 'var(--muted-foreground)' }} />
-                          <YAxis tick={{ fontSize: 12, fill: 'var(--muted-foreground)' }} />
+                          <XAxis dataKey="name" tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }} interval="preserveStartEnd" />
+                          <YAxis tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }} tickFormatter={(v) => typeof v === 'number' && v >= 1000 ? `${(v/1000).toFixed(0)}k` : v} />
                           <Tooltip contentStyle={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: '8px', fontSize: 13 }} />
                           <Area type="monotone" dataKey="profit" stroke="var(--neon)" fill="rgba(0, 255, 136, 0.1)" strokeWidth={2} />
                         </AreaChart>
@@ -329,10 +383,10 @@ export function MartingaleCalculator() {
                       <ResponsiveContainer width="100%" height={300}>
                         <LineChart data={chartData}>
                           <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                          <XAxis dataKey="name" tick={{ fontSize: 12, fill: 'var(--muted-foreground)' }} />
-                          <YAxis tick={{ fontSize: 12, fill: 'var(--muted-foreground)' }} />
+                          <XAxis dataKey="name" tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }} interval="preserveStartEnd" />
+                          <YAxis tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }} tickFormatter={(v) => typeof v === 'number' && v >= 1000 ? `${(v/1000).toFixed(0)}k` : v} />
                           <Tooltip contentStyle={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: '8px', fontSize: 13 }} />
-                          <Line type="monotone" dataKey="bet" stroke="var(--neon-blue)" strokeWidth={2} dot={{ r: 4, fill: 'var(--neon-blue)' }} />
+                          <Line type="monotone" dataKey="bet" stroke="var(--neon-blue)" strokeWidth={2} dot={{ r: 3, fill: 'var(--neon-blue)' }} />
                         </LineChart>
                       </ResponsiveContainer>
                     </TabsContent>
@@ -342,7 +396,7 @@ export function MartingaleCalculator() {
             </TabsContent>
 
             <TabsContent value="simulator" className="mt-4">
-              <Card className="border-border/50 bg-card/50 backdrop-blur">
+              <Card className="border-border/50 bg-card/50 backdrop-blur overflow-hidden">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-lg flex items-center gap-2">
                     <Play className="h-5 w-5 text-neon" /> Simulador
@@ -350,27 +404,29 @@ export function MartingaleCalculator() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Clique em um nível para simular um acerto naquele gale.
+                    Clique em um nível para simular um acerte naquele gale.
                   </p>
-                  <div className="flex flex-wrap gap-3">
-                    {levels.map((level) => (
-                      <button
-                        key={level.level}
-                        onClick={() => setWinAtGale(level.level)}
-                        className={`flex flex-col items-center p-4 rounded-xl border transition-all hover:scale-105 min-w-[90px] ${
-                          winAtGale === level.level ? 'border-neon bg-neon/20 neon-glow' : 'border-border/50 bg-muted/20 hover:border-neon/50'
-                        }`}
-                      >
-                        <span className="text-sm text-muted-foreground">
-                          {level.level === 0 ? 'Entrada' : `G${level.level}`}
-                        </span>
-                        <span className="text-base font-bold font-mono">R${level.bet.toFixed(0)}</span>
-                        {winAtGale === level.level && (
-                          <span className="text-xs text-neon font-bold mt-1">+R${level.profit.toFixed(2)}</span>
-                        )}
-                      </button>
-                    ))}
-                  </div>
+                  <ScrollArea className="max-h-[400px]">
+                    <div className="flex flex-wrap gap-2">
+                      {levels.map((level) => (
+                        <button
+                          key={level.level}
+                          onClick={() => setWinAtGale(level.level)}
+                          className={`flex flex-col items-center p-3 rounded-lg border transition-all hover:scale-105 min-w-[72px] ${
+                            winAtGale === level.level ? 'border-neon bg-neon/20 neon-glow' : 'border-border/50 bg-muted/20 hover:border-neon/50'
+                          }`}
+                        >
+                          <span className="text-xs text-muted-foreground">
+                            {level.level === 0 ? 'Entrada' : `G${level.level}`}
+                          </span>
+                          <span className="text-sm font-bold font-mono">{formatCurrency(level.bet)}</span>
+                          {winAtGale === level.level && (
+                            <span className="text-xs text-neon font-bold mt-0.5">+{formatCurrency(level.profit)}</span>
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  </ScrollArea>
 
                   {winAtGale !== null && (
                     <div className="mt-5 p-5 rounded-xl border border-neon/30 bg-neon/5 text-center neon-glow">
@@ -378,9 +434,9 @@ export function MartingaleCalculator() {
                         ✅ GREEN no {winAtGale === 0 ? 'Entrada' : `Gale ${winAtGale}`}!
                       </p>
                       <p className="text-base text-muted-foreground mt-2">
-                        Aposta: R$ {levels[winAtGale].bet.toFixed(2)} | 
-                        Investido: R$ {levels[winAtGale].totalInvested.toFixed(2)} | 
-                        Lucro: <span className="text-neon font-bold">R$ {levels[winAtGale].profit.toFixed(2)}</span>
+                        Aposta: {formatCurrency(levels[winAtGale].bet)} | 
+                        Investido: {formatCurrency(levels[winAtGale].totalInvested)} | 
+                        Lucro: <span className="text-neon font-bold">{formatCurrency(levels[winAtGale].profit)}</span>
                       </p>
                     </div>
                   )}
