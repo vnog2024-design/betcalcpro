@@ -19,6 +19,7 @@ import { ProbabilitySimulator } from '@/components/tools/probability-simulator'
 import { StrategyGenerator } from '@/components/tools/strategy-generator'
 import { UserPanel } from '@/components/tools/user-panel'
 import { AdBanner } from '@/components/shared/ad-banner'
+import { AnimatedBackground } from '@/components/shared/animated-background'
 import { Toaster } from '@/components/ui/toaster'
 
 const toolComponents: Record<ToolPage, React.ComponentType> = {
@@ -43,7 +44,8 @@ export default function Home() {
   const CurrentComponent = toolComponents[currentPage] || LandingPage
 
   return (
-    <div className="min-h-screen flex flex-col bg-background grid-pattern">
+    <div className="min-h-screen flex flex-col bg-background grid-pattern relative">
+      <AnimatedBackground />
       <Header />
       <div className="flex flex-1">
         <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
