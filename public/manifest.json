@@ -1,0 +1,20 @@
+{
+  "name": "BetCalc Pro — Ferramentas para Apostadores",
+  "short_name": "BetCalc Pro",
+  "description": "Calculadoras avançadas, simuladores e estratégias para apostadores de cassino online",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0e17",
+  "theme_color": "#00ff88",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["utilities", "finance"],
+  "lang": "pt-BR"
+}

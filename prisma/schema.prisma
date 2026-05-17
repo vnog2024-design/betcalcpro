@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  avatar    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  calculations  Calculation[]
+  favorites     FavoriteTool[]
+  achievements  UserAchievement[]
+  strategies    Strategy[]
+}
+
+model Calculation {
+  id        String   @id @default(cuid())
+  tool      String
+  params    String   // JSON stringified
+  result    String   // JSON stringified
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+}
+
+model FavoriteTool {
+  id        String   @id @default(cuid())
+  toolId    String
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  @@unique([userId, toolId])
+}
+
+model UserAchievement {
+  id         String   @id @default(cuid())
+  achievementId String
+  unlockedAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  @@unique([userId, achievementId])
+}
+
+model Strategy {
+  id        String   @id @default(cuid())
+  name      String
+  tool      String
+  config    String   // JSON stringified
+  isPublic  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+}
+
+model EmailSubscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  source    String   @default("popup")
+  createdAt DateTime @default(now())
+}
+
+model ToolUsage {
+  id        String   @id @default(cuid())
+  toolId    String
+  count     Int      @default(0)
+  updatedAt DateTime @updatedAt
+
+  @@unique([toolId])
+}

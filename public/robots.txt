@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://betcalcpro.com/sitemap.xml
