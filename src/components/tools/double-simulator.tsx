@@ -413,7 +413,7 @@ export function DoubleSimulator() {
               </TabsList>
 
               <TabsContent value="table" className="mt-4">
-                <Card className="border-border/50 bg-card/50 backdrop-blur">
+                <Card className="border-border/50 bg-card/50 backdrop-blur overflow-hidden">
                   <CardContent className="p-0">
                     <ScrollArea className="max-h-[500px]">
                       <table className="w-full text-sm">

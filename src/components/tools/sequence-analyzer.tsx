@@ -511,7 +511,7 @@ export function SequenceAnalyzer() {
               </TabsContent>
 
               <TabsContent value="patterns" className="mt-4">
-                <Card className="border-border/50 bg-card/50 backdrop-blur">
+                <Card className="border-border/50 bg-card/50 backdrop-blur overflow-hidden">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-base flex items-center gap-2">
                       <Search className="h-4 w-4 text-neon" /> Detecção de Padrões

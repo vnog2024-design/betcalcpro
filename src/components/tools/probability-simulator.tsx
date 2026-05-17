@@ -336,7 +336,7 @@ export function ProbabilitySimulator() {
           </div>
 
           {/* Theoretical Probabilities */}
-          <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <Card className="border-border/50 bg-card/50 backdrop-blur overflow-hidden">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-semibold flex items-center gap-2">
                 <TrendingUp className="h-4 w-4 text-neon" /> Probabilidades Teóricas

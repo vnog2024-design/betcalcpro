@@ -334,7 +334,7 @@ export function BankrollCalculator() {
               </div>
 
               {/* Detailed Comparison Table */}
-              <Card className="border-border/50 bg-card/50 backdrop-blur">
+              <Card className="border-border/50 bg-card/50 backdrop-blur overflow-hidden">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-base font-semibold flex items-center gap-2">
                     <Target className="h-4 w-4 text-neon" /> Risk Level Comparison
@@ -446,7 +446,7 @@ export function BankrollCalculator() {
               </Card>
 
               {/* Bankroll Survival Analysis */}
-              <Card className="border-border/50 bg-card/50 backdrop-blur">
+              <Card className="border-border/50 bg-card/50 backdrop-blur overflow-hidden">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-base font-semibold flex items-center gap-2">
                     <Wallet className="h-4 w-4 text-neon-blue" /> Bankroll Survival Analysis

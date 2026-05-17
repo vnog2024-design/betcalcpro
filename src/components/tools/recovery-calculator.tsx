@@ -420,7 +420,7 @@ export function RecoveryCalculator() {
               </div>
 
               {/* Comparison Table */}
-              <Card className="border-border/50 bg-card/50 backdrop-blur">
+              <Card className="border-border/50 bg-card/50 backdrop-blur overflow-hidden">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-base font-semibold flex items-center gap-2">
                     <Target className="h-4 w-4 text-neon" /> Comparação de Estratégias
@@ -487,7 +487,7 @@ export function RecoveryCalculator() {
               </Card>
 
               {/* Strategy Detail Tabs */}
-              <Card className="border-border/50 bg-card/50 backdrop-blur">
+              <Card className="border-border/50 bg-card/50 backdrop-blur overflow-hidden">
                 <CardContent className="p-4">
                   <Tabs defaultValue="flat" className="w-full">
                     <TabsList className="bg-muted/50 border border-border w-full">
