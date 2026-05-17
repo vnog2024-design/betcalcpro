@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo } from 'react'
-import { useAppStore, setCurrentPage, type ToolPage, toolInfo } from '@/store/app-store'
+import { useAppStore, type ToolPage, toolInfo } from '@/store/app-store'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'

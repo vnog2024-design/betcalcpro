@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import { useAppStore, type ToolPage } from '@/store/app-store'
 import { Header } from '@/components/layout/header'
 import { Sidebar } from '@/components/layout/sidebar'
@@ -55,6 +56,14 @@ const toolComponents: Record<ToolPage, React.ComponentType> = {
 export default function Home() {
   const { currentPage, sidebarOpen, setSidebarOpen } = useAppStore()
   const CurrentComponent = toolComponents[currentPage] || LandingPage
+  const mainRef = useRef<HTMLElement>(null)
+
+  // Scroll to top whenever the page changes
+  useEffect(() => {
+    if (mainRef.current) {
+      mainRef.current.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }, [currentPage])
 
   return (
     <div className="min-h-screen flex flex-col bg-background grid-pattern relative">
@@ -62,7 +71,7 @@ export default function Home() {
       <Header />
       <div className="flex flex-1">
         <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-        <main className="flex-1 min-h-0 overflow-y-auto">
+        <main ref={mainRef} className="flex-1 min-h-0 overflow-y-auto">
           {/* Top ad banner */}
           <AdBanner slot="top" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4" />
           
