@@ -66,6 +66,8 @@ interface AppState {
   logout: () => void
   theme: 'dark' | 'light'
   setTheme: (theme: 'dark' | 'light') => void
+  colorTheme: string
+  setColorTheme: (colorTheme: string) => void
 }
 
 export const useAppStore = create<AppState>()(
@@ -112,6 +114,8 @@ export const useAppStore = create<AppState>()(
       logout: () => set({ userName: null, userEmail: null, isLoggedIn: false }),
       theme: 'dark',
       setTheme: (theme) => set({ theme }),
+      colorTheme: 'neon-green',
+      setColorTheme: (colorTheme) => set({ colorTheme }),
     }),
     {
       name: 'betcalc-storage',
@@ -123,6 +127,7 @@ export const useAppStore = create<AppState>()(
         userEmail: state.userEmail,
         isLoggedIn: state.isLoggedIn,
         theme: state.theme,
+        colorTheme: state.colorTheme,
       }),
     }
   )

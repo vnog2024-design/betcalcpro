@@ -72,12 +72,12 @@ export function CookieConsent() {
   return (
     <div className="fixed inset-x-0 bottom-0 z-50 animate-slide-up p-4 sm:p-6">
       <div
-        className="relative mx-auto max-w-4xl rounded-xl border border-border/60 border-t-2 border-t-[#00ff88]/40 bg-card/90 backdrop-blur-xl shadow-2xl shadow-black/40"
+        className="relative mx-auto max-w-4xl rounded-xl border border-border/60 border-t-2 border-t-neon/40 bg-card/90 backdrop-blur-xl shadow-2xl shadow-black/40"
         role="dialog"
         aria-label="Consentimento de cookies"
       >
         {/* Subtle neon accent line at top */}
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#00ff88]/50 to-transparent" />
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-neon/50 to-transparent" />
 
         <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:gap-6 sm:p-6">
           {/* Text section */}
@@ -96,7 +96,7 @@ export function CookieConsent() {
               <button
                 type="button"
                 onClick={handlePolicyClick}
-                className="inline font-medium text-[#00ff88] underline underline-offset-2 transition-colors hover:text-[#00ff88]/80"
+                className="inline font-medium text-neon underline underline-offset-2 transition-colors hover:text-neon/80"
               >
                 Política de Cookies
               </button>
@@ -117,7 +117,7 @@ export function CookieConsent() {
             <Button
               size="sm"
               onClick={handleAcceptAll}
-              className="bg-[#00ff88] font-semibold text-[#0a0e17] shadow-md shadow-[#00ff88]/20 hover:bg-[#00ff88]/90"
+              className="bg-neon font-semibold text-primary-foreground shadow-md shadow-neon/20 hover:bg-neon/90"
             >
               Aceitar todos os cookies
             </Button>

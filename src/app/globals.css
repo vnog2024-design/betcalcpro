@@ -130,6 +130,212 @@
   --sidebar-ring: #00ff88;
 }
 
+/* ========================================
+   COLOR THEMES — accent color overrides
+   Uses data-color-theme attribute on <html>
+   Base dark/light still controls backgrounds
+   ======================================== */
+
+/* Neon Verde (default) */
+[data-color-theme="neon-green"].dark,
+[data-color-theme="neon-green"] {
+  --neon: #00ff88;
+  --neon-blue: #00d4ff;
+  --neon-green: #00ff88;
+  --neon-dim: rgba(0, 255, 136, 0.15);
+  --ring: #00ff88;
+  --primary: #00ff88;
+  --primary-foreground: #0a0e17;
+  --sidebar-primary: #00ff88;
+  --sidebar-ring: #00ff88;
+}
+[data-color-theme="neon-green"]:root {
+  --primary: #059669;
+  --primary-foreground: #ffffff;
+  --ring: #059669;
+  --neon: #059669;
+  --neon-blue: #0284c7;
+  --neon-green: #059669;
+  --neon-dim: rgba(5, 150, 105, 0.1);
+  --sidebar-primary: #059669;
+  --sidebar-ring: #059669;
+}
+
+/* Neon Azul */
+[data-color-theme="neon-blue"].dark,
+[data-color-theme="neon-blue"] {
+  --neon: #00d4ff;
+  --neon-blue: #0099ff;
+  --neon-green: #00d4ff;
+  --neon-dim: rgba(0, 212, 255, 0.15);
+  --ring: #00d4ff;
+  --primary: #00d4ff;
+  --primary-foreground: #0a0e17;
+  --sidebar-primary: #00d4ff;
+  --sidebar-ring: #00d4ff;
+}
+[data-color-theme="neon-blue"]:root {
+  --primary: #0284c7;
+  --primary-foreground: #ffffff;
+  --ring: #0284c7;
+  --neon: #0284c7;
+  --neon-blue: #0284c7;
+  --neon-green: #0284c7;
+  --neon-dim: rgba(2, 132, 199, 0.1);
+  --sidebar-primary: #0284c7;
+  --sidebar-ring: #0284c7;
+}
+
+/* Neon Roxo */
+[data-color-theme="neon-purple"].dark,
+[data-color-theme="neon-purple"] {
+  --neon: #a855f7;
+  --neon-blue: #7c3aed;
+  --neon-green: #a855f7;
+  --neon-dim: rgba(168, 85, 247, 0.15);
+  --ring: #a855f7;
+  --primary: #a855f7;
+  --primary-foreground: #0a0e17;
+  --sidebar-primary: #a855f7;
+  --sidebar-ring: #a855f7;
+}
+[data-color-theme="neon-purple"]:root {
+  --primary: #7c3aed;
+  --primary-foreground: #ffffff;
+  --ring: #7c3aed;
+  --neon: #7c3aed;
+  --neon-blue: #6d28d9;
+  --neon-green: #7c3aed;
+  --neon-dim: rgba(124, 58, 237, 0.1);
+  --sidebar-primary: #7c3aed;
+  --sidebar-ring: #7c3aed;
+}
+
+/* Neon Rosa */
+[data-color-theme="neon-pink"].dark,
+[data-color-theme="neon-pink"] {
+  --neon: #f472b6;
+  --neon-blue: #ec4899;
+  --neon-green: #f472b6;
+  --neon-dim: rgba(244, 114, 182, 0.15);
+  --ring: #f472b6;
+  --primary: #f472b6;
+  --primary-foreground: #0a0e17;
+  --sidebar-primary: #f472b6;
+  --sidebar-ring: #f472b6;
+}
+[data-color-theme="neon-pink"]:root {
+  --primary: #db2777;
+  --primary-foreground: #ffffff;
+  --ring: #db2777;
+  --neon: #db2777;
+  --neon-blue: #be185d;
+  --neon-green: #db2777;
+  --neon-dim: rgba(219, 39, 119, 0.1);
+  --sidebar-primary: #db2777;
+  --sidebar-ring: #db2777;
+}
+
+/* Neon Laranja */
+[data-color-theme="neon-orange"].dark,
+[data-color-theme="neon-orange"] {
+  --neon: #fb923c;
+  --neon-blue: #f97316;
+  --neon-green: #fb923c;
+  --neon-dim: rgba(251, 146, 60, 0.15);
+  --ring: #fb923c;
+  --primary: #fb923c;
+  --primary-foreground: #0a0e17;
+  --sidebar-primary: #fb923c;
+  --sidebar-ring: #fb923c;
+}
+[data-color-theme="neon-orange"]:root {
+  --primary: #ea580c;
+  --primary-foreground: #ffffff;
+  --ring: #ea580c;
+  --neon: #ea580c;
+  --neon-blue: #c2410c;
+  --neon-green: #ea580c;
+  --neon-dim: rgba(234, 88, 12, 0.1);
+  --sidebar-primary: #ea580c;
+  --sidebar-ring: #ea580c;
+}
+
+/* Neon Vermelho */
+[data-color-theme="neon-red"].dark,
+[data-color-theme="neon-red"] {
+  --neon: #f87171;
+  --neon-blue: #ef4444;
+  --neon-green: #f87171;
+  --neon-dim: rgba(248, 113, 113, 0.15);
+  --ring: #f87171;
+  --primary: #f87171;
+  --primary-foreground: #0a0e17;
+  --sidebar-primary: #f87171;
+  --sidebar-ring: #f87171;
+}
+[data-color-theme="neon-red"]:root {
+  --primary: #dc2626;
+  --primary-foreground: #ffffff;
+  --ring: #dc2626;
+  --neon: #dc2626;
+  --neon-blue: #b91c1c;
+  --neon-green: #dc2626;
+  --neon-dim: rgba(220, 38, 38, 0.1);
+  --sidebar-primary: #dc2626;
+  --sidebar-ring: #dc2626;
+}
+
+/* Oceano (Teal) */
+[data-color-theme="ocean"].dark,
+[data-color-theme="ocean"] {
+  --neon: #14b8a6;
+  --neon-blue: #0d9488;
+  --neon-green: #14b8a6;
+  --neon-dim: rgba(20, 184, 166, 0.15);
+  --ring: #14b8a6;
+  --primary: #14b8a6;
+  --primary-foreground: #0a0e17;
+  --sidebar-primary: #14b8a6;
+  --sidebar-ring: #14b8a6;
+}
+[data-color-theme="ocean"]:root {
+  --primary: #0d9488;
+  --primary-foreground: #ffffff;
+  --ring: #0d9488;
+  --neon: #0d9488;
+  --neon-blue: #0f766e;
+  --neon-green: #0d9488;
+  --neon-dim: rgba(13, 148, 136, 0.1);
+  --sidebar-primary: #0d9488;
+  --sidebar-ring: #0d9488;
+}
+
+/* Ouro (Gold) */
+[data-color-theme="gold"].dark,
+[data-color-theme="gold"] {
+  --neon: #eab308;
+  --neon-blue: #ca8a04;
+  --neon-green: #eab308;
+  --neon-dim: rgba(234, 179, 8, 0.15);
+  --ring: #eab308;
+  --primary: #eab308;
+  --primary-foreground: #0a0e17;
+  --sidebar-primary: #eab308;
+  --sidebar-ring: #eab308;
+}
+[data-color-theme="gold"]:root {
+  --primary: #ca8a04;
+  --primary-foreground: #ffffff;
+  --ring: #ca8a04;
+  --neon: #ca8a04;
+  --neon-blue: #a16207;
+  --neon-green: #ca8a04;
+  --neon-dim: rgba(202, 138, 4, 0.1);
+  --sidebar-primary: #ca8a04;
+  --sidebar-ring: #ca8a04;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

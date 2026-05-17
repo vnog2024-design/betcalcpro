@@ -80,10 +80,14 @@ export default function RootLayout({
               (function() {
                 try {
                   var stored = JSON.parse(localStorage.getItem('betcalc-storage'));
-                  var theme = stored && stored.state && stored.state.theme ? stored.state.theme : 'dark';
+                  var state = stored && stored.state ? stored.state : {};
+                  var theme = state.theme || 'dark';
+                  var colorTheme = state.colorTheme || 'neon-green';
                   document.documentElement.classList.toggle('dark', theme === 'dark');
+                  document.documentElement.setAttribute('data-color-theme', colorTheme);
                 } catch(e) {
                   document.documentElement.classList.add('dark');
+                  document.documentElement.setAttribute('data-color-theme', 'neon-green');
                 }
               })();
               if('serviceWorker' in navigator) {

@@ -3,9 +3,10 @@
 import { useAppStore, toolInfo, type ToolPage } from '@/store/app-store'
 import { Button } from '@/components/ui/button'
 import { Menu, X, User, Sun, Moon } from 'lucide-react'
+import { ThemePicker } from '@/components/shared/theme-picker'
 
 export function Header() {
-  const { sidebarOpen, setSidebarOpen, isLoggedIn, userName, setCurrentPage, theme, setTheme } = useAppStore()
+  const { sidebarOpen, setSidebarOpen, isLoggedIn, userName, setCurrentPage, theme, setTheme, colorTheme } = useAppStore()
 
   const toggleTheme = () => {
     const newTheme = theme === 'dark' ? 'light' : 'dark'
@@ -56,7 +57,10 @@ export function Header() {
 
         {/* Right: Actions */}
         <div className="flex items-center gap-2">
-          {/* Theme toggle */}
+          {/* Color theme picker */}
+          <ThemePicker />
+
+          {/* Dark/Light toggle */}
           <Button
             variant="ghost"
             size="icon"

@@ -54,7 +54,7 @@ const toolComponents: Record<ToolPage, React.ComponentType> = {
 }
 
 export default function Home() {
-  const { currentPage, sidebarOpen, setSidebarOpen } = useAppStore()
+  const { currentPage, sidebarOpen, setSidebarOpen, colorTheme, theme } = useAppStore()
   const CurrentComponent = toolComponents[currentPage] || LandingPage
   const mainRef = useRef<HTMLElement>(null)
 
@@ -64,6 +64,12 @@ export default function Home() {
       mainRef.current.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }, [currentPage])
+
+  // Sync color theme to DOM
+  useEffect(() => {
+    document.documentElement.setAttribute('data-color-theme', colorTheme)
+    document.documentElement.classList.toggle('dark', theme === 'dark')
+  }, [colorTheme, theme])
 
   return (
     <div className="min-h-screen flex flex-col bg-background grid-pattern relative">
