@@ -16,6 +16,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell
 } from 'recharts'
 import { useToast } from '@/hooks/use-toast'
+import { useThemeColors } from '@/hooks/use-theme-colors'
 import { AdInContent } from '@/components/shared/ad-banner'
 
 interface StreakInfo {
@@ -32,6 +33,7 @@ interface PatternInfo {
 
 export function SequenceAnalyzer() {
   const { toast } = useToast()
+  const { neon } = useThemeColors()
   const { addHistory, addFavorite, removeFavorite, isFavorite, unlockAchievement } = useAppStore()
 
   const [sequenceInput, setSequenceInput] = useState('')
@@ -474,7 +476,7 @@ export function SequenceAnalyzer() {
                             labelStyle={{ color: "var(--foreground)" }}
                             formatter={(value: number) => [value, 'Ocorrências']}
                           />
-                          <Bar dataKey="count" radius={[4, 4, 0, 0]} fill="#00ff88" fillOpacity={0.7} />
+                          <Bar dataKey="count" radius={[4, 4, 0, 0]} fill={neon} fillOpacity={0.7} />
                         </BarChart>
                       </ResponsiveContainer>
                     )}

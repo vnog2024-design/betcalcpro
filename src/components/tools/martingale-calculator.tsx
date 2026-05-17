@@ -18,6 +18,7 @@ import {
   AreaChart, Area
 } from 'recharts'
 import { useToast } from '@/hooks/use-toast'
+import { useThemeColors } from '@/hooks/use-theme-colors'
 
 interface GaleLevel {
   level: number
@@ -39,6 +40,7 @@ function formatCurrency(value: number): string {
 
 export function MartingaleCalculator() {
   const { toast } = useToast()
+  const { neon, neonBlue, neonWithAlpha } = useThemeColors()
   const { addHistory, addFavorite, removeFavorite, isFavorite, unlockAchievement } = useAppStore()
 
   const [initialBet, setInitialBet] = useState('10')
@@ -353,7 +355,7 @@ export function MartingaleCalculator() {
                           <XAxis dataKey="name" tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }} interval="preserveStartEnd" />
                           <YAxis tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }} tickFormatter={(v) => typeof v === 'number' && v >= 1000 ? `${(v/1000).toFixed(0)}k` : v} />
                           <Tooltip contentStyle={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: '8px', fontSize: 13 }} />
-                          <Area type="monotone" dataKey="profit" stroke="var(--neon)" fill="rgba(0, 255, 136, 0.1)" strokeWidth={2} />
+                          <Area type="monotone" dataKey="profit" stroke={neon} fill={neonWithAlpha(0.1)} strokeWidth={2} />
                         </AreaChart>
                       </ResponsiveContainer>
                     </TabsContent>
@@ -364,7 +366,7 @@ export function MartingaleCalculator() {
                           <XAxis dataKey="name" tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }} interval="preserveStartEnd" />
                           <YAxis tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }} tickFormatter={(v) => typeof v === 'number' && v >= 1000 ? `${(v/1000).toFixed(0)}k` : v} />
                           <Tooltip contentStyle={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: '8px', fontSize: 13 }} />
-                          <Line type="monotone" dataKey="bet" stroke="var(--neon-blue)" strokeWidth={2} dot={{ r: 3, fill: 'var(--neon-blue)' }} />
+                          <Line type="monotone" dataKey="bet" stroke={neonBlue} strokeWidth={2} dot={{ r: 3, fill: neonBlue }} />
                         </LineChart>
                       </ResponsiveContainer>
                     </TabsContent>

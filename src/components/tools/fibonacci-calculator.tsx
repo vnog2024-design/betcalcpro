@@ -16,6 +16,7 @@ import {
   AreaChart, Area
 } from 'recharts'
 import { useToast } from '@/hooks/use-toast'
+import { useThemeColors } from '@/hooks/use-theme-colors'
 import { AdInContent } from '@/components/shared/ad-banner'
 
 interface FibLevel {
@@ -29,6 +30,7 @@ interface FibLevel {
 
 export function FibonacciCalculator() {
   const { toast } = useToast()
+  const { neon, neonBlue, neonBlueWithAlpha } = useThemeColors()
   const { addHistory, unlockAchievement } = useAppStore()
 
   // Inputs
@@ -300,9 +302,9 @@ export function FibonacciCalculator() {
                     <Line
                       type="monotone"
                       dataKey="bet"
-                      stroke="#00d4ff"
+                      stroke={neonBlue}
                       strokeWidth={2}
-                      dot={{ r: 4, fill: '#00d4ff' }}
+                      dot={{ r: 4, fill: neonBlue }}
                       name="bet"
                     />
                     <Line
@@ -316,9 +318,9 @@ export function FibonacciCalculator() {
                     <Line
                       type="monotone"
                       dataKey="profit"
-                      stroke="#00ff88"
+                      stroke={neon}
                       strokeWidth={2}
-                      dot={{ r: 3, fill: '#00ff88' }}
+                      dot={{ r: 3, fill: neon }}
                       name="profit"
                     />
                   </LineChart>
@@ -437,8 +439,8 @@ export function FibonacciCalculator() {
                     <Area
                       type="monotone"
                       dataKey="bet"
-                      stroke="#00d4ff"
-                      fill="rgba(0, 212, 255, 0.1)"
+                      stroke={neonBlue}
+                      fill={neonBlueWithAlpha(0.1)}
                       strokeWidth={2}
                       name="bet"
                     />

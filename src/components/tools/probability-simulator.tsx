@@ -16,6 +16,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell
 } from 'recharts'
 import { useToast } from '@/hooks/use-toast'
+import { useThemeColors } from '@/hooks/use-theme-colors'
 import { AdInContent } from '@/components/shared/ad-banner'
 
 interface SimulationResult {
@@ -35,6 +36,7 @@ interface ProbabilityEntry {
 
 export function ProbabilitySimulator() {
   const { toast } = useToast()
+  const { neon } = useThemeColors()
   const { addHistory, addFavorite, removeFavorite, isFavorite, unlockAchievement } = useAppStore()
 
   const [probability, setProbability] = useState('48.6')
@@ -484,7 +486,7 @@ export function ProbabilitySimulator() {
                           {distributionData.map((entry, index) => (
                             <Cell
                               key={index}
-                              fill={entry.name.includes('-') ? '#ef4444' : '#00ff88'}
+                              fill={entry.name.includes('-') ? '#ef4444' : neon}
                               fillOpacity={0.7}
                             />
                           ))}

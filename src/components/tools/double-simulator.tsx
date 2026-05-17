@@ -16,6 +16,7 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
 } from 'recharts'
 import { useToast } from '@/hooks/use-toast'
+import { useThemeColors } from '@/hooks/use-theme-colors'
 import { AdInContent } from '@/components/shared/ad-banner'
 
 type Strategy = 'martingale' | 'fibonacci' | 'flat'
@@ -54,6 +55,7 @@ function getFibonacciBet(fibIndex: number, baseBet: number): number {
 
 export function DoubleSimulator() {
   const { toast } = useToast()
+  const { neon } = useThemeColors()
   const { addHistory, addFavorite, removeFavorite, isFavorite, unlockAchievement } = useAppStore()
 
   const [initialBet, setInitialBet] = useState('10')
@@ -498,10 +500,10 @@ export function DoubleSimulator() {
                         <Line
                           type="monotone"
                           dataKey="balance"
-                          stroke="#00ff88"
+                          stroke={neon}
                           strokeWidth={2}
                           dot={false}
-                          activeDot={{ r: 4, fill: '#00ff88' }}
+                          activeDot={{ r: 4, fill: neon }}
                         />
                       </LineChart>
                     </ResponsiveContainer>

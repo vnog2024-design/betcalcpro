@@ -16,6 +16,7 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
 } from 'recharts'
 import { useToast } from '@/hooks/use-toast'
+import { useThemeColors } from '@/hooks/use-theme-colors'
 import { AdInContent } from '@/components/shared/ad-banner'
 
 interface CrashRound {
@@ -30,6 +31,7 @@ interface CrashRound {
 
 export function CrashSimulator() {
   const { toast } = useToast()
+  const { neon, neonBlue } = useThemeColors()
   const { addHistory, addFavorite, removeFavorite, isFavorite, unlockAchievement } = useAppStore()
 
   const [initialBet, setInitialBet] = useState('10')
@@ -399,10 +401,10 @@ export function CrashSimulator() {
                         <Line
                           type="monotone"
                           dataKey="balance"
-                          stroke="#00ff88"
+                          stroke={neon}
                           strokeWidth={2}
                           dot={false}
-                          activeDot={{ r: 4, fill: '#00ff88' }}
+                          activeDot={{ r: 4, fill: neon }}
                         />
                       </LineChart>
                     </ResponsiveContainer>
@@ -422,9 +424,9 @@ export function CrashSimulator() {
                           <Line
                             type="monotone"
                             dataKey="crashPoint"
-                            stroke="#00d4ff"
+                            stroke={neonBlue}
                             strokeWidth={1}
-                            dot={{ r: 2, fill: '#00d4ff' }}
+                            dot={{ r: 2, fill: neonBlue }}
                           />
                         </LineChart>
                       </ResponsiveContainer>

@@ -16,6 +16,7 @@ import {
   BarChart, Bar
 } from 'recharts'
 import { useToast } from '@/hooks/use-toast'
+import { useThemeColors } from '@/hooks/use-theme-colors'
 import { AdInContent } from '@/components/shared/ad-banner'
 
 interface MasanielloEvent {
@@ -162,6 +163,7 @@ function computeMasaniello(totalEvents: string, eventsToHit: string, odds: strin
 
 export function MasanielloCalculator() {
   const { toast } = useToast()
+  const { neon, neonBlue, neonBlueWithAlpha } = useThemeColors()
   const { addHistory, unlockAchievement } = useAppStore()
 
   // Inputs
@@ -424,9 +426,9 @@ export function MasanielloCalculator() {
                     <Line
                       type="monotone"
                       dataKey="ifWin"
-                      stroke="#00ff88"
+                      stroke={neon}
                       strokeWidth={2}
-                      dot={{ r: 3, fill: '#00ff88' }}
+                      dot={{ r: 3, fill: neon }}
                       name="ifWin"
                     />
                     <Line
@@ -440,10 +442,10 @@ export function MasanielloCalculator() {
                     <Line
                       type="monotone"
                       dataKey="bet"
-                      stroke="#00d4ff"
+                      stroke={neonBlue}
                       strokeWidth={2}
                       strokeDasharray="5 5"
-                      dot={{ r: 2, fill: '#00d4ff' }}
+                      dot={{ r: 2, fill: neonBlue }}
                       name="bet"
                     />
                   </LineChart>
@@ -485,7 +487,7 @@ export function MasanielloCalculator() {
                       labelStyle={{ color: "var(--foreground)" }}
                       formatter={(value: number) => [`R$ ${value.toFixed(2)}`, 'Aposta']}
                     />
-                    <Bar dataKey="bet" fill="rgba(0, 212, 255, 0.6)" stroke="#00d4ff" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="bet" fill={neonBlueWithAlpha(0.6)} stroke={neonBlue} radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </CardContent>

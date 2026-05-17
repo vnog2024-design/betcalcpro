@@ -14,6 +14,7 @@ import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts'
 import { useToast } from '@/hooks/use-toast'
+import { useThemeColors } from '@/hooks/use-theme-colors'
 import { AdInContent } from '@/components/shared/ad-banner'
 
 interface SorosStep {
@@ -28,6 +29,7 @@ interface SorosStep {
 
 export function SorosCalculator() {
   const { toast } = useToast()
+  const { neon, neonWithAlpha } = useThemeColors()
   const { addHistory, unlockAchievement } = useAppStore()
 
   const [initialBankroll, setInitialBankroll] = useState('100')
@@ -277,8 +279,8 @@ export function SorosCalculator() {
                     <AreaChart data={chartData}>
                       <defs>
                         <linearGradient id="bankrollGradient" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#00ff88" stopOpacity={0.3} />
-                          <stop offset="95%" stopColor="#00ff88" stopOpacity={0} />
+                          <stop offset="5%" stopColor={neon} stopOpacity={0.3} />
+                          <stop offset="95%" stopColor={neon} stopOpacity={0} />
                         </linearGradient>
                       </defs>
                       <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
@@ -292,7 +294,7 @@ export function SorosCalculator() {
                       <Area
                         type="monotone"
                         dataKey="bankroll"
-                        stroke="#00ff88"
+                        stroke={neon}
                         fill="url(#bankrollGradient)"
                         strokeWidth={2}
                       />
