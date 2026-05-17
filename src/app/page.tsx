@@ -20,7 +20,14 @@ import { StrategyGenerator } from '@/components/tools/strategy-generator'
 import { UserPanel } from '@/components/tools/user-panel'
 import { AdBanner } from '@/components/shared/ad-banner'
 import { AnimatedBackground } from '@/components/shared/animated-background'
+import { CookieConsent } from '@/components/shared/cookie-consent'
 import { Toaster } from '@/components/ui/toaster'
+import { PrivacyPolicy } from '@/components/legal/privacy-policy'
+import { TermsOfUse } from '@/components/legal/terms-of-use'
+import { ResponsibleGaming } from '@/components/legal/responsible-gaming'
+import { ContactPage } from '@/components/legal/contact-page'
+import { AboutPage } from '@/components/legal/about-page'
+import { CookiesPolicy } from '@/components/legal/cookies-policy'
 
 const toolComponents: Record<ToolPage, React.ComponentType> = {
   home: LandingPage,
@@ -37,6 +44,12 @@ const toolComponents: Record<ToolPage, React.ComponentType> = {
   'probability-simulator': ProbabilitySimulator,
   'strategy-generator': StrategyGenerator,
   'user-panel': UserPanel,
+  'privacy': PrivacyPolicy,
+  'terms': TermsOfUse,
+  'responsible-gaming': ResponsibleGaming,
+  'contact': ContactPage,
+  'about': AboutPage,
+  'cookies': CookiesPolicy,
 }
 
 export default function Home() {
@@ -62,6 +75,7 @@ export default function Home() {
         </main>
       </div>
       <Footer />
+      <CookieConsent />
       <Toaster />
     </div>
   )

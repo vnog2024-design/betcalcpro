@@ -16,6 +16,12 @@ export type ToolPage =
   | 'probability-simulator'
   | 'strategy-generator'
   | 'user-panel'
+  | 'privacy'
+  | 'terms'
+  | 'responsible-gaming'
+  | 'contact'
+  | 'about'
+  | 'cookies'
 
 export interface CalculationHistory {
   id: string
@@ -137,4 +143,10 @@ export const toolInfo: Record<ToolPage, { name: string; description: string; ico
   'probability-simulator': { name: 'Simulador Probabilístico', description: 'Simule probabilidades e cenários', icon: 'Percent', category: 'simulators' },
   'strategy-generator': { name: 'Gerador Estratégias', description: 'Gere estratégias personalizadas', icon: 'Sparkles', category: 'simulators' },
   'user-panel': { name: 'Meu Painel', description: 'Seu painel pessoal', icon: 'User', category: 'nav' },
+  'privacy': { name: 'Privacidade', description: 'Política de Privacidade', icon: 'Shield', category: 'legal' },
+  'terms': { name: 'Termos', description: 'Termos de Uso', icon: 'FileText', category: 'legal' },
+  'responsible-gaming': { name: 'Jogo Responsável', description: 'Compromisso com jogo responsável', icon: 'Heart', category: 'legal' },
+  'contact': { name: 'Contato', description: 'Fale conosco', icon: 'Mail', category: 'legal' },
+  'about': { name: 'Sobre Nós', description: 'Quem somos', icon: 'Info', category: 'legal' },
+  'cookies': { name: 'Cookies', description: 'Política de Cookies', icon: 'Cookie', category: 'legal' },
 }
