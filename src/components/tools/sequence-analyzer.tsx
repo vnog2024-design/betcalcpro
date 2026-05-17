@@ -17,6 +17,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell
 } from 'recharts'
 import { useToast } from '@/hooks/use-toast'
+import { AdInContent } from '@/components/shared/ad-banner'
 
 interface StreakInfo {
   outcome: string
@@ -261,7 +262,7 @@ export function SequenceAnalyzer() {
             <Search className="h-7 w-7 text-neon" />
             Analisador de <span className="gradient-neon-text">Sequência</span>
           </h1>
-          <p className="text-sm text-muted-foreground mt-1">
+          <p className="text-base text-muted-foreground mt-1">
             Analise padrões, frequências e streaks em sequências de resultados
           </p>
         </div>
@@ -283,17 +284,17 @@ export function SequenceAnalyzer() {
         <div className="lg:col-span-1 space-y-4">
           <Card className="border-border/50 bg-card/50 backdrop-blur">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-semibold flex items-center gap-2">
+              <CardTitle className="text-base font-semibold flex items-center gap-2">
                 <Search className="h-4 w-4 text-neon" /> Entrada de Sequência
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Sequência de Resultados (separados por vírgula)</Label>
+                <Label className="text-sm text-muted-foreground">Sequência de Resultados (separados por vírgula)</Label>
                 <textarea
                   value={sequenceInput}
                   onChange={(e) => setSequenceInput(e.target.value)}
-                  className="w-full h-32 rounded-lg border border-border bg-muted/50 px-3 py-2 text-xs font-mono resize-none focus:outline-none focus:border-neon/50 focus:ring-1 focus:ring-neon/20"
+                  className="w-full h-32 rounded-lg border border-border bg-muted/50 px-3 py-2 text-sm font-mono resize-none focus:outline-none focus:border-neon/50 focus:ring-1 focus:ring-neon/20"
                   placeholder="R,B,R,R,W,B,R,B,B,R,W,R,R,B,R..."
                 />
               </div>
@@ -307,11 +308,11 @@ export function SequenceAnalyzer() {
               <div className="grid grid-cols-2 gap-2">
                 <Button
                   onClick={handleAnalyze}
-                  className="gradient-neon text-black text-xs font-bold"
+                  className="gradient-neon text-black text-sm font-bold"
                 >
                   <Search className="h-3 w-3 mr-1" /> Analisar
                 </Button>
-                <Button onClick={handleReset} variant="outline" size="sm" className="border-border text-xs">
+                <Button onClick={handleReset} variant="outline" size="sm" className="border-border text-sm">
                   <RotateCcw className="h-3 w-3 mr-1" /> Limpar
                 </Button>
               </div>
@@ -320,13 +321,13 @@ export function SequenceAnalyzer() {
                 onClick={loadSampleSequence}
                 variant="outline"
                 size="sm"
-                className="w-full border-border text-xs"
+                className="w-full border-border text-sm"
               >
                 <BarChart3 className="h-3 w-3 mr-1" /> Carregar Exemplo (50 resultados)
               </Button>
 
               {parsedSequence.length > 0 && (
-                <div className="text-xs text-muted-foreground">
+                <div className="text-sm text-muted-foreground">
                   <span className="text-neon font-bold">{parsedSequence.length}</span> resultados detectados
                 </div>
               )}
@@ -337,7 +338,7 @@ export function SequenceAnalyzer() {
           {analysis && (
             <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardHeader className="pb-2">
-                <CardTitle className="text-xs font-semibold flex items-center gap-2">
+                <CardTitle className="text-sm font-semibold flex items-center gap-2">
                   <TrendingUp className="h-4 w-4 text-neon" /> Tendências Hot/Cold
                 </CardTitle>
               </CardHeader>
@@ -345,7 +346,7 @@ export function SequenceAnalyzer() {
                 {analysis.hotCold.map(hc => (
                   <div key={hc.outcome} className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <span className={`text-xs font-bold ${outcomeColor[hc.outcome]}`}>
+                      <span className={`text-sm font-bold ${outcomeColor[hc.outcome]}`}>
                         {outcomeLabel[hc.outcome]}
                       </span>
                       {hc.trend === 'hot' && <Flame className="h-3 w-3 text-red-500" />}
@@ -370,7 +371,7 @@ export function SequenceAnalyzer() {
 
           {/* Copy */}
           {analysis && (
-            <Button onClick={handleCopy} variant="outline" size="sm" className="w-full border-border text-xs">
+            <Button onClick={handleCopy} variant="outline" size="sm" className="w-full border-border text-sm">
               {copied ? <Check className="h-3 w-3 mr-1" /> : <Copy className="h-3 w-3 mr-1" />}
               {copied ? 'Copiado!' : 'Copiar Análise'}
             </Button>
@@ -382,27 +383,27 @@ export function SequenceAnalyzer() {
           {analysis ? (
             <Tabs defaultValue="frequency" className="w-full">
               <TabsList className="bg-muted/50 border border-border">
-                <TabsTrigger value="frequency" className="text-xs">Frequência</TabsTrigger>
-                <TabsTrigger value="streaks" className="text-xs">Streaks</TabsTrigger>
-                <TabsTrigger value="patterns" className="text-xs">Padrões</TabsTrigger>
+                <TabsTrigger value="frequency" className="text-sm">Frequência</TabsTrigger>
+                <TabsTrigger value="streaks" className="text-sm">Streaks</TabsTrigger>
+                <TabsTrigger value="patterns" className="text-sm">Padrões</TabsTrigger>
               </TabsList>
 
               <TabsContent value="frequency" className="mt-4">
                 <Card className="border-border/50 bg-card/50 backdrop-blur">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm flex items-center gap-2">
+                    <CardTitle className="text-base flex items-center gap-2">
                       <BarChart3 className="h-4 w-4 text-neon" /> Distribuição de Frequência
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <ResponsiveContainer width="100%" height={250}>
                       <BarChart data={analysis.freqData}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                        <XAxis dataKey="short" tick={{ fontSize: 12, fill: '#94a3b8' }} />
-                        <YAxis tick={{ fontSize: 10, fill: '#94a3b8' }} />
+                        <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                        <XAxis dataKey="short" tick={{ fontSize: 12, fill: "var(--muted-foreground)" }} />
+                        <YAxis tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} />
                         <Tooltip
-                          contentStyle={{ background: '#111827', border: '1px solid #1e293b', borderRadius: '8px', fontSize: 12 }}
-                          labelStyle={{ color: '#e2e8f0' }}
+                          contentStyle={{ background: "var(--card)", border: '1px solid var(--border)', borderRadius: '8px', fontSize: 12 }}
+                          labelStyle={{ color: "var(--foreground)" }}
                           formatter={(value: number, name: string) => {
                             if (name === 'count') return [value, 'Contagem']
                             return [`${value.toFixed(1)}%`, 'Porcentagem']
@@ -419,7 +420,7 @@ export function SequenceAnalyzer() {
                     <div className="grid grid-cols-3 gap-3 mt-4">
                       {analysis.freqData.map(d => (
                         <div key={d.short} className="text-center p-2 rounded-lg bg-muted/20">
-                          <p className="text-lg font-black" style={{ color: d.color }}>{d.count}</p>
+                          <p className="text-xl font-black" style={{ color: d.color }}>{d.count}</p>
                           <p className="text-[10px] text-muted-foreground">{d.percentage.toFixed(1)}%</p>
                         </div>
                       ))}
@@ -431,7 +432,7 @@ export function SequenceAnalyzer() {
               <TabsContent value="streaks" className="mt-4">
                 <Card className="border-border/50 bg-card/50 backdrop-blur">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm flex items-center gap-2">
+                    <CardTitle className="text-base flex items-center gap-2">
                       <TrendingUp className="h-4 w-4 text-neon" /> Análise de Streaks
                     </CardTitle>
                   </CardHeader>
@@ -440,7 +441,7 @@ export function SequenceAnalyzer() {
                     <div className="grid grid-cols-3 gap-3 mb-4">
                       {Object.entries(analysis.longestStreaks).map(([outcome, info]) => (
                         <div key={outcome} className="text-center p-3 rounded-lg bg-muted/20 border border-border/30">
-                          <p className={`text-xs font-bold ${outcomeColor[outcome]}`}>
+                          <p className={`text-sm font-bold ${outcomeColor[outcome]}`}>
                             {outcomeLabel[outcome]}
                           </p>
                           <p className="text-2xl font-black text-neon">{info.length}x</p>
@@ -453,10 +454,10 @@ export function SequenceAnalyzer() {
                     <div className="grid grid-cols-3 gap-3 mb-4">
                       {Object.entries(analysis.avgStreaks).map(([outcome, avg]) => (
                         <div key={outcome} className="text-center p-2 rounded-lg bg-muted/20">
-                          <p className={`text-xs font-bold ${outcomeColor[outcome]}`}>
+                          <p className={`text-sm font-bold ${outcomeColor[outcome]}`}>
                             {outcomeLabel[outcome]}
                           </p>
-                          <p className="text-sm font-bold text-neon-blue">{avg.toFixed(2)}</p>
+                          <p className="text-base font-bold text-neon-blue">{avg.toFixed(2)}</p>
                           <p className="text-[10px] text-muted-foreground">Média</p>
                         </div>
                       ))}
@@ -466,12 +467,12 @@ export function SequenceAnalyzer() {
                     {analysis.streakChart.length > 0 && (
                       <ResponsiveContainer width="100%" height={200}>
                         <BarChart data={analysis.streakChart}>
-                          <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                          <XAxis dataKey="length" tick={{ fontSize: 10, fill: '#94a3b8' }} />
-                          <YAxis tick={{ fontSize: 10, fill: '#94a3b8' }} />
+                          <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                          <XAxis dataKey="length" tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} />
+                          <YAxis tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} />
                           <Tooltip
-                            contentStyle={{ background: '#111827', border: '1px solid #1e293b', borderRadius: '8px', fontSize: 12 }}
-                            labelStyle={{ color: '#e2e8f0' }}
+                            contentStyle={{ background: "var(--card)", border: '1px solid var(--border)', borderRadius: '8px', fontSize: 12 }}
+                            labelStyle={{ color: "var(--foreground)" }}
                             formatter={(value: number) => [value, 'Ocorrências']}
                           />
                           <Bar dataKey="count" radius={[4, 4, 0, 0]} fill="#00ff88" fillOpacity={0.7} />
@@ -481,7 +482,7 @@ export function SequenceAnalyzer() {
 
                     {/* Streak table */}
                     <ScrollArea className="max-h-48 mt-4">
-                      <table className="w-full text-xs">
+                      <table className="w-full text-sm">
                         <thead>
                           <tr className="border-b border-border">
                             <th className="text-left p-2 font-semibold text-muted-foreground">Resultado</th>
@@ -512,7 +513,7 @@ export function SequenceAnalyzer() {
               <TabsContent value="patterns" className="mt-4">
                 <Card className="border-border/50 bg-card/50 backdrop-blur">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm flex items-center gap-2">
+                    <CardTitle className="text-base flex items-center gap-2">
                       <Search className="h-4 w-4 text-neon" /> Detecção de Padrões
                     </CardTitle>
                   </CardHeader>
@@ -520,17 +521,17 @@ export function SequenceAnalyzer() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {/* 2-length patterns */}
                       <div>
-                        <h3 className="text-xs font-semibold text-muted-foreground mb-3">Padrões de 2 Resultados</h3>
+                        <h3 className="text-sm font-semibold text-muted-foreground mb-3">Padrões de 2 Resultados</h3>
                         <div className="space-y-2">
                           {analysis.patternData2.map((p, i) => (
                             <div key={i} className="flex items-center justify-between p-2 rounded-lg bg-muted/20">
-                              <span className="text-xs font-mono font-bold">
+                              <span className="text-sm font-mono font-bold">
                                 {p.pattern.split('').map((c, ci) => (
                                   <span key={ci} className={outcomeColor[c]}>{c}</span>
                                 ))}
                               </span>
                               <div className="flex items-center gap-2">
-                                <span className="text-xs font-mono">{p.count}x</span>
+                                <span className="text-sm font-mono">{p.count}x</span>
                                 <Badge className="border-0 text-[8px] bg-neon/10 text-neon">
                                   {p.percentage.toFixed(1)}%
                                 </Badge>
@@ -542,18 +543,18 @@ export function SequenceAnalyzer() {
 
                       {/* 3-length patterns */}
                       <div>
-                        <h3 className="text-xs font-semibold text-muted-foreground mb-3">Padrões de 3 Resultados</h3>
+                        <h3 className="text-sm font-semibold text-muted-foreground mb-3">Padrões de 3 Resultados</h3>
                         <ScrollArea className="max-h-64">
                           <div className="space-y-2">
                             {analysis.patternData3.slice(0, 15).map((p, i) => (
                               <div key={i} className="flex items-center justify-between p-2 rounded-lg bg-muted/20">
-                                <span className="text-xs font-mono font-bold">
+                                <span className="text-sm font-mono font-bold">
                                   {p.pattern.split('').map((c, ci) => (
                                     <span key={ci} className={outcomeColor[c]}>{c}</span>
                                   ))}
                                 </span>
                                 <div className="flex items-center gap-2">
-                                  <span className="text-xs font-mono">{p.count}x</span>
+                                  <span className="text-sm font-mono">{p.count}x</span>
                                   <Badge className="border-0 text-[8px] bg-neon-blue/10 text-neon-blue">
                                     {p.percentage.toFixed(1)}%
                                   </Badge>
@@ -572,23 +573,25 @@ export function SequenceAnalyzer() {
             <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardContent className="p-12 text-center">
                 <Search className="h-12 w-12 text-neon/30 mx-auto mb-4" />
-                <p className="text-muted-foreground text-sm">
+                <p className="text-muted-foreground text-base">
                   Insira uma sequência de resultados e clique em <span className="text-neon font-semibold">Analisar</span>
                 </p>
-                <p className="text-muted-foreground text-xs mt-2">
+                <p className="text-muted-foreground text-sm mt-2">
                   Exemplo: R,B,R,R,W,B,R
                 </p>
               </CardContent>
             </Card>
           )}
 
+          <AdInContent />
+
           {/* Warning */}
           <Card className="border-amber-500/20 bg-amber-500/5">
             <CardContent className="p-4 flex gap-3">
               <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
               <div>
-                <p className="text-xs font-semibold text-amber-500">Aviso Importante</p>
-                <p className="text-xs text-muted-foreground leading-relaxed mt-1">
+                <p className="text-sm font-semibold text-amber-500">Aviso Importante</p>
+                <p className="text-sm text-muted-foreground leading-relaxed mt-1">
                   A detecção de padrões em resultados de jogos de azar é ilusória. Cada rodada é independente e
                   resultados passados não influenciam resultados futuros. Padrões identificados são apenas coincidências estatísticas.
                 </p>

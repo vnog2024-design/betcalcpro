@@ -18,7 +18,7 @@ import { SequenceAnalyzer } from '@/components/tools/sequence-analyzer'
 import { ProbabilitySimulator } from '@/components/tools/probability-simulator'
 import { StrategyGenerator } from '@/components/tools/strategy-generator'
 import { UserPanel } from '@/components/tools/user-panel'
-import { EmailPopup } from '@/components/shared/email-popup'
+import { AdBanner } from '@/components/shared/ad-banner'
 import { Toaster } from '@/components/ui/toaster'
 
 const toolComponents: Record<ToolPage, React.ComponentType> = {
@@ -48,13 +48,18 @@ export default function Home() {
       <div className="flex flex-1">
         <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
         <main className="flex-1 min-h-0 overflow-y-auto">
+          {/* Top ad banner */}
+          <AdBanner slot="top" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4" />
+          
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <CurrentComponent />
           </div>
+
+          {/* Bottom ad banner */}
+          <AdBanner slot="bottom" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-4" />
         </main>
       </div>
       <Footer />
-      <EmailPopup />
       <Toaster />
     </div>
   )

@@ -13,6 +13,7 @@ import {
   RotateCcw, Target, AlertTriangle, Copy, Download, Check, Info, ChevronDown, ChevronUp,
 } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
+import { AdInContent } from '@/components/shared/ad-banner'
 
 interface RecoveryStep {
   step: number
@@ -117,7 +118,7 @@ export function LossRecoveryCalculator() {
             <RotateCcw className="h-7 w-7 text-neon" />
             Recuperação de <span className="gradient-neon-text">Loss %</span>
           </h1>
-          <p className="text-sm text-muted-foreground mt-1">
+          <p className="text-base text-muted-foreground mt-1">
             Calcule a recuperação de perdas com percentual por etapa
           </p>
         </div>
@@ -128,30 +129,30 @@ export function LossRecoveryCalculator() {
         <div className="lg:col-span-1 space-y-4">
           <Card className="border-border/50 bg-card/50 backdrop-blur">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-semibold flex items-center gap-2">
+              <CardTitle className="text-base font-semibold flex items-center gap-2">
                 <Target className="h-4 w-4 text-neon" /> Configurações
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Valor Perdido (R$)</Label>
+                <Label className="text-sm text-muted-foreground">Valor Perdido (R$)</Label>
                 <Input
                   type="number"
                   value={amountLost}
                   onChange={(e) => setAmountLost(e.target.value)}
-                  className="bg-muted/50 border-border"
+                  className="bg-muted/50 border-border h-11"
                   min="0.01"
                   step="0.01"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">% de Recuperação por Etapa</Label>
+                <Label className="text-sm text-muted-foreground">% de Recuperação por Etapa</Label>
                 <Input
                   type="number"
                   value={recoveryPercentage}
                   onChange={(e) => setRecoveryPercentage(e.target.value)}
-                  className="bg-muted/50 border-border"
+                  className="bg-muted/50 border-border h-11"
                   min="1"
                   max="100"
                   step="1"
@@ -160,12 +161,12 @@ export function LossRecoveryCalculator() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Multiplicador Alvo</Label>
+                <Label className="text-sm text-muted-foreground">Multiplicador Alvo</Label>
                 <Input
                   type="number"
                   value={targetMultiplier}
                   onChange={(e) => setTargetMultiplier(e.target.value)}
-                  className="bg-muted/50 border-border"
+                  className="bg-muted/50 border-border h-11"
                   min="1.1"
                   step="0.1"
                 />
@@ -174,7 +175,7 @@ export function LossRecoveryCalculator() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="w-full text-xs text-muted-foreground"
+                className="w-full text-sm text-muted-foreground"
                 onClick={() => setShowAdvanced(!showAdvanced)}
               >
                 {showAdvanced ? <ChevronUp className="h-3 w-3 mr-1" /> : <ChevronDown className="h-3 w-3 mr-1" />}
@@ -201,14 +202,14 @@ export function LossRecoveryCalculator() {
               <CardContent className="p-3 text-center">
                 <Target className="h-4 w-4 text-neon mx-auto mb-1" />
                 <p className="text-[10px] text-muted-foreground">Etapas Necessárias</p>
-                <p className="text-lg font-black gradient-neon-text">{totalSteps}</p>
+                <p className="text-xl font-black gradient-neon-text">{totalSteps}</p>
               </CardContent>
             </Card>
             <Card className="border-neon-blue/20 bg-neon-blue/5">
               <CardContent className="p-3 text-center">
                 <RotateCcw className="h-4 w-4 text-neon-blue mx-auto mb-1" />
                 <p className="text-[10px] text-muted-foreground">Total Apostado</p>
-                <p className="text-lg font-black neon-text-blue">
+                <p className="text-xl font-black neon-text-blue">
                   R$ {totalWagered.toFixed(2)}
                 </p>
               </CardContent>
@@ -218,7 +219,7 @@ export function LossRecoveryCalculator() {
           {/* Recovery Progress */}
           <Card className="border-border/50 bg-card/50 backdrop-blur">
             <CardHeader className="pb-2">
-              <CardTitle className="text-xs font-semibold text-muted-foreground">
+              <CardTitle className="text-sm font-semibold text-muted-foreground">
                 Progresso de Recuperação
               </CardTitle>
             </CardHeader>
@@ -233,15 +234,12 @@ export function LossRecoveryCalculator() {
           </Card>
 
           {/* Action Buttons */}
-          <div className="grid grid-cols-3 gap-2">
-            <Button onClick={handleCopy} variant="outline" size="sm" className="border-border text-xs">
+          <div className="grid grid-cols-2 gap-2">
+            <Button onClick={handleCopy} variant="outline" size="sm" className="border-border text-sm">
               {copied ? <Check className="h-3 w-3 mr-1" /> : <Copy className="h-3 w-3 mr-1" />}
               {copied ? 'Copiado!' : 'Copiar'}
             </Button>
-            <Button onClick={handleSave} variant="outline" size="sm" className="border-border text-xs">
-              <Download className="h-3 w-3 mr-1" /> Salvar
-            </Button>
-            <Button onClick={handleReset} variant="outline" size="sm" className="border-border text-xs">
+            <Button onClick={handleReset} variant="outline" size="sm" className="border-border text-sm">
               <RotateCcw className="h-3 w-3 mr-1" /> Resetar
             </Button>
           </div>
@@ -253,7 +251,7 @@ export function LossRecoveryCalculator() {
             <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardContent className="p-8 text-center">
                 <RotateCcw className="h-12 w-12 text-muted-foreground/30 mx-auto mb-3" />
-                <p className="text-sm text-muted-foreground">
+                <p className="text-base text-muted-foreground">
                   Preencha os campos ao lado para calcular a progressão de recuperação.
                 </p>
               </CardContent>
@@ -266,25 +264,25 @@ export function LossRecoveryCalculator() {
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     <div className="text-center">
                       <p className="text-[10px] text-muted-foreground">Perda Original</p>
-                      <p className="text-sm font-bold text-red-400">
+                      <p className="text-base font-bold text-red-400">
                         R$ {(parseFloat(amountLost) || 0).toFixed(2)}
                       </p>
                     </div>
                     <div className="text-center">
                       <p className="text-[10px] text-muted-foreground">% por Etapa</p>
-                      <p className="text-sm font-bold text-neon-blue">
+                      <p className="text-base font-bold text-neon-blue">
                         {recoveryPercentage}%
                       </p>
                     </div>
                     <div className="text-center">
                       <p className="text-[10px] text-muted-foreground">Recuperação Total</p>
-                      <p className="text-sm font-bold text-neon">
+                      <p className="text-base font-bold text-neon">
                         R$ {steps[steps.length - 1]?.cumulativeRecovery.toFixed(2)}
                       </p>
                     </div>
                     <div className="text-center">
                       <p className="text-[10px] text-muted-foreground">Restante</p>
-                      <p className="text-sm font-bold text-amber-400">
+                      <p className="text-base font-bold text-amber-400">
                         R$ {steps[steps.length - 1]?.remainingLoss.toFixed(2)}
                       </p>
                     </div>
@@ -295,13 +293,13 @@ export function LossRecoveryCalculator() {
               {/* Progression Table */}
               <Card className="border-border/50 bg-card/50 backdrop-blur">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                  <CardTitle className="text-base font-semibold flex items-center gap-2">
                     <RotateCcw className="h-4 w-4 text-neon" /> Tabela de Progressão
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
                   <ScrollArea className="max-h-[420px]">
-                    <table className="w-full text-xs">
+                    <table className="w-full text-sm">
                       <thead className="sticky top-0 bg-card">
                         <tr className="border-b border-border">
                           <th className="text-left p-3 font-semibold text-muted-foreground">Etapa</th>
@@ -362,7 +360,7 @@ export function LossRecoveryCalculator() {
               {/* Visual Progress Bars */}
               <Card className="border-border/50 bg-card/50 backdrop-blur">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                  <CardTitle className="text-base font-semibold flex items-center gap-2">
                     <Target className="h-4 w-4 text-neon-blue" /> Recuperação Visual por Etapa
                   </CardTitle>
                 </CardHeader>
@@ -386,13 +384,15 @@ export function LossRecoveryCalculator() {
             </>
           )}
 
+          <AdInContent />
+
           {/* Warning */}
           <Card className="border-amber-500/20 bg-amber-500/5">
             <CardContent className="p-4 flex gap-3">
               <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
               <div>
-                <p className="text-xs font-semibold text-amber-500">Aviso - Jogo Responsável</p>
-                <p className="text-xs text-muted-foreground leading-relaxed mt-1">
+                <p className="text-sm font-semibold text-amber-500">Aviso - Jogo Responsável</p>
+                <p className="text-sm text-muted-foreground leading-relaxed mt-1">
                   Nenhuma estratégia garante recuperação de perdas. Cada aposta carrega risco real de perda adicional.
                   A progressão de recuperação pode levar a apostas cada vez maiores. Defina limites claros e nunca
                   aposte mais do que pode se permitir perder. Jogue com responsabilidade.

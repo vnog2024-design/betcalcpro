@@ -13,6 +13,7 @@ import {
   Check, AlertTriangle, TrendingUp, TrendingDown, Info
 } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
+import { AdInContent } from '@/components/shared/ad-banner'
 
 interface RiskLevel {
   name: string
@@ -164,7 +165,7 @@ export function BankrollCalculator() {
             <Wallet className="h-7 w-7 text-neon" />
             Bankroll <span className="gradient-neon-text">Management</span>
           </h1>
-          <p className="text-sm text-muted-foreground mt-1">
+          <p className="text-base text-muted-foreground mt-1">
             Calculate your optimal bet size and manage risk like a professional
           </p>
         </div>
@@ -175,30 +176,30 @@ export function BankrollCalculator() {
         <div className="lg:col-span-1 space-y-4">
           <Card className="border-border/50 bg-card/50 backdrop-blur">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-semibold flex items-center gap-2">
+              <CardTitle className="text-base font-semibold flex items-center gap-2">
                 <Target className="h-4 w-4 text-neon" /> Configuration
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Current Bankroll (R$)</Label>
+                <Label className="text-sm text-muted-foreground">Current Bankroll (R$)</Label>
                 <Input
                   type="number"
                   value={bankroll}
                   onChange={(e) => setBankroll(e.target.value)}
-                  className="bg-muted/50 border-border"
+                  className="bg-muted/50 border-border h-11"
                   min="0.01"
                   step="0.01"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Risk Percentage (%)</Label>
+                <Label className="text-sm text-muted-foreground">Risk Percentage (%)</Label>
                 <Input
                   type="number"
                   value={riskPercent}
                   onChange={(e) => setRiskPercent(e.target.value)}
-                  className="bg-muted/50 border-border"
+                  className="bg-muted/50 border-border h-11"
                   min="0.1"
                   max="10"
                   step="0.1"
@@ -206,12 +207,12 @@ export function BankrollCalculator() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Target Profit (%)</Label>
+                <Label className="text-sm text-muted-foreground">Target Profit (%)</Label>
                 <Input
                   type="number"
                   value={targetProfit}
                   onChange={(e) => setTargetProfit(e.target.value)}
-                  className="bg-muted/50 border-border"
+                  className="bg-muted/50 border-border h-11"
                   min="0.1"
                   max="100"
                   step="0.1"
@@ -219,12 +220,12 @@ export function BankrollCalculator() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Max Daily Loss (%)</Label>
+                <Label className="text-sm text-muted-foreground">Max Daily Loss (%)</Label>
                 <Input
                   type="number"
                   value={maxDailyLoss}
                   onChange={(e) => setMaxDailyLoss(e.target.value)}
-                  className="bg-muted/50 border-border"
+                  className="bg-muted/50 border-border h-11"
                   min="0.1"
                   max="100"
                   step="0.1"
@@ -248,7 +249,7 @@ export function BankrollCalculator() {
                 <CardContent className="p-3 text-center">
                   <Wallet className="h-4 w-4 text-neon mx-auto mb-1" />
                   <p className="text-[10px] text-muted-foreground">Recommended Bet ({calculations.riskPercent}%)</p>
-                  <p className="text-lg font-black gradient-neon-text">
+                  <p className="text-xl font-black gradient-neon-text">
                     R$ {calculations.custom.betSize.toFixed(2)}
                   </p>
                 </CardContent>
@@ -257,7 +258,7 @@ export function BankrollCalculator() {
                 <CardContent className="p-3 text-center">
                   <TrendingDown className="h-4 w-4 text-red-500 mx-auto mb-1" />
                   <p className="text-[10px] text-muted-foreground">Max Daily Loss</p>
-                  <p className="text-lg font-black text-red-400">
+                  <p className="text-xl font-black text-red-400">
                     R$ {calculations.custom.maxDailyLossAmount.toFixed(2)}
                   </p>
                 </CardContent>
@@ -266,7 +267,7 @@ export function BankrollCalculator() {
                 <CardContent className="p-3 text-center">
                   <TrendingUp className="h-4 w-4 text-neon-blue mx-auto mb-1" />
                   <p className="text-[10px] text-muted-foreground">Daily Profit Target</p>
-                  <p className="text-lg font-black neon-text-blue">
+                  <p className="text-xl font-black neon-text-blue">
                     R$ {calculations.custom.profitTarget.toFixed(2)}
                   </p>
                 </CardContent>
@@ -275,15 +276,12 @@ export function BankrollCalculator() {
           )}
 
           {/* Action Buttons */}
-          <div className="grid grid-cols-3 gap-2">
-            <Button onClick={handleCopy} variant="outline" size="sm" className="border-border text-xs">
+          <div className="grid grid-cols-2 gap-2">
+            <Button onClick={handleCopy} variant="outline" size="sm" className="border-border text-sm">
               {copied ? <Check className="h-3 w-3 mr-1" /> : <Copy className="h-3 w-3 mr-1" />}
               {copied ? 'Copied!' : 'Copy'}
             </Button>
-            <Button onClick={handleSave} variant="outline" size="sm" className="border-border text-xs">
-              <Download className="h-3 w-3 mr-1" /> Save
-            </Button>
-            <Button onClick={handleReset} variant="outline" size="sm" className="border-border text-xs">
+            <Button onClick={handleReset} variant="outline" size="sm" className="border-border text-sm">
               <RotateCcw className="h-3 w-3 mr-1" /> Reset
             </Button>
           </div>
@@ -299,32 +297,32 @@ export function BankrollCalculator() {
                 {calculations.results.map((result, i) => (
                   <Card key={i} className={`${result.level.borderColor} ${result.level.bgColor} backdrop-blur`}>
                     <CardHeader className="pb-2">
-                      <CardTitle className={`text-sm font-bold flex items-center gap-2 ${result.level.color}`}>
+                      <CardTitle className={`text-base font-bold flex items-center gap-2 ${result.level.color}`}>
                         <Shield className="h-4 w-4" />
                         {result.level.name}
                         <Badge className="bg-muted/50 text-[10px] ml-auto">{result.level.percent}%</Badge>
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-2">
-                      <div className="flex justify-between text-xs">
+                      <div className="flex justify-between text-sm">
                         <span className="text-muted-foreground">Bet Size</span>
                         <span className={`font-mono font-bold ${result.level.color}`}>
                           R$ {result.betSize.toFixed(2)}
                         </span>
                       </div>
-                      <div className="flex justify-between text-xs">
+                      <div className="flex justify-between text-sm">
                         <span className="text-muted-foreground">Max Daily Loss</span>
                         <span className="font-mono text-red-400">
                           R$ {result.maxDailyLossAmount.toFixed(2)}
                         </span>
                       </div>
-                      <div className="flex justify-between text-xs">
+                      <div className="flex justify-between text-sm">
                         <span className="text-muted-foreground">Profit Target</span>
                         <span className="font-mono text-neon-blue">
                           R$ {result.profitTarget.toFixed(2)}
                         </span>
                       </div>
-                      <div className="flex justify-between text-xs border-t border-border/30 pt-2">
+                      <div className="flex justify-between text-sm border-t border-border/30 pt-2">
                         <span className="text-muted-foreground">Bets Before Bust</span>
                         <span className={`font-mono font-bold ${result.betsBeforeBust >= 10 ? 'text-neon' : result.betsBeforeBust >= 5 ? 'text-amber-500' : 'text-red-400'}`}>
                           {result.betsBeforeBust}
@@ -338,13 +336,13 @@ export function BankrollCalculator() {
               {/* Detailed Comparison Table */}
               <Card className="border-border/50 bg-card/50 backdrop-blur">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                  <CardTitle className="text-base font-semibold flex items-center gap-2">
                     <Target className="h-4 w-4 text-neon" /> Risk Level Comparison
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
                   <ScrollArea className="max-h-[400px]">
-                    <table className="w-full text-xs">
+                    <table className="w-full text-sm">
                       <thead className="sticky top-0 bg-card">
                         <tr className="border-b border-border">
                           <th className="text-left p-3 font-semibold text-muted-foreground">Risk Level</th>
@@ -450,13 +448,13 @@ export function BankrollCalculator() {
               {/* Bankroll Survival Analysis */}
               <Card className="border-border/50 bg-card/50 backdrop-blur">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                  <CardTitle className="text-base font-semibold flex items-center gap-2">
                     <Wallet className="h-4 w-4 text-neon-blue" /> Bankroll Survival Analysis
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
                   <ScrollArea className="max-h-[300px]">
-                    <table className="w-full text-xs">
+                    <table className="w-full text-sm">
                       <thead className="sticky top-0 bg-card">
                         <tr className="border-b border-border">
                           <th className="text-left p-3 font-semibold text-muted-foreground">Consecutive Losses</th>
@@ -523,13 +521,15 @@ export function BankrollCalculator() {
             </>
           )}
 
+          <AdInContent />
+
           {/* Warning */}
           <Card className="border-amber-500/20 bg-amber-500/5">
             <CardContent className="p-4 flex gap-3">
               <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
               <div>
-                <p className="text-xs font-semibold text-amber-500">Warning</p>
-                <p className="text-xs text-muted-foreground leading-relaxed mt-1">
+                <p className="text-sm font-semibold text-amber-500">Warning</p>
+                <p className="text-sm text-muted-foreground leading-relaxed mt-1">
                   No betting strategy can guarantee profits. The 1-2% rule is a risk management guideline,
                   not a profit guarantee. Always gamble responsibly and never bet more than you can afford to lose.
                   Past results do not guarantee future outcomes.

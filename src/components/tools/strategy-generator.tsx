@@ -14,6 +14,7 @@ import {
   Star, Copy, Check, RotateCcw, Zap, Dices
 } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
+import { AdInContent } from '@/components/shared/ad-banner'
 
 type RiskTolerance = 'low' | 'medium' | 'high'
 type GameType = 'crash' | 'double' | 'other'
@@ -538,7 +539,7 @@ export function StrategyGenerator() {
             <Sparkles className="h-7 w-7 text-neon" />
             Gerador de <span className="gradient-neon-text">Estratégias</span>
           </h1>
-          <p className="text-sm text-muted-foreground mt-1">
+          <p className="text-base text-muted-foreground mt-1">
             Gere estratégias personalizadas com base no seu perfil e tipo de jogo
           </p>
         </div>
@@ -560,25 +561,25 @@ export function StrategyGenerator() {
         <div className="lg:col-span-1 space-y-4">
           <Card className="border-border/50 bg-card/50 backdrop-blur">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-semibold flex items-center gap-2">
+              <CardTitle className="text-base font-semibold flex items-center gap-2">
                 <Target className="h-4 w-4 text-neon" /> Perfil do Jogador
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Banca Disponível (R$)</Label>
+                <Label className="text-sm text-muted-foreground">Banca Disponível (R$)</Label>
                 <Input
                   type="number"
                   value={bankroll}
                   onChange={(e) => setBankroll(e.target.value)}
-                  className="bg-muted/50 border-border"
+                  className="bg-muted/50 border-border h-11"
                   min="1"
                   step="1"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Tolerância a Risco</Label>
+                <Label className="text-sm text-muted-foreground">Tolerância a Risco</Label>
                 <div className="grid grid-cols-3 gap-1">
                   {(['low', 'medium', 'high'] as RiskTolerance[]).map((r) => (
                     <button
@@ -598,7 +599,7 @@ export function StrategyGenerator() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Tipo de Jogo</Label>
+                <Label className="text-sm text-muted-foreground">Tipo de Jogo</Label>
                 <div className="grid grid-cols-3 gap-1">
                   {(['crash', 'double', 'other'] as GameType[]).map((g) => (
                     <button
@@ -618,12 +619,12 @@ export function StrategyGenerator() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Duração da Sessão (rodadas)</Label>
+                <Label className="text-sm text-muted-foreground">Duração da Sessão (rodadas)</Label>
                 <Input
                   type="number"
                   value={sessionDuration}
                   onChange={(e) => setSessionDuration(e.target.value)}
-                  className="bg-muted/50 border-border"
+                  className="bg-muted/50 border-border h-11"
                   min="5"
                   max="500"
                 />
@@ -632,10 +633,10 @@ export function StrategyGenerator() {
           </Card>
 
           <div className="grid grid-cols-2 gap-2">
-            <Button onClick={handleGenerate} className="gradient-neon text-black text-xs font-bold">
+            <Button onClick={handleGenerate} className="gradient-neon text-black text-sm font-bold">
               <Sparkles className="h-3 w-3 mr-1" /> Gerar
             </Button>
-            <Button onClick={handleReset} variant="outline" size="sm" className="border-border text-xs">
+            <Button onClick={handleReset} variant="outline" size="sm" className="border-border text-sm">
               <RotateCcw className="h-3 w-3 mr-1" /> Resetar
             </Button>
           </div>
@@ -644,7 +645,7 @@ export function StrategyGenerator() {
           {generatedStrategies && (
             <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardHeader className="pb-2">
-                <CardTitle className="text-xs font-semibold">Estratégias Sugeridas</CardTitle>
+                <CardTitle className="text-sm font-semibold">Estratégias Sugeridas</CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
                 {generatedStrategies.map((s, i) => (
@@ -658,7 +659,7 @@ export function StrategyGenerator() {
                     }`}
                   >
                     <div className="flex items-center justify-between mb-1">
-                      <span className="text-xs font-bold">{i + 1}. {s.name}</span>
+                      <span className="text-sm font-bold">{i + 1}. {s.name}</span>
                       <Badge className={`border-0 text-[8px] ${riskColors[s.riskLevel].bg} ${riskColors[s.riskLevel].text}`}>
                         {riskLabels[s.riskLevel]}
                       </Badge>
@@ -680,38 +681,38 @@ export function StrategyGenerator() {
           {currentStrategy ? (
             <Tabs defaultValue="steps" className="w-full">
               <TabsList className="bg-muted/50 border border-border">
-                <TabsTrigger value="steps" className="text-xs">Passo a Passo</TabsTrigger>
-                <TabsTrigger value="rules" className="text-xs">Regras</TabsTrigger>
-                <TabsTrigger value="outcomes" className="text-xs">Cenários</TabsTrigger>
+                <TabsTrigger value="steps" className="text-sm">Passo a Passo</TabsTrigger>
+                <TabsTrigger value="rules" className="text-sm">Regras</TabsTrigger>
+                <TabsTrigger value="outcomes" className="text-sm">Cenários</TabsTrigger>
               </TabsList>
 
               <TabsContent value="steps" className="mt-4">
                 <Card className="border-border/50 bg-card/50 backdrop-blur">
                   <CardHeader className="pb-2">
                     <div className="flex items-center justify-between">
-                      <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                      <CardTitle className="text-base font-semibold flex items-center gap-2">
                         <Target className="h-4 w-4 text-neon" /> {currentStrategy.name}
                       </CardTitle>
                       <Badge className={`border-0 text-[10px] ${riskColors[currentStrategy.riskLevel].bg} ${riskColors[currentStrategy.riskLevel].text}`}>
                         {riskLabels[currentStrategy.riskLevel]}
                       </Badge>
                     </div>
-                    <p className="text-xs text-muted-foreground mt-1">{currentStrategy.description}</p>
+                    <p className="text-sm text-muted-foreground mt-1">{currentStrategy.description}</p>
                   </CardHeader>
                   <CardContent>
                     {/* Quick Stats */}
                     <div className="grid grid-cols-3 gap-3 mb-4">
                       <div className="text-center p-2 rounded-lg bg-muted/20">
                         <p className="text-[10px] text-muted-foreground">Progressão</p>
-                        <p className="text-xs font-bold text-neon">{currentStrategy.progressionType}</p>
+                        <p className="text-sm font-bold text-neon">{currentStrategy.progressionType}</p>
                       </div>
                       <div className="text-center p-2 rounded-lg bg-muted/20">
                         <p className="text-[10px] text-muted-foreground">Aposta Recomendada</p>
-                        <p className="text-xs font-bold text-neon-blue">R$ {currentStrategy.recommendedBetSize.toFixed(2)}</p>
+                        <p className="text-sm font-bold text-neon-blue">R$ {currentStrategy.recommendedBetSize.toFixed(2)}</p>
                       </div>
                       <div className="text-center p-2 rounded-lg bg-muted/20">
                         <p className="text-[10px] text-muted-foreground">Max Drawdown</p>
-                        <p className="text-xs font-bold text-red-500">{currentStrategy.maxDrawdown}</p>
+                        <p className="text-sm font-bold text-red-500">{currentStrategy.maxDrawdown}</p>
                       </div>
                     </div>
 
@@ -758,7 +759,7 @@ export function StrategyGenerator() {
                             <span className="text-[10px] font-black text-neon">{step.step}</span>
                           </div>
                           <div>
-                            <p className="text-xs font-bold">{step.action}</p>
+                            <p className="text-sm font-bold">{step.action}</p>
                             <p className="text-[10px] text-muted-foreground mt-0.5">{step.detail}</p>
                           </div>
                         </div>
@@ -772,14 +773,14 @@ export function StrategyGenerator() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <Card className="border-neon/20 bg-neon/5">
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-xs font-semibold flex items-center gap-2">
+                      <CardTitle className="text-sm font-semibold flex items-center gap-2">
                         <Target className="h-4 w-4 text-neon" /> Regras de Entrada
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
                       <ul className="space-y-2">
                         {currentStrategy.entryRules.map((rule, i) => (
-                          <li key={i} className="flex gap-2 text-xs">
+                          <li key={i} className="flex gap-2 text-sm">
                             <span className="text-neon font-bold shrink-0">{i + 1}.</span>
                             <span className="text-muted-foreground">{rule}</span>
                           </li>
@@ -790,14 +791,14 @@ export function StrategyGenerator() {
 
                   <Card className="border-red-500/20 bg-red-500/5">
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-xs font-semibold flex items-center gap-2">
+                      <CardTitle className="text-sm font-semibold flex items-center gap-2">
                         <Shield className="h-4 w-4 text-red-500" /> Regras de Saída
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
                       <ul className="space-y-2">
                         {currentStrategy.exitRules.map((rule, i) => (
-                          <li key={i} className="flex gap-2 text-xs">
+                          <li key={i} className="flex gap-2 text-sm">
                             <span className="text-red-500 font-bold shrink-0">{i + 1}.</span>
                             <span className="text-muted-foreground">{rule}</span>
                           </li>
@@ -811,7 +812,7 @@ export function StrategyGenerator() {
               <TabsContent value="outcomes" className="mt-4">
                 <Card className="border-border/50 bg-card/50 backdrop-blur">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                    <CardTitle className="text-base font-semibold flex items-center gap-2">
                       <TrendingUp className="h-4 w-4 text-neon" /> Cenários Esperados
                     </CardTitle>
                   </CardHeader>
@@ -820,38 +821,38 @@ export function StrategyGenerator() {
                       <div className="p-4 rounded-lg bg-neon/5 border border-neon/20">
                         <div className="flex items-center gap-2 mb-2">
                           <div className="w-2 h-2 rounded-full bg-neon" />
-                          <span className="text-xs font-bold text-neon">Melhor Cenário</span>
+                          <span className="text-sm font-bold text-neon">Melhor Cenário</span>
                         </div>
-                        <p className="text-sm text-muted-foreground">{currentStrategy.expectedOutcomes.bestCase}</p>
+                        <p className="text-base text-muted-foreground">{currentStrategy.expectedOutcomes.bestCase}</p>
                       </div>
 
                       <div className="p-4 rounded-lg bg-neon-blue/5 border border-neon-blue/20">
                         <div className="flex items-center gap-2 mb-2">
                           <div className="w-2 h-2 rounded-full bg-neon-blue" />
-                          <span className="text-xs font-bold text-neon-blue">Cenário Esperado</span>
+                          <span className="text-sm font-bold text-neon-blue">Cenário Esperado</span>
                         </div>
-                        <p className="text-sm text-muted-foreground">{currentStrategy.expectedOutcomes.expectedCase}</p>
+                        <p className="text-base text-muted-foreground">{currentStrategy.expectedOutcomes.expectedCase}</p>
                       </div>
 
                       <div className="p-4 rounded-lg bg-red-500/5 border border-red-500/20">
                         <div className="flex items-center gap-2 mb-2">
                           <div className="w-2 h-2 rounded-full bg-red-500" />
-                          <span className="text-xs font-bold text-red-500">Pior Cenário</span>
+                          <span className="text-sm font-bold text-red-500">Pior Cenário</span>
                         </div>
-                        <p className="text-sm text-muted-foreground">{currentStrategy.expectedOutcomes.worstCase}</p>
+                        <p className="text-base text-muted-foreground">{currentStrategy.expectedOutcomes.worstCase}</p>
                       </div>
 
                       <div className="p-4 rounded-lg bg-amber-500/5 border border-amber-500/20">
                         <div className="flex items-center gap-2 mb-2">
                           <AlertTriangle className="w-4 h-4 text-amber-500" />
-                          <span className="text-xs font-bold text-amber-500">Max Drawdown</span>
+                          <span className="text-sm font-bold text-amber-500">Max Drawdown</span>
                         </div>
-                        <p className="text-sm text-muted-foreground">{currentStrategy.maxDrawdown}</p>
+                        <p className="text-base text-muted-foreground">{currentStrategy.maxDrawdown}</p>
                       </div>
                     </div>
 
                     <div className="mt-4">
-                      <Button onClick={handleCopy} variant="outline" size="sm" className="w-full border-border text-xs">
+                      <Button onClick={handleCopy} variant="outline" size="sm" className="w-full border-border text-sm">
                         {copied ? <Check className="h-3 w-3 mr-1" /> : <Copy className="h-3 w-3 mr-1" />}
                         {copied ? 'Copiado!' : 'Copiar Estratégia'}
                       </Button>
@@ -864,20 +865,22 @@ export function StrategyGenerator() {
             <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardContent className="p-12 text-center">
                 <Sparkles className="h-12 w-12 text-neon/30 mx-auto mb-4" />
-                <p className="text-muted-foreground text-sm">
+                <p className="text-muted-foreground text-base">
                   Configure seu perfil e clique em <span className="text-neon font-semibold">Gerar</span> para criar estratégias personalizadas
                 </p>
               </CardContent>
             </Card>
           )}
 
+          <AdInContent />
+
           {/* Warning */}
           <Card className="border-amber-500/20 bg-amber-500/5">
             <CardContent className="p-4 flex gap-3">
               <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
               <div>
-                <p className="text-xs font-semibold text-amber-500">Jogo Responsável</p>
-                <p className="text-xs text-muted-foreground leading-relaxed mt-1">
+                <p className="text-sm font-semibold text-amber-500">Jogo Responsável</p>
+                <p className="text-sm text-muted-foreground leading-relaxed mt-1">
                   Nenhuma estratégia garante lucro em jogos de azar. As estratégias geradas são sugestões baseadas em
                   gerenciamento de risco, mas a casa sempre tem vantagem matemática. Sempre defina limites e nunca aposte
                   mais do que pode perder. Se precisar de ajuda, procure suporte profissional.

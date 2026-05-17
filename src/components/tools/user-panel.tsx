@@ -12,6 +12,7 @@ import { Progress } from '@/components/ui/progress'
 import {
   User, Trophy, Star, History, LogOut, Crown, Target, TrendingUp,
 } from 'lucide-react'
+import { AdInContent } from '@/components/shared/ad-banner'
 
 function formatDate(ts: number): string {
   return new Date(ts).toLocaleDateString('pt-BR', {
@@ -115,7 +116,7 @@ export function UserPanel() {
             <User className="h-7 w-7 text-neon" />
             Meu <span className="gradient-neon-text">Painel</span>
           </h1>
-          <p className="text-sm text-muted-foreground mt-1">
+          <p className="text-base text-muted-foreground mt-1">
             Seu dashboard pessoal com histórico, conquistas e favoritos
           </p>
         </div>
@@ -127,7 +128,7 @@ export function UserPanel() {
           {/* Profile Section */}
           <Card className="border-border/50 bg-card/50 backdrop-blur">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-semibold flex items-center gap-2">
+              <CardTitle className="text-base font-semibold flex items-center gap-2">
                 <User className="h-4 w-4 text-neon" /> Perfil
               </CardTitle>
             </CardHeader>
@@ -140,8 +141,8 @@ export function UserPanel() {
                     </AvatarFallback>
                   </Avatar>
                   <div className="text-center">
-                    <p className="font-bold text-base">{userName}</p>
-                    <p className="text-xs text-muted-foreground">{userEmail}</p>
+                    <p className="font-bold text-lg">{userName}</p>
+                    <p className="text-sm text-muted-foreground">{userEmail}</p>
                   </div>
                   <Badge className="bg-neon/10 text-neon border-neon/20 text-[10px]">
                     <Crown className="h-3 w-3 mr-1" /> Membro
@@ -150,7 +151,7 @@ export function UserPanel() {
                     variant="outline"
                     size="sm"
                     onClick={handleLogout}
-                    className="w-full border-border/50 text-muted-foreground hover:text-red-400 hover:border-red-400/50 text-xs"
+                    className="w-full border-border/50 text-muted-foreground hover:text-red-400 hover:border-red-400/50 text-sm"
                   >
                     <LogOut className="h-3 w-3 mr-1" /> Sair
                   </Button>
@@ -162,12 +163,12 @@ export function UserPanel() {
                       ??
                     </AvatarFallback>
                   </Avatar>
-                  <p className="text-xs text-muted-foreground text-center">
+                  <p className="text-sm text-muted-foreground text-center">
                     Faça login para salvar seu progresso e desbloquear conquistas
                   </p>
                   <Button
                     onClick={handleLogin}
-                    className="w-full gradient-neon text-black font-bold text-xs"
+                    className="w-full gradient-neon text-black font-bold text-sm"
                   >
                     <svg className="h-4 w-4 mr-2" viewBox="0 0 24 24">
                       <path
@@ -197,7 +198,7 @@ export function UserPanel() {
           {/* Stats Overview */}
           <Card className="border-border/50 bg-card/50 backdrop-blur">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-semibold flex items-center gap-2">
+              <CardTitle className="text-base font-semibold flex items-center gap-2">
                 <TrendingUp className="h-4 w-4 text-neon-blue" /> Estatísticas
               </CardTitle>
             </CardHeader>
@@ -209,7 +210,7 @@ export function UserPanel() {
                   </div>
                   <div className="min-w-0">
                     <p className="text-[10px] text-muted-foreground">Total de Cálculos</p>
-                    <p className="text-lg font-black gradient-neon-text">{totalCalculations}</p>
+                    <p className="text-xl font-black gradient-neon-text">{totalCalculations}</p>
                   </div>
                 </div>
 
@@ -219,7 +220,7 @@ export function UserPanel() {
                   </div>
                   <div className="min-w-0">
                     <p className="text-[10px] text-muted-foreground">Ferramenta Mais Usada</p>
-                    <p className="text-sm font-bold truncate">
+                    <p className="text-base font-bold truncate">
                       {mostUsedTool ? getToolName(mostUsedTool.toolId) : '—'}
                     </p>
                     {mostUsedTool && (
@@ -236,7 +237,7 @@ export function UserPanel() {
                   </div>
                   <div className="min-w-0">
                     <p className="text-[10px] text-muted-foreground">Membro Desde</p>
-                    <p className="text-sm font-bold">
+                    <p className="text-base font-bold">
                       {memberSince ? formatDate(memberSince) : '—'}
                     </p>
                   </div>
@@ -252,7 +253,7 @@ export function UserPanel() {
           <Card className="border-border/50 bg-card/50 backdrop-blur">
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                <CardTitle className="text-base font-semibold flex items-center gap-2">
                   <Trophy className="h-4 w-4 text-amber-500" /> Conquistas
                 </CardTitle>
                 <Badge className="bg-neon/10 text-neon border-neon/20 text-[10px]">
@@ -280,7 +281,7 @@ export function UserPanel() {
                       }`}
                     >
                       <div
-                        className={`h-10 w-10 rounded-lg flex items-center justify-center text-lg shrink-0 ${
+                        className={`h-10 w-10 rounded-lg flex items-center justify-center text-xl shrink-0 ${
                           isUnlocked
                             ? 'bg-neon/10'
                             : 'bg-muted/30 grayscale'
@@ -290,7 +291,7 @@ export function UserPanel() {
                       </div>
                       <div className="min-w-0">
                         <p
-                          className={`text-xs font-bold ${
+                          className={`text-sm font-bold ${
                             isUnlocked ? 'text-neon' : 'text-muted-foreground'
                           }`}
                         >
@@ -322,7 +323,7 @@ export function UserPanel() {
             {/* Favorites */}
             <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                <CardTitle className="text-base font-semibold flex items-center gap-2">
                   <Star className="h-4 w-4 text-neon" /> Favoritos
                 </CardTitle>
               </CardHeader>
@@ -330,7 +331,7 @@ export function UserPanel() {
                 {favorites.length === 0 ? (
                   <div className="flex flex-col items-center gap-2 py-6 text-center">
                     <Star className="h-8 w-8 text-muted-foreground/30" />
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-sm text-muted-foreground">
                       Nenhuma ferramenta favoritada
                     </p>
                     <p className="text-[10px] text-muted-foreground/70">
@@ -355,7 +356,7 @@ export function UserPanel() {
                                 <Star className="h-3 w-3 text-neon fill-neon" />
                               </div>
                               <div className="min-w-0">
-                                <p className="text-xs font-semibold truncate group-hover:text-neon transition-colors">
+                                <p className="text-sm font-semibold truncate group-hover:text-neon transition-colors">
                                   {info?.name ?? fav.toolId}
                                 </p>
                                 <p className="text-[10px] text-muted-foreground truncate">
@@ -369,7 +370,7 @@ export function UserPanel() {
                               onClick={() => removeFavorite(fav.toolId)}
                               className="h-6 w-6 p-0 text-muted-foreground hover:text-red-400 shrink-0"
                             >
-                              <span className="text-xs">×</span>
+                              <span className="text-sm">×</span>
                             </Button>
                           </div>
                         )
@@ -384,7 +385,7 @@ export function UserPanel() {
             <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                  <CardTitle className="text-base font-semibold flex items-center gap-2">
                     <History className="h-4 w-4 text-neon-blue" /> Histórico
                   </CardTitle>
                   {calculationHistory.length > 0 && (
@@ -403,7 +404,7 @@ export function UserPanel() {
                 {calculationHistory.length === 0 ? (
                   <div className="flex flex-col items-center gap-2 py-6 text-center">
                     <History className="h-8 w-8 text-muted-foreground/30" />
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-sm text-muted-foreground">
                       Nenhum cálculo realizado
                     </p>
                     <p className="text-[10px] text-muted-foreground/70">
@@ -421,7 +422,7 @@ export function UserPanel() {
                             </div>
                             <div className="min-w-0 flex-1">
                               <div className="flex items-center justify-between gap-2">
-                                <p className="text-xs font-semibold truncate">
+                                <p className="text-sm font-semibold truncate">
                                   {getToolName(entry.tool)}
                                 </p>
                                 <span className="text-[9px] text-muted-foreground whitespace-nowrap">
@@ -448,34 +449,36 @@ export function UserPanel() {
             </Card>
           </div>
 
+          <AdInContent />
+
           {/* Quick Stats Cards */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <Card className="border-neon/20 bg-neon/5">
               <CardContent className="p-3 text-center">
                 <Target className="h-4 w-4 text-neon mx-auto mb-1" />
                 <p className="text-[10px] text-muted-foreground">Cálculos</p>
-                <p className="text-lg font-black gradient-neon-text">{totalCalculations}</p>
+                <p className="text-xl font-black gradient-neon-text">{totalCalculations}</p>
               </CardContent>
             </Card>
             <Card className="border-neon-blue/20 bg-neon-blue/5">
               <CardContent className="p-3 text-center">
                 <Trophy className="h-4 w-4 text-neon-blue mx-auto mb-1" />
                 <p className="text-[10px] text-muted-foreground">Conquistas</p>
-                <p className="text-lg font-black neon-text-blue">{unlockedCount}</p>
+                <p className="text-xl font-black neon-text-blue">{unlockedCount}</p>
               </CardContent>
             </Card>
             <Card className="border-amber-500/20 bg-amber-500/5">
               <CardContent className="p-3 text-center">
                 <Star className="h-4 w-4 text-amber-500 mx-auto mb-1" />
                 <p className="text-[10px] text-muted-foreground">Favoritos</p>
-                <p className="text-lg font-black text-amber-500">{favorites.length}</p>
+                <p className="text-xl font-black text-amber-500">{favorites.length}</p>
               </CardContent>
             </Card>
             <Card className="border-purple-500/20 bg-purple-500/5">
               <CardContent className="p-3 text-center">
                 <TrendingUp className="h-4 w-4 text-purple-400 mx-auto mb-1" />
                 <p className="text-[10px] text-muted-foreground">Progresso</p>
-                <p className="text-lg font-black text-purple-400">{achievementProgress.toFixed(0)}%</p>
+                <p className="text-xl font-black text-purple-400">{achievementProgress.toFixed(0)}%</p>
               </CardContent>
             </Card>
           </div>

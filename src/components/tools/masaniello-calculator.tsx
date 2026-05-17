@@ -17,6 +17,7 @@ import {
   BarChart, Bar
 } from 'recharts'
 import { useToast } from '@/hooks/use-toast'
+import { AdInContent } from '@/components/shared/ad-banner'
 
 interface MasanielloEvent {
   event: number
@@ -235,7 +236,7 @@ export function MasanielloCalculator() {
             <Calculator className="h-7 w-7 text-neon" />
             Masaniello <span className="gradient-neon-text">Calculator</span>
           </h1>
-          <p className="text-sm text-muted-foreground mt-1">
+          <p className="text-base text-muted-foreground mt-1">
             Distribute risk across events with the Masaniello progression system
           </p>
         </div>
@@ -246,66 +247,66 @@ export function MasanielloCalculator() {
         <div className="lg:col-span-1 space-y-4">
           <Card className="border-border/50 bg-card/50 backdrop-blur">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-semibold flex items-center gap-2">
+              <CardTitle className="text-base font-semibold flex items-center gap-2">
                 <Target className="h-4 w-4 text-neon" /> Configuration
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Total Events (N)</Label>
+                <Label className="text-sm text-muted-foreground">Total Events (N)</Label>
                 <Input
                   type="number"
                   value={totalEvents}
                   onChange={(e) => setTotalEvents(e.target.value)}
-                  className="bg-muted/50 border-border"
+                  className="bg-muted/50 border-border h-11"
                   min="1"
                   max="50"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Events to Hit (M)</Label>
+                <Label className="text-sm text-muted-foreground">Events to Hit (M)</Label>
                 <Input
                   type="number"
                   value={eventsToHit}
                   onChange={(e) => setEventsToHit(e.target.value)}
-                  className="bg-muted/50 border-border"
+                  className="bg-muted/50 border-border h-11"
                   min="1"
                   max="50"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Odds (Decimal)</Label>
+                <Label className="text-sm text-muted-foreground">Odds (Decimal)</Label>
                 <Input
                   type="number"
                   value={odds}
                   onChange={(e) => setOdds(e.target.value)}
-                  className="bg-muted/50 border-border"
+                  className="bg-muted/50 border-border h-11"
                   min="1.01"
                   step="0.01"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Unit Stake (R$)</Label>
+                <Label className="text-sm text-muted-foreground">Unit Stake (R$)</Label>
                 <Input
                   type="number"
                   value={unitStake}
                   onChange={(e) => setUnitStake(e.target.value)}
-                  className="bg-muted/50 border-border"
+                  className="bg-muted/50 border-border h-11"
                   min="0.01"
                   step="0.01"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Bankroll (R$)</Label>
+                <Label className="text-sm text-muted-foreground">Bankroll (R$)</Label>
                 <Input
                   type="number"
                   value={bankroll}
                   onChange={(e) => setBankroll(e.target.value)}
-                  className="bg-muted/50 border-border"
+                  className="bg-muted/50 border-border h-11"
                   min="0.01"
                   step="0.01"
                 />
@@ -329,7 +330,7 @@ export function MasanielloCalculator() {
                 <CardContent className="p-3 text-center">
                   <TrendingUp className="h-4 w-4 text-neon mx-auto mb-1" />
                   <p className="text-[10px] text-muted-foreground">Best Case (All Wins)</p>
-                  <p className="text-lg font-black gradient-neon-text">
+                  <p className="text-xl font-black gradient-neon-text">
                     R$ {calculations.bestCase.finalBankroll.toFixed(2)}
                   </p>
                 </CardContent>
@@ -338,7 +339,7 @@ export function MasanielloCalculator() {
                 <CardContent className="p-3 text-center">
                   <Target className="h-4 w-4 text-neon-blue mx-auto mb-1" />
                   <p className="text-[10px] text-muted-foreground">Target (M Hits)</p>
-                  <p className="text-lg font-black neon-text-blue">
+                  <p className="text-xl font-black neon-text-blue">
                     R$ {calculations.targetCase.finalBankroll.toFixed(2)}
                   </p>
                 </CardContent>
@@ -347,7 +348,7 @@ export function MasanielloCalculator() {
                 <CardContent className="p-3 text-center">
                   <TrendingDown className="h-4 w-4 text-red-500 mx-auto mb-1" />
                   <p className="text-[10px] text-muted-foreground">Worst Case (All Losses)</p>
-                  <p className="text-lg font-black text-red-400">
+                  <p className="text-xl font-black text-red-400">
                     R$ {calculations.worstCase.finalBankroll.toFixed(2)}
                   </p>
                 </CardContent>
@@ -358,10 +359,10 @@ export function MasanielloCalculator() {
                 <CardContent className="p-3">
                   <div className="flex items-center gap-2 mb-2">
                     <Shield className="h-4 w-4 text-neon-blue" />
-                    <span className="text-xs font-semibold">Required Hit Rate</span>
+                    <span className="text-sm font-semibold">Required Hit Rate</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-muted-foreground">
+                    <span className="text-sm text-muted-foreground">
                       {eventsToHit}/{totalEvents} events
                     </span>
                     <Badge className="bg-neon-blue/10 text-neon-blue border-0">
@@ -369,7 +370,7 @@ export function MasanielloCalculator() {
                     </Badge>
                   </div>
                   <div className="flex items-center justify-between mt-1">
-                    <span className="text-xs text-muted-foreground">
+                    <span className="text-sm text-muted-foreground">
                       Break-even hit rate at {odds}x odds
                     </span>
                     <Badge className="bg-amber-500/10 text-amber-500 border-0">
@@ -382,15 +383,12 @@ export function MasanielloCalculator() {
           )}
 
           {/* Action Buttons */}
-          <div className="grid grid-cols-3 gap-2">
-            <Button onClick={handleCopy} variant="outline" size="sm" className="border-border text-xs">
+          <div className="grid grid-cols-2 gap-2">
+            <Button onClick={handleCopy} variant="outline" size="sm" className="border-border text-sm">
               {copied ? <Check className="h-3 w-3 mr-1" /> : <Copy className="h-3 w-3 mr-1" />}
               {copied ? 'Copied!' : 'Copy'}
             </Button>
-            <Button onClick={handleSave} variant="outline" size="sm" className="border-border text-xs">
-              <Download className="h-3 w-3 mr-1" /> Save
-            </Button>
-            <Button onClick={handleReset} variant="outline" size="sm" className="border-border text-xs">
+            <Button onClick={handleReset} variant="outline" size="sm" className="border-border text-sm">
               <RotateCcw className="h-3 w-3 mr-1" /> Reset
             </Button>
           </div>
@@ -402,19 +400,19 @@ export function MasanielloCalculator() {
           {calculations && (
             <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                <CardTitle className="text-base font-semibold flex items-center gap-2">
                   <TrendingUp className="h-4 w-4 text-neon" /> Bankroll Scenario Analysis
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
                   <LineChart data={calculations.chartData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                    <XAxis dataKey="name" tick={{ fontSize: 10, fill: '#94a3b8' }} />
-                    <YAxis tick={{ fontSize: 10, fill: '#94a3b8' }} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                    <XAxis dataKey="name" tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} />
+                    <YAxis tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} />
                     <Tooltip
-                      contentStyle={{ background: '#111827', border: '1px solid #1e293b', borderRadius: '8px', fontSize: 12 }}
-                      labelStyle={{ color: '#e2e8f0' }}
+                      contentStyle={{ background: "var(--card)", border: '1px solid var(--border)', borderRadius: '8px', fontSize: 12 }}
+                      labelStyle={{ color: "var(--foreground)" }}
                       formatter={(value: number, name: string) => {
                         const labels: Record<string, string> = {
                           ifWin: 'If Win',
@@ -473,19 +471,19 @@ export function MasanielloCalculator() {
           {calculations && (
             <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                <CardTitle className="text-base font-semibold flex items-center gap-2">
                   <Calculator className="h-4 w-4 text-neon-blue" /> Bet Distribution per Event
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={200}>
                   <BarChart data={calculations.chartData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                    <XAxis dataKey="name" tick={{ fontSize: 10, fill: '#94a3b8' }} />
-                    <YAxis tick={{ fontSize: 10, fill: '#94a3b8' }} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                    <XAxis dataKey="name" tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} />
+                    <YAxis tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} />
                     <Tooltip
-                      contentStyle={{ background: '#111827', border: '1px solid #1e293b', borderRadius: '8px', fontSize: 12 }}
-                      labelStyle={{ color: '#e2e8f0' }}
+                      contentStyle={{ background: "var(--card)", border: '1px solid var(--border)', borderRadius: '8px', fontSize: 12 }}
+                      labelStyle={{ color: "var(--foreground)" }}
                       formatter={(value: number) => [`R$ ${value.toFixed(2)}`, 'Bet']}
                     />
                     <Bar dataKey="bet" fill="rgba(0, 212, 255, 0.6)" stroke="#00d4ff" radius={[4, 4, 0, 0]} />
@@ -499,13 +497,13 @@ export function MasanielloCalculator() {
           {calculations && (
             <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                <CardTitle className="text-base font-semibold flex items-center gap-2">
                   <Target className="h-4 w-4 text-neon-blue" /> Event Progression Table
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0">
                 <ScrollArea className="max-h-[500px]">
-                  <table className="w-full text-xs">
+                  <table className="w-full text-sm">
                     <thead className="sticky top-0 bg-card">
                       <tr className="border-b border-border">
                         <th className="text-left p-3 font-semibold text-muted-foreground">Event</th>
@@ -565,7 +563,7 @@ export function MasanielloCalculator() {
           {calculations && (
             <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                <CardTitle className="text-base font-semibold flex items-center gap-2">
                   <Shield className="h-4 w-4 text-amber-500" /> Probability Analysis
                 </CardTitle>
               </CardHeader>
@@ -573,25 +571,25 @@ export function MasanielloCalculator() {
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   <div className="text-center p-3 rounded-lg bg-muted/20 border border-border/30">
                     <p className="text-[10px] text-muted-foreground">Total Combinations</p>
-                    <p className="text-sm font-bold font-mono">
+                    <p className="text-base font-bold font-mono">
                       {combinations(parseInt(totalEvents), parseInt(eventsToHit)).toLocaleString()}
                     </p>
                   </div>
                   <div className="text-center p-3 rounded-lg bg-muted/20 border border-border/30">
                     <p className="text-[10px] text-muted-foreground">Win Probability</p>
-                    <p className="text-sm font-bold font-mono text-neon">
+                    <p className="text-base font-bold font-mono text-neon">
                       {((1 / parseFloat(odds)) * 100).toFixed(1)}%
                     </p>
                   </div>
                   <div className="text-center p-3 rounded-lg bg-muted/20 border border-border/30">
                     <p className="text-[10px] text-muted-foreground">Hit Rate Required</p>
-                    <p className="text-sm font-bold font-mono text-neon-blue">
+                    <p className="text-base font-bold font-mono text-neon-blue">
                       {((parseInt(eventsToHit) / parseInt(totalEvents)) * 100).toFixed(1)}%
                     </p>
                   </div>
                   <div className="text-center p-3 rounded-lg bg-muted/20 border border-border/30">
                     <p className="text-[10px] text-muted-foreground">Edge</p>
-                    <p className={`text-sm font-bold font-mono ${
+                    <p className={`text-base font-bold font-mono ${
                       calculations.expectedProfit > 0 ? 'text-neon' : 'text-red-400'
                     }`}>
                       {calculations.expectedProfit > 0 ? '+' : ''}R$ {calculations.expectedProfit.toFixed(2)}
@@ -602,13 +600,15 @@ export function MasanielloCalculator() {
             </Card>
           )}
 
+          <AdInContent />
+
           {/* Warning */}
           <Card className="border-amber-500/20 bg-amber-500/5">
             <CardContent className="p-4 flex gap-3">
               <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
               <div>
-                <p className="text-xs font-semibold text-amber-500">Warning</p>
-                <p className="text-xs text-muted-foreground leading-relaxed mt-1">
+                <p className="text-sm font-semibold text-amber-500">Warning</p>
+                <p className="text-sm text-muted-foreground leading-relaxed mt-1">
                   The Masaniello system distributes risk but does not eliminate it. If you fail to hit the
                   required number of events, losses can still be significant. The system is designed for
                   scenarios where you have a statistical edge. Always ensure the required hit rate is achievable

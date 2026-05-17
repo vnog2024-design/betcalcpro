@@ -17,6 +17,7 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
 } from 'recharts'
 import { useToast } from '@/hooks/use-toast'
+import { AdInContent } from '@/components/shared/ad-banner'
 
 type Strategy = 'martingale' | 'fibonacci' | 'flat'
 type TargetColor = 'red' | 'black' | 'white'
@@ -208,7 +209,7 @@ export function DoubleSimulator() {
             <Dices className="h-7 w-7 text-neon" />
             Simulador <span className="gradient-neon-text">Double</span>
           </h1>
-          <p className="text-sm text-muted-foreground mt-1">
+          <p className="text-base text-muted-foreground mt-1">
             Simule estratégias para jogos Double/Roleta com diferentes progressões
           </p>
         </div>
@@ -230,25 +231,25 @@ export function DoubleSimulator() {
         <div className="lg:col-span-1 space-y-4">
           <Card className="border-border/50 bg-card/50 backdrop-blur">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-semibold flex items-center gap-2">
+              <CardTitle className="text-base font-semibold flex items-center gap-2">
                 <Dices className="h-4 w-4 text-neon" /> Configurações
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Aposta Inicial (R$)</Label>
+                <Label className="text-sm text-muted-foreground">Aposta Inicial (R$)</Label>
                 <Input
                   type="number"
                   value={initialBet}
                   onChange={(e) => setInitialBet(e.target.value)}
-                  className="bg-muted/50 border-border"
+                  className="bg-muted/50 border-border h-11"
                   min="0.01"
                   step="0.01"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Estratégia</Label>
+                <Label className="text-sm text-muted-foreground">Estratégia</Label>
                 <div className="grid grid-cols-3 gap-1">
                   {(['martingale', 'fibonacci', 'flat'] as Strategy[]).map((s) => (
                     <button
@@ -267,7 +268,7 @@ export function DoubleSimulator() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Cor Alvo</Label>
+                <Label className="text-sm text-muted-foreground">Cor Alvo</Label>
                 <div className="grid grid-cols-3 gap-1">
                   {(['red', 'black', 'white'] as TargetColor[]).map((c) => (
                     <button
@@ -290,24 +291,24 @@ export function DoubleSimulator() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Banca Inicial (R$)</Label>
+                <Label className="text-sm text-muted-foreground">Banca Inicial (R$)</Label>
                 <Input
                   type="number"
                   value={bankroll}
                   onChange={(e) => setBankroll(e.target.value)}
-                  className="bg-muted/50 border-border"
+                  className="bg-muted/50 border-border h-11"
                   min="1"
                   step="1"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Número de Rodadas</Label>
+                <Label className="text-sm text-muted-foreground">Número de Rodadas</Label>
                 <Input
                   type="number"
                   value={numRounds}
                   onChange={(e) => setNumRounds(e.target.value)}
-                  className="bg-muted/50 border-border"
+                  className="bg-muted/50 border-border h-11"
                   min="1"
                   max="10000"
                 />
@@ -326,14 +327,14 @@ export function DoubleSimulator() {
             <Button
               onClick={runSimulation}
               disabled={isRunning}
-              className="gradient-neon text-black text-xs font-bold"
+              className="gradient-neon text-black text-sm font-bold"
             >
               <Play className="h-3 w-3 mr-1" /> Simular
             </Button>
-            <Button onClick={handleReset} variant="outline" size="sm" className="border-border text-xs">
+            <Button onClick={handleReset} variant="outline" size="sm" className="border-border text-sm">
               <RotateCcw className="h-3 w-3 mr-1" /> Resetar
             </Button>
-            <Button onClick={handleCopy} variant="outline" size="sm" className="border-border text-xs" disabled={results.length === 0}>
+            <Button onClick={handleCopy} variant="outline" size="sm" className="border-border text-sm" disabled={results.length === 0}>
               {copied ? <Check className="h-3 w-3 mr-1" /> : <Copy className="h-3 w-3 mr-1" />}
               {copied ? 'Copiado!' : 'Copiar'}
             </Button>
@@ -345,20 +346,20 @@ export function DoubleSimulator() {
               <Card className="border-neon/20 bg-neon/5">
                 <CardContent className="p-3 text-center">
                   <p className="text-[10px] text-muted-foreground">Vitórias</p>
-                  <p className="text-lg font-black text-neon">{stats.wins}</p>
+                  <p className="text-xl font-black text-neon">{stats.wins}</p>
                 </CardContent>
               </Card>
               <Card className="border-red-500/20 bg-red-500/5">
                 <CardContent className="p-3 text-center">
                   <p className="text-[10px] text-muted-foreground">Derrotas</p>
-                  <p className="text-lg font-black text-red-500">{stats.losses}</p>
+                  <p className="text-xl font-black text-red-500">{stats.losses}</p>
                 </CardContent>
               </Card>
               <Card className="border-neon-blue/20 bg-neon-blue/5">
                 <CardContent className="p-3 text-center">
                   <Wallet className="h-4 w-4 text-neon-blue mx-auto mb-1" />
                   <p className="text-[10px] text-muted-foreground">Saldo Final</p>
-                  <p className={`text-lg font-black ${stats.finalBalance >= parseFloat(bankroll) ? 'text-neon' : 'text-red-500'}`}>
+                  <p className={`text-xl font-black ${stats.finalBalance >= parseFloat(bankroll) ? 'text-neon' : 'text-red-500'}`}>
                     R$ {stats.finalBalance.toFixed(2)}
                   </p>
                 </CardContent>
@@ -367,7 +368,7 @@ export function DoubleSimulator() {
                 <CardContent className="p-3 text-center">
                   <BarChart3 className="h-4 w-4 text-neon-blue mx-auto mb-1" />
                   <p className="text-[10px] text-muted-foreground">Lucro/Prejuízo</p>
-                  <p className={`text-lg font-black ${stats.profitLoss >= 0 ? 'gradient-neon-text' : 'text-red-500'}`}>
+                  <p className={`text-xl font-black ${stats.profitLoss >= 0 ? 'gradient-neon-text' : 'text-red-500'}`}>
                     {stats.profitLoss >= 0 ? '+' : ''}R$ {stats.profitLoss.toFixed(2)}
                   </p>
                 </CardContent>
@@ -378,9 +379,9 @@ export function DoubleSimulator() {
           {stats && (
             <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardHeader className="pb-2">
-                <CardTitle className="text-xs font-semibold">Estatísticas Avançadas</CardTitle>
+                <CardTitle className="text-sm font-semibold">Estatísticas Avançadas</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-2 text-xs">
+              <CardContent className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Taxa de Vitória</span>
                   <span className="font-mono text-neon">{stats.winRate.toFixed(1)}%</span>
@@ -407,15 +408,15 @@ export function DoubleSimulator() {
           {results.length > 0 ? (
             <Tabs defaultValue="table" className="w-full">
               <TabsList className="bg-muted/50 border border-border">
-                <TabsTrigger value="table" className="text-xs">Resultados</TabsTrigger>
-                <TabsTrigger value="chart" className="text-xs">Gráfico</TabsTrigger>
+                <TabsTrigger value="table" className="text-sm">Resultados</TabsTrigger>
+                <TabsTrigger value="chart" className="text-sm">Gráfico</TabsTrigger>
               </TabsList>
 
               <TabsContent value="table" className="mt-4">
                 <Card className="border-border/50 bg-card/50 backdrop-blur">
                   <CardContent className="p-0">
                     <ScrollArea className="max-h-[500px]">
-                      <table className="w-full text-xs">
+                      <table className="w-full text-sm">
                         <thead className="sticky top-0 bg-card">
                           <tr className="border-b border-border">
                             <th className="text-left p-3 font-semibold text-muted-foreground">Round</th>
@@ -476,23 +477,23 @@ export function DoubleSimulator() {
               <TabsContent value="chart" className="mt-4">
                 <Card className="border-border/50 bg-card/50 backdrop-blur">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm flex items-center gap-2">
+                    <CardTitle className="text-base flex items-center gap-2">
                       <TrendingUp className="h-4 w-4 text-neon" /> Saldo ao Longo das Rodadas
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <ResponsiveContainer width="100%" height={350}>
                       <LineChart data={chartData}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
+                        <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
                         <XAxis
                           dataKey="round"
-                          tick={{ fontSize: 10, fill: '#94a3b8' }}
-                          label={{ value: 'Rodada', position: 'insideBottom', offset: -5, fontSize: 10, fill: '#94a3b8' }}
+                          tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
+                          label={{ value: 'Rodada', position: 'insideBottom', offset: -5, fontSize: 10, fill: "var(--muted-foreground)" }}
                         />
-                        <YAxis tick={{ fontSize: 10, fill: '#94a3b8' }} />
+                        <YAxis tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} />
                         <Tooltip
-                          contentStyle={{ background: '#111827', border: '1px solid #1e293b', borderRadius: '8px', fontSize: 12 }}
-                          labelStyle={{ color: '#e2e8f0' }}
+                          contentStyle={{ background: "var(--card)", border: '1px solid var(--border)', borderRadius: '8px', fontSize: 12 }}
+                          labelStyle={{ color: "var(--foreground)" }}
                           formatter={(value: number) => [`R$ ${value.toFixed(2)}`, 'Saldo']}
                         />
                         <Line
@@ -513,20 +514,22 @@ export function DoubleSimulator() {
             <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardContent className="p-12 text-center">
                 <Dices className="h-12 w-12 text-neon/30 mx-auto mb-4" />
-                <p className="text-muted-foreground text-sm">
+                <p className="text-muted-foreground text-base">
                   Configure os parâmetros e clique em <span className="text-neon font-semibold">Simular</span> para começar
                 </p>
               </CardContent>
             </Card>
           )}
 
+          <AdInContent />
+
           {/* Warning */}
           <Card className="border-amber-500/20 bg-amber-500/5">
             <CardContent className="p-4 flex gap-3">
               <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
               <div>
-                <p className="text-xs font-semibold text-amber-500">Jogo Responsável</p>
-                <p className="text-xs text-muted-foreground leading-relaxed mt-1">
+                <p className="text-sm font-semibold text-amber-500">Jogo Responsável</p>
+                <p className="text-sm text-muted-foreground leading-relaxed mt-1">
                   Este simulador é apenas para fins educacionais. Estratégias como Martingale e Fibonacci não garantem lucro
                   e podem levar a perdas significativas. A casa sempre tem vantagem. Nunca aposte mais do que pode perder.
                 </p>

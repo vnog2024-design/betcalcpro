@@ -17,6 +17,7 @@ import {
   AreaChart, Area
 } from 'recharts'
 import { useToast } from '@/hooks/use-toast'
+import { AdInContent } from '@/components/shared/ad-banner'
 
 interface FibLevel {
   level: number
@@ -144,7 +145,7 @@ export function FibonacciCalculator() {
             <BarChart3 className="h-7 w-7 text-neon" />
             Fibonacci <span className="gradient-neon-text">Calculator</span>
           </h1>
-          <p className="text-sm text-muted-foreground mt-1">
+          <p className="text-base text-muted-foreground mt-1">
             Calculate your Fibonacci betting progression with visual analysis
           </p>
         </div>
@@ -155,42 +156,42 @@ export function FibonacciCalculator() {
         <div className="lg:col-span-1 space-y-4">
           <Card className="border-border/50 bg-card/50 backdrop-blur">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-semibold flex items-center gap-2">
+              <CardTitle className="text-base font-semibold flex items-center gap-2">
                 <TrendingUp className="h-4 w-4 text-neon" /> Configuration
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Initial Bet (R$)</Label>
+                <Label className="text-sm text-muted-foreground">Initial Bet (R$)</Label>
                 <Input
                   type="number"
                   value={initialBet}
                   onChange={(e) => setInitialBet(e.target.value)}
-                  className="bg-muted/50 border-border"
+                  className="bg-muted/50 border-border h-11"
                   min="0.01"
                   step="0.01"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Number of Levels</Label>
+                <Label className="text-sm text-muted-foreground">Number of Levels</Label>
                 <Input
                   type="number"
                   value={levels}
                   onChange={(e) => setLevels(e.target.value)}
-                  className="bg-muted/50 border-border"
+                  className="bg-muted/50 border-border h-11"
                   min="1"
                   max="30"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Target Multiplier</Label>
+                <Label className="text-sm text-muted-foreground">Target Multiplier</Label>
                 <Input
                   type="number"
                   value={targetMultiplier}
                   onChange={(e) => setTargetMultiplier(e.target.value)}
-                  className="bg-muted/50 border-border"
+                  className="bg-muted/50 border-border h-11"
                   min="1.1"
                   step="0.1"
                 />
@@ -214,7 +215,7 @@ export function FibonacciCalculator() {
                 <CardContent className="p-3 text-center">
                   <BarChart3 className="h-4 w-4 text-neon mx-auto mb-1" />
                   <p className="text-[10px] text-muted-foreground">Bankroll Needed</p>
-                  <p className="text-lg font-black gradient-neon-text">
+                  <p className="text-xl font-black gradient-neon-text">
                     R$ {calculations.totalBankrollNeeded.toFixed(2)}
                   </p>
                 </CardContent>
@@ -223,7 +224,7 @@ export function FibonacciCalculator() {
                 <CardContent className="p-3 text-center">
                   <TrendingUp className="h-4 w-4 text-neon-blue mx-auto mb-1" />
                   <p className="text-[10px] text-muted-foreground">Max Profit</p>
-                  <p className="text-lg font-black neon-text-blue">
+                  <p className="text-xl font-black neon-text-blue">
                     R$ {calculations.maxProfit.toFixed(2)}
                   </p>
               </CardContent>
@@ -231,7 +232,7 @@ export function FibonacciCalculator() {
               <Card className="border-amber-500/20 bg-amber-500/5 col-span-2">
                 <CardContent className="p-3 text-center">
                   <p className="text-[10px] text-muted-foreground">Largest Bet (Level {calculations.fibLevels.length})</p>
-                  <p className="text-lg font-black text-amber-500">
+                  <p className="text-xl font-black text-amber-500">
                     R$ {calculations.maxBet.toFixed(2)}
                   </p>
                 </CardContent>
@@ -243,7 +244,7 @@ export function FibonacciCalculator() {
           {calculations && (
             <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardHeader className="pb-2">
-                <CardTitle className="text-xs font-semibold text-muted-foreground">Fibonacci Sequence</CardTitle>
+                <CardTitle className="text-sm font-semibold text-muted-foreground">Fibonacci Sequence</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-1">
@@ -258,15 +259,12 @@ export function FibonacciCalculator() {
           )}
 
           {/* Action Buttons */}
-          <div className="grid grid-cols-3 gap-2">
-            <Button onClick={handleCopy} variant="outline" size="sm" className="border-border text-xs">
+          <div className="grid grid-cols-2 gap-2">
+            <Button onClick={handleCopy} variant="outline" size="sm" className="border-border text-sm">
               {copied ? <Check className="h-3 w-3 mr-1" /> : <Copy className="h-3 w-3 mr-1" />}
               {copied ? 'Copied!' : 'Copy'}
             </Button>
-            <Button onClick={handleSave} variant="outline" size="sm" className="border-border text-xs">
-              <Download className="h-3 w-3 mr-1" /> Save
-            </Button>
-            <Button onClick={handleReset} variant="outline" size="sm" className="border-border text-xs">
+            <Button onClick={handleReset} variant="outline" size="sm" className="border-border text-sm">
               <RotateCcw className="h-3 w-3 mr-1" /> Reset
             </Button>
           </div>
@@ -278,19 +276,19 @@ export function FibonacciCalculator() {
           {calculations && (
             <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                <CardTitle className="text-base font-semibold flex items-center gap-2">
                   <BarChart3 className="h-4 w-4 text-neon" /> Bet Progression Chart
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
                   <LineChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                    <XAxis dataKey="name" tick={{ fontSize: 10, fill: '#94a3b8' }} />
-                    <YAxis tick={{ fontSize: 10, fill: '#94a3b8' }} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                    <XAxis dataKey="name" tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} />
+                    <YAxis tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} />
                     <Tooltip
-                      contentStyle={{ background: '#111827', border: '1px solid #1e293b', borderRadius: '8px', fontSize: 12 }}
-                      labelStyle={{ color: '#e2e8f0' }}
+                      contentStyle={{ background: "var(--card)", border: '1px solid var(--border)', borderRadius: '8px', fontSize: 12 }}
+                      labelStyle={{ color: "var(--foreground)" }}
                       formatter={(value: number, name: string) => {
                         const labels: Record<string, string> = {
                           bet: 'Bet Amount',
@@ -348,13 +346,13 @@ export function FibonacciCalculator() {
           {calculations && (
             <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                <CardTitle className="text-base font-semibold flex items-center gap-2">
                   <TrendingUp className="h-4 w-4 text-neon-blue" /> Progression Table
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0">
                 <ScrollArea className="max-h-[500px]">
-                  <table className="w-full text-xs">
+                  <table className="w-full text-sm">
                     <thead className="sticky top-0 bg-card">
                       <tr className="border-b border-border">
                         <th className="text-left p-3 font-semibold text-muted-foreground">Level</th>
@@ -408,19 +406,19 @@ export function FibonacciCalculator() {
           {calculations && (
             <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                <CardTitle className="text-base font-semibold flex items-center gap-2">
                   <BarChart3 className="h-4 w-4 text-amber-500" /> Investment Growth
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={250}>
                   <AreaChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                    <XAxis dataKey="name" tick={{ fontSize: 10, fill: '#94a3b8' }} />
-                    <YAxis tick={{ fontSize: 10, fill: '#94a3b8' }} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                    <XAxis dataKey="name" tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} />
+                    <YAxis tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} />
                     <Tooltip
-                      contentStyle={{ background: '#111827', border: '1px solid #1e293b', borderRadius: '8px', fontSize: 12 }}
-                      labelStyle={{ color: '#e2e8f0' }}
+                      contentStyle={{ background: "var(--card)", border: '1px solid var(--border)', borderRadius: '8px', fontSize: 12 }}
+                      labelStyle={{ color: "var(--foreground)" }}
                       formatter={(value: number, name: string) => {
                         const labels: Record<string, string> = {
                           totalInvested: 'Total Invested',
@@ -451,13 +449,15 @@ export function FibonacciCalculator() {
             </Card>
           )}
 
+          <AdInContent />
+
           {/* Warning */}
           <Card className="border-amber-500/20 bg-amber-500/5">
             <CardContent className="p-4 flex gap-3">
               <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
               <div>
-                <p className="text-xs font-semibold text-amber-500">Warning</p>
-                <p className="text-xs text-muted-foreground leading-relaxed mt-1">
+                <p className="text-sm font-semibold text-amber-500">Warning</p>
+                <p className="text-sm text-muted-foreground leading-relaxed mt-1">
                   The Fibonacci progression grows slower than Martingale but still requires a significant bankroll
                   for deeper levels. Total invested increases with each level, and extended losing streaks
                   can quickly deplete your bankroll. Always set strict loss limits.

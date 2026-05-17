@@ -17,6 +17,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell
 } from 'recharts'
 import { useToast } from '@/hooks/use-toast'
+import { AdInContent } from '@/components/shared/ad-banner'
 
 interface SimulationResult {
   consecutiveWins: number
@@ -233,7 +234,7 @@ export function ProbabilitySimulator() {
             <Percent className="h-7 w-7 text-neon" />
             Simulador <span className="gradient-neon-text">Probabilístico</span>
           </h1>
-          <p className="text-sm text-muted-foreground mt-1">
+          <p className="text-base text-muted-foreground mt-1">
             Simulação Monte Carlo para análise de probabilidades e cenários
           </p>
         </div>
@@ -255,18 +256,18 @@ export function ProbabilitySimulator() {
         <div className="lg:col-span-1 space-y-4">
           <Card className="border-border/50 bg-card/50 backdrop-blur">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-semibold flex items-center gap-2">
+              <CardTitle className="text-base font-semibold flex items-center gap-2">
                 <Percent className="h-4 w-4 text-neon" /> Parâmetros
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Probabilidade do Evento (%)</Label>
+                <Label className="text-sm text-muted-foreground">Probabilidade do Evento (%)</Label>
                 <Input
                   type="number"
                   value={probability}
                   onChange={(e) => setProbability(e.target.value)}
-                  className="bg-muted/50 border-border"
+                  className="bg-muted/50 border-border h-11"
                   min="0.1"
                   max="99.9"
                   step="0.1"
@@ -275,12 +276,12 @@ export function ProbabilitySimulator() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Número de Simulações</Label>
+                <Label className="text-sm text-muted-foreground">Número de Simulações</Label>
                 <Input
                   type="number"
                   value={simulations}
                   onChange={(e) => setSimulations(e.target.value)}
-                  className="bg-muted/50 border-border"
+                  className="bg-muted/50 border-border h-11"
                   min="100"
                   max="100000"
                   step="100"
@@ -288,36 +289,36 @@ export function ProbabilitySimulator() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Eventos Consecutivos para Análise</Label>
+                <Label className="text-sm text-muted-foreground">Eventos Consecutivos para Análise</Label>
                 <Input
                   type="number"
                   value={consecutiveEvents}
                   onChange={(e) => setConsecutiveEvents(e.target.value)}
-                  className="bg-muted/50 border-border"
+                  className="bg-muted/50 border-border h-11"
                   min="1"
                   max="20"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Banca Inicial (R$)</Label>
+                <Label className="text-sm text-muted-foreground">Banca Inicial (R$)</Label>
                 <Input
                   type="number"
                   value={bankroll}
                   onChange={(e) => setBankroll(e.target.value)}
-                  className="bg-muted/50 border-border"
+                  className="bg-muted/50 border-border h-11"
                   min="1"
                   step="1"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Valor da Aposta (R$)</Label>
+                <Label className="text-sm text-muted-foreground">Valor da Aposta (R$)</Label>
                 <Input
                   type="number"
                   value={betAmount}
                   onChange={(e) => setBetAmount(e.target.value)}
-                  className="bg-muted/50 border-border"
+                  className="bg-muted/50 border-border h-11"
                   min="0.01"
                   step="0.01"
                 />
@@ -326,10 +327,10 @@ export function ProbabilitySimulator() {
           </Card>
 
           <div className="grid grid-cols-2 gap-2">
-            <Button onClick={runMonteCarlo} className="gradient-neon text-black text-xs font-bold">
+            <Button onClick={runMonteCarlo} className="gradient-neon text-black text-sm font-bold">
               <Calculator className="h-3 w-3 mr-1" /> Simular
             </Button>
-            <Button onClick={handleReset} variant="outline" size="sm" className="border-border text-xs">
+            <Button onClick={handleReset} variant="outline" size="sm" className="border-border text-sm">
               <RotateCcw className="h-3 w-3 mr-1" /> Resetar
             </Button>
           </div>
@@ -337,13 +338,13 @@ export function ProbabilitySimulator() {
           {/* Theoretical Probabilities */}
           <Card className="border-border/50 bg-card/50 backdrop-blur">
             <CardHeader className="pb-2">
-              <CardTitle className="text-xs font-semibold flex items-center gap-2">
+              <CardTitle className="text-sm font-semibold flex items-center gap-2">
                 <TrendingUp className="h-4 w-4 text-neon" /> Probabilidades Teóricas
               </CardTitle>
             </CardHeader>
             <CardContent>
               <ScrollArea className="max-h-64">
-                <table className="w-full text-xs">
+                <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-border">
                       <th className="text-left p-2 font-semibold text-muted-foreground">N</th>
@@ -368,7 +369,7 @@ export function ProbabilitySimulator() {
           </Card>
 
           {statsSummary && (
-            <Button onClick={handleCopy} variant="outline" size="sm" className="w-full border-border text-xs">
+            <Button onClick={handleCopy} variant="outline" size="sm" className="w-full border-border text-sm">
               {copied ? <Check className="h-3 w-3 mr-1" /> : <Copy className="h-3 w-3 mr-1" />}
               {copied ? 'Copiado!' : 'Copiar Resultados'}
             </Button>
@@ -380,9 +381,9 @@ export function ProbabilitySimulator() {
           {statsSummary && distributionData ? (
             <Tabs defaultValue="summary" className="w-full">
               <TabsList className="bg-muted/50 border border-border">
-                <TabsTrigger value="summary" className="text-xs">Resumo</TabsTrigger>
-                <TabsTrigger value="distribution" className="text-xs">Distribuição</TabsTrigger>
-                <TabsTrigger value="streaks" className="text-xs">Streaks</TabsTrigger>
+                <TabsTrigger value="summary" className="text-sm">Resumo</TabsTrigger>
+                <TabsTrigger value="distribution" className="text-sm">Distribuição</TabsTrigger>
+                <TabsTrigger value="streaks" className="text-sm">Streaks</TabsTrigger>
               </TabsList>
 
               <TabsContent value="summary" className="mt-4">
@@ -390,7 +391,7 @@ export function ProbabilitySimulator() {
                   <Card className="border-neon/20 bg-neon/5">
                     <CardContent className="p-3 text-center">
                       <p className="text-[10px] text-muted-foreground">Saldo Médio Final</p>
-                      <p className={`text-lg font-black ${statsSummary.avgBalance >= parseFloat(bankroll) ? 'text-neon' : 'text-red-500'}`}>
+                      <p className={`text-xl font-black ${statsSummary.avgBalance >= parseFloat(bankroll) ? 'text-neon' : 'text-red-500'}`}>
                         R$ {statsSummary.avgBalance.toFixed(2)}
                       </p>
                     </CardContent>
@@ -398,40 +399,40 @@ export function ProbabilitySimulator() {
                   <Card className="border-neon/20 bg-neon/5">
                     <CardContent className="p-3 text-center">
                       <p className="text-[10px] text-muted-foreground">% Lucro</p>
-                      <p className="text-lg font-black text-neon">{statsSummary.profitPct.toFixed(1)}%</p>
+                      <p className="text-xl font-black text-neon">{statsSummary.profitPct.toFixed(1)}%</p>
                     </CardContent>
                   </Card>
                   <Card className="border-red-500/20 bg-red-500/5">
                     <CardContent className="p-3 text-center">
                       <p className="text-[10px] text-muted-foreground">% Prejuízo</p>
-                      <p className="text-lg font-black text-red-500">{statsSummary.lossPct.toFixed(1)}%</p>
+                      <p className="text-xl font-black text-red-500">{statsSummary.lossPct.toFixed(1)}%</p>
                     </CardContent>
                   </Card>
                   <Card className="border-amber-500/20 bg-amber-500/5">
                     <CardContent className="p-3 text-center">
                       <p className="text-[10px] text-muted-foreground">Taxa de Falência</p>
-                      <p className="text-lg font-black text-amber-500">{statsSummary.bustPct.toFixed(1)}%</p>
+                      <p className="text-xl font-black text-amber-500">{statsSummary.bustPct.toFixed(1)}%</p>
                     </CardContent>
                   </Card>
                   <Card className="border-neon-blue/20 bg-neon-blue/5">
                     <CardContent className="p-3 text-center">
                       <p className="text-[10px] text-muted-foreground">Desvio Padrão</p>
-                      <p className="text-lg font-black text-neon-blue">R$ {statsSummary.stdDev.toFixed(2)}</p>
+                      <p className="text-xl font-black text-neon-blue">R$ {statsSummary.stdDev.toFixed(2)}</p>
                     </CardContent>
                   </Card>
                   <Card className="border-neon-blue/20 bg-neon-blue/5">
                     <CardContent className="p-3 text-center">
                       <p className="text-[10px] text-muted-foreground">Variância</p>
-                      <p className="text-lg font-black text-neon-blue">{statsSummary.variance.toFixed(0)}</p>
+                      <p className="text-xl font-black text-neon-blue">{statsSummary.variance.toFixed(0)}</p>
                     </CardContent>
                   </Card>
                 </div>
 
                 <Card className="border-border/50 bg-card/50 backdrop-blur">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-xs font-semibold">Análise de Valor Esperado</CardTitle>
+                    <CardTitle className="text-sm font-semibold">Análise de Valor Esperado</CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-3 text-xs">
+                  <CardContent className="space-y-3 text-sm">
                     <div className="flex justify-between p-2 rounded-lg bg-muted/20">
                       <span className="text-muted-foreground">Valor Esperado por Aposta</span>
                       <span className={`font-mono font-bold ${
@@ -465,19 +466,19 @@ export function ProbabilitySimulator() {
               <TabsContent value="distribution" className="mt-4">
                 <Card className="border-border/50 bg-card/50 backdrop-blur">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm flex items-center gap-2">
+                    <CardTitle className="text-base flex items-center gap-2">
                       <BarChart3 className="h-4 w-4 text-neon" /> Distribuição do Saldo Final
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <ResponsiveContainer width="100%" height={300}>
                       <BarChart data={distributionData}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                        <XAxis dataKey="name" tick={{ fontSize: 9, fill: '#94a3b8' }} angle={-45} textAnchor="end" height={60} />
-                        <YAxis tick={{ fontSize: 10, fill: '#94a3b8' }} />
+                        <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                        <XAxis dataKey="name" tick={{ fontSize: 9, fill: "var(--muted-foreground)" }} angle={-45} textAnchor="end" height={60} />
+                        <YAxis tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} />
                         <Tooltip
-                          contentStyle={{ background: '#111827', border: '1px solid #1e293b', borderRadius: '8px', fontSize: 12 }}
-                          labelStyle={{ color: '#e2e8f0' }}
+                          contentStyle={{ background: "var(--card)", border: '1px solid var(--border)', borderRadius: '8px', fontSize: 12 }}
+                          labelStyle={{ color: "var(--foreground)" }}
                           formatter={(value: number) => [value, 'Frequência']}
                         />
                         <Bar dataKey="count" radius={[4, 4, 0, 0]}>
@@ -498,7 +499,7 @@ export function ProbabilitySimulator() {
               <TabsContent value="streaks" className="mt-4">
                 <Card className="border-border/50 bg-card/50 backdrop-blur">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm flex items-center gap-2">
+                    <CardTitle className="text-base flex items-center gap-2">
                       <TrendingUp className="h-4 w-4 text-neon" /> Análise de Streaks (Monte Carlo)
                     </CardTitle>
                   </CardHeader>
@@ -506,26 +507,26 @@ export function ProbabilitySimulator() {
                     <div className="grid grid-cols-2 gap-3 mb-4">
                       <div className="p-3 rounded-lg bg-neon/5 border border-neon/20 text-center">
                         <p className="text-[10px] text-muted-foreground">Média Max Streak Vitórias</p>
-                        <p className="text-lg font-black text-neon">{statsSummary.avgMaxWinStreak.toFixed(1)}x</p>
+                        <p className="text-xl font-black text-neon">{statsSummary.avgMaxWinStreak.toFixed(1)}x</p>
                       </div>
                       <div className="p-3 rounded-lg bg-red-500/5 border border-red-500/20 text-center">
                         <p className="text-[10px] text-muted-foreground">Média Max Streak Derrotas</p>
-                        <p className="text-lg font-black text-red-500">{statsSummary.avgMaxLossStreak.toFixed(1)}x</p>
+                        <p className="text-xl font-black text-red-500">{statsSummary.avgMaxLossStreak.toFixed(1)}x</p>
                       </div>
                       <div className="p-3 rounded-lg bg-neon/5 border border-neon/20 text-center">
                         <p className="text-[10px] text-muted-foreground">Atingiu {consecutiveEvents} Vitórias</p>
-                        <p className="text-lg font-black text-neon">{statsSummary.hitConsecWinsPct.toFixed(1)}%</p>
+                        <p className="text-xl font-black text-neon">{statsSummary.hitConsecWinsPct.toFixed(1)}%</p>
                         <p className="text-[10px] text-muted-foreground">({statsSummary.hitConsecWins} simulações)</p>
                       </div>
                       <div className="p-3 rounded-lg bg-red-500/5 border border-red-500/20 text-center">
                         <p className="text-[10px] text-muted-foreground">Atingiu {consecutiveEvents} Derrotas</p>
-                        <p className="text-lg font-black text-red-500">{statsSummary.hitConsecLossesPct.toFixed(1)}%</p>
+                        <p className="text-xl font-black text-red-500">{statsSummary.hitConsecLossesPct.toFixed(1)}%</p>
                         <p className="text-[10px] text-muted-foreground">({statsSummary.hitConsecLosses} simulações)</p>
                       </div>
                     </div>
 
                     <div className="p-3 rounded-lg bg-muted/20 border border-border/50">
-                      <p className="text-xs text-muted-foreground leading-relaxed">
+                      <p className="text-sm text-muted-foreground leading-relaxed">
                         <span className="font-semibold text-neon">Interpretação:</span> Em {simulations} simulações,
                         {statsSummary.hitConsecWinsPct.toFixed(1)}% das sessões atingiram pelo menos {consecutiveEvents} vitórias
                         consecutivas, enquanto {statsSummary.hitConsecLossesPct.toFixed(1)}% atingiram {consecutiveEvents} derrotas
@@ -540,20 +541,22 @@ export function ProbabilitySimulator() {
             <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardContent className="p-12 text-center">
                 <Percent className="h-12 w-12 text-neon/30 mx-auto mb-4" />
-                <p className="text-muted-foreground text-sm">
+                <p className="text-muted-foreground text-base">
                   Configure os parâmetros e clique em <span className="text-neon font-semibold">Simular</span> para executar a simulação Monte Carlo
                 </p>
               </CardContent>
             </Card>
           )}
 
+          <AdInContent />
+
           {/* Warning */}
           <Card className="border-amber-500/20 bg-amber-500/5">
             <CardContent className="p-4 flex gap-3">
               <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
               <div>
-                <p className="text-xs font-semibold text-amber-500">Jogo Responsável</p>
-                <p className="text-xs text-muted-foreground leading-relaxed mt-1">
+                <p className="text-sm font-semibold text-amber-500">Jogo Responsável</p>
+                <p className="text-sm text-muted-foreground leading-relaxed mt-1">
                   Simulações Monte Carlo mostram resultados probabilísticos de longo prazo. Na prática, resultados individuais
                   podem variar significativamente. A casa sempre tem vantagem matemática. Nunca aposte mais do que pode perder.
                 </p>

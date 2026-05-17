@@ -10,9 +10,10 @@ import { Badge } from '@/components/ui/badge'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
-  Shield, Target, AlertTriangle, Copy, Download, Check, Info, ChevronDown, ChevronUp,
+  Shield, Target, AlertTriangle, Copy, Download, Check, Info, ChevronDown, ChevronUp, RotateCcw,
 } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
+import { AdInContent } from '@/components/shared/ad-banner'
 
 interface StrategyStep {
   step: number
@@ -244,7 +245,7 @@ export function RecoveryCalculator() {
             <Shield className="h-7 w-7 text-neon" />
             Recuperação de <span className="gradient-neon-text">Banca</span>
           </h1>
-          <p className="text-sm text-muted-foreground mt-1">
+          <p className="text-base text-muted-foreground mt-1">
             Compare estratégias de recuperação de banca lado a lado
           </p>
         </div>
@@ -255,54 +256,54 @@ export function RecoveryCalculator() {
         <div className="lg:col-span-1 space-y-4">
           <Card className="border-border/50 bg-card/50 backdrop-blur">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-semibold flex items-center gap-2">
+              <CardTitle className="text-base font-semibold flex items-center gap-2">
                 <Target className="h-4 w-4 text-neon" /> Configurações
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Banca Atual (R$)</Label>
+                <Label className="text-sm text-muted-foreground">Banca Atual (R$)</Label>
                 <Input
                   type="number"
                   value={currentBankroll}
                   onChange={(e) => setCurrentBankroll(e.target.value)}
-                  className="bg-muted/50 border-border"
+                  className="bg-muted/50 border-border h-11"
                   min="0.01"
                   step="0.01"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Banca Alvo (R$)</Label>
+                <Label className="text-sm text-muted-foreground">Banca Alvo (R$)</Label>
                 <Input
                   type="number"
                   value={targetBankroll}
                   onChange={(e) => setTargetBankroll(e.target.value)}
-                  className="bg-muted/50 border-border"
+                  className="bg-muted/50 border-border h-11"
                   min="0.01"
                   step="0.01"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Odds por Aposta</Label>
+                <Label className="text-sm text-muted-foreground">Odds por Aposta</Label>
                 <Input
                   type="number"
                   value={oddsPerBet}
                   onChange={(e) => setOddsPerBet(e.target.value)}
-                  className="bg-muted/50 border-border"
+                  className="bg-muted/50 border-border h-11"
                   min="1.01"
                   step="0.01"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">% de Risco da Banca</Label>
+                <Label className="text-sm text-muted-foreground">% de Risco da Banca</Label>
                 <Input
                   type="number"
                   value={riskPercentage}
                   onChange={(e) => setRiskPercentage(e.target.value)}
-                  className="bg-muted/50 border-border"
+                  className="bg-muted/50 border-border h-11"
                   min="0.1"
                   max="99"
                   step="0.1"
@@ -313,7 +314,7 @@ export function RecoveryCalculator() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="w-full text-xs text-muted-foreground"
+                className="w-full text-sm text-muted-foreground"
                 onClick={() => setShowAdvanced(!showAdvanced)}
               >
                 {showAdvanced ? <ChevronUp className="h-3 w-3 mr-1" /> : <ChevronDown className="h-3 w-3 mr-1" />}
@@ -353,7 +354,7 @@ export function RecoveryCalculator() {
             <CardContent className="p-3">
               <div className="flex items-center gap-2 mb-2">
                 <Target className="h-4 w-4 text-neon" />
-                <span className="text-xs font-semibold text-muted-foreground">Déficit a Recuperar</span>
+                <span className="text-sm font-semibold text-muted-foreground">Déficit a Recuperar</span>
               </div>
               <p className="text-xl font-black gradient-neon-text text-center">
                 R$ {Math.max(0, (parseFloat(targetBankroll) || 0) - (parseFloat(currentBankroll) || 0)).toFixed(2)}
@@ -362,16 +363,13 @@ export function RecoveryCalculator() {
           </Card>
 
           {/* Action Buttons */}
-          <div className="grid grid-cols-3 gap-2">
-            <Button onClick={handleCopy} variant="outline" size="sm" className="border-border text-xs">
+          <div className="grid grid-cols-2 gap-2">
+            <Button onClick={handleCopy} variant="outline" size="sm" className="border-border text-sm">
               {copied ? <Check className="h-3 w-3 mr-1" /> : <Copy className="h-3 w-3 mr-1" />}
               {copied ? 'Copiado!' : 'Copiar'}
             </Button>
-            <Button onClick={handleSave} variant="outline" size="sm" className="border-border text-xs">
-              <Download className="h-3 w-3 mr-1" /> Salvar
-            </Button>
-            <Button onClick={handleReset} variant="outline" size="sm" className="border-border text-xs">
-              <Shield className="h-3 w-3 mr-1" /> Resetar
+            <Button onClick={handleReset} variant="outline" size="sm" className="border-border text-sm">
+              <RotateCcw className="h-3 w-3 mr-1" /> Resetar
             </Button>
           </div>
         </div>
@@ -382,7 +380,7 @@ export function RecoveryCalculator() {
             <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardContent className="p-8 text-center">
                 <Shield className="h-12 w-12 text-muted-foreground/30 mx-auto mb-3" />
-                <p className="text-sm text-muted-foreground">
+                <p className="text-base text-muted-foreground">
                   Preencha os campos ao lado para comparar as estratégias de recuperação.
                 </p>
               </CardContent>
@@ -396,22 +394,22 @@ export function RecoveryCalculator() {
                     <CardContent className="p-4 space-y-3">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <span className="text-lg">{s.icon}</span>
-                          <span className={`text-sm font-bold ${s.color}`}>{s.name}</span>
+                          <span className="text-xl">{s.icon}</span>
+                          <span className={`text-base font-bold ${s.color}`}>{s.name}</span>
                         </div>
                         {getRiskBadge(s.riskLevel)}
                       </div>
                       <p className="text-[10px] text-muted-foreground">{s.description}</p>
                       <div className="space-y-1.5">
-                        <div className="flex justify-between text-xs">
+                        <div className="flex justify-between text-sm">
                           <span className="text-muted-foreground">Apostas Necessárias</span>
                           <span className="font-bold">{s.totalBets}</span>
                         </div>
-                        <div className="flex justify-between text-xs">
+                        <div className="flex justify-between text-sm">
                           <span className="text-muted-foreground">Total Apostado</span>
                           <span className="font-bold font-mono">R$ {s.totalWagered.toFixed(2)}</span>
                         </div>
-                        <div className="flex justify-between text-xs">
+                        <div className="flex justify-between text-sm">
                           <span className="text-muted-foreground">Max Drawdown</span>
                           <span className="font-bold font-mono text-red-400">R$ {s.maxDrawdown.toFixed(2)}</span>
                         </div>
@@ -424,13 +422,13 @@ export function RecoveryCalculator() {
               {/* Comparison Table */}
               <Card className="border-border/50 bg-card/50 backdrop-blur">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                  <CardTitle className="text-base font-semibold flex items-center gap-2">
                     <Target className="h-4 w-4 text-neon" /> Comparação de Estratégias
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
                   <ScrollArea className="max-h-[400px]">
-                    <table className="w-full text-xs">
+                    <table className="w-full text-sm">
                       <thead className="sticky top-0 bg-card">
                         <tr className="border-b border-border">
                           <th className="text-left p-3 font-semibold text-muted-foreground">Métrica</th>
@@ -493,13 +491,13 @@ export function RecoveryCalculator() {
                 <CardContent className="p-4">
                   <Tabs defaultValue="flat" className="w-full">
                     <TabsList className="bg-muted/50 border border-border w-full">
-                      <TabsTrigger value="flat" className="text-xs flex-1">
+                      <TabsTrigger value="flat" className="text-sm flex-1">
                         🛡️ Flat
                       </TabsTrigger>
-                      <TabsTrigger value="progressive" className="text-xs flex-1">
+                      <TabsTrigger value="progressive" className="text-sm flex-1">
                         🎯 Progressiva
                       </TabsTrigger>
-                      <TabsTrigger value="aggressive" className="text-xs flex-1">
+                      <TabsTrigger value="aggressive" className="text-sm flex-1">
                         ⚡ Agressiva
                       </TabsTrigger>
                     </TabsList>
@@ -509,7 +507,7 @@ export function RecoveryCalculator() {
                       return (
                         <TabsContent key={tabValue} value={tabValue} className="mt-4">
                           <ScrollArea className="max-h-[350px]">
-                            <table className="w-full text-xs">
+                            <table className="w-full text-sm">
                               <thead className="sticky top-0 bg-card">
                                 <tr className="border-b border-border">
                                   <th className="text-left p-3 font-semibold text-muted-foreground">Etapa</th>
@@ -566,13 +564,15 @@ export function RecoveryCalculator() {
             </>
           )}
 
+          <AdInContent />
+
           {/* Warning */}
           <Card className="border-amber-500/20 bg-amber-500/5">
             <CardContent className="p-4 flex gap-3">
               <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
               <div>
-                <p className="text-xs font-semibold text-amber-500">Aviso - Jogo Responsável</p>
-                <p className="text-xs text-muted-foreground leading-relaxed mt-1">
+                <p className="text-sm font-semibold text-amber-500">Aviso - Jogo Responsável</p>
+                <p className="text-sm text-muted-foreground leading-relaxed mt-1">
                   Estas simulações consideram cenários onde todas as apostas são vencedoras, o que é altamente improvável.
                   Na realidade, sequências de perdas podem ocorrer e levar à perda total da banca.
                   Nenhuma estratégia garante lucro ou recuperação. Sempre jogue com dinheiro que pode perder

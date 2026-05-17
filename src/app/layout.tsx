@@ -21,15 +21,15 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://betcalcpro.com"),
-  title: "BetCalc Pro — Ferramentas Inteligentes para Apostadores",
-  description: "Calculadoras avançadas, simuladores e estratégias para apostadores de cassino online. Martingale, Fibonacci, Soros, Crash e muito mais.",
-  keywords: ["apostas", "martingale", "calculadora", "crash", "double", "fibonacci", "soros", "gestão de banca", "cassino online", "masaniello", "progressão"],
+  title: "BetCalc Pro — Ferramentas para Apostadores",
+  description: "Calculadoras gratuitas para apostadores. Martingale, Fibonacci, Soros, Crash Simulator, gestão de banca e mais.",
+  keywords: ["apostas", "martingale", "calculadora", "crash", "double", "fibonacci", "soros", "gestão de banca", "masaniello", "progressão", "simulador"],
   authors: [{ name: "BetCalc Pro" }],
   icons: { icon: "/logo.svg" },
   manifest: "/manifest.json",
   openGraph: {
-    title: "BetCalc Pro — Ferramentas Inteligentes para Apostadores",
-    description: "Calculadoras avançadas, simuladores e estratégias para apostadores.",
+    title: "BetCalc Pro — Ferramentas para Apostadores",
+    description: "Calculadoras e simuladores gratuitos para apostadores.",
     type: "website",
     siteName: "BetCalc Pro",
     images: [{ url: "/og-image.png", width: 1344, height: 768 }],
@@ -37,12 +37,13 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "BetCalc Pro",
-    description: "Ferramentas inteligentes para apostadores",
+    description: "Ferramentas gratuitas para apostadores",
   },
   other: {
     "mobile-web-app-capable": "yes",
     "apple-mobile-web-app-capable": "yes",
     "apple-mobile-web-app-status-bar-style": "black-translucent",
+    "google-adsense-account": "ca-pub-XXXXXXXXXX",
   },
 };
 
@@ -55,7 +56,7 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "BetCalc Pro",
-    "description": "Ferramentas inteligentes para apostadores de cassino online",
+    "description": "Ferramentas gratuitas para apostadores",
     "applicationCategory": "UtilityApplication",
     "operatingSystem": "Any",
     "offers": {
@@ -66,11 +67,30 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="pt-BR" className="dark" suppressHydrationWarning>
+    <html lang="pt-BR" suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        {/* Theme init to prevent flash */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var stored = JSON.parse(localStorage.getItem('betcalc-storage'));
+                  var theme = stored && stored.state && stored.state.theme ? stored.state.theme : 'dark';
+                  document.documentElement.classList.toggle('dark', theme === 'dark');
+                } catch(e) {
+                  document.documentElement.classList.add('dark');
+                }
+              })();
+              if('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/sw.js');
+              }
+            `,
+          }}
         />
       </head>
       <body

@@ -3,80 +3,65 @@
 ---
 Task ID: 1
 Agent: Main
-Task: Set up project foundation - global styles, Zustand store, layout components
+Task: Set up project foundation
 
 Work Log:
-- Created futuristic dark mode CSS theme with neon green (#00ff88) and neon blue (#00d4ff) accents
-- Added custom CSS utilities: neon-glow, gradient-neon, neon-text, grid-pattern, card-hover
-- Created Zustand store (src/store/app-store.ts) with full state management
-- Built Header component with notifications, achievements, and user menu
-- Built Sidebar component with tool navigation, favorites, and ad space
-- Built Footer component with brand, tools, resources, newsletter sections
-- Built EmailPopup component for email capture (30s delayed)
-- Set up Prisma schema with User, Calculation, FavoriteTool, UserAchievement, Strategy, EmailSubscriber, ToolUsage models
-- Created API routes: /api/calculations, /api/subscribe, /api/tool-usage
-- Added PWA manifest.json and robots.txt
-- Updated layout.tsx with SEO metadata, JSON-LD schema markup, PWA support, OG image
-- Generated OG image for social sharing
+- Created futuristic dark mode CSS theme with neon accents
+- Created Zustand store with full state management
+- Built Header, Sidebar, Footer, EmailPopup components
+- Set up Prisma schema with 7 models
+- Created API routes
+- Added PWA manifest and SEO
 
 Stage Summary:
-- Full dark futuristic theme with neon accents
-- Complete state management with Zustand
-- All layout components (header, sidebar, footer) working
-- Database schema ready with SQLite/Prisma
-- API endpoints functional
-- SEO and PWA configured
+- Full project foundation established
 
 ---
-Task ID: 2-a
-Agent: Subagent (full-stack-developer)
-Task: Build bankroll, fibonacci, and masaniello calculators
+Task ID: 2-a through 2-d
+Agent: Subagents
+Task: Build all tool components
 
 Work Log:
-- Created BankrollCalculator with risk levels (1%, 1.5%, 2%), comparison table, survival analysis
-- Created FibonacciCalculator with Fibonacci progression, charts (LineChart + AreaChart), sequence preview
-- Created MasanielloCalculator with event progression, probability analysis, charts
+- Built 13 tool components (calculators + simulators)
+- All with charts, tables, copy/save functionality
 
 Stage Summary:
-- 3 calculator components created and working
+- All tools implemented
 
 ---
-Task ID: 2-b
-Agent: Subagent (full-stack-developer)
-Task: Build loss-recovery, soros, and recovery calculators
+Task ID: 3 (Current)
+Agent: Main + Subagent
+Task: Apply all corrections — remove sales language, increase fonts, add AdSense, simplify UI, persist data, add theme toggle
 
 Work Log:
-- Created LossRecoveryCalculator with progress bars, step-by-step table
-- Created SorosCalculator with compound growth chart, visual step cards
-- Created RecoveryCalculator with 3 strategy comparison (flat/progressive/aggressive)
+- Removed email popup component entirely (no more ebook/sales language)
+- Added Zustand persist middleware with localStorage — data survives page refresh
+- Removed emailPopupShown, notifications from store (simplified)
+- Added theme (dark/light) to store with persistence
+- Increased font sizes across ALL 13 tool components (text-xs→text-sm, text-sm→text-base, etc)
+- Increased input heights to h-11, button heights to h-10
+- Simplified button grids (removed redundant Save buttons since Zustand persists)
+- Created AdBanner, AdInContent, AdSidebar components for AdSense preparation
+- Added AdInContent between content and warning in all tools
+- Added AdSidebar in sidebar, AdBanner top/bottom of main content
+- Added google-adsense-account meta tag placeholder
+- Redesigned landing page as professional tools directory (no stats counters, no blog, no CTA, no sales)
+- Rewrote footer — removed newsletter, removed ebook, removed "Feito com ❤", added Jogo Responsável links
+- Simplified header — removed notifications dropdown, removed achievements badge, added theme toggle (Sun/Moon)
+- Added light theme CSS variables in :root (green primary #059669, blue accent #0284c7)
+- Added theme initialization script in layout to prevent flash
+- Added service worker (sw.js) for PWA offline support
+- Added service worker registration in layout
+- Updated chart colors to use CSS variables instead of hardcoded hex
+- Removed marketing language ("Maximize seus lucros", "precisão cirúrgica", "premium", etc)
+- Made all tool descriptions factual and neutral
+- Simplified landing page to just: Hero + Calculators grid + Ad + Simulators grid + Education + Responsible gambling
 
 Stage Summary:
-- 3 calculator components created and working
-
----
-Task ID: 2-c
-Agent: Subagent (full-stack-developer)
-Task: Build simulator tools (crash, double, sequence analyzer, probability, strategy generator)
-
-Work Log:
-- Created CrashSimulator with exponential distribution, running balance chart, summary stats
-- Created DoubleSimulator with 3 strategies, 3 target colors, color-coded results
-- Created SequenceAnalyzer with frequency chart, streak analysis, pattern detection
-- Created ProbabilitySimulator with Monte Carlo simulation, distribution charts
-- Created StrategyGenerator with ranked strategy suggestions, risk/reward scores
-- Fixed Percent import in landing-page.tsx
-
-Stage Summary:
-- 5 simulator/tool components created and working
-
----
-Task ID: 2-d
-Agent: Subagent (full-stack-developer)
-Task: Build user panel component
-
-Work Log:
-- Created UserPanel with profile, achievements, history, favorites, stats sections
-- Mock Google login, achievement progress bar, scrollable history
-
-Stage Summary:
-- User panel component created and working
+- Site is now a professional tools site, not a SaaS sales page
+- All data persists via localStorage
+- AdSense prepared with ad slots throughout
+- Dark/light theme toggle works
+- Service worker for PWA offline
+- Fonts significantly larger and more readable
+- All interactions simplified

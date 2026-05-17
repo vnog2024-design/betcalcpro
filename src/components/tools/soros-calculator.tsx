@@ -9,12 +9,13 @@ import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import {
-  Coins, TrendingUp, AlertTriangle, Copy, Download, Check, Info, ChevronDown, ChevronUp,
+  Coins, TrendingUp, AlertTriangle, Copy, Download, Check, Info, ChevronDown, ChevronUp, RotateCcw,
 } from 'lucide-react'
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts'
 import { useToast } from '@/hooks/use-toast'
+import { AdInContent } from '@/components/shared/ad-banner'
 
 interface SorosStep {
   step: number
@@ -129,7 +130,7 @@ export function SorosCalculator() {
             <Coins className="h-7 w-7 text-neon" />
             Calculadora <span className="gradient-neon-text">Soros</span>
           </h1>
-          <p className="text-sm text-muted-foreground mt-1">
+          <p className="text-base text-muted-foreground mt-1">
             Estratégia Soros: reinvesta todos os lucros em cada etapa
           </p>
         </div>
@@ -140,54 +141,54 @@ export function SorosCalculator() {
         <div className="lg:col-span-1 space-y-4">
           <Card className="border-border/50 bg-card/50 backdrop-blur">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-semibold flex items-center gap-2">
+              <CardTitle className="text-base font-semibold flex items-center gap-2">
                 <Coins className="h-4 w-4 text-neon" /> Configurações
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Banca Inicial (R$)</Label>
+                <Label className="text-sm text-muted-foreground">Banca Inicial (R$)</Label>
                 <Input
                   type="number"
                   value={initialBankroll}
                   onChange={(e) => setInitialBankroll(e.target.value)}
-                  className="bg-muted/50 border-border"
+                  className="bg-muted/50 border-border h-11"
                   min="0.01"
                   step="0.01"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Lucro Alvo (R$)</Label>
+                <Label className="text-sm text-muted-foreground">Lucro Alvo (R$)</Label>
                 <Input
                   type="number"
                   value={targetProfit}
                   onChange={(e) => setTargetProfit(e.target.value)}
-                  className="bg-muted/50 border-border"
+                  className="bg-muted/50 border-border h-11"
                   min="0.01"
                   step="0.01"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Número de Etapas</Label>
+                <Label className="text-sm text-muted-foreground">Número de Etapas</Label>
                 <Input
                   type="number"
                   value={numSteps}
                   onChange={(e) => setNumSteps(e.target.value)}
-                  className="bg-muted/50 border-border"
+                  className="bg-muted/50 border-border h-11"
                   min="1"
                   max="50"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">% de Risco por Etapa</Label>
+                <Label className="text-sm text-muted-foreground">% de Risco por Etapa</Label>
                 <Input
                   type="number"
                   value={riskPercentage}
                   onChange={(e) => setRiskPercentage(e.target.value)}
-                  className="bg-muted/50 border-border"
+                  className="bg-muted/50 border-border h-11"
                   min="1"
                   max="100"
                   step="1"
@@ -198,7 +199,7 @@ export function SorosCalculator() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="w-full text-xs text-muted-foreground"
+                className="w-full text-sm text-muted-foreground"
                 onClick={() => setShowAdvanced(!showAdvanced)}
               >
                 {showAdvanced ? <ChevronUp className="h-3 w-3 mr-1" /> : <ChevronDown className="h-3 w-3 mr-1" />}
@@ -224,7 +225,7 @@ export function SorosCalculator() {
               <CardContent className="p-3 text-center">
                 <Coins className="h-4 w-4 text-neon mx-auto mb-1" />
                 <p className="text-[10px] text-muted-foreground">Banca Final</p>
-                <p className="text-lg font-black gradient-neon-text">
+                <p className="text-xl font-black gradient-neon-text">
                   R$ {finalBankroll.toFixed(2)}
                 </p>
               </CardContent>
@@ -233,7 +234,7 @@ export function SorosCalculator() {
               <CardContent className="p-3 text-center">
                 <TrendingUp className="h-4 w-4 text-neon-blue mx-auto mb-1" />
                 <p className="text-[10px] text-muted-foreground">Crescimento Total</p>
-                <p className="text-lg font-black neon-text-blue">
+                <p className="text-xl font-black neon-text-blue">
                   {totalGrowth.toFixed(1)}%
                 </p>
               </CardContent>
@@ -241,16 +242,13 @@ export function SorosCalculator() {
           </div>
 
           {/* Action Buttons */}
-          <div className="grid grid-cols-3 gap-2">
-            <Button onClick={handleCopy} variant="outline" size="sm" className="border-border text-xs">
+          <div className="grid grid-cols-2 gap-2">
+            <Button onClick={handleCopy} variant="outline" size="sm" className="border-border text-sm">
               {copied ? <Check className="h-3 w-3 mr-1" /> : <Copy className="h-3 w-3 mr-1" />}
               {copied ? 'Copiado!' : 'Copiar'}
             </Button>
-            <Button onClick={handleSave} variant="outline" size="sm" className="border-border text-xs">
-              <Download className="h-3 w-3 mr-1" /> Salvar
-            </Button>
-            <Button onClick={handleReset} variant="outline" size="sm" className="border-border text-xs">
-              <Coins className="h-3 w-3 mr-1" /> Resetar
+            <Button onClick={handleReset} variant="outline" size="sm" className="border-border text-sm">
+              <RotateCcw className="h-3 w-3 mr-1" /> Resetar
             </Button>
           </div>
         </div>
@@ -261,7 +259,7 @@ export function SorosCalculator() {
             <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardContent className="p-8 text-center">
                 <Coins className="h-12 w-12 text-muted-foreground/30 mx-auto mb-3" />
-                <p className="text-sm text-muted-foreground">
+                <p className="text-base text-muted-foreground">
                   Preencha os campos ao lado para calcular a progressão Soros.
                 </p>
               </CardContent>
@@ -271,7 +269,7 @@ export function SorosCalculator() {
               {/* Compound Growth Chart */}
               <Card className="border-border/50 bg-card/50 backdrop-blur">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                  <CardTitle className="text-base font-semibold flex items-center gap-2">
                     <TrendingUp className="h-4 w-4 text-neon-blue" /> Crescimento Composto
                   </CardTitle>
                 </CardHeader>
@@ -284,12 +282,12 @@ export function SorosCalculator() {
                           <stop offset="95%" stopColor="#00ff88" stopOpacity={0} />
                         </linearGradient>
                       </defs>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                      <XAxis dataKey="name" tick={{ fontSize: 10, fill: '#94a3b8' }} />
-                      <YAxis tick={{ fontSize: 10, fill: '#94a3b8' }} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                      <XAxis dataKey="name" tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} />
+                      <YAxis tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} />
                       <Tooltip
-                        contentStyle={{ background: '#111827', border: '1px solid #1e293b', borderRadius: '8px', fontSize: 12 }}
-                        labelStyle={{ color: '#e2e8f0' }}
+                        contentStyle={{ background: "var(--card)", border: '1px solid var(--border)', borderRadius: '8px', fontSize: 12 }}
+                        labelStyle={{ color: "var(--foreground)" }}
                         formatter={(value: number) => [`R$ ${value.toFixed(2)}`, 'Banca']}
                       />
                       <Area
@@ -307,13 +305,13 @@ export function SorosCalculator() {
               {/* Soros Steps Table */}
               <Card className="border-border/50 bg-card/50 backdrop-blur">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                  <CardTitle className="text-base font-semibold flex items-center gap-2">
                     <Coins className="h-4 w-4 text-neon" /> Progressão Soros
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
                   <ScrollArea className="max-h-[400px]">
-                    <table className="w-full text-xs">
+                    <table className="w-full text-sm">
                       <thead className="sticky top-0 bg-card">
                         <tr className="border-b border-border">
                           <th className="text-left p-3 font-semibold text-muted-foreground">Etapa</th>
@@ -367,7 +365,7 @@ export function SorosCalculator() {
               {/* Step-by-step visual cards */}
               <Card className="border-border/50 bg-card/50 backdrop-blur">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                  <CardTitle className="text-base font-semibold flex items-center gap-2">
                     <TrendingUp className="h-4 w-4 text-neon" /> Visualização das Etapas
                   </CardTitle>
                 </CardHeader>
@@ -379,7 +377,7 @@ export function SorosCalculator() {
                         className="flex flex-col items-center p-3 rounded-xl border border-border/50 bg-muted/20 min-w-[90px] hover:border-neon/30 transition-colors"
                       >
                         <span className="text-[10px] text-muted-foreground">Step {s.step}</span>
-                        <span className="text-sm font-bold font-mono text-neon">
+                        <span className="text-base font-bold font-mono text-neon">
                           R${s.bankrollIfWin.toFixed(0)}
                         </span>
                         <span className="text-[10px] text-neon-blue">
@@ -393,13 +391,15 @@ export function SorosCalculator() {
             </>
           )}
 
+          <AdInContent />
+
           {/* Warning */}
           <Card className="border-amber-500/20 bg-amber-500/5">
             <CardContent className="p-4 flex gap-3">
               <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
               <div>
-                <p className="text-xs font-semibold text-amber-500">Aviso - Jogo Responsável</p>
-                <p className="text-xs text-muted-foreground leading-relaxed mt-1">
+                <p className="text-sm font-semibold text-amber-500">Aviso - Jogo Responsável</p>
+                <p className="text-sm text-muted-foreground leading-relaxed mt-1">
                   A estratégia Soros pressupõe vitórias consecutivas, o que é improvável a longo prazo.
                   Uma única perda pode eliminar todo o lucro acumulado. O crescimento composto funciona
                   em ambas as direções. Sempre defina limites de perda e proteja parte dos seus ganhos.

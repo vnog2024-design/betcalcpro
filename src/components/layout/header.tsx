@@ -2,20 +2,16 @@
 
 import { useAppStore, toolInfo, type ToolPage } from '@/store/app-store'
 import { Button } from '@/components/ui/button'
-import { Bell, Menu, X, User, Star, Trophy } from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuSeparator,
-} from '@/components/ui/dropdown-menu'
+import { Menu, X, User, Sun, Moon } from 'lucide-react'
 
 export function Header() {
-  const { sidebarOpen, setSidebarOpen, notifications, achievements, isLoggedIn, userName, setCurrentPage } = useAppStore()
-  const unreadCount = notifications.filter(n => !n.read).length
-  const unlockedCount = achievements.filter(a => a.unlockedAt).length
+  const { sidebarOpen, setSidebarOpen, isLoggedIn, userName, setCurrentPage, theme, setTheme } = useAppStore()
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'dark' ? 'light' : 'dark'
+    setTheme(newTheme)
+    document.documentElement.classList.toggle('dark', newTheme === 'dark')
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur-xl">
@@ -28,17 +24,17 @@ export function Header() {
             className="lg:hidden text-muted-foreground hover:text-neon"
             onClick={() => setSidebarOpen(!sidebarOpen)}
           >
-            {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {sidebarOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </Button>
           <button 
             onClick={() => setCurrentPage('home')}
-            className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+            className="flex items-center gap-2.5 hover:opacity-80 transition-opacity"
           >
-            <div className="h-8 w-8 rounded-lg gradient-neon flex items-center justify-center">
-              <span className="text-black font-bold text-sm">BC</span>
+            <div className="h-9 w-9 rounded-lg gradient-neon flex items-center justify-center">
+              <span className="text-black font-bold text-base">BC</span>
             </div>
             <div className="hidden sm:block">
-              <h1 className="text-lg font-bold gradient-neon-text">BetCalc Pro</h1>
+              <h1 className="text-xl font-bold gradient-neon-text">BetCalc Pro</h1>
             </div>
           </button>
         </div>
@@ -51,7 +47,7 @@ export function Header() {
               variant="ghost"
               size="sm"
               onClick={() => setCurrentPage(page)}
-              className="text-muted-foreground hover:text-neon hover:bg-neon-dim text-xs"
+              className="text-muted-foreground hover:text-neon hover:bg-neon-dim text-sm"
             >
               {toolInfo[page].name}
             </Button>
@@ -60,52 +56,14 @@ export function Header() {
 
         {/* Right: Actions */}
         <div className="flex items-center gap-2">
-          {/* Notifications */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="relative text-muted-foreground hover:text-neon">
-                <Bell className="h-4 w-4" />
-                {unreadCount > 0 && (
-                  <Badge className="absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center text-[10px] bg-red-500 text-white border-0">
-                    {unreadCount}
-                  </Badge>
-                )}
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-72 bg-card border-border">
-              <div className="p-3 border-b border-border">
-                <h3 className="font-semibold text-sm">Notificações</h3>
-              </div>
-              {notifications.length === 0 ? (
-                <div className="p-4 text-center text-muted-foreground text-sm">
-                  Nenhuma notificação
-                </div>
-              ) : (
-                notifications.slice(0, 5).map((n) => (
-                  <DropdownMenuItem key={n.id} className="p-3 cursor-pointer">
-                    <div className="flex flex-col gap-1">
-                      <span className="text-sm font-medium">{n.title}</span>
-                      <span className="text-xs text-muted-foreground">{n.message}</span>
-                    </div>
-                  </DropdownMenuItem>
-                ))
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          {/* Achievements */}
+          {/* Theme toggle */}
           <Button
             variant="ghost"
             size="icon"
-            className="text-muted-foreground hover:text-neon hidden sm:flex"
-            onClick={() => setCurrentPage('user-panel')}
+            className="text-muted-foreground hover:text-neon"
+            onClick={toggleTheme}
           >
-            <Trophy className="h-4 w-4" />
-            {unlockedCount > 0 && (
-              <Badge className="absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center text-[10px] bg-neon text-black border-0">
-                {unlockedCount}
-              </Badge>
-            )}
+            {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </Button>
 
           {/* User */}
@@ -115,8 +73,8 @@ export function Header() {
             onClick={() => setCurrentPage('user-panel')}
             className="text-muted-foreground hover:text-neon gap-2"
           >
-            <User className="h-4 w-4" />
-            <span className="hidden sm:inline text-xs">
+            <User className="h-5 w-5" />
+            <span className="hidden sm:inline text-sm">
               {isLoggedIn ? userName : 'Entrar'}
             </span>
           </Button>
