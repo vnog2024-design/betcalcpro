@@ -555,3 +555,194 @@ input:focus, select:focus, textarea:focus {
 .dark td {
   border-color: #1e293b;
 }
+
+/* ========================================
+   HERO VISUAL ANIMATIONS
+   ======================================== */
+
+/* Chart line drawing animation */
+.hero-chart-line {
+  stroke-dasharray: 800;
+  stroke-dashoffset: 800;
+  animation: hero-draw-line 3s ease-out forwards;
+}
+
+.hero-chart-line-2 {
+  stroke-dasharray: 600;
+  stroke-dashoffset: 600;
+  animation: hero-draw-line 3s ease-out 0.5s forwards;
+}
+
+@keyframes hero-draw-line {
+  to { stroke-dashoffset: 0; }
+}
+
+/* Node pulse */
+.hero-node-pulse {
+  animation: hero-node-glow 2s ease-in-out infinite;
+}
+
+.hero-node-delay-1 { animation-delay: 0.5s; }
+.hero-node-delay-2 { animation-delay: 1s; }
+.hero-node-delay-3 { animation-delay: 1.5s; }
+
+@keyframes hero-node-glow {
+  0%, 100% { opacity: 0.5; r: 3; }
+  50% { opacity: 1; r: 5; }
+}
+
+/* Floating shapes */
+.hero-float-diamond {
+  animation: hero-float-1 6s ease-in-out infinite;
+}
+
+.hero-float-hexagon {
+  animation: hero-float-2 8s ease-in-out infinite;
+}
+
+.hero-float-dice {
+  animation: hero-float-3 7s ease-in-out infinite;
+}
+
+.hero-float-coin {
+  animation: hero-float-4 9s ease-in-out infinite;
+}
+
+.hero-float-cross {
+  animation: hero-float-5 5s ease-in-out infinite;
+}
+
+.hero-float-triangle {
+  animation: hero-float-6 7s ease-in-out infinite;
+}
+
+.hero-float-percent {
+  animation: hero-float-7 6s ease-in-out infinite;
+}
+
+@keyframes hero-float-1 {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(-8px, -12px) rotate(5deg); }
+  50% { transform: translate(5px, -20px) rotate(-3deg); }
+  75% { transform: translate(10px, -8px) rotate(2deg); }
+}
+
+@keyframes hero-float-2 {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(12px, 8px) rotate(-8deg); }
+  66% { transform: translate(-10px, 15px) rotate(5deg); }
+}
+
+@keyframes hero-float-3 {
+  0%, 100% { transform: translate(0, 0) rotate(15deg); }
+  25% { transform: translate(-15px, -10px) rotate(20deg); }
+  50% { transform: translate(8px, -18px) rotate(12deg); }
+  75% { transform: translate(12px, -5px) rotate(18deg); }
+}
+
+@keyframes hero-float-4 {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(10px, -15px); }
+  50% { transform: translate(-5px, -25px); }
+  75% { transform: translate(-12px, -8px); }
+}
+
+@keyframes hero-float-5 {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(8px, -12px) rotate(90deg); }
+}
+
+@keyframes hero-float-6 {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(-10px, -15px) rotate(-10deg); }
+  66% { transform: translate(8px, -8px) rotate(8deg); }
+}
+
+@keyframes hero-float-7 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(5px, -10px) scale(1.05); }
+}
+
+/* Connection lines */
+.hero-connection-line {
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  animation: hero-draw-line 2s ease-out 1s forwards;
+}
+
+.hero-conn-delay-1 {
+  animation-delay: 1.5s;
+}
+
+/* Percentage ring rotation */
+.hero-percent-ring {
+  animation: hero-ring-spin 4s linear infinite;
+  transform-origin: center;
+}
+
+@keyframes hero-ring-spin {
+  0% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: 188; }
+}
+
+/* Morphing blobs */
+.hero-morph-blob-1 {
+  animation: hero-morph-1 12s ease-in-out infinite;
+}
+
+.hero-morph-blob-2 {
+  animation: hero-morph-2 15s ease-in-out infinite;
+}
+
+.hero-morph-blob-3 {
+  animation: hero-morph-3 10s ease-in-out infinite;
+}
+
+@keyframes hero-morph-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); border-radius: 50%; }
+  25% { transform: translate(30px, -40px) scale(1.1); border-radius: 45% 55% 50% 50%; }
+  50% { transform: translate(-20px, 20px) scale(0.95); border-radius: 55% 45% 50% 50%; }
+  75% { transform: translate(10px, 30px) scale(1.05); border-radius: 48% 52% 50% 50%; }
+}
+
+@keyframes hero-morph-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); border-radius: 50%; }
+  33% { transform: translate(-25px, 15px) scale(1.08); border-radius: 55% 45% 55% 45%; }
+  66% { transform: translate(20px, -25px) scale(0.92); border-radius: 45% 55% 45% 55%; }
+}
+
+@keyframes hero-morph-3 {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.15); }
+}
+
+/* Scan line */
+.hero-scan-line {
+  top: 0;
+  animation: hero-scan 6s linear infinite;
+}
+
+@keyframes hero-scan {
+  0% { top: -2px; }
+  100% { top: 100%; }
+}
+
+/* Border glow animation */
+.hero-border-glow {
+  animation: hero-glow-pulse 4s ease-in-out infinite;
+}
+
+@keyframes hero-glow-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* Base gradient subtle shift */
+.hero-base-gradient {
+  animation: hero-gradient-shift 10s ease-in-out infinite;
+}
+
+@keyframes hero-gradient-shift {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.05); }
+}

@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { AdInContent } from '@/components/shared/ad-banner'
+import { HeroVisual } from '@/components/shared/hero-visual'
 import { 
   TrendingUp, Zap, BarChart3, Calculator, Sparkles, 
   ArrowRight, ChevronRight, Target, Coins, AlertTriangle,
@@ -41,38 +42,60 @@ export function LandingPage() {
 
   return (
     <div className="space-y-10 pb-8">
-      {/* Hero — Clean and direct */}
-      <section className="relative overflow-hidden rounded-2xl border border-neon/20 bg-gradient-to-br from-card via-card to-card/50 p-8 sm:p-12 lg:p-16">
-        <div className="absolute inset-0 grid-pattern opacity-50" />
-        <div className="absolute top-0 right-0 w-96 h-96 bg-neon/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-neon-blue/5 rounded-full blur-3xl" />
+      {/* Hero — With stunning visual art */}
+      <section className="relative overflow-hidden rounded-2xl border border-neon/20 min-h-[420px] sm:min-h-[480px] flex items-center">
+        <HeroVisual />
         
-        <div className="relative z-10 max-w-3xl">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-5 leading-tight">
-            Ferramentas para <span className="gradient-neon-text">Apostadores</span>
-          </h1>
-          <p className="text-lg sm:text-xl text-muted-foreground mb-8 max-w-2xl leading-relaxed">
-            Calculadoras, simuladores e análises gratuitas. 
-            Tudo o que você precisa para gerenciar sua banca e tomar decisões melhores.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Button
-              size="lg"
-              onClick={() => setCurrentPage('martingale')}
-              className="gradient-neon text-black font-bold hover:opacity-90 text-base h-12 px-6"
-            >
-              <TrendingUp className="h-5 w-5 mr-2" />
-              Calculadora Martingale
-              <ArrowRight className="h-5 w-5 ml-2" />
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              onClick={() => setCurrentPage('bankroll')}
-              className="border-neon-blue/30 text-neon-blue hover:bg-neon-blue/10 text-base h-12 px-6"
-            >
-              Gestão de Banca
-            </Button>
+        <div className="relative z-10 w-full p-8 sm:p-12 lg:p-16">
+          <div className="max-w-3xl">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-neon/10 border border-neon/20 mb-6">
+              <div className="h-1.5 w-1.5 rounded-full bg-neon neon-pulse" />
+              <span className="text-xs font-medium text-neon">100% Gratuito</span>
+            </div>
+
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-5 leading-tight">
+              Ferramentas para <span className="gradient-neon-text">Apostadores</span>
+            </h1>
+            <p className="text-lg sm:text-xl text-muted-foreground mb-8 max-w-2xl leading-relaxed">
+              Calculadoras, simuladores e análises gratuitas. 
+              Tudo o que você precisa para gerenciar sua banca e tomar decisões melhores.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Button
+                size="lg"
+                onClick={() => setCurrentPage('martingale')}
+                className="gradient-neon text-black font-bold hover:opacity-90 text-base h-12 px-6 neon-glow"
+              >
+                <TrendingUp className="h-5 w-5 mr-2" />
+                Calculadora Martingale
+                <ArrowRight className="h-5 w-5 ml-2" />
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={() => setCurrentPage('bankroll')}
+                className="border-neon-blue/30 text-neon-blue hover:bg-neon-blue/10 text-base h-12 px-6"
+              >
+                Gestão de Banca
+              </Button>
+            </div>
+
+            {/* Stats bar */}
+            <div className="flex flex-wrap gap-x-8 gap-y-3 mt-8 pt-6 border-t border-border/30">
+              <div className="flex items-center gap-2">
+                <Calculator className="h-4 w-4 text-neon" />
+                <span className="text-sm text-muted-foreground"><span className="font-bold text-foreground">7</span> Calculadoras</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Sparkles className="h-4 w-4 text-neon-blue" />
+                <span className="text-sm text-muted-foreground"><span className="font-bold text-foreground">5</span> Simuladores</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Shield className="h-4 w-4 text-neon" />
+                <span className="text-sm text-muted-foreground"><span className="font-bold text-foreground">100%</span> Gratuito</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
