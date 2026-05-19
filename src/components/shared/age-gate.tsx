@@ -1,22 +1,28 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useSyncExternalStore, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import { AlertTriangle } from 'lucide-react'
 
 const AGE_GATE_KEY = 'age-verified'
 
-function getInitialVisibility(): boolean {
+function subscribe() { return () => {} }
+
+function getSnapshot(): boolean {
   if (typeof window === 'undefined') return false
   return !localStorage.getItem(AGE_GATE_KEY)
 }
 
+function getServerSnapshot(): boolean {
+  return false
+}
+
 export function AgeGate() {
-  const [visible, setVisible] = useState(getInitialVisibility)
+  const visible = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
 
   const handleVerify = useCallback(() => {
     localStorage.setItem(AGE_GATE_KEY, 'true')
-    setVisible(false)
+    window.location.reload()
   }, [])
 
   const handleDeny = useCallback(() => {
