@@ -10,14 +10,33 @@ import { DisclaimerBar } from '@/components/shared/disclaimer-bar'
 import { Toaster } from '@/components/ui/toaster'
 import { useAppStore } from '@/store/app-store'
 import { useEffect } from 'react'
+import { useMounted } from '@/hooks/use-mounted'
 
 export function ToolPageLayout({ children }: { children: React.ReactNode }) {
   const { sidebarOpen, setSidebarOpen, colorTheme, theme } = useAppStore()
+  const mounted = useMounted()
 
   useEffect(() => {
     document.documentElement.setAttribute('data-color-theme', colorTheme)
     document.documentElement.classList.toggle('dark', theme === 'dark')
   }, [colorTheme, theme])
+
+  // Server renders a simple shell to prevent hydration mismatch.
+  // Client immediately renders the full interactive content.
+  if (!mounted) {
+    return (
+      <div className="min-h-screen flex flex-col bg-background grid-pattern relative">
+        <div className="flex-1 flex items-center justify-center">
+          <div className="flex flex-col items-center gap-3">
+            <div className="h-8 w-8 rounded-lg gradient-neon flex items-center justify-center animate-pulse">
+              <span className="text-black font-bold text-sm">BC</span>
+            </div>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-background grid-pattern relative">
