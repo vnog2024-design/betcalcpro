@@ -8,8 +8,10 @@ const nextConfig: NextConfig = {
   },
   reactStrictMode: false,
   allowedDevOrigins: [
+    "preview-chat-bae9cdca-dbab-4e8c-a529-9bacb30033da.space-z.ai",
     ".space-z.ai",
     ".z.ai",
+    "localhost",
   ],
 };
 
