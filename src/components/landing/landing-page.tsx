@@ -134,16 +134,16 @@ export function LandingPage() {
             const color = colorMap[tool.color]
             const href = toolHref[tool.id] || `/${tool.id}`
             return (
-              <Link key={tool.id} href={href}>
-                <Card className={`card-hover border-border/50 bg-card/50 backdrop-blur cursor-pointer group ${color.border}`}>
-                  <CardContent className="p-5">
+              <Link key={tool.id} href={href} className="block h-full">
+                <Card className={`card-hover border-border/50 bg-card/50 backdrop-blur cursor-pointer group h-full ${color.border}`}>
+                  <CardContent className="p-5 flex flex-col h-full">
                     <div className="flex items-center gap-3 mb-3">
                       <div className={`inline-flex p-2.5 rounded-lg ${color.bg}`}>
                         <tool.icon className={`h-5 w-5 ${color.text}`} />
                       </div>
                       <h3 className="text-lg font-bold group-hover:text-neon transition-colors">{info.name}</h3>
                     </div>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{info.description}</p>
+                    <p className="text-sm text-muted-foreground leading-relaxed flex-1">{info.description}</p>
                     <div className="flex items-center gap-1 mt-3 text-sm text-neon font-medium">
                       Usar <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                     </div>
@@ -166,16 +166,16 @@ export function LandingPage() {
             const color = colorMap[tool.color]
             const href = toolHref[tool.id] || `/${tool.id}`
             return (
-              <Link key={tool.id} href={href}>
-                <Card className={`card-hover border-border/50 bg-card/50 backdrop-blur cursor-pointer group ${color.border}`}>
-                  <CardContent className="p-5">
+              <Link key={tool.id} href={href} className="block h-full">
+                <Card className={`card-hover border-border/50 bg-card/50 backdrop-blur cursor-pointer group h-full ${color.border}`}>
+                  <CardContent className="p-5 flex flex-col h-full">
                     <div className="flex items-center gap-3 mb-3">
                       <div className={`inline-flex p-2.5 rounded-lg ${color.bg}`}>
                         <tool.icon className={`h-5 w-5 ${color.text}`} />
                       </div>
                       <h3 className="text-lg font-bold group-hover:text-neon transition-colors">{info.name}</h3>
                     </div>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{info.description}</p>
+                    <p className="text-sm text-muted-foreground leading-relaxed flex-1">{info.description}</p>
                     <div className="flex items-center gap-1 mt-3 text-sm text-neon font-medium">
                       Usar <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                     </div>
