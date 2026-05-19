@@ -1,7 +1,7 @@
 {
-  "name": "BetCalc Pro — Ferramentas para Apostadores",
+  "name": "BetCalc Pro — Ferramentas de Probabilidade e Gestão de Risco",
   "short_name": "BetCalc Pro",
-  "description": "Calculadoras avançadas, simuladores e estratégias para apostadores de cassino online",
+  "description": "Calculadoras gratuitas de probabilidade, gestão de risco e análise estatística",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0a0e17",
@@ -15,6 +15,6 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": ["utilities", "finance"],
+  "categories": ["utilities", "education"],
   "lang": "pt-BR"
 }
