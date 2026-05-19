@@ -82,3 +82,13 @@ model ToolUsage {
 
   @@unique([toolId])
 }
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String
+  message   String
+  emailSent Boolean @default(false)
+  createdAt DateTime @default(now())
+}
