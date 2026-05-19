@@ -127,15 +127,15 @@ export function LandingPage() {
       <section>
         <h2 className="text-2xl sm:text-3xl font-bold mb-2">Calculadoras</h2>
         <p className="text-base text-muted-foreground mb-6">Calcule progressões, capital e cenários de risco</p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 items-stretch">
           {calculators.map((tool) => {
             const info = toolInfo[tool.id]
             if (!info) return null
             const color = colorMap[tool.color]
             const href = toolHref[tool.id] || `/${tool.id}`
             return (
-              <Link key={tool.id} href={href} className="flex flex-col">
-                <Card className={`card-hover border-border/50 bg-card/50 backdrop-blur cursor-pointer group flex-1 ${color.border}`}>
+              <Link key={tool.id} href={href} className="contents">
+                <Card className={`card-hover border-border/50 bg-card/50 backdrop-blur cursor-pointer group h-full ${color.border}`}>
                   <CardContent className="p-5 flex flex-col h-full">
                     <div className="flex items-center gap-3 mb-3">
                       <div className={`inline-flex p-2.5 rounded-lg ${color.bg}`}>
@@ -159,15 +159,15 @@ export function LandingPage() {
       <section>
         <h2 className="text-2xl sm:text-3xl font-bold mb-2">Simuladores</h2>
         <p className="text-base text-muted-foreground mb-6">Simule probabilidades e analise cenários</p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 items-stretch">
           {simulators.map((tool) => {
             const info = toolInfo[tool.id]
             if (!info) return null
             const color = colorMap[tool.color]
             const href = toolHref[tool.id] || `/${tool.id}`
             return (
-              <Link key={tool.id} href={href} className="flex flex-col">
-                <Card className={`card-hover border-border/50 bg-card/50 backdrop-blur cursor-pointer group flex-1 ${color.border}`}>
+              <Link key={tool.id} href={href} className="contents">
+                <Card className={`card-hover border-border/50 bg-card/50 backdrop-blur cursor-pointer group h-full ${color.border}`}>
                   <CardContent className="p-5 flex flex-col h-full">
                     <div className="flex items-center gap-3 mb-3">
                       <div className={`inline-flex p-2.5 rounded-lg ${color.bg}`}>
