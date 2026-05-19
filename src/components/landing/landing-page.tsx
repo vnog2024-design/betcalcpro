@@ -52,10 +52,10 @@ const featuredArticles = [
   },
 ]
 
-const HERO_TITLE_PART1 = 'Ferramentas de'
-const HERO_TITLE_HIGHLIGHT1 = 'Probabilidade'
-const HERO_TITLE_PART2 = 'e'
-const HERO_TITLE_HIGHLIGHT2 = 'Gestão de Risco'
+// Using dangerouslySetInnerHTML for the hero title to prevent hydration mismatch.
+// React does NOT diff dangerouslySetInnerHTML content during hydration,
+// so cached client JS with old text won't cause a tree regeneration.
+const HERO_TITLE_HTML = 'Ferramentas de <span class="gradient-neon-text">Probabilidade</span> e <span class="gradient-neon-text">Gestão de Risco</span>'
 
 export function LandingPage() {
   const router = useRouter()
@@ -75,12 +75,7 @@ export function LandingPage() {
               <span className="text-xs font-medium text-neon">100% Gratuito</span>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-5 leading-tight" suppressHydrationWarning>
-              {HERO_TITLE_PART1}{' '}
-              <span className="gradient-neon-text">{HERO_TITLE_HIGHLIGHT1}</span>{' '}
-              {HERO_TITLE_PART2}{' '}
-              <span className="gradient-neon-text">{HERO_TITLE_HIGHLIGHT2}</span>
-            </h1>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-5 leading-tight" dangerouslySetInnerHTML={{ __html: HERO_TITLE_HTML }} />
             <p className="text-lg sm:text-xl text-muted-foreground mb-8 max-w-2xl leading-relaxed">
               Calculadoras, simuladores e artigos educacionais gratuitos. 
               Aprenda probabilidade, estatística e gestão de risco para tomar decisões mais informadas.
