@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { toolInfo, toolHref, type ToolPage } from '@/store/app-store'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -52,6 +53,7 @@ const featuredArticles = [
 ]
 
 export function LandingPage() {
+  const router = useRouter()
   const calculators = allTools.filter(t => toolInfo[t.id]?.category === 'calculators')
   const simulators = allTools.filter(t => toolInfo[t.id]?.category === 'simulators')
 
@@ -127,29 +129,31 @@ export function LandingPage() {
       <section>
         <h2 className="text-2xl sm:text-3xl font-bold mb-2">Calculadoras</h2>
         <p className="text-base text-muted-foreground mb-6">Calcule progressões, capital e cenários de risco</p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 items-stretch">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {calculators.map((tool) => {
             const info = toolInfo[tool.id]
             if (!info) return null
             const color = colorMap[tool.color]
             const href = toolHref[tool.id] || `/${tool.id}`
             return (
-              <Link key={tool.id} href={href} className="contents">
-                <Card className={`card-hover border-border/50 bg-card/50 backdrop-blur cursor-pointer group h-full ${color.border}`}>
-                  <CardContent className="p-5 flex flex-col h-full">
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className={`inline-flex p-2.5 rounded-lg ${color.bg}`}>
-                        <tool.icon className={`h-5 w-5 ${color.text}`} />
-                      </div>
-                      <h3 className="text-lg font-bold group-hover:text-neon transition-colors">{info.name}</h3>
+              <Card
+                key={tool.id}
+                className={`card-hover border-border/50 bg-card/50 backdrop-blur cursor-pointer group ${color.border}`}
+                onClick={() => router.push(href)}
+              >
+                <CardContent className="p-5">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className={`inline-flex p-2.5 rounded-lg ${color.bg}`}>
+                      <tool.icon className={`h-5 w-5 ${color.text}`} />
                     </div>
-                    <p className="text-sm text-muted-foreground leading-relaxed flex-1">{info.description}</p>
-                    <div className="flex items-center gap-1 mt-3 text-sm text-neon font-medium">
-                      Usar <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
+                    <h3 className="text-lg font-bold group-hover:text-neon transition-colors">{info.name}</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{info.description}</p>
+                  <div className="flex items-center gap-1 mt-3 text-sm text-neon font-medium">
+                    Usar <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </CardContent>
+              </Card>
             )
           })}
         </div>
@@ -159,29 +163,31 @@ export function LandingPage() {
       <section>
         <h2 className="text-2xl sm:text-3xl font-bold mb-2">Simuladores</h2>
         <p className="text-base text-muted-foreground mb-6">Simule probabilidades e analise cenários</p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 items-stretch">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {simulators.map((tool) => {
             const info = toolInfo[tool.id]
             if (!info) return null
             const color = colorMap[tool.color]
             const href = toolHref[tool.id] || `/${tool.id}`
             return (
-              <Link key={tool.id} href={href} className="contents">
-                <Card className={`card-hover border-border/50 bg-card/50 backdrop-blur cursor-pointer group h-full ${color.border}`}>
-                  <CardContent className="p-5 flex flex-col h-full">
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className={`inline-flex p-2.5 rounded-lg ${color.bg}`}>
-                        <tool.icon className={`h-5 w-5 ${color.text}`} />
-                      </div>
-                      <h3 className="text-lg font-bold group-hover:text-neon transition-colors">{info.name}</h3>
+              <Card
+                key={tool.id}
+                className={`card-hover border-border/50 bg-card/50 backdrop-blur cursor-pointer group ${color.border}`}
+                onClick={() => router.push(href)}
+              >
+                <CardContent className="p-5">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className={`inline-flex p-2.5 rounded-lg ${color.bg}`}>
+                      <tool.icon className={`h-5 w-5 ${color.text}`} />
                     </div>
-                    <p className="text-sm text-muted-foreground leading-relaxed flex-1">{info.description}</p>
-                    <div className="flex items-center gap-1 mt-3 text-sm text-neon font-medium">
-                      Usar <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
+                    <h3 className="text-lg font-bold group-hover:text-neon transition-colors">{info.name}</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{info.description}</p>
+                  <div className="flex items-center gap-1 mt-3 text-sm text-neon font-medium">
+                    Usar <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </CardContent>
+              </Card>
             )
           })}
         </div>
@@ -202,20 +208,22 @@ export function LandingPage() {
           {featuredArticles.map((article) => {
             const Icon = article.icon
             return (
-              <Link key={article.slug} href={`/artigos/${article.slug}`}>
-                <Card className="card-hover border-border/50 bg-card/50 backdrop-blur cursor-pointer group h-full">
-                  <CardContent className="p-5">
-                    <div className="flex items-center gap-2 mb-3">
-                      <Icon className="h-5 w-5 text-neon" />
-                      <h3 className="text-base font-bold group-hover:text-neon transition-colors">{article.title}</h3>
-                    </div>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{article.desc}</p>
-                    <div className="flex items-center gap-1 mt-3 text-sm text-neon font-medium">
-                      Ler artigo <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
+              <Card
+                key={article.slug}
+                className="card-hover border-border/50 bg-card/50 backdrop-blur cursor-pointer group"
+                onClick={() => router.push(`/artigos/${article.slug}`)}
+              >
+                <CardContent className="p-5">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Icon className="h-5 w-5 text-neon" />
+                    <h3 className="text-base font-bold group-hover:text-neon transition-colors">{article.title}</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{article.desc}</p>
+                  <div className="flex items-center gap-1 mt-3 text-sm text-neon font-medium">
+                    Ler artigo <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </CardContent>
+              </Card>
             )
           })}
         </div>
