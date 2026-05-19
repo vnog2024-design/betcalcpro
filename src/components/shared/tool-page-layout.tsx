@@ -7,6 +7,7 @@ import { AnimatedBackground } from '@/components/shared/animated-background'
 import { CookieConsent } from '@/components/shared/cookie-consent'
 import { AgeGate } from '@/components/shared/age-gate'
 import { DisclaimerBar } from '@/components/shared/disclaimer-bar'
+import { AdBanner } from '@/components/ads/ad-unit'
 import { Toaster } from '@/components/ui/toaster'
 import { useAppStore } from '@/store/app-store'
 import { useEffect } from 'react'
@@ -49,6 +50,7 @@ export function ToolPageLayout({ children }: { children: React.ReactNode }) {
         <main className="flex-1 min-h-0 overflow-y-auto">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             {children}
+            <AdBanner className="mt-8" />
           </div>
         </main>
       </div>

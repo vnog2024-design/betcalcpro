@@ -44,7 +44,7 @@ export function PrivacyPolicy() {
               <h2 className="text-lg font-semibold text-foreground">1. Introdução</h2>
             </div>
             <p>
-              O <strong className="text-foreground">BetCalc Pro</strong> (&quot;nós&quot;, &quot;nosso&quot; ou &quot;empresa&quot;) valoriza a privacidade
+              O <strong className="text-foreground">BetCalc Pro</strong> (&quot;nós&quot;, &quot;nosso&quot; ou &quot;responsável pelo site&quot;) valoriza a privacidade
               e a proteção dos dados pessoais de seus usuários. Esta Política de Privacidade descreve como coletamos,
               utilizamos, armazenamos, compartilhamos e protegemos as informações dos visitantes e usuários do nosso
               site (betcalcpro.com.br), em conformidade com a Lei Geral de Proteção de Dados Pessoais (Lei nº 13.709/2018
@@ -69,19 +69,19 @@ export function PrivacyPolicy() {
               <h2 className="text-lg font-semibold text-foreground">2. Controlador dos Dados</h2>
             </div>
             <p>
-              O controlador dos dados pessoais coletados neste site é o BetCalc Pro, com as seguintes informações de
-              contato:
+              O responsável pelo tratamento dos dados pessoais coletados neste site é Valdir Nogueira, mantenedor do
+              projeto BetCalc Pro, com as seguintes informações de contato:
             </p>
             <ul className="space-y-1 ml-2">
-              <li><strong className="text-foreground">E-mail:</strong> <a href="mailto:contato@betcalcpro.com.br" className="text-neon underline hover:no-underline">contato@betcalcpro.com.br</a></li>
-              <li><strong className="text-foreground">E-mail para privacidade (Encarregado):</strong> <a href="mailto:privacidade@betcalcpro.com.br" className="text-neon underline hover:no-underline">privacidade@betcalcpro.com.br</a></li>
-              <li><strong className="text-foreground">Endereço:</strong> [Endereço completo — a preencher]</li>
-              <li><strong className="text-foreground">CNPJ:</strong> [CNPJ — a preencher]</li>
+              <li><strong className="text-foreground">Responsável:</strong> Projeto pessoal mantido por Valdir Nogueira</li>
+              <li><strong className="text-foreground">Localização:</strong> Brasil</li>
+              <li><strong className="text-foreground">E-mail:</strong> <a href="mailto:valdirnogueira2010@gmail.com" className="text-neon underline hover:no-underline">valdirnogueira2010@gmail.com</a></li>
+              <li><strong className="text-foreground">E-mail para privacidade (Encarregado):</strong> <a href="mailto:valdirnogueira2010@gmail.com" className="text-neon underline hover:no-underline">valdirnogueira2010@gmail.com</a></li>
             </ul>
             <p>
               Para exercer seus direitos como titular de dados ou esclarecer dúvidas sobre esta política, entre em
               contato com nosso Encarregado de Proteção de Dados (DPO) pelo e-mail{' '}
-              <a href="mailto:privacidade@betcalcpro.com.br" className="text-neon underline hover:no-underline">privacidade@betcalcpro.com.br</a>.
+              <a href="mailto:valdirnogueira2010@gmail.com" className="text-neon underline hover:no-underline">valdirnogueira2010@gmail.com</a>.
             </p>
           </section>
 
@@ -266,7 +266,7 @@ export function PrivacyPolicy() {
             <p>
               Para exercer qualquer um desses direitos, entre em contato com nosso Encarregado de Proteção de Dados
               através do e-mail{' '}
-              <a href="mailto:privacidade@betcalcpro.com.br" className="text-neon underline hover:no-underline">privacidade@betcalcpro.com.br</a>.
+              <a href="mailto:valdirnogueira2010@gmail.com" className="text-neon underline hover:no-underline">valdirnogueira2010@gmail.com</a>.
               Responderemos sua solicitação no prazo de até 15 dias úteis, conforme previsto no Art. 18, § 5º da LGPD.
             </p>
           </section>
@@ -313,7 +313,7 @@ export function PrivacyPolicy() {
               <li>Monitoramento contínuo de segurança e detecção de intrusão;</li>
               <li>Processamento local de dados sensíveis (cálculos realizados no navegador do usuário);</li>
               <li>Backups regulares com criptografia e controle de acesso;</li>
-              <li>Políticas internas de segurança da informação e treinamento da equipe;</li>
+              <li>Políticas internas de segurança da informação;</li>
               <li>Plano de resposta a incidentes de segurança com notificação aos titulares e à ANPD quando aplicável.</li>
             </ul>
             <p>
@@ -382,8 +382,8 @@ export function PrivacyPolicy() {
               tratamento de seus dados pessoais, entre em contato conosco:
             </p>
             <ul className="space-y-2 ml-2">
-              <li><strong className="text-foreground">E-mail geral:</strong> <a href="mailto:contato@betcalcpro.com.br" className="text-neon underline hover:no-underline">contato@betcalcpro.com.br</a></li>
-              <li><strong className="text-foreground">Encarregado de Proteção de Dados (DPO):</strong> <a href="mailto:privacidade@betcalcpro.com.br" className="text-neon underline hover:no-underline">privacidade@betcalcpro.com.br</a></li>
+              <li><strong className="text-foreground">E-mail geral:</strong> <a href="mailto:valdirnogueira2010@gmail.com" className="text-neon underline hover:no-underline">valdirnogueira2010@gmail.com</a></li>
+              <li><strong className="text-foreground">Encarregado de Proteção de Dados (DPO):</strong> <a href="mailto:valdirnogueira2010@gmail.com" className="text-neon underline hover:no-underline">valdirnogueira2010@gmail.com</a></li>
               <li><strong className="text-foreground">Prazo de resposta:</strong> Até 15 dias úteis (conforme Art. 18, § 5º da LGPD)</li>
               <li><strong className="text-foreground">Formulário de contato:</strong> <Link href="/contact" className="text-neon underline hover:no-underline">Página de Contato</Link></li>
             </ul>

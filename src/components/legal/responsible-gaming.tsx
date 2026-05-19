@@ -251,7 +251,7 @@ export function ResponsibleGaming() {
               <p className="font-semibold text-foreground mb-1">Solicitar suspensão de acesso:</p>
               <p>
                 Envie um e-mail para{' '}
-                <a href="mailto:contato@betcalcpro.com.br" className="text-neon underline hover:no-underline">contato@betcalcpro.com.br</a>{' '}
+                <a href="mailto:valdirnogueira2010@gmail.com" className="text-neon underline hover:no-underline">valdirnogueira2010@gmail.com</a>{' '}
                 com o assunto &quot;Suspensão de Acesso&quot;. Sua conta será desativada em até 24 horas.
               </p>
             </div>
@@ -349,7 +349,7 @@ export function ResponsibleGaming() {
 
           <div className="pt-4 border-t border-border/50">
             <p className="text-xs text-muted-foreground italic">
-              Precisa de ajuda? Entre em contato: <a href="mailto:contato@betcalcpro.com.br" className="text-neon underline hover:no-underline">contato@betcalcpro.com.br</a>.
+              Precisa de ajuda? Entre em contato: <a href="mailto:valdirnogueira2010@gmail.com" className="text-neon underline hover:no-underline">valdirnogueira2010@gmail.com</a>.
               Se está em crise emocional, ligue para o CVV: 188. Para mais informações sobre seus direitos, consulte
               nossos{' '}
               <Link href="/terms" className="text-neon underline hover:no-underline">Termos de Uso</Link> e{' '}

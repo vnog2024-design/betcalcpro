@@ -148,8 +148,7 @@ export function TermsOfUse() {
               <h2 className="text-lg font-semibold text-foreground">5. Limitação de Responsabilidade</h2>
             </div>
             <p>
-              Na máxima extensão permitida pela legislação brasileira, o BetCalc Pro, seus sócios, diretores, colaboradores
-              e parceiros NÃO serão responsáveis por:
+              Na máxima extensão permitida pela legislação brasileira, o BetCalc Pro e seu responsável NÃO serão responsáveis por:
             </p>
             <ul className="list-disc list-inside space-y-2 ml-2">
               <li>Perdas financeiras diretas ou indiretas resultantes do uso de nossas ferramentas educacionais;</li>
@@ -348,7 +347,7 @@ export function TermsOfUse() {
               Para dúvidas, sugestões ou reclamações sobre estes Termos de Uso, entre em contato:
             </p>
             <ul className="space-y-1 ml-2">
-              <li><strong className="text-foreground">E-mail:</strong> <a href="mailto:contato@betcalcpro.com.br" className="text-neon underline hover:no-underline">contato@betcalcpro.com.br</a></li>
+              <li><strong className="text-foreground">E-mail:</strong> <a href="mailto:valdirnogueira2010@gmail.com" className="text-neon underline hover:no-underline">valdirnogueira2010@gmail.com</a></li>
               <li><strong className="text-foreground">Prazo de resposta:</strong> Até 48 horas úteis</li>
               <li><strong className="text-foreground">Formulário:</strong> <Link href="/contact" className="text-neon underline hover:no-underline">Página de Contato</Link></li>
             </ul>

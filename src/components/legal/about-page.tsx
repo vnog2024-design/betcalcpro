@@ -381,8 +381,8 @@ export function AboutPage() {
                 <Mail className="h-4 w-4 text-neon shrink-0 mt-0.5" />
                 <div>
                   <p className="font-semibold text-foreground text-sm">E-mail</p>
-                  <a href="mailto:contato@betcalcpro.com.br" className="text-neon underline hover:no-underline">
-                    contato@betcalcpro.com.br
+                  <a href="mailto:valdirnogueira2010@gmail.com" className="text-neon underline hover:no-underline">
+                    valdirnogueira2010@gmail.com
                   </a>
                 </div>
               </div>
@@ -390,7 +390,14 @@ export function AboutPage() {
                 <MapPin className="h-4 w-4 text-neon shrink-0 mt-0.5" />
                 <div>
                   <p className="font-semibold text-foreground text-sm">Localização</p>
-                  <p>[Cidade, Estado, Brasil] — a preencher</p>
+                  <p>Brasil</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
+                <Info className="h-4 w-4 text-neon shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-semibold text-foreground text-sm">Natureza do Projeto</p>
+                  <p>Projeto pessoal mantido por Valdir Nogueira</p>
                 </div>
               </div>
             </div>

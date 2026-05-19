@@ -6,6 +6,7 @@ import { toolInfo, toolHref, type ToolPage } from '@/store/app-store'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { HeroVisual } from '@/components/shared/hero-visual'
+import { AdBanner, AdInFeed } from '@/components/ads/ad-unit'
 import { 
   TrendingUp, BarChart3, Calculator, Sparkles, 
   ArrowRight, ChevronRight, Target, Coins, AlertTriangle,
@@ -159,6 +160,9 @@ export function LandingPage() {
         </div>
       </section>
 
+      {/* Ad Banner */}
+      <AdBanner className="my-2" />
+
       {/* Simulators */}
       <section>
         <h2 className="text-2xl sm:text-3xl font-bold mb-2">Simuladores</h2>
@@ -192,6 +196,9 @@ export function LandingPage() {
           })}
         </div>
       </section>
+
+      {/* Ad In-Feed */}
+      <AdInFeed className="my-2" />
 
       {/* Articles Section */}
       <section>
@@ -231,6 +238,9 @@ export function LandingPage() {
           Ver todos os artigos <ArrowRight className="h-4 w-4" />
         </Link>
       </section>
+
+      {/* Ad Banner */}
+      <AdBanner className="my-2" />
 
       {/* Risk Management Principles */}
       <section>

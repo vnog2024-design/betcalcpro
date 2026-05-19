@@ -17,7 +17,6 @@ import {
   Clock,
   HelpCircle,
   MapPin,
-  Phone,
   Building2,
   AlertCircle,
 } from 'lucide-react'
@@ -64,10 +63,10 @@ export function ContactPage() {
       })
       setFormData({ name: '', email: '', subject: '', message: '' })
     } catch {
-      setSubmitError('Erro de conexão. Tente novamente mais tarde ou envie um e-mail diretamente para contato@betcalcpro.com.br')
+      setSubmitError('Erro de conexão. Tente novamente mais tarde ou envie um e-mail diretamente para valdirnogueira2010@gmail.com')
       toast({
         title: 'Erro de conexão',
-        description: 'Não foi possível enviar sua mensagem. Tente novamente ou envie um e-mail para contato@betcalcpro.com.br',
+        description: 'Não foi possível enviar sua mensagem. Tente novamente ou envie um e-mail para valdirnogueira2010@gmail.com',
         variant: 'destructive',
       })
     } finally {
@@ -99,7 +98,7 @@ export function ContactPage() {
     {
       question: 'Como posso excluir meus dados pessoais?',
       answer:
-        'Você pode solicitar a exclusão de seus dados pessoais enviando um e-mail para contato@betcalcpro.com.br com o assunto "Exclusão de dados — LGPD". O processo será concluído em até 15 dias úteis, conforme previsto na Lei Geral de Proteção de Dados.',
+        'Você pode solicitar a exclusão de seus dados pessoais enviando um e-mail para valdirnogueira2010@gmail.com com o assunto "Exclusão de dados — LGPD". O processo será concluído em até 15 dias úteis, conforme previsto na Lei Geral de Proteção de Dados.',
     },
     {
       question: 'O site é gratuito?',
@@ -109,7 +108,7 @@ export function ContactPage() {
     {
       question: 'Como reporto um erro em uma calculadora?',
       answer:
-        'Se você encontrar um erro ou resultado incorreto em qualquer calculadora, entre em contato conosco pelo formulário abaixo ou pelo e-mail contato@betcalcpro.com.br. Iremos investigar e corrigir o problema o mais rápido possível.',
+        'Se você encontrar um erro ou resultado incorreto em qualquer calculadora, entre em contato conosco pelo formulário abaixo ou pelo e-mail valdirnogueira2010@gmail.com. Iremos investigar e corrigir o problema o mais rápido possível.',
     },
   ]
 
@@ -137,8 +136,8 @@ export function ContactPage() {
             </div>
             <div>
               <p className="text-xs text-muted-foreground">E-mail</p>
-              <a href="mailto:contato@betcalcpro.com.br" className="text-sm font-semibold text-foreground hover:text-neon transition-colors">
-                contato@betcalcpro.com.br
+              <a href="mailto:valdirnogueira2010@gmail.com" className="text-sm font-semibold text-foreground hover:text-neon transition-colors">
+                valdirnogueira2010@gmail.com
               </a>
             </div>
           </CardContent>
@@ -146,11 +145,13 @@ export function ContactPage() {
         <Card>
           <CardContent className="p-4 flex items-center gap-3">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-neon/20">
-              <Phone className="h-5 w-5 text-neon" />
+              <Mail className="h-5 w-5 text-neon" />
             </div>
             <div>
-              <p className="text-xs text-muted-foreground">Telefone</p>
-              <p className="text-sm font-semibold text-foreground">[Telefone — a preencher]</p>
+              <p className="text-xs text-muted-foreground">E-mail LGPD</p>
+              <a href="mailto:valdirnogueira2010@gmail.com" className="text-sm font-semibold text-neon hover:underline transition-colors">
+                valdirnogueira2010@gmail.com
+              </a>
             </div>
           </CardContent>
         </Card>
@@ -178,26 +179,26 @@ export function ContactPage() {
         </Card>
       </div>
 
-      {/* Informações da Empresa */}
+      {/* Informações do Projeto */}
       <Card>
         <CardContent className="p-6 space-y-4">
           <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
-            <Building2 className="h-5 w-5 text-neon" /> Informações da Empresa
+            <Building2 className="h-5 w-5 text-neon" /> Informações do Projeto
           </h2>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-3">
               <div className="flex items-start gap-2">
                 <Building2 className="h-4 w-4 text-neon shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-xs text-muted-foreground">Razão Social / CNPJ</p>
-                  <p className="text-sm text-foreground">[CNPJ — a preencher]</p>
+                  <p className="text-xs text-muted-foreground">Responsável</p>
+                  <p className="text-sm text-foreground">Valdir Nogueira — Projeto pessoal</p>
                 </div>
               </div>
               <div className="flex items-start gap-2">
                 <MapPin className="h-4 w-4 text-neon shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-xs text-muted-foreground">Endereço</p>
-                  <p className="text-sm text-foreground">[Endereço completo — a preencher]</p>
+                  <p className="text-xs text-muted-foreground">Localização</p>
+                  <p className="text-sm text-foreground">Brasil</p>
                 </div>
               </div>
             </div>
@@ -206,15 +207,15 @@ export function ContactPage() {
                 <Mail className="h-4 w-4 text-neon shrink-0 mt-0.5" />
                 <div>
                   <p className="text-xs text-muted-foreground">E-mail para Privacidade (LGPD)</p>
-                  <a href="mailto:privacidade@betcalcpro.com.br" className="text-sm text-neon hover:underline">
-                    privacidade@betcalcpro.com.br
+                  <a href="mailto:valdirnogueira2010@gmail.com" className="text-sm text-neon hover:underline">
+                    valdirnogueira2010@gmail.com
                   </a>
                 </div>
               </div>
               <div className="flex items-start gap-2">
                 <Clock className="h-4 w-4 text-neon shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-xs text-muted-foreground">Horário de Funcionamento</p>
+                  <p className="text-xs text-muted-foreground">Horário de Atendimento</p>
                   <p className="text-sm text-foreground">Segunda a Sexta, 9h às 18h (Horário de Brasília)</p>
                   <p className="text-xs text-muted-foreground">Sábados, Domingos e Feriados: fechado</p>
                 </div>
@@ -312,8 +313,8 @@ export function ContactPage() {
               </Button>
               <p className="text-xs text-muted-foreground">
                 Ou envie um e-mail diretamente para{' '}
-                <a href="mailto:contato@betcalcpro.com.br" className="text-neon underline hover:no-underline">
-                  contato@betcalcpro.com.br
+                <a href="mailto:valdirnogueira2010@gmail.com" className="text-neon underline hover:no-underline">
+                  valdirnogueira2010@gmail.com
                 </a>
               </p>
             </div>
@@ -342,36 +343,36 @@ export function ContactPage() {
         </CardContent>
       </Card>
 
-      {/* Outros Canais */}
+      {/* Canais de Atendimento */}
       <Card>
         <CardContent className="p-6 space-y-4">
-          <h2 className="text-lg font-semibold text-foreground">Outros Canais de Atendimento</h2>
+          <h2 className="text-lg font-semibold text-foreground">Canais de Atendimento</h2>
           <p className="text-sm text-muted-foreground">
-            Além do formulário de contato, você pode nos acionar através dos seguintes canais para diferentes tipos de solicitações:
+            Além do formulário de contato, você pode nos acionar por e-mail para diferentes tipos de solicitações:
           </p>
           <div className="grid gap-3 sm:grid-cols-2">
             <div className="p-3 bg-muted/30 rounded-lg space-y-1">
               <p className="font-semibold text-foreground text-sm">Dúvidas gerais e suporte</p>
-              <a href="mailto:contato@betcalcpro.com.br" className="text-xs text-neon underline hover:no-underline">
-                contato@betcalcpro.com.br
+              <a href="mailto:valdirnogueira2010@gmail.com" className="text-xs text-neon underline hover:no-underline">
+                valdirnogueira2010@gmail.com
               </a>
             </div>
             <div className="p-3 bg-muted/30 rounded-lg space-y-1">
               <p className="font-semibold text-foreground text-sm">Privacidade e LGPD</p>
-              <a href="mailto:privacidade@betcalcpro.com.br" className="text-xs text-neon underline hover:no-underline">
-                privacidade@betcalcpro.com.br
+              <a href="mailto:valdirnogueira2010@gmail.com" className="text-xs text-neon underline hover:no-underline">
+                valdirnogueira2010@gmail.com
               </a>
             </div>
             <div className="p-3 bg-muted/30 rounded-lg space-y-1">
               <p className="font-semibold text-foreground text-sm">Parcerias e publicidade</p>
-              <a href="mailto:parcerias@betcalcpro.com.br" className="text-xs text-neon underline hover:no-underline">
-                parcerias@betcalcpro.com.br
+              <a href="mailto:valdirnogueira2010@gmail.com?subject=Parceria%20BetCalc%20Pro" className="text-xs text-neon underline hover:no-underline">
+                valdirnogueira2010@gmail.com
               </a>
             </div>
             <div className="p-3 bg-muted/30 rounded-lg space-y-1">
               <p className="font-semibold text-foreground text-sm">Reportar erro técnico</p>
-              <a href="mailto:bugs@betcalcpro.com.br" className="text-xs text-neon underline hover:no-underline">
-                bugs@betcalcpro.com.br
+              <a href="mailto:valdirnogueira2010@gmail.com?subject=Bug%20Report%20BetCalc%20Pro" className="text-xs text-neon underline hover:no-underline">
+                valdirnogueira2010@gmail.com
               </a>
             </div>
           </div>
@@ -381,7 +382,7 @@ export function ContactPage() {
       <div className="text-center space-y-2">
         <p className="text-xs text-muted-foreground">
           Compromisso de resposta: até 48 horas úteis •{' '}
-          <a href="mailto:contato@betcalcpro.com.br" className="text-neon underline hover:no-underline">contato@betcalcpro.com.br</a>
+          <a href="mailto:valdirnogueira2010@gmail.com" className="text-neon underline hover:no-underline">valdirnogueira2010@gmail.com</a>
         </p>
         <p className="text-xs text-muted-foreground">
           Em caso de solicitações relacionadas à LGPD, o prazo de resposta é de até 15 dias úteis, conforme previsto na lei.

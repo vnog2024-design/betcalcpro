@@ -547,7 +547,7 @@ export function CookiesPolicy() {
             </ul>
             <p>
               Para exercer qualquer direito, entre em contato com nosso Encarregado de Proteção de Dados pelo e-mail{' '}
-              <a href="mailto:privacidade@betcalcpro.com.br" className="text-neon underline hover:no-underline">privacidade@betcalcpro.com.br</a>.
+              <a href="mailto:valdirnogueira2010@gmail.com" className="text-neon underline hover:no-underline">valdirnogueira2010@gmail.com</a>.
             </p>
           </section>
         </CardContent>
@@ -579,9 +579,9 @@ export function CookiesPolicy() {
             </p>
             <p className="text-xs text-muted-foreground italic">
               Em caso de dúvidas sobre cookies, entre em contato:{' '}
-              <a href="mailto:contato@betcalcpro.com.br" className="text-neon underline hover:no-underline">contato@betcalcpro.com.br</a>{' '}
+              <a href="mailto:valdirnogueira2010@gmail.com" className="text-neon underline hover:no-underline">valdirnogueira2010@gmail.com</a>{' '}
               ou{' '}
-              <a href="mailto:privacidade@betcalcpro.com.br" className="text-neon underline hover:no-underline">privacidade@betcalcpro.com.br</a>{' '}
+              <a href="mailto:valdirnogueira2010@gmail.com" className="text-neon underline hover:no-underline">valdirnogueira2010@gmail.com</a>{' '}
               (Encarregado de Proteção de Dados).
             </p>
           </div>
