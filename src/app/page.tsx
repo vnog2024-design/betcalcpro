@@ -1,69 +1,19 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
-import { useAppStore, type ToolPage } from '@/store/app-store'
 import { Header } from '@/components/layout/header'
 import { Sidebar } from '@/components/layout/sidebar'
 import { Footer } from '@/components/layout/footer'
 import { LandingPage } from '@/components/landing/landing-page'
-import { MartingaleCalculator } from '@/components/tools/martingale-calculator'
-import { BankrollCalculator } from '@/components/tools/bankroll-calculator'
-import { CrashSimulator } from '@/components/tools/crash-simulator'
-import { DoubleSimulator } from '@/components/tools/double-simulator'
-import { FibonacciCalculator } from '@/components/tools/fibonacci-calculator'
-import { MasanielloCalculator } from '@/components/tools/masaniello-calculator'
-import { LossRecoveryCalculator } from '@/components/tools/loss-recovery-calculator'
-import { SorosCalculator } from '@/components/tools/soros-calculator'
-import { RecoveryCalculator } from '@/components/tools/recovery-calculator'
-import { SequenceAnalyzer } from '@/components/tools/sequence-analyzer'
-import { ProbabilitySimulator } from '@/components/tools/probability-simulator'
-import { StrategyGenerator } from '@/components/tools/strategy-generator'
-import { UserPanel } from '@/components/tools/user-panel'
-import { AdBanner } from '@/components/shared/ad-banner'
 import { AnimatedBackground } from '@/components/shared/animated-background'
 import { CookieConsent } from '@/components/shared/cookie-consent'
+import { AgeGate } from '@/components/shared/age-gate'
+import { DisclaimerBar } from '@/components/shared/disclaimer-bar'
 import { Toaster } from '@/components/ui/toaster'
-import { PrivacyPolicy } from '@/components/legal/privacy-policy'
-import { TermsOfUse } from '@/components/legal/terms-of-use'
-import { ResponsibleGaming } from '@/components/legal/responsible-gaming'
-import { ContactPage } from '@/components/legal/contact-page'
-import { AboutPage } from '@/components/legal/about-page'
-import { CookiesPolicy } from '@/components/legal/cookies-policy'
-
-const toolComponents: Record<ToolPage, React.ComponentType> = {
-  home: LandingPage,
-  martingale: MartingaleCalculator,
-  bankroll: BankrollCalculator,
-  'crash-simulator': CrashSimulator,
-  'double-simulator': DoubleSimulator,
-  fibonacci: FibonacciCalculator,
-  masaniello: MasanielloCalculator,
-  'loss-recovery': LossRecoveryCalculator,
-  soros: SorosCalculator,
-  recovery: RecoveryCalculator,
-  'sequence-analyzer': SequenceAnalyzer,
-  'probability-simulator': ProbabilitySimulator,
-  'strategy-generator': StrategyGenerator,
-  'user-panel': UserPanel,
-  'privacy': PrivacyPolicy,
-  'terms': TermsOfUse,
-  'responsible-gaming': ResponsibleGaming,
-  'contact': ContactPage,
-  'about': AboutPage,
-  'cookies': CookiesPolicy,
-}
+import { useAppStore } from '@/store/app-store'
+import { useEffect } from 'react'
 
 export default function Home() {
-  const { currentPage, sidebarOpen, setSidebarOpen, colorTheme, theme } = useAppStore()
-  const CurrentComponent = toolComponents[currentPage] || LandingPage
-  const mainRef = useRef<HTMLElement>(null)
-
-  // Scroll to top whenever the page changes
-  useEffect(() => {
-    if (mainRef.current) {
-      mainRef.current.scrollTo({ top: 0, behavior: 'smooth' })
-    }
-  }, [currentPage])
+  const { sidebarOpen, setSidebarOpen, colorTheme, theme } = useAppStore()
 
   // Sync color theme to DOM
   useEffect(() => {
@@ -74,19 +24,15 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col bg-background grid-pattern relative">
       <AnimatedBackground />
+      <AgeGate />
+      <DisclaimerBar />
       <Header />
       <div className="flex flex-1">
         <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-        <main ref={mainRef} className="flex-1 min-h-0 overflow-y-auto">
-          {/* Top ad banner */}
-          <AdBanner slot="top" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4" />
-          
+        <main className="flex-1 min-h-0 overflow-y-auto">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <CurrentComponent />
+            <LandingPage />
           </div>
-
-          {/* Bottom ad banner */}
-          <AdBanner slot="bottom" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-4" />
         </main>
       </div>
       <Footer />

@@ -5,16 +5,14 @@ export type ToolPage =
   | 'home'
   | 'martingale'
   | 'bankroll'
-  | 'crash-simulator'
-  | 'double-simulator'
   | 'fibonacci'
   | 'masaniello'
-  | 'loss-recovery'
   | 'soros'
   | 'recovery'
   | 'sequence-analyzer'
   | 'probability-simulator'
   | 'strategy-generator'
+  | 'artigos'
   | 'user-panel'
   | 'privacy'
   | 'terms'
@@ -46,9 +44,7 @@ export interface Achievement {
 }
 
 interface AppState {
-  currentPage: ToolPage
   sidebarOpen: boolean
-  setCurrentPage: (page: ToolPage) => void
   setSidebarOpen: (open: boolean) => void
   calculationHistory: CalculationHistory[]
   addHistory: (entry: CalculationHistory) => void
@@ -73,9 +69,7 @@ interface AppState {
 export const useAppStore = create<AppState>()(
   persist(
     (set, get) => ({
-      currentPage: 'home',
       sidebarOpen: false,
-      setCurrentPage: (page) => set({ currentPage: page, sidebarOpen: false }),
       setSidebarOpen: (open) => set({ sidebarOpen: open }),
       calculationHistory: [],
       addHistory: (entry) =>
@@ -135,23 +129,43 @@ export const useAppStore = create<AppState>()(
 
 export const toolInfo: Record<ToolPage, { name: string; description: string; icon: string; category: string }> = {
   home: { name: 'Início', description: 'Página principal', icon: 'Home', category: 'nav' },
-  martingale: { name: 'Martingale', description: 'Calculadora Martingale com níveis ilimitados', icon: 'TrendingUp', category: 'calculators' },
-  bankroll: { name: 'Gestão de Banca', description: 'Calcule sua banca ideal e gerencie riscos', icon: 'Wallet', category: 'calculators' },
-  'crash-simulator': { name: 'Simulador Crash', description: 'Simule estratégias para jogos Crash', icon: 'Zap', category: 'simulators' },
-  'double-simulator': { name: 'Simulador Double', description: 'Simule estratégias para jogos Double', icon: 'Dice5', category: 'simulators' },
-  fibonacci: { name: 'Fibonacci', description: 'Calculadora de progressão Fibonacci', icon: 'BarChart3', category: 'calculators' },
-  masaniello: { name: 'Masaniello', description: 'Calculadora Masaniello para gestão avançada', icon: 'Calculator', category: 'calculators' },
-  'loss-recovery': { name: 'Recuperação Loss %', description: 'Calcule recuperação de perdas com percentual', icon: 'RotateCcw', category: 'calculators' },
-  soros: { name: 'Soros', description: 'Calculadora de estratégia Soros', icon: 'Coins', category: 'calculators' },
-  recovery: { name: 'Recuperação', description: 'Calculadora de recuperação de banca', icon: 'Shield', category: 'calculators' },
-  'sequence-analyzer': { name: 'Analisador Sequência', description: 'Analise padrões em sequências de resultados', icon: 'Search', category: 'simulators' },
-  'probability-simulator': { name: 'Simulador Probabilístico', description: 'Simule probabilidades e cenários', icon: 'Percent', category: 'simulators' },
-  'strategy-generator': { name: 'Gerador Estratégias', description: 'Gere estratégias personalizadas', icon: 'Sparkles', category: 'simulators' },
+  martingale: { name: 'Martingale', description: 'Calculadora de progressão Martingale com níveis ilimitados', icon: 'TrendingUp', category: 'calculators' },
+  bankroll: { name: 'Gestão de Capital', description: 'Calcule seu capital ideal e gerencie riscos', icon: 'Wallet', category: 'calculators' },
+  fibonacci: { name: 'Fibonacci', description: 'Calculadora de sequência Fibonacci para análise de progressões', icon: 'BarChart3', category: 'calculators' },
+  masaniello: { name: 'Masaniello', description: 'Calculadora Masaniello para gestão avançada de capital', icon: 'Calculator', category: 'calculators' },
+  soros: { name: 'Progressão Geométrica', description: 'Calculadora de progressão geométrica e crescimento de capital', icon: 'Coins', category: 'calculators' },
+  recovery: { name: 'Recuperação de Capital', description: 'Calcule planos de recuperação de capital', icon: 'Shield', category: 'calculators' },
+  'sequence-analyzer': { name: 'Analisador de Sequências', description: 'Analise padrões em sequências de resultados', icon: 'Search', category: 'simulators' },
+  'probability-simulator': { name: 'Simulador de Probabilidades', description: 'Simule probabilidades e cenários', icon: 'Percent', category: 'simulators' },
+  'strategy-generator': { name: 'Gerador de Estratégias', description: 'Gere estratégias personalizadas de gestão', icon: 'Sparkles', category: 'simulators' },
+  artigos: { name: 'Artigos', description: 'Artigos educacionais', icon: 'BookOpen', category: 'content' },
   'user-panel': { name: 'Meu Painel', description: 'Seu painel pessoal', icon: 'User', category: 'nav' },
   'privacy': { name: 'Privacidade', description: 'Política de Privacidade', icon: 'Shield', category: 'legal' },
   'terms': { name: 'Termos', description: 'Termos de Uso', icon: 'FileText', category: 'legal' },
-  'responsible-gaming': { name: 'Jogo Responsável', description: 'Compromisso com jogo responsável', icon: 'Heart', category: 'legal' },
+  'responsible-gaming': { name: 'Uso Responsável', description: 'Compromisso com uso responsável', icon: 'Heart', category: 'legal' },
   'contact': { name: 'Contato', description: 'Fale conosco', icon: 'Mail', category: 'legal' },
   'about': { name: 'Sobre Nós', description: 'Quem somos', icon: 'Info', category: 'legal' },
   'cookies': { name: 'Cookies', description: 'Política de Cookies', icon: 'Cookie', category: 'legal' },
+}
+
+/** Map a ToolPage id to its route href */
+export const toolHref: Record<ToolPage, string> = {
+  home: '/',
+  martingale: '/martingale',
+  bankroll: '/bankroll',
+  fibonacci: '/fibonacci',
+  masaniello: '/masaniello',
+  soros: '/soros',
+  recovery: '/recovery',
+  'sequence-analyzer': '/sequence-analyzer',
+  'probability-simulator': '/probability-simulator',
+  'strategy-generator': '/strategy-generator',
+  artigos: '/artigos',
+  'user-panel': '/user-panel',
+  privacy: '/privacy',
+  terms: '/terms',
+  'responsible-gaming': '/responsible-gaming',
+  contact: '/contact',
+  about: '/about',
+  cookies: '/cookies',
 }

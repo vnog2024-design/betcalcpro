@@ -20,16 +20,32 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://betcalcpro.com"),
-  title: "BetCalc Pro — Ferramentas para Apostadores",
-  description: "Calculadoras gratuitas para apostadores. Martingale, Fibonacci, Soros, Crash Simulator, gestão de banca e mais.",
-  keywords: ["apostas", "martingale", "calculadora", "crash", "double", "fibonacci", "soros", "gestão de banca", "masaniello", "progressão", "simulador"],
+  metadataBase: new URL("https://betcalcpro.com.br"),
+  title: {
+    default: "BetCalc Pro — Ferramentas de Probabilidade e Gestão de Risco",
+    template: "%s | BetCalc Pro",
+  },
+  description:
+    "Calculadoras gratuitas de probabilidade, gestão de risco e análise estatística. Ferramentas matemáticas para tomada de decisão informada.",
+  keywords: [
+    "probabilidade",
+    "cálculo",
+    "gestão de risco",
+    "matemática",
+    "estatística",
+    "progressão",
+    "simulador",
+    "análise",
+    "ferramentas",
+    "gratuito",
+  ],
   authors: [{ name: "BetCalc Pro" }],
   icons: { icon: "/logo.svg" },
   manifest: "/manifest.json",
   openGraph: {
-    title: "BetCalc Pro — Ferramentas para Apostadores",
-    description: "Calculadoras e simuladores gratuitos para apostadores.",
+    title: "BetCalc Pro — Ferramentas de Probabilidade e Gestão de Risco",
+    description:
+      "Calculadoras e simuladores gratuitos de probabilidade e gestão de risco.",
     type: "website",
     siteName: "BetCalc Pro",
     images: [{ url: "/og-image.png", width: 1344, height: 768 }],
@@ -37,13 +53,12 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "BetCalc Pro",
-    description: "Ferramentas gratuitas para apostadores",
+    description: "Ferramentas gratuitas de probabilidade e gestão de risco",
   },
   other: {
     "mobile-web-app-capable": "yes",
     "apple-mobile-web-app-capable": "yes",
     "apple-mobile-web-app-status-bar-style": "black-translucent",
-    "google-adsense-account": "ca-pub-XXXXXXXXXX",
   },
 };
 
@@ -55,14 +70,15 @@ export default function RootLayout({
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "BetCalc Pro",
-    "description": "Ferramentas gratuitas para apostadores",
-    "applicationCategory": "UtilityApplication",
-    "operatingSystem": "Any",
-    "offers": {
+    name: "BetCalc Pro",
+    description:
+      "Ferramentas gratuitas de probabilidade e gestão de risco",
+    applicationCategory: "UtilityApplication",
+    operatingSystem: "Any",
+    offers: {
       "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "BRL",
+      price: "0",
+      priceCurrency: "BRL",
     },
   };
 
@@ -73,7 +89,6 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        {/* Theme init to prevent flash */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -83,6 +98,17 @@ export default function RootLayout({
                   var state = stored && stored.state ? stored.state : {};
                   var theme = state.theme || 'dark';
                   var colorTheme = state.colorTheme || 'neon-green';
+                  var consent = localStorage.getItem('cookie-consent');
+                  if(!consent) {
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('consent', 'default', {
+                      'ad_storage': 'denied',
+                      'analytics_storage': 'denied',
+                      'ad_user_data': 'denied',
+                      'ad_personalization': 'denied',
+                    });
+                  }
                   document.documentElement.classList.toggle('dark', theme === 'dark');
                   document.documentElement.setAttribute('data-color-theme', colorTheme);
                 } catch(e) {
@@ -90,9 +116,6 @@ export default function RootLayout({
                   document.documentElement.setAttribute('data-color-theme', 'neon-green');
                 }
               })();
-              if('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('/sw.js');
-              }
             `,
           }}
         />

@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://betcalcpro.com/sitemap.xml
+Sitemap: https://betcalcpro.com.br/sitemap.xml
+
+User-agent: Mediapartners-Google
+Allow: /

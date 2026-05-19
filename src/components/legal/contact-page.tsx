@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useAppStore } from '@/store/app-store'
+import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -15,14 +15,14 @@ import {
   Send,
   MessageCircle,
   Clock,
-  Instagram,
-  Twitter,
-  Youtube,
   HelpCircle,
+  MapPin,
+  Phone,
+  Building2,
+  AlertCircle,
 } from 'lucide-react'
 
 export function ContactPage() {
-  const { setCurrentPage } = useAppStore()
   const { toast } = useToast()
 
   const [formData, setFormData] = useState({
@@ -32,37 +32,64 @@ export function ContactPage() {
     message: '',
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState('')
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setSubmitError('')
 
-    // Simulate submission
-    setTimeout(() => {
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        setSubmitError(data.error || 'Erro ao enviar mensagem.')
+        toast({
+          title: 'Erro ao enviar',
+          description: data.error || 'Ocorreu um erro ao processar sua mensagem. Tente novamente.',
+          variant: 'destructive',
+        })
+        return
+      }
+
       toast({
         title: 'Mensagem enviada!',
         description: 'Recebemos sua mensagem e responderemos em até 48 horas úteis. Obrigado pelo contato!',
       })
       setFormData({ name: '', email: '', subject: '', message: '' })
+    } catch {
+      setSubmitError('Erro de conexão. Tente novamente mais tarde ou envie um e-mail diretamente para contato@betcalcpro.com.br')
+      toast({
+        title: 'Erro de conexão',
+        description: 'Não foi possível enviar sua mensagem. Tente novamente ou envie um e-mail para contato@betcalcpro.com.br',
+        variant: 'destructive',
+      })
+    } finally {
       setIsSubmitting(false)
-    }, 1000)
+    }
   }
 
   const faqItems = [
     {
-      question: 'O BetCalc Pro é um site de apostas?',
+      question: 'O BetCalc Pro é uma plataforma financeira?',
       answer:
-        'Não. O BetCalc Pro é um site de ferramentas educacionais. Oferecemos calculadoras, simuladores e conteúdo educativo para ajudar apostadores a gerenciar suas bancas de forma responsável. Não aceitamos apostas, não operamos jogos e não processamos transações financeiras de nenhum tipo.',
+        'Não. O BetCalc Pro é uma plataforma de ferramentas educacionais. Oferecemos calculadoras, simuladores e conteúdo educativo para o estudo de probabilidade, estatística e gestão de risco. Não aceitamos depósitos, não operamos nenhuma plataforma de transações financeiras e não processamos pagamentos de qualquer natureza.',
     },
     {
-      question: 'As ferramentas garantem lucro nas apostas?',
+      question: 'As ferramentas garantem resultados precisos para decisões reais?',
       answer:
-        'Não. Nenhuma ferramenta ou estratégia pode garantir lucros em apostas. Nossas calculadoras e simuladores são baseados em modelos matemáticos teóricos e servem apenas como auxílio educacional. Resultados passados e simulações não garantem resultados futuros.',
+        'Não. Nossas ferramentas são baseadas em modelos matemáticos teóricos e servem exclusivamente como recursos educacionais. Os resultados das simulações e cálculos são estimativas baseadas em premissas teóricas e não devem ser interpretados como previsões definitivas de eventos reais. Resultados passados e simulações não garantem resultados futuros.',
     },
     {
       question: 'Posso usar o site se tenho menos de 18 anos?',
       answer:
-        'Não. O uso do BetCalc Pro é estritamente proibido para menores de 18 anos. Nosso conteúdo é destinado exclusivamente a adultos que podem tomar decisões informadas e responsáveis sobre apostas.',
+        'Não. O uso do BetCalc Pro é estritamente proibido para menores de 18 anos. Nosso conteúdo é destinado exclusivamente a adultos que podem compreender e avaliar os conceitos de probabilidade e gestão de risco de forma responsável.',
     },
     {
       question: 'Meus dados de cálculo ficam salvos no servidor?',
@@ -70,9 +97,9 @@ export function ContactPage() {
         'Não. Os cálculos são processados localmente no seu navegador. O histórico de cálculos é armazenado apenas no seu dispositivo e pode ser excluído a qualquer momento. Não armazenamos dados de cálculo em nossos servidores.',
     },
     {
-      question: 'Como posso excluir minha conta e meus dados?',
+      question: 'Como posso excluir meus dados pessoais?',
       answer:
-        'Você pode solicitar a exclusão da sua conta e de todos os dados associados enviando um e-mail para contato@betcalcpro.com com o assunto "Exclusão de conta". O processo será concluído em até 15 dias úteis, conforme a LGPD.',
+        'Você pode solicitar a exclusão de seus dados pessoais enviando um e-mail para contato@betcalcpro.com.br com o assunto "Exclusão de dados — LGPD". O processo será concluído em até 15 dias úteis, conforme previsto na Lei Geral de Proteção de Dados.',
     },
     {
       question: 'O site é gratuito?',
@@ -82,16 +109,18 @@ export function ContactPage() {
     {
       question: 'Como reporto um erro em uma calculadora?',
       answer:
-        'Se você encontrar um erro ou resultado incorreto em qualquer calculadora, entre em contato conosco pelo formulário abaixo ou pelo e-mail contato@betcalcpro.com. Iremos investigar e corrigir o problema o mais rápido possível.',
+        'Se você encontrar um erro ou resultado incorreto em qualquer calculadora, entre em contato conosco pelo formulário abaixo ou pelo e-mail contato@betcalcpro.com.br. Iremos investigar e corrigir o problema o mais rápido possível.',
     },
   ]
 
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-3">
-        <Button variant="ghost" size="sm" onClick={() => setCurrentPage('home')} className="text-muted-foreground hover:text-neon">
-          <ArrowLeft className="h-4 w-4 mr-1" /> Voltar
-        </Button>
+        <Link href="/">
+          <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-neon">
+            <ArrowLeft className="h-4 w-4 mr-1" /> Voltar
+          </Button>
+        </Link>
       </div>
 
       <div className="flex items-center gap-3 mb-2">
@@ -100,7 +129,7 @@ export function ContactPage() {
       </div>
 
       {/* Info Cards */}
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardContent className="p-4 flex items-center gap-3">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-neon/20">
@@ -108,9 +137,20 @@ export function ContactPage() {
             </div>
             <div>
               <p className="text-xs text-muted-foreground">E-mail</p>
-              <a href="mailto:contato@betcalcpro.com" className="text-sm font-semibold text-foreground hover:text-neon transition-colors">
-                contato@betcalcpro.com
+              <a href="mailto:contato@betcalcpro.com.br" className="text-sm font-semibold text-foreground hover:text-neon transition-colors">
+                contato@betcalcpro.com.br
               </a>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4 flex items-center gap-3">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-neon/20">
+              <Phone className="h-5 w-5 text-neon" />
+            </div>
+            <div>
+              <p className="text-xs text-muted-foreground">Telefone</p>
+              <p className="text-sm font-semibold text-foreground">[Telefone — a preencher]</p>
             </div>
           </CardContent>
         </Card>
@@ -120,8 +160,8 @@ export function ContactPage() {
               <Clock className="h-5 w-5 text-neon" />
             </div>
             <div>
-              <p className="text-xs text-muted-foreground">Tempo de Resposta</p>
-              <p className="text-sm font-semibold text-foreground">Até 48 horas úteis</p>
+              <p className="text-xs text-muted-foreground">Horário de Atendimento</p>
+              <p className="text-sm font-semibold text-foreground">Seg–Sex, 9h–18h (BRT)</p>
             </div>
           </CardContent>
         </Card>
@@ -131,12 +171,58 @@ export function ContactPage() {
               <MessageCircle className="h-5 w-5 text-neon" />
             </div>
             <div>
-              <p className="text-xs text-muted-foreground">Idioma</p>
-              <p className="text-sm font-semibold text-foreground">Português (Brasil)</p>
+              <p className="text-xs text-muted-foreground">Tempo de Resposta</p>
+              <p className="text-sm font-semibold text-foreground">Até 48 horas úteis</p>
             </div>
           </CardContent>
         </Card>
       </div>
+
+      {/* Informações da Empresa */}
+      <Card>
+        <CardContent className="p-6 space-y-4">
+          <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
+            <Building2 className="h-5 w-5 text-neon" /> Informações da Empresa
+          </h2>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-3">
+              <div className="flex items-start gap-2">
+                <Building2 className="h-4 w-4 text-neon shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-xs text-muted-foreground">Razão Social / CNPJ</p>
+                  <p className="text-sm text-foreground">[CNPJ — a preencher]</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <MapPin className="h-4 w-4 text-neon shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-xs text-muted-foreground">Endereço</p>
+                  <p className="text-sm text-foreground">[Endereço completo — a preencher]</p>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-3">
+              <div className="flex items-start gap-2">
+                <Mail className="h-4 w-4 text-neon shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-xs text-muted-foreground">E-mail para Privacidade (LGPD)</p>
+                  <a href="mailto:privacidade@betcalcpro.com.br" className="text-sm text-neon hover:underline">
+                    privacidade@betcalcpro.com.br
+                  </a>
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <Clock className="h-4 w-4 text-neon shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-xs text-muted-foreground">Horário de Funcionamento</p>
+                  <p className="text-sm text-foreground">Segunda a Sexta, 9h às 18h (Horário de Brasília)</p>
+                  <p className="text-xs text-muted-foreground">Sábados, Domingos e Feriados: fechado</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Contact Form */}
       <Card>
@@ -144,20 +230,30 @@ export function ContactPage() {
           <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
             <Send className="h-5 w-5 text-neon" /> Envie sua Mensagem
           </h2>
+          <p className="text-sm text-muted-foreground">
+            Preencha o formulário abaixo e entraremos em contato o mais rápido possível. Campos marcados com * são obrigatórios.
+          </p>
+          {submitError && (
+            <div className="flex items-start gap-2 p-3 bg-destructive/10 border border-destructive/30 rounded-lg">
+              <AlertCircle className="h-4 w-4 text-destructive shrink-0 mt-0.5" />
+              <p className="text-sm text-destructive">{submitError}</p>
+            </div>
+          )}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="contact-name">Nome</Label>
+                <Label htmlFor="contact-name">Nome *</Label>
                 <Input
                   id="contact-name"
                   placeholder="Seu nome completo"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
+                  disabled={isSubmitting}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="contact-email">E-mail</Label>
+                <Label htmlFor="contact-email">E-mail *</Label>
                 <Input
                   id="contact-email"
                   type="email"
@@ -165,16 +261,18 @@ export function ContactPage() {
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required
+                  disabled={isSubmitting}
                 />
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="contact-subject">Assunto</Label>
+              <Label htmlFor="contact-subject">Assunto *</Label>
               <select
                 id="contact-subject"
                 value={formData.subject}
                 onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                 required
+                disabled={isSubmitting}
                 className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <option value="">Selecione um assunto</option>
@@ -182,34 +280,43 @@ export function ContactPage() {
                 <option value="bug">Reportar erro/bug</option>
                 <option value="sugestao">Sugestão de melhoria</option>
                 <option value="lgpd">Solicitação LGPD (dados pessoais)</option>
-                <option value="autoexclusao">Autoexclusão</option>
+                <option value="exclusao_dados">Solicitação de exclusão de dados</option>
                 <option value="parceria">Parceria / Publicidade</option>
                 <option value="outro">Outro assunto</option>
               </select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="contact-message">Mensagem</Label>
+              <Label htmlFor="contact-message">Mensagem *</Label>
               <Textarea
                 id="contact-message"
-                placeholder="Escreva sua mensagem aqui..."
+                placeholder="Escreva sua mensagem aqui (mínimo 10 caracteres)..."
                 rows={5}
                 value={formData.message}
                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                 required
+                disabled={isSubmitting}
               />
             </div>
-            <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
-              {isSubmitting ? (
-                <>
-                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent mr-2" />
-                  Enviando...
-                </>
-              ) : (
-                <>
-                  <Send className="h-4 w-4 mr-2" /> Enviar Mensagem
-                </>
-              )}
-            </Button>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
+                {isSubmitting ? (
+                  <>
+                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent mr-2" />
+                    Enviando...
+                  </>
+                ) : (
+                  <>
+                    <Send className="h-4 w-4 mr-2" /> Enviar Mensagem
+                  </>
+                )}
+              </Button>
+              <p className="text-xs text-muted-foreground">
+                Ou envie um e-mail diretamente para{' '}
+                <a href="mailto:contato@betcalcpro.com.br" className="text-neon underline hover:no-underline">
+                  contato@betcalcpro.com.br
+                </a>
+              </p>
+            </div>
           </form>
         </CardContent>
       </Card>
@@ -235,37 +342,49 @@ export function ContactPage() {
         </CardContent>
       </Card>
 
-      {/* Social Media */}
+      {/* Outros Canais */}
       <Card>
         <CardContent className="p-6 space-y-4">
-          <h2 className="text-lg font-semibold text-foreground">Redes Sociais</h2>
+          <h2 className="text-lg font-semibold text-foreground">Outros Canais de Atendimento</h2>
           <p className="text-sm text-muted-foreground">
-            Siga-nos nas redes sociais para novidades, dicas e atualizações sobre nossas ferramentas:
+            Além do formulário de contato, você pode nos acionar através dos seguintes canais para diferentes tipos de solicitações:
           </p>
-          <div className="flex flex-wrap gap-3">
-            <Button variant="outline" size="sm" className="gap-2" asChild>
-              <a href="https://instagram.com/betcalcpro" target="_blank" rel="noopener noreferrer">
-                <Instagram className="h-4 w-4" /> Instagram
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div className="p-3 bg-muted/30 rounded-lg space-y-1">
+              <p className="font-semibold text-foreground text-sm">Dúvidas gerais e suporte</p>
+              <a href="mailto:contato@betcalcpro.com.br" className="text-xs text-neon underline hover:no-underline">
+                contato@betcalcpro.com.br
               </a>
-            </Button>
-            <Button variant="outline" size="sm" className="gap-2" asChild>
-              <a href="https://twitter.com/betcalcpro" target="_blank" rel="noopener noreferrer">
-                <Twitter className="h-4 w-4" /> Twitter
+            </div>
+            <div className="p-3 bg-muted/30 rounded-lg space-y-1">
+              <p className="font-semibold text-foreground text-sm">Privacidade e LGPD</p>
+              <a href="mailto:privacidade@betcalcpro.com.br" className="text-xs text-neon underline hover:no-underline">
+                privacidade@betcalcpro.com.br
               </a>
-            </Button>
-            <Button variant="outline" size="sm" className="gap-2" asChild>
-              <a href="https://youtube.com/@betcalcpro" target="_blank" rel="noopener noreferrer">
-                <Youtube className="h-4 w-4" /> YouTube
+            </div>
+            <div className="p-3 bg-muted/30 rounded-lg space-y-1">
+              <p className="font-semibold text-foreground text-sm">Parcerias e publicidade</p>
+              <a href="mailto:parcerias@betcalcpro.com.br" className="text-xs text-neon underline hover:no-underline">
+                parcerias@betcalcpro.com.br
               </a>
-            </Button>
+            </div>
+            <div className="p-3 bg-muted/30 rounded-lg space-y-1">
+              <p className="font-semibold text-foreground text-sm">Reportar erro técnico</p>
+              <a href="mailto:bugs@betcalcpro.com.br" className="text-xs text-neon underline hover:no-underline">
+                bugs@betcalcpro.com.br
+              </a>
+            </div>
           </div>
         </CardContent>
       </Card>
 
-      <div className="text-center">
+      <div className="text-center space-y-2">
         <p className="text-xs text-muted-foreground">
           Compromisso de resposta: até 48 horas úteis •{' '}
-          <a href="mailto:contato@betcalcpro.com" className="text-neon underline hover:no-underline">contato@betcalcpro.com</a>
+          <a href="mailto:contato@betcalcpro.com.br" className="text-neon underline hover:no-underline">contato@betcalcpro.com.br</a>
+        </p>
+        <p className="text-xs text-muted-foreground">
+          Em caso de solicitações relacionadas à LGPD, o prazo de resposta é de até 15 dias úteis, conforme previsto na lei.
         </p>
       </div>
     </div>

@@ -1,7 +1,8 @@
 'use client'
 
 import { useMemo } from 'react'
-import { useAppStore, type ToolPage, toolInfo } from '@/store/app-store'
+import Link from 'next/link'
+import { useAppStore, type ToolPage, toolInfo, toolHref } from '@/store/app-store'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -11,7 +12,6 @@ import { Progress } from '@/components/ui/progress'
 import {
   User, Trophy, Star, History, LogOut, Crown, Target, TrendingUp,
 } from 'lucide-react'
-import { AdInContent } from '@/components/shared/ad-banner'
 
 function formatDate(ts: number): string {
   return new Date(ts).toLocaleDateString('pt-BR', {
@@ -46,7 +46,6 @@ export function UserPanel() {
     favorites,
     removeFavorite,
     achievements,
-    setCurrentPage,
   } = useAppStore()
 
   // Stats
@@ -342,13 +341,14 @@ export function UserPanel() {
                     <div className="space-y-2 pr-2">
                       {favorites.map((fav) => {
                         const info = toolInfo[fav.toolId]
+                        const href = toolHref[fav.toolId]
                         return (
                           <div
                             key={fav.id}
                             className="flex items-center justify-between gap-2 p-2.5 rounded-lg border border-border/30 bg-muted/10 hover:bg-muted/20 transition-colors group"
                           >
-                            <button
-                              onClick={() => setCurrentPage(fav.toolId)}
+                            <Link
+                              href={href}
                               className="flex items-center gap-2 min-w-0 flex-1 text-left"
                             >
                               <div className="h-7 w-7 rounded-md bg-neon/10 flex items-center justify-center shrink-0">
@@ -362,7 +362,7 @@ export function UserPanel() {
                                   {info?.description ?? ''}
                                 </p>
                               </div>
-                            </button>
+                            </Link>
                             <Button
                               variant="ghost"
                               size="sm"
@@ -447,8 +447,6 @@ export function UserPanel() {
               </CardContent>
             </Card>
           </div>
-
-          <AdInContent />
 
           {/* Quick Stats Cards */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">

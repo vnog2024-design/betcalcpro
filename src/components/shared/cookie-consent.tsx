@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { Button } from '@/components/ui/button'
-import { useAppStore } from '@/store/app-store'
+import Link from 'next/link'
 
 const CONSENT_KEY = 'cookie-consent'
 
@@ -25,27 +25,36 @@ function getStoredConsent(): ConsentData | null {
 function storeConsent(accepted: boolean): void {
   const data: ConsentData = { accepted, timestamp: Date.now() }
   localStorage.setItem(CONSENT_KEY, JSON.stringify(data))
+
+  // Update Google Consent Mode
+  if (typeof window !== 'undefined' && typeof (window as any).gtag === 'function') {
+    if (accepted) {
+      ;(window as any).gtag('consent', 'update', {
+        ad_storage: 'granted',
+        analytics_storage: 'granted',
+        ad_user_data: 'granted',
+        ad_personalization: 'granted',
+      })
+    }
+    // If not accepted, consent remains denied (set in layout.tsx default)
+  }
 }
 
 export function CookieConsent() {
   const [visible, setVisible] = useState(false)
   const initializedRef = useRef(false)
-  const setCurrentPage = useAppStore((s) => s.setCurrentPage)
 
-  // Check localStorage on mount — only show if no prior consent
   useEffect(() => {
     if (initializedRef.current) return
     initializedRef.current = true
 
     const consent = getStoredConsent()
     if (!consent) {
-      // Small delay so the slide-up animation is visible
       const timer = setTimeout(() => {
         setVisible(true)
       }, 300)
       return () => clearTimeout(timer)
     }
-    // Consent already given — no need to show banner
   }, [])
 
   const handleAcceptAll = useCallback(() => {
@@ -58,15 +67,6 @@ export function CookieConsent() {
     setVisible(false)
   }, [])
 
-  const handlePolicyClick = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>) => {
-      e.preventDefault()
-      setCurrentPage('cookies')
-    },
-    [setCurrentPage]
-  )
-
-  // Don't render anything if consent already given or not yet visible
   if (!visible) return null
 
   return (
@@ -76,11 +76,9 @@ export function CookieConsent() {
         role="dialog"
         aria-label="Consentimento de cookies"
       >
-        {/* Subtle neon accent line at top */}
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-neon/50 to-transparent" />
 
         <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:gap-6 sm:p-6">
-          {/* Text section */}
           <div className="flex-1 space-y-1.5">
             <div className="flex items-center gap-2">
               <span className="text-lg" role="img" aria-hidden="true">
@@ -92,19 +90,16 @@ export function CookieConsent() {
             </div>
             <p className="text-sm leading-relaxed text-muted-foreground">
               Utilizamos cookies para melhorar sua experiência, analisar o tráfego e exibir
-              anúncios personalizados do Google AdSense. Ao continuar, você concorda com nossa{' '}
-              <button
-                type="button"
-                onClick={handlePolicyClick}
+              anúncios. Você pode aceitar todos os cookies ou apenas os essenciais.{' '}
+              <Link
+                href="/cookies"
                 className="inline font-medium text-neon underline underline-offset-2 transition-colors hover:text-neon/80"
               >
                 Política de Cookies
-              </button>
-              .
+              </Link>
             </p>
           </div>
 
-          {/* Buttons section */}
           <div className="flex flex-col gap-2 sm:flex-shrink-0 sm:flex-row sm:items-center">
             <Button
               variant="outline"
@@ -112,14 +107,14 @@ export function CookieConsent() {
               onClick={handleEssentialOnly}
               className="border-border/60 text-muted-foreground hover:bg-muted/50 hover:text-foreground"
             >
-              Apenas cookies essenciais
+              Apenas essenciais
             </Button>
             <Button
               size="sm"
               onClick={handleAcceptAll}
               className="bg-neon font-semibold text-primary-foreground shadow-md shadow-neon/20 hover:bg-neon/90"
             >
-              Aceitar todos os cookies
+              Aceitar todos
             </Button>
           </div>
         </div>

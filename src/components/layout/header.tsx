@@ -1,12 +1,18 @@
 'use client'
 
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useAppStore, toolInfo, type ToolPage } from '@/store/app-store'
 import { Button } from '@/components/ui/button'
 import { Menu, X, User, Sun, Moon } from 'lucide-react'
 import { ThemePicker } from '@/components/shared/theme-picker'
+import { cn } from '@/lib/utils'
+
+const quickNavTools: ToolPage[] = ['martingale', 'bankroll', 'fibonacci', 'soros']
 
 export function Header() {
-  const { sidebarOpen, setSidebarOpen, isLoggedIn, userName, setCurrentPage, theme, setTheme, colorTheme } = useAppStore()
+  const { sidebarOpen, setSidebarOpen, isLoggedIn, userName, theme, setTheme, colorTheme } = useAppStore()
+  const pathname = usePathname()
 
   const toggleTheme = () => {
     const newTheme = theme === 'dark' ? 'light' : 'dark'
@@ -27,8 +33,8 @@ export function Header() {
           >
             {sidebarOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </Button>
-          <button 
-            onClick={() => setCurrentPage('home')}
+          <Link
+            href="/"
             className="flex items-center gap-2.5 hover:opacity-80 transition-opacity"
           >
             <div className="h-9 w-9 rounded-lg gradient-neon flex items-center justify-center">
@@ -37,22 +43,31 @@ export function Header() {
             <div className="hidden sm:block">
               <h1 className="text-xl font-bold gradient-neon-text">BetCalc Pro</h1>
             </div>
-          </button>
+          </Link>
         </div>
 
         {/* Center: Quick nav (desktop) */}
         <nav className="hidden lg:flex items-center gap-1">
-          {(['martingale', 'bankroll', 'crash-simulator', 'fibonacci'] as ToolPage[]).map((page) => (
-            <Button
-              key={page}
-              variant="ghost"
-              size="sm"
-              onClick={() => setCurrentPage(page)}
-              className="text-muted-foreground hover:text-neon hover:bg-neon-dim text-sm"
-            >
-              {toolInfo[page].name}
-            </Button>
-          ))}
+          {quickNavTools.map((page) => {
+            const href = page === 'home' ? '/' : `/${page}`
+            const isActive = pathname === href
+            return (
+              <Link key={page} href={href}>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className={cn(
+                    'text-sm',
+                    isActive
+                      ? 'text-neon bg-neon-dim'
+                      : 'text-muted-foreground hover:text-neon hover:bg-neon-dim'
+                  )}
+                >
+                  {toolInfo[page].name}
+                </Button>
+              </Link>
+            )
+          })}
         </nav>
 
         {/* Right: Actions */}
@@ -71,17 +86,18 @@ export function Header() {
           </Button>
 
           {/* User */}
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setCurrentPage('user-panel')}
-            className="text-muted-foreground hover:text-neon gap-2"
-          >
-            <User className="h-5 w-5" />
-            <span className="hidden sm:inline text-sm">
-              {isLoggedIn ? userName : 'Entrar'}
-            </span>
-          </Button>
+          <Link href="/user-panel">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-muted-foreground hover:text-neon gap-2"
+            >
+              <User className="h-5 w-5" />
+              <span className="hidden sm:inline text-sm">
+                {isLoggedIn ? userName : 'Entrar'}
+              </span>
+            </Button>
+          </Link>
         </div>
       </div>
     </header>
