@@ -52,6 +52,11 @@ const featuredArticles = [
   },
 ]
 
+const HERO_TITLE_PART1 = 'Ferramentas de'
+const HERO_TITLE_HIGHLIGHT1 = 'Probabilidade'
+const HERO_TITLE_PART2 = 'e'
+const HERO_TITLE_HIGHLIGHT2 = 'Gestão de Risco'
+
 export function LandingPage() {
   const router = useRouter()
   const calculators = allTools.filter(t => toolInfo[t.id]?.category === 'calculators')
@@ -70,11 +75,11 @@ export function LandingPage() {
               <span className="text-xs font-medium text-neon">100% Gratuito</span>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-5 leading-tight">
-              Ferramentas de{' '}
-              <span className="gradient-neon-text">Probabilidade</span>{' '}
-              e{' '}
-              <span className="gradient-neon-text">Gestão de Risco</span>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-5 leading-tight" suppressHydrationWarning>
+              {HERO_TITLE_PART1}{' '}
+              <span className="gradient-neon-text">{HERO_TITLE_HIGHLIGHT1}</span>{' '}
+              {HERO_TITLE_PART2}{' '}
+              <span className="gradient-neon-text">{HERO_TITLE_HIGHLIGHT2}</span>
             </h1>
             <p className="text-lg sm:text-xl text-muted-foreground mb-8 max-w-2xl leading-relaxed">
               Calculadoras, simuladores e artigos educacionais gratuitos. 
