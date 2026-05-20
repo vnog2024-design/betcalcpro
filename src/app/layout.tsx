@@ -69,7 +69,7 @@ export const metadata: Metadata = {
     "apple-mobile-web-app-capable": "yes",
     "apple-mobile-web-app-status-bar-style": "black-translucent",
     "google-adsense-account": "ca-pub-3765222786344373",
-    "google-site-verification": "PENDING_VERIFICATION",
+    "google-site-verification": "Kf7SATy7yvEEuCFxk4av2Y9nv07qi_DDuw9TJP9LxJ8",
   },
 };
 
