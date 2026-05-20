@@ -109,3 +109,28 @@ Stage Summary:
 - All 4 new articles have full content, proper categorization, and consistent formatting
 - Sitemap includes all 12 article URLs
 - Landing page shows updated count and new featured article
+
+---
+Task ID: 2
+Agent: Main Agent
+Task: Implement AdSense approval improvements - Service Worker, Structured Data, 404 Page, New Articles
+
+Work Log:
+- Registered service worker in layout.tsx (critical for PWA install to work on Android)
+- Added BreadcrumbList structured data (JSON-LD) for SEO
+- Added Google Site Verification meta tag placeholder
+- Created custom 404 page (not-found.tsx + not-found-client.tsx)
+- Added 4 new educational articles: Paradoxo de Monty Hall, Lei dos Grandes Números, Distribuição Normal, Teoria dos Jogos
+- Updated articles-list.tsx with new articles and Probabilidade category color
+- Updated sitemap.ts with 4 new article slugs
+- Updated landing page with new featured article and article count (8→12)
+- Fixed FAQ page <a> tag to use Next.js <Link> component
+- Pushed all changes to GitHub (commit 23f0306)
+
+Stage Summary:
+- Site now has 12 educational articles (was 8)
+- PWA install now functional on Android (service worker registered)
+- Structured data: WebApplication + FAQPage + BreadcrumbList
+- Custom 404 page with helpful navigation
+- All pages return correct HTTP status codes
+- Lint passes cleanly
