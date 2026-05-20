@@ -1,8 +1,12 @@
-const CACHE_NAME = 'betcalc-v1'
+const CACHE_NAME = 'betcalc-v2'
 const STATIC_ASSETS = [
   '/',
   '/manifest.json',
-  '/logo.svg',
+  '/logo-icon.png',
+  '/favicon-32x32.png',
+  '/favicon-16x16.png',
+  '/apple-touch-icon.png',
+  '/android-chrome-192x192.png',
 ]
 
 self.addEventListener('install', (event) => {
@@ -22,22 +26,46 @@ self.addEventListener('activate', (event) => {
 })
 
 self.addEventListener('fetch', (event) => {
-  // Network first, cache fallback for navigation
-  if (event.request.mode === 'navigate') {
+  const { request } = event
+
+  // Skip non-GET requests
+  if (request.method !== 'GET') return
+
+  // Skip Chrome extension requests
+  if (request.url.startsWith('chrome-extension://')) return
+
+  // Skip external API requests (AdSense, analytics)
+  if (request.url.includes('google') || request.url.includes('googlesyndication')) return
+
+  // Network first, cache fallback for navigation (HTML pages)
+  if (request.mode === 'navigate') {
     event.respondWith(
-      fetch(event.request).catch(() => caches.match('/'))
+      fetch(request)
+        .then((response) => {
+          const clone = response.clone()
+          caches.open(CACHE_NAME).then((cache) => cache.put(request, clone))
+          return response
+        })
+        .catch(() => caches.match('/'))
     )
     return
   }
 
-  // Cache first for static assets
-  if (event.request.url.includes('/_next/static/') || event.request.url.includes('/logo.svg')) {
+  // Cache first for static assets (images, fonts, CSS, JS)
+  if (
+    request.url.includes('/_next/static/') ||
+    request.url.includes('/logo') ||
+    request.url.includes('/favicon') ||
+    request.url.includes('/android-chrome') ||
+    request.url.includes('/apple-touch-icon') ||
+    request.url.includes('/manifest.json')
+  ) {
     event.respondWith(
-      caches.match(event.request).then((cached) => {
+      caches.match(request).then((cached) => {
         if (cached) return cached
-        return fetch(event.request).then((response) => {
+        return fetch(request).then((response) => {
           const clone = response.clone()
-          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone))
+          caches.open(CACHE_NAME).then((cache) => cache.put(request, clone))
           return response
         })
       })
@@ -45,8 +73,14 @@ self.addEventListener('fetch', (event) => {
     return
   }
 
-  // Network first for API calls
+  // Network first for everything else
   event.respondWith(
-    fetch(event.request).catch(() => caches.match(event.request))
+    fetch(request)
+      .then((response) => {
+        const clone = response.clone()
+        caches.open(CACHE_NAME).then((cache) => cache.put(request, clone))
+        return response
+      })
+      .catch(() => caches.match(request))
   )
 })

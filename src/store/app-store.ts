@@ -14,6 +14,7 @@ export type ToolPage =
   | 'strategy-generator'
   | 'artigos'
   | 'user-panel'
+  | 'faq'
   | 'privacy'
   | 'terms'
   | 'responsible-gaming'
@@ -140,6 +141,7 @@ export const toolInfo: Record<ToolPage, { name: string; description: string; ico
   'strategy-generator': { name: 'Gerador de Estratégias', description: 'Gere estratégias personalizadas de gestão', icon: 'Sparkles', category: 'simulators' },
   artigos: { name: 'Artigos', description: 'Artigos educacionais', icon: 'BookOpen', category: 'content' },
   'user-panel': { name: 'Meu Painel', description: 'Seu painel pessoal', icon: 'User', category: 'nav' },
+  'faq': { name: 'FAQ', description: 'Perguntas frequentes', icon: 'HelpCircle', category: 'legal' },
   'privacy': { name: 'Privacidade', description: 'Política de Privacidade', icon: 'Shield', category: 'legal' },
   'terms': { name: 'Termos', description: 'Termos de Uso', icon: 'FileText', category: 'legal' },
   'responsible-gaming': { name: 'Uso Responsável', description: 'Compromisso com uso responsável', icon: 'Heart', category: 'legal' },
@@ -162,6 +164,7 @@ export const toolHref: Record<ToolPage, string> = {
   'strategy-generator': '/strategy-generator',
   artigos: '/artigos',
   'user-panel': '/user-panel',
+  faq: '/faq',
   privacy: '/privacy',
   terms: '/terms',
   'responsible-gaming': '/responsible-gaming',

@@ -16,6 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ]
 
   const legal = [
+    'faq',
     'privacy',
     'terms',
     'responsible-gaming',

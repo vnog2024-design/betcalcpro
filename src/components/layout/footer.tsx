@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { TrendingUp, Shield, Mail, Heart, Info, Cookie, FileText, AlertTriangle } from 'lucide-react'
+import { TrendingUp, Shield, Mail, Heart, Info, Cookie, FileText, AlertTriangle, HelpCircle } from 'lucide-react'
 
 const toolLinks: { label: string; href: string }[] = [
   { label: 'Martingale', href: '/martingale' },
@@ -13,6 +13,7 @@ const toolLinks: { label: string; href: string }[] = [
 ]
 
 const legalLinks: { label: string; href: string; icon: React.ReactNode }[] = [
+  { label: 'Perguntas Frequentes', href: '/faq', icon: <HelpCircle className="h-3.5 w-3.5" /> },
   { label: 'Política de Privacidade', href: '/privacy', icon: <Shield className="h-3.5 w-3.5" /> },
   { label: 'Termos de Uso', href: '/terms', icon: <FileText className="h-3.5 w-3.5" /> },
   { label: 'Uso Responsável', href: '/responsible-gaming', icon: <Heart className="h-3.5 w-3.5" /> },
@@ -113,6 +114,10 @@ export function Footer() {
               © {new Date().getFullYear()} BetCalc Pro. Todos os direitos reservados.
             </p>
             <div className="flex items-center gap-3 text-xs text-muted-foreground">
+              <Link href="/faq" className="text-xs text-muted-foreground hover:text-neon-blue transition-colors">
+                FAQ
+              </Link>
+              <span className="text-border">•</span>
               <Link href="/privacy" className="text-xs text-muted-foreground hover:text-neon-blue transition-colors">
                 Privacidade
               </Link>
