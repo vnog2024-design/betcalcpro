@@ -41,7 +41,15 @@ export const metadata: Metadata = {
     "gratuito",
   ],
   authors: [{ name: "BetCalc Pro" }],
-  icons: { icon: "/logo.svg" },
+  icons: {
+    icon: [
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
   manifest: "/manifest.json",
   openGraph: {
     title: "BetCalc Pro — Ferramentas de Probabilidade e Gestão de Risco",
@@ -60,6 +68,7 @@ export const metadata: Metadata = {
     "mobile-web-app-capable": "yes",
     "apple-mobile-web-app-capable": "yes",
     "apple-mobile-web-app-status-bar-style": "black-translucent",
+    "google-adsense-account": "ca-pub-3765222786344373",
   },
 };
 

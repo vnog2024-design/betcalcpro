@@ -29,9 +29,11 @@ export function Footer() {
           {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-1">
             <div className="flex items-center gap-2 mb-3">
-              <div className="h-7 w-7 rounded gradient-neon flex items-center justify-center">
-                <span className="text-black font-bold text-xs">BC</span>
-              </div>
+              <img 
+                src="/logo-icon.png" 
+                alt="BetCalc Pro" 
+                className="h-7 w-7 rounded object-cover"
+              />
               <span className="font-bold gradient-neon-text text-lg">BetCalc Pro</span>
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed mb-3">

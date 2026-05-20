@@ -37,9 +37,11 @@ export function Header() {
             href="/"
             className="flex items-center gap-2.5 hover:opacity-80 transition-opacity"
           >
-            <div className="h-9 w-9 rounded-lg gradient-neon flex items-center justify-center">
-              <span className="text-black font-bold text-base">BC</span>
-            </div>
+            <img 
+              src="/logo-icon.png" 
+              alt="BetCalc Pro" 
+              className="h-9 w-9 rounded-lg object-cover"
+            />
             <div className="hidden sm:block">
               <h1 className="text-xl font-bold gradient-neon-text">BetCalc Pro</h1>
             </div>
