@@ -47,3 +47,65 @@ Stage Summary:
 - All visuals respond to theme color changes
 - Multiple layers create depth and visual richness
 - Added badge and stats bar for better first impression
+
+---
+Task ID: 2-b
+Agent: 404 + Links Fix Agent
+Task: Create custom 404 page and fix <a> tags to use Next.js <Link>
+
+Work Log:
+- Created /src/app/not-found.tsx — server component with metadata (title, description for SEO/AdSense) that renders the client component
+- Created /src/app/not-found-client.tsx — client component with styled 404 page featuring gradient-neon-text "404", navigation buttons (Página Inicial, Artigos, FAQ), and quick-access tool links (Martingale, Fibonacci, Bankroll, Soros)
+- Fixed /src/components/content/faq-content.tsx — replaced `<a href="/contact">` with `<Link href="/contact">` and added `import Link from 'next/link'`
+- Ran lint check — passes cleanly
+
+Stage Summary:
+- Custom 404 page handles not-found routes gracefully with helpful navigation links (important for AdSense approval)
+- All internal links in faq-content.tsx now use Next.js <Link> for client-side navigation instead of full page reloads
+
+---
+Task ID: 2-a
+Agent: SW + Structured Data Agent
+Task: Register Service Worker, add BreadcrumbList structured data, add google-site-verification meta tag
+
+Work Log:
+- Read current layout.tsx and worklog.md
+- Added Service Worker registration <Script> component (id="sw-register", strategy="afterInteractive") after the AdSense script tag — registers /sw.js on window load with silent error catch
+- Added BreadcrumbList JSON-LD structured data with 4 items (Início, Ferramentas, Artigos, FAQ) and corresponding <script type="application/ld+json"> tag in <head> after the FAQPage schema
+- Added "google-site-verification": "PENDING_VERIFICATION" to metadata.other object
+- Ran lint check — passes cleanly
+- Verified dev server compiles and serves pages without errors
+
+Stage Summary:
+- PWA install prompt (pwa-install-prompt.tsx) will now work on Android because the service worker /sw.js is being registered
+- BreadcrumbList structured data helps Google understand the site navigation hierarchy for rich search results
+- Google site verification placeholder is in place for when the user gets a code from Google Search Console
+
+---
+Task ID: 2-c
+Agent: Content Expansion Agent
+Task: Add 4 new educational articles to increase content depth (CRITICAL for AdSense)
+
+Work Log:
+- Read all 4 target files (article-content.tsx, articles-list.tsx, sitemap.ts, landing-page.tsx)
+- Added 4 new article entries to article-content.tsx:
+  1. 'paradoxo-monty-hall' — O Paradoxo de Monty Hall (Probabilidade, 6 min)
+  2. 'lei-grandes-numeros' — A Lei dos Grandes Números (Estatística, 8 min)
+  3. 'distribuicao-normal-gaussiana' — A Distribuição Normal (Gaussiana) (Estatística, 9 min)
+  4. 'introducao-teoria-jogos' — Introdução à Teoria dos Jogos (Matemática, 10 min)
+- Added 4 new article entries to articles-list.tsx with descriptions and icons
+- Added 'Probabilidade' category color to categoryColors in articles-list.tsx
+- Added 4 new article slugs to sitemap.ts articles array
+- Added 'paradoxo-monty-hall' to featuredArticles in landing-page.tsx
+- Added Lightbulb to lucide-react imports in landing-page.tsx
+- Updated article count from 8 to 12 in landing-page.tsx hero stats
+- Updated featured articles grid from 3-col to 4-col layout (lg:grid-cols-4)
+- Ran lint check — passes cleanly
+- Verified dev server returns 200 OK
+
+Stage Summary:
+- Site now has 12 educational articles (up from 8), meeting the AdSense minimum content threshold
+- New articles cover: probability (Monty Hall), statistics (Law of Large Numbers, Normal Distribution), and game theory (Prisoner's Dilemma, Nash Equilibrium)
+- All 4 new articles have full content, proper categorization, and consistent formatting
+- Sitemap includes all 12 article URLs
+- Landing page shows updated count and new featured article

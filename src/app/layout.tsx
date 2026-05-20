@@ -69,6 +69,7 @@ export const metadata: Metadata = {
     "apple-mobile-web-app-capable": "yes",
     "apple-mobile-web-app-status-bar-style": "black-translucent",
     "google-adsense-account": "ca-pub-3765222786344373",
+    "google-site-verification": "PENDING_VERIFICATION",
   },
 };
 
@@ -139,6 +140,37 @@ export default function RootLayout({
     ]
   };
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Início",
+        "item": "https://betcalcpro.com.br"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Ferramentas",
+        "item": "https://betcalcpro.com.br/martingale"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Artigos",
+        "item": "https://betcalcpro.com.br/artigos"
+      },
+      {
+        "@type": "ListItem",
+        "position": 4,
+        "name": "FAQ",
+        "item": "https://betcalcpro.com.br/faq"
+      }
+    ]
+  };
+
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <head>
@@ -148,6 +180,15 @@ export default function RootLayout({
           crossOrigin="anonymous"
           strategy="afterInteractive"
         />
+        <Script id="sw-register" strategy="afterInteractive">
+          {`
+            if ('serviceWorker' in navigator) {
+              window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js').catch(function() {});
+              });
+            }
+          `}
+        </Script>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -155,6 +196,10 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
         />
         <script
           dangerouslySetInnerHTML={{

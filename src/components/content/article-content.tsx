@@ -565,6 +565,340 @@ const articles: Record<string, {
       </div>
     ),
   },
+  'paradoxo-monty-hall': {
+    title: 'O Paradoxo de Monty Hall',
+    category: 'Probabilidade',
+    readTime: '6 min',
+    icon: Lightbulb,
+    content: (
+      <div className="prose prose-sm dark:prose-invert max-w-none space-y-6">
+        <p className="text-base leading-relaxed">
+          O paradoxo de Monty Hall é um dos problemas de probabilidade mais contra-intuitivos já formulados. 
+          Baseado no programa de TV americano &quot;Let&apos;s Make a Deal&quot; apresentado por Monty Hall, este problema 
+          desafia nossa intuição sobre probabilidade de forma surpreendente.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">O Problema</h2>
+        <p className="text-base leading-relaxed">
+          Imagine que você está em um programa de TV e há 3 portas. Atrás de uma porta há um prêmio (um carro) 
+          e atrás das outras duas há bodes. Você escolhe uma porta (digamos, a porta 1). O apresentador, que 
+          sabe o que está atrás de cada porta, abre uma das outras portas revelando um bode (digamos, a porta 3). 
+          Ele então pergunta: &quot;Você quer trocar para a porta 2?&quot;
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">A Resposta Contra-Intuitiva</h2>
+        <p className="text-base leading-relaxed">
+          A maioria das pessoas acredita que, com duas portas restantes, a probabilidade é 50-50, então tanto 
+          faz trocar ou não. Mas a resposta correta é: <strong className="text-foreground">você deve sempre trocar</strong>, 
+          pois trocar dá 2/3 de chance de ganhar, enquanto manter dá apenas 1/3.
+        </p>
+
+        <div className="p-4 rounded-lg bg-muted/30 border border-border/50">
+          <p className="text-center font-mono text-lg">
+            Manter a escolha: 1/3 ≈ 33,3% de chance de ganhar
+          </p>
+          <p className="text-center font-mono text-lg">
+            Trocar de porta: 2/3 ≈ 66,7% de chance de ganhar
+          </p>
+        </div>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Por Que Funciona?</h2>
+        <p className="text-base leading-relaxed">
+          A chave está em entender que o apresentador NÃO abre uma porta aleatoriamente — ele sempre abre 
+          uma porta com bode. Quando você escolhe inicialmente, há 1/3 de chance de ter escolhido o carro 
+          e 2/3 de chance de ter escolhido um bode. Se escolheu o carro (1/3), trocar faz você perder. 
+          Se escolheu um bode (2/3), trocar faz você ganhar, pois o apresentador já eliminou o outro bode.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Simulação com 100 Portas</h2>
+        <p className="text-base leading-relaxed">
+          Para entender melhor, imagine 100 portas: 1 carro e 99 bodes. Você escolhe uma porta (1% de chance 
+          de ser o carro). O apresentador abre 98 portas com bodes, restando apenas a sua porta e mais uma. 
+          Trocar? É óbvio que sim — há 99% de chance de que o carro esteja na outra porta. O mesmo princípio 
+          se aplica com 3 portas, apenas com probabilidades menores.
+        </p>
+
+        <div className="mt-8 p-4 rounded-lg border border-neon-blue/30 bg-neon-blue/5">
+          <div className="flex items-center gap-2 mb-2">
+            <Lightbulb className="h-5 w-5 text-neon-blue" />
+            <h3 className="font-bold text-neon-blue">Lição Importante</h3>
+          </div>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            O paradoxo de Monty Hall ilustra como informações adicionais (a ação do apresentador) mudam 
+            as probabilidades. Nossa intuição frequentemente falha com probabilidade condicional — por isso 
+            é tão importante usar matemática rigorosa em vez de &quot;bom senso&quot; quando lidamos com incerteza.
+          </p>
+        </div>
+      </div>
+    ),
+  },
+  'lei-grandes-numeros': {
+    title: 'A Lei dos Grandes Números',
+    category: 'Estatística',
+    readTime: '8 min',
+    icon: BarChart3,
+    content: (
+      <div className="prose prose-sm dark:prose-invert max-w-none space-y-6">
+        <p className="text-base leading-relaxed">
+          A Lei dos Grandes Números (LGN) é um dos teoremas mais importantes da teoria das probabilidades. 
+          Ela afirma que, à medida que o número de tentativas de um experimento aleatório aumenta, a média 
+          dos resultados observados converge para o valor esperado teórico. Em termos simples: quanto mais 
+          você repete um experimento, mais a média se aproxima do que a teoria prevê.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Exemplo com Moeda</h2>
+        <p className="text-base leading-relaxed">
+          Se você lançar uma moeda justa 10 vezes, pode obter 7 caras (70%). Com 100 lançamentos, talvez 
+          55 caras (55%). Com 1.000 lançamentos, provavelmente algo como 505 caras (50,5%). Com 1.000.000 
+          de lançamentos, a proporção será extremamente próxima de 50%. A LGN garante essa convergência.
+        </p>
+
+        <div className="p-4 rounded-lg bg-muted/30 border border-border/50">
+          <p className="text-center font-mono">
+            10 lançamentos: ~70% possível<br/>
+            100 lançamentos: ~55% provável<br/>
+            1.000 lançamentos: ~50,5% esperado<br/>
+            1.000.000 lançamentos: ~50,01% praticamente certo
+          </p>
+        </div>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">LGN Fraca vs. Forte</h2>
+        <div className="space-y-4">
+          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+            <h3 className="font-bold text-base mb-2">Lei Fraca (Convergência em Probabilidade)</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              A LGN fraca diz que, para qualquer ε {'>'} 0, a probabilidade de |X̄ₙ - μ| {'>'} ε tende a zero 
+              quando n → ∞. Ou seja, a média amostral se aproxima do valor esperado em probabilidade — 
+              fica cada vez mais improvável que esteja longe do valor verdadeiro.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+            <h3 className="font-bold text-base mb-2">Lei Forte (Convergência Quase Certa)</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              A LGN forte vai além: diz que X̄ₙ converge para μ com probabilidade 1. Isso significa que 
+              a média amostral quase certamente se estabiliza no valor esperado. A LGN forte implica a fraca, 
+              mas não o contrário.
+            </p>
+          </div>
+        </div>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Aplicações Práticas</h2>
+        <ul className="space-y-2 text-base text-muted-foreground">
+          <li className="flex gap-2"><span className="text-neon">•</span> <strong className="text-foreground">Seguros:</strong> Com muitos segurados, o custo médio por apólice converge para o previsto</li>
+          <li className="flex gap-2"><span className="text-neon">•</span> <strong className="text-foreground">Qualidade:</strong> Amostras grandes representam melhor a população</li>
+          <li className="flex gap-2"><span className="text-neon">•</span> <strong className="text-foreground">Pesquisas:</strong> Mais entrevistados = resultados mais precisos</li>
+          <li className="flex gap-2"><span className="text-neon">•</span> <strong className="text-foreground">Casinos:</strong> A &quot;vantagem da casa&quot; se manifesta no longo prazo</li>
+        </ul>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Interpretação Equivocada Comum</h2>
+        <p className="text-base leading-relaxed">
+          A LGN NÃO diz que desvios serão &quot;compensados&quot;. Se uma moeda cair 10 vezes em cara, a LGN não 
+          garante que as próximas 10 serão coroa. A convergência ocorre pela diluição: as 10 caras extras 
+          se tornam insignificantes quando divididas por milhares de lançamentos. A moeda não tem memória — 
+          cada lançamento é independente.
+        </p>
+
+        <div className="mt-8 p-4 rounded-lg border border-amber-500/30 bg-amber-500/5">
+          <div className="flex items-center gap-2 mb-2">
+            <AlertTriangle className="h-5 w-5 text-amber-500" />
+            <h3 className="font-bold text-amber-500">Atenção</h3>
+          </div>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            Confundir a LGN com a &quot;falácia do apostador&quot; é um erro grave. A LGN descreve convergência 
+            estatística no longo prazo, não compensação de desvios no curto prazo. Resultados passados 
+            de eventos independentes não influenciam resultados futuros.
+          </p>
+        </div>
+      </div>
+    ),
+  },
+  'distribuicao-normal-gaussiana': {
+    title: 'A Distribuição Normal (Gaussiana)',
+    category: 'Estatística',
+    readTime: '9 min',
+    icon: BarChart3,
+    content: (
+      <div className="prose prose-sm dark:prose-invert max-w-none space-y-6">
+        <p className="text-base leading-relaxed">
+          A distribuição normal, também chamada de distribuição gaussiana, é a mais importante da estatística. 
+          Sua forma de &quot;sino&quot; simétrico aparece naturalmente em inúmeros fenômenos: alturas de pessoas, 
+          erros de medição, notas de provas, pressão arterial e muito mais. Entendê-la é essencial para 
+          qualquer análise estatística.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Características da Distribuição Normal</h2>
+        <div className="space-y-4">
+          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+            <h3 className="font-bold text-base mb-2">Simetria</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              A distribuição normal é perfeitamente simétrica em torno da média. A metade esquerda é espelho 
+              da metade direita. A média, mediana e moda são iguais e estão no centro da distribuição.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+            <h3 className="font-bold text-base mb-2">Parâmetros: μ e σ</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              A distribuição normal é completamente definida por dois parâmetros: a média (μ), que define 
+              o centro, e o desvio padrão (σ), que define a dispersão. A notação é N(μ, σ²). 
+              A distribuição padrão é N(0, 1), com média zero e desvio padrão 1.
+            </p>
+          </div>
+        </div>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">A Regra 68-95-99,7</h2>
+        <p className="text-base leading-relaxed">
+          Esta é a propriedade mais útil da distribuição normal:
+        </p>
+        <div className="p-4 rounded-lg bg-muted/30 border border-border/50">
+          <p className="text-center font-mono">
+            68,27% dos dados estão entre μ-1σ e μ+1σ<br/>
+            95,45% dos dados estão entre μ-2σ e μ+2σ<br/>
+            99,73% dos dados estão entre μ-3σ e μ+3σ
+          </p>
+        </div>
+        <p className="text-base leading-relaxed mt-4">
+          Por exemplo, se a altura média de adultos é 170cm com desvio padrão de 10cm, então 68% das pessoas 
+          têm entre 160cm e 180cm, 95% entre 150cm e 190cm, e 99,7% entre 140cm e 200cm.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Teorema Central do Limite</h2>
+        <p className="text-base leading-relaxed">
+          O Teorema Central do Limite (TCL) explica por que a distribuição normal aparece em tantos lugares. 
+          Ele afirma que a média de um grande número de variáveis aleatórias independentes, independentemente 
+          de suas distribuições individuais, converge para uma distribuição normal. É por isso que a 
+          distribuição normal é tão ubíqua — ela emerge naturalmente quando muitos fatores independentes 
+          se combinam.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Pontuação Z (Z-Score)</h2>
+        <p className="text-base leading-relaxed">
+          A pontuação Z mede quantos desvios padrão um valor está acima ou abaixo da média. A fórmula é:
+        </p>
+        <div className="p-4 rounded-lg bg-muted/30 border border-border/50">
+          <p className="text-center font-mono text-lg">
+            Z = (X - μ) / σ
+          </p>
+        </div>
+        <p className="text-base leading-relaxed mt-4">
+          Um Z-score de 2 significa que o valor está 2 desvios padrão acima da média. Isso permite comparar 
+          valores de distribuições diferentes e calcular probabilidades usando a tabela Z padrão.
+        </p>
+
+        <div className="mt-8 p-4 rounded-lg border border-neon-blue/30 bg-neon-blue/5">
+          <div className="flex items-center gap-2 mb-2">
+            <Lightbulb className="h-5 w-5 text-neon-blue" />
+            <h3 className="font-bold text-neon-blue">Aplicação Prática</h3>
+          </div>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            A distribuição normal é a base de testes de hipóteses, intervalos de confiança, controle 
+            estatístico de qualidade e análise de risco. Compreender seus princípios permite interpretar 
+            dados e tomar decisões baseadas em evidência estatística.
+          </p>
+        </div>
+      </div>
+    ),
+  },
+  'introducao-teoria-jogos': {
+    title: 'Introdução à Teoria dos Jogos',
+    category: 'Matemática',
+    readTime: '10 min',
+    icon: Calculator,
+    content: (
+      <div className="prose prose-sm dark:prose-invert max-w-none space-y-6">
+        <p className="text-base leading-relaxed">
+          A teoria dos jogos é o estudo matemático de situações estratégicas, onde o resultado para cada 
+          participante depende das ações de todos os outros. Desenvolvida por John von Neumann e Oskar 
+          Morgenstern na década de 1940, a teoria dos jogos revolucionou a economia, a ciência política, 
+          a biologia evolutiva e muitas outras áreas.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">O Dilema do Prisioneiro</h2>
+        <p className="text-base leading-relaxed">
+          O dilema do prisioneiro é o exemplo mais famoso da teoria dos jogos. Dois suspeitos são presos 
+          e interrogados separadamente. Cada um pode cooperar (ficar em silêncio) ou trair (confessar). 
+          Se ambos cooperarem, cada um pega 1 ano. Se ambos traírem, cada um pega 5 anos. Se um trair e 
+          o outro cooperar, o traidor sai livre e o cooperador pega 10 anos.
+        </p>
+        <div className="p-4 rounded-lg bg-muted/30 border border-border/50">
+          <table className="w-full text-sm text-center">
+            <thead>
+              <tr className="border-b border-border/50">
+                <th className="p-2"></th>
+                <th className="p-2">B Cooperar</th>
+                <th className="p-2">B Trair</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-b border-border/30">
+                <td className="p-2 font-semibold">A Cooperar</td>
+                <td className="p-2">A: 1 ano, B: 1 ano</td>
+                <td className="p-2">A: 10 anos, B: livre</td>
+              </tr>
+              <tr>
+                <td className="p-2 font-semibold">A Trair</td>
+                <td className="p-2">A: livre, B: 10 anos</td>
+                <td className="p-2">A: 5 anos, B: 5 anos</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="text-base leading-relaxed mt-4">
+          O resultado racional individual (ambos traem) é pior para ambos do que se cooperassem. 
+          Esse paradoxo está no coração de muitos problemas do mundo real, da política ambiental 
+          às corridas armamentistas.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Conceitos Fundamentais</h2>
+        <div className="space-y-4">
+          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+            <h3 className="font-bold text-base mb-2">Equilíbrio de Nash</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Um equilíbrio de Nash ocorre quando nenhum jogador pode melhorar seu resultado mudando 
+              sua estratégia unilateralmente. No dilema do prisioneiro, ambos traírem é o equilíbrio 
+              de Nash — mesmo sendo subótimo. John Nash recebeu o Nobel de Economia por esta contribuição.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+            <h3 className="font-bold text-base mb-2">Jogos de Soma Zero</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Em um jogo de soma zero, o ganho de um jogador é exatamente a perda do outro. Xadrez, 
+              por exemplo, é um jogo de soma zero. Já negociações comerciais geralmente não são — ambos 
+              podem se beneficiar (soma positiva). Identificar o tipo de jogo é crucial para escolher 
+              a estratégia adequada.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+            <h3 className="font-bold text-base mb-2">Estratégia Dominante</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Uma estratégia dominante é aquela que produz o melhor resultado independente do que o 
+              outro jogador fizer. No dilema do prisioneiro, trair é a estratégia dominante — sempre 
+              produz resultado igual ou melhor que cooperar, não importa o que o outro faça.
+            </p>
+          </div>
+        </div>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Aplicações no Mundo Real</h2>
+        <ul className="space-y-2 text-base text-muted-foreground">
+          <li className="flex gap-2"><span className="text-neon">•</span> <strong className="text-foreground">Economia:</strong> Leilões, negociação, oligopólios, regulação</li>
+          <li className="flex gap-2"><span className="text-neon">•</span> <strong className="text-foreground">Biologia:</strong> Evolução, seleção natural, comportamento animal</li>
+          <li className="flex gap-2"><span className="text-neon">•</span> <strong className="text-foreground">Ciência Política:</strong> Votação, negociações internacionais, dissuasão</li>
+          <li className="flex gap-2"><span className="text-neon">•</span> <strong className="text-foreground">Tecnologia:</strong> Design de mecanismos, sistemas de reputação, blockchain</li>
+        </ul>
+
+        <div className="mt-8 p-4 rounded-lg border border-neon-blue/30 bg-neon-blue/5">
+          <div className="flex items-center gap-2 mb-2">
+            <Lightbulb className="h-5 w-5 text-neon-blue" />
+            <h3 className="font-bold text-neon-blue">Conexão com Probabilidade</h3>
+          </div>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            A teoria dos jogos se conecta profundamente com probabilidade quando os jogadores usam 
+            estratégias mistas (escolhendo ações com certas probabilidades). O Minimax de von Neumann 
+            garante que todo jogo de soma zero com dois jogadores tem um equilíbrio em estratégias mistas.
+          </p>
+        </div>
+      </div>
+    ),
+  },
 }
 
 export function ArticleContent({ slug }: { slug: string }) {

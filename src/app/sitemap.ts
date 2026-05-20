@@ -34,6 +34,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     'simulacao-monte-carlo',
     'falacias-estatisticas',
     'valor-esperado-matematico',
+    'paradoxo-monty-hall',
+    'lei-grandes-numeros',
+    'distribuicao-normal-gaussiana',
+    'introducao-teoria-jogos',
   ]
 
   const now = new Date()

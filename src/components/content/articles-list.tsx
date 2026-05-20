@@ -70,6 +70,38 @@ const articles = [
     category: 'Fundamentos',
     readTime: '7 min',
   },
+  {
+    slug: 'paradoxo-monty-hall',
+    title: 'O Paradoxo de Monty Hall',
+    description: 'Descubra por que trocar de porta no famoso paradoxo de Monty Hall dobra suas chances. Um problema de probabilidade condicional que desafia a intuição.',
+    icon: Lightbulb,
+    category: 'Probabilidade',
+    readTime: '6 min',
+  },
+  {
+    slug: 'lei-grandes-numeros',
+    title: 'A Lei dos Grandes Números',
+    description: 'Entenda por que a média dos resultados converge para o valor esperado conforme o número de experimentos aumenta e evite interpretações equivocadas.',
+    icon: BarChart3,
+    category: 'Estatística',
+    readTime: '8 min',
+  },
+  {
+    slug: 'distribuicao-normal-gaussiana',
+    title: 'A Distribuição Normal (Gaussiana)',
+    description: 'Conheça a distribuição mais importante da estatística: a regra 68-95-99,7, o Teorema Central do Limite e a pontuação Z explicadas de forma clara.',
+    icon: BarChart3,
+    category: 'Estatística',
+    readTime: '9 min',
+  },
+  {
+    slug: 'introducao-teoria-jogos',
+    title: 'Introdução à Teoria dos Jogos',
+    description: 'Explore o dilema do prisioneiro, o equilíbrio de Nash e estratégias dominantes. A matemática das decisões estratégicas explicada de forma acessível.',
+    icon: Calculator,
+    category: 'Matemática',
+    readTime: '10 min',
+  },
 ]
 
 const categoryColors: Record<string, string> = {
@@ -79,6 +111,7 @@ const categoryColors: Record<string, string> = {
   'Análise': 'bg-amber-500/10 text-amber-500 border-amber-500/20',
   'Estatística': 'bg-neon-blue/10 text-neon-blue border-neon-blue/20',
   'Simulação': 'bg-neon/10 text-neon border-neon/20',
+  'Probabilidade': 'bg-neon/10 text-neon border-neon/20',
 }
 
 export function ArticlesList() {

@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { HelpCircle, Calculator, Shield, BookOpen, Smartphone, CreditCard, BarChart3, AlertTriangle } from 'lucide-react'
 
@@ -164,12 +165,12 @@ export function FAQContent() {
         <p className="text-sm text-muted-foreground mb-4 max-w-md mx-auto">
           Se você não encontrou a resposta que procurava, entre em contato conosco.
         </p>
-        <a
+        <Link
           href="/contact"
           className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg gradient-neon text-black font-bold text-sm hover:opacity-90 transition-opacity"
         >
           Fale Conosco
-        </a>
+        </Link>
       </div>
 
       {/* Install CTA */}

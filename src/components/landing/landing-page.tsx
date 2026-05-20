@@ -10,7 +10,7 @@ import { HeroVisual } from '@/components/shared/hero-visual'
 import { 
   TrendingUp, BarChart3, Calculator, Sparkles, 
   ArrowRight, ChevronRight, Target, Coins, AlertTriangle,
-  Search, Percent, Shield, BookOpen
+  Search, Percent, Shield, BookOpen, Lightbulb
 } from 'lucide-react'
 
 const allTools: { id: ToolPage; icon: React.ComponentType<{ className?: string }>; color: string }[] = [
@@ -50,6 +50,12 @@ const featuredArticles = [
     title: 'Falácias Estatísticas Comuns',
     desc: 'Conheça os vieses cognitivos mais comuns e aprenda a pensar de forma mais racional.',
     icon: AlertTriangle,
+  },
+  {
+    slug: 'paradoxo-monty-hall',
+    title: 'O Paradoxo de Monty Hall',
+    desc: 'Descubra por que trocar de porta dobra suas chances neste famoso problema de probabilidade.',
+    icon: Lightbulb,
   },
 ]
 
@@ -113,7 +119,7 @@ export function LandingPage() {
               </div>
               <div className="flex items-center gap-2">
                 <BookOpen className="h-4 w-4 text-purple-500" />
-                <span className="text-sm text-muted-foreground"><span className="font-bold text-foreground">8</span> Artigos</span>
+                <span className="text-sm text-muted-foreground"><span className="font-bold text-foreground">12</span> Artigos</span>
               </div>
               <div className="flex items-center gap-2">
                 <Shield className="h-4 w-4 text-neon" />
@@ -206,7 +212,7 @@ export function LandingPage() {
             Ver todos <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {featuredArticles.map((article) => {
             const Icon = article.icon
             return (
