@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { ArrowLeft, BookOpen, Calculator, TrendingUp, BarChart3, Lightbulb, AlertTriangle } from 'lucide-react'
+import { AdInContent } from '@/components/shared/ad-banner'
 
 const articles: Record<string, {
   title: string
@@ -947,8 +948,14 @@ export function ArticleContent({ slug }: { slug: string }) {
       {/* Separator */}
       <hr className="border-border/50" />
 
+      {/* Ad — After header */}
+      <AdInContent />
+
       {/* Article content */}
       {article.content}
+
+      {/* Ad — After content */}
+      <AdInContent />
     </div>
   )
 }

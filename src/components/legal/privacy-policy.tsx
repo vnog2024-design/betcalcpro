@@ -16,6 +16,7 @@ import {
   Globe,
   AlertTriangle,
 } from 'lucide-react'
+import { AdBanner } from '@/components/shared/ad-banner'
 
 export function PrivacyPolicy() {
   return (
@@ -417,6 +418,9 @@ export function PrivacyPolicy() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Ad */}
+      <AdBanner className="mt-6" />
     </div>
   )
 }

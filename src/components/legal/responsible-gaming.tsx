@@ -17,6 +17,7 @@ import {
   Brain,
   Scale,
 } from 'lucide-react'
+import { AdBanner } from '@/components/shared/ad-banner'
 
 export function ResponsibleGaming() {
   return (
@@ -358,6 +359,9 @@ export function ResponsibleGaming() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Ad */}
+      <AdBanner className="mt-6" />
     </div>
   )
 }

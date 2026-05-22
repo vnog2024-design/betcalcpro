@@ -20,6 +20,7 @@ import {
   Building2,
   AlertCircle,
 } from 'lucide-react'
+import { AdBanner } from '@/components/shared/ad-banner'
 
 export function ContactPage() {
   const { toast } = useToast()
@@ -378,6 +379,8 @@ export function ContactPage() {
           </div>
         </CardContent>
       </Card>
+
+      <AdBanner className="mt-6" />
 
       <div className="text-center space-y-2">
         <p className="text-xs text-muted-foreground">

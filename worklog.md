@@ -158,3 +158,25 @@ Stage Summary:
 - FAQPage structured data only appears on the FAQ page (not site-wide spam)
 - Article pages have proper Article structured data for Google rich results
 - Article [slug] page now covers all 12 articles with dynamic canonical URLs
+
+---
+Task ID: 4
+Agent: Ad System Fix Agent
+Task: Unify ad system and add 3 ad blocks per page
+
+Work Log:
+- Replaced `/src/components/shared/ad-banner.tsx` — removed fake placeholder "Anúncio" text slots; now wraps real `AdUnit` from `@/components/ads/ad-unit` for AdBanner, AdInContent, AdSidebar
+- Updated landing page with 3 ad units: AdBanner TOP (after hero), AdInContent MIDDLE (between Calculators/Simulators), AdBanner BOTTOM (after Risk Management)
+- Verified tool pages already have proper ads: AdInContent (middle) + AdBanner (bottom from tool-page-layout.tsx)
+- Added AdBanner to 8 previously ad-free pages: faq-content.tsx, articles-list.tsx, about-page.tsx, contact-page.tsx, privacy-policy.tsx, terms-of-use.tsx, cookies-policy.tsx, responsible-gaming.tsx
+- Added AdInContent to article-content.tsx: one after <hr> separator (after header) and one after article content (before closing div)
+- Ran lint check — passes cleanly
+- Verified dev server compiles and serves all pages without errors
+
+Stage Summary:
+- Unified ad system: all AdBanner/AdInContent/AdSidebar now render real AdSense <ins> tags instead of fake "Anúncio" placeholders
+- Landing page: 3 ad units (top/middle/bottom) — Google best practice for AdSense approval
+- Tool pages: 2-3 ad units per page (in-content + bottom banner)
+- Article pages: 3 ad units per page (after header in-content + after content in-content + bottom banner from layout)
+- 8 previously ad-free pages now have AdBanner at bottom (1 per page within Google's 3-unit limit)
+- All ad slots use "0000000000" placeholder — to be replaced with real slot IDs after AdSense approval

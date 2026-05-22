@@ -1,27 +1,16 @@
 'use client'
 
-// AdSense banner component — insert your publisher ID and slot IDs when ready
-export function AdBanner({ slot, className = '' }: { slot: string; className?: string }) {
+import { AdUnit } from '@/components/ads/ad-unit'
+
+// Horizontal banner ad — top/bottom of pages
+export function AdBanner({ className = '' }: { slot?: string; className?: string }) {
   return (
-    <div className={`ad-container ${className}`}>
-      <div 
-        className="ad-slot min-h-[90px] flex items-center justify-center rounded-lg border border-border/30 bg-muted/10"
-        data-ad-slot={slot}
-        data-ad-format="horizontal"
-      >
-        {/* 
-          AdSense code will be inserted here when approved.
-          Replace with:
-          <ins className="adsbygoogle"
-            style={{ display: 'block' }}
-            data-ad-client="ca-pub-XXXXXXXXXX"
-            data-ad-slot="XXXXXXX"
-            data-ad-format="auto"
-            data-full-width-responsive="true"
-          />
-        */}
-        <span className="text-xs text-muted-foreground/40">Anúncio</span>
-      </div>
+    <div className={`w-full ${className}`}>
+      <AdUnit
+        adSlot="0000000000"
+        adFormat="horizontal"
+        style={{ display: 'block', minHeight: '90px' }}
+      />
     </div>
   )
 }
@@ -29,13 +18,12 @@ export function AdBanner({ slot, className = '' }: { slot: string; className?: s
 // In-content ad — placed between sections for higher RPM
 export function AdInContent({ className = '' }: { className?: string }) {
   return (
-    <div className={`ad-container my-6 ${className}`}>
-      <div 
-        className="ad-slot min-h-[250px] flex items-center justify-center rounded-lg border border-border/30 bg-muted/10"
-        data-ad-format="fluid"
-      >
-        <span className="text-xs text-muted-foreground/40">Anúncio</span>
-      </div>
+    <div className={`w-full my-6 ${className}`}>
+      <AdUnit
+        adSlot="0000000000"
+        adFormat="fluid"
+        style={{ display: 'block' }}
+      />
     </div>
   )
 }
@@ -43,13 +31,12 @@ export function AdInContent({ className = '' }: { className?: string }) {
 // Sidebar ad — vertical format
 export function AdSidebar({ className = '' }: { className?: string }) {
   return (
-    <div className={`ad-container ${className}`}>
-      <div 
-        className="ad-slot min-h-[600px] flex items-center justify-center rounded-lg border border-border/30 bg-muted/10"
-        data-ad-format="vertical"
-      >
-        <span className="text-xs text-muted-foreground/40">Anúncio</span>
-      </div>
+    <div className={`w-full ${className}`}>
+      <AdUnit
+        adSlot="0000000000"
+        adFormat="vertical"
+        style={{ display: 'block', minHeight: '250px', width: '300px' }}
+      />
     </div>
   )
 }

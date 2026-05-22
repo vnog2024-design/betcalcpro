@@ -18,6 +18,7 @@ import {
   BookOpen,
   Eye,
 } from 'lucide-react'
+import { AdBanner } from '@/components/shared/ad-banner'
 
 export function TermsOfUse() {
   return (
@@ -365,6 +366,9 @@ export function TermsOfUse() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Ad */}
+      <AdBanner className="mt-6" />
     </div>
   )
 }

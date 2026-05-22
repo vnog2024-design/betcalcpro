@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { AdBanner } from '@/components/shared/ad-banner'
 import { Calculator, BarChart3, TrendingUp, BookOpen, Lightbulb, AlertTriangle, ArrowRight } from 'lucide-react'
 
 const articles = [
@@ -165,6 +166,9 @@ export function ArticlesList() {
           )
         })}
       </div>
+
+      {/* Ad */}
+      <AdBanner className="mt-6" />
     </div>
   )
 }

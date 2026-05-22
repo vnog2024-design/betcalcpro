@@ -16,6 +16,7 @@ import {
   Mail,
   Shield,
 } from 'lucide-react'
+import { AdBanner } from '@/components/shared/ad-banner'
 
 export function CookiesPolicy() {
   return (
@@ -587,6 +588,9 @@ export function CookiesPolicy() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Ad */}
+      <AdBanner className="mt-6" />
     </div>
   )
 }

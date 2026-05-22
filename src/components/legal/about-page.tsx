@@ -19,6 +19,7 @@ import {
   Lightbulb,
   Globe,
 } from 'lucide-react'
+import { AdBanner } from '@/components/shared/ad-banner'
 
 export function AboutPage() {
   return (
@@ -412,6 +413,9 @@ export function AboutPage() {
           </section>
         </CardContent>
       </Card>
+
+      {/* Ad */}
+      <AdBanner className="mt-6" />
     </div>
   )
 }
