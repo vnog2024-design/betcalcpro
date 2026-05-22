@@ -10,6 +10,7 @@ export function AdBanner({ className = '' }: { slot?: string; className?: string
         adSlot="0000000000"
         adFormat="horizontal"
         style={{ display: 'block', minHeight: '90px' }}
+        label="Anúncio"
       />
     </div>
   )
@@ -23,6 +24,7 @@ export function AdInContent({ className = '' }: { className?: string }) {
         adSlot="0000000000"
         adFormat="fluid"
         style={{ display: 'block' }}
+        label="Anúncio"
       />
     </div>
   )
@@ -36,6 +38,7 @@ export function AdSidebar({ className = '' }: { className?: string }) {
         adSlot="0000000000"
         adFormat="vertical"
         style={{ display: 'block', minHeight: '250px', width: '300px' }}
+        label="Anúncio"
       />
     </div>
   )
