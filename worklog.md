@@ -180,3 +180,22 @@ Stage Summary:
 - Article pages: 3 ad units per page (after header in-content + after content in-content + bottom banner from layout)
 - 8 previously ad-free pages now have AdBanner at bottom (1 per page within Google's 3-unit limit)
 - All ad slots use "0000000000" placeholder — to be replaced with real slot IDs after AdSense approval
+
+---
+Task ID: 5
+Agent: Main
+Task: Fix disappeared ad blocks — add visible placeholders for AdSense pre-approval
+
+Work Log:
+- Investigated missing ad blocks — found the real AdSense <ins> tags were rendering but invisible because placeholder slot ID "0000000000" doesn't serve real ads
+- Updated /src/components/ads/ad-unit.tsx — added useState/useEffect to detect if ad has loaded, shows dashed-border placeholder with "Anúncio" label when no ad is served
+- Updated /src/components/shared/ad-banner.tsx — added consistent label prop to AdBanner, AdInContent, AdSidebar
+- Placeholder is subtle (dashed border, muted text) — disappears automatically when real AdSense ad fills the slot
+- Lint passes, dev server compiles, all pages return 200
+- Pushed to GitHub (commit 017b529) — Vercel will auto-deploy
+
+Stage Summary:
+- Ad blocks now VISIBLE on all pages as subtle dashed-border placeholders with "Anúncio" text
+- When AdSense approves and serves real ads, placeholders automatically disappear and real ads show
+- Landing page: 3 ad blocks (top/middle/bottom), tools: 2 (in-content/bottom), articles: 3, other pages: 1-2
+- All changes deployed via GitHub push to Vercel
