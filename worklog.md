@@ -134,3 +134,27 @@ Stage Summary:
 - Custom 404 page with helpful navigation
 - All pages return correct HTTP status codes
 - Lint passes cleanly
+
+---
+Task ID: 3
+Agent: SEO Fix Agent
+Task: Fix critical SEO issues — canonical URLs, FAQPage structured data placement, Article structured data
+
+Work Log:
+- Added `alternates.canonical` and `openGraph.url` to 20 pages total (layout + 19 sub-pages)
+- Pages updated: layout.tsx (root), faq, about, contact, privacy, terms, cookies, responsible-gaming, artigos, artigos/[slug], martingale, fibonacci, bankroll, soros, masaniello, recovery, sequence-analyzer, probability-simulator, strategy-generator, user-panel
+- Removed FAQPage JSON-LD from layout.tsx (was appearing on every page — flagged as spam by Google)
+- Added FAQPage JSON-LD only to /faq/page.tsx (where FAQ content actually exists)
+- Added Article JSON-LD structured data to /artigos/[slug]/page.tsx with headline, description, author, publisher, url, mainEntityOfPage, inLanguage, datePublished, dateModified
+- Made ArticlePage component async to await params for slug-based JSON-LD generation
+- Moved articles map to module level in [slug]/page.tsx for shared access between generateMetadata and page component
+- Added 4 missing article entries to [slug]/page.tsx articles map (paradoxo-monty-hall, lei-grandes-numeros, distribuicao-normal-gaussiana, introducao-teoria-jogos) — now all 12 articles have proper metadata
+- Ran lint check — passes cleanly
+- Verified dev server compiles and serves pages without errors
+
+Stage Summary:
+- Every page now has a canonical URL tag for proper Google indexing (prevents duplicate content issues)
+- Every page with openGraph now has og:url for social sharing accuracy
+- FAQPage structured data only appears on the FAQ page (not site-wide spam)
+- Article pages have proper Article structured data for Google rich results
+- Article [slug] page now covers all 12 articles with dynamic canonical URLs
