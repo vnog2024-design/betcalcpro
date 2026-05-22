@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { toolInfo, toolHref, type ToolPage } from '@/store/app-store'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { AdInContent, AdBanner } from '@/components/shared/ad-banner'
+import { AdBannerTop, AdBannerMiddle, AdBannerBottom, AdInContent } from '@/components/ads/ad-unit'
 import { HeroVisual } from '@/components/shared/hero-visual'
 import { 
   TrendingUp, BarChart3, Calculator, Sparkles, 
@@ -131,7 +131,7 @@ export function LandingPage() {
       </section>
 
       {/* Ad — Top */}
-      <AdBanner />
+      <AdBannerTop />
 
       {/* Calculators */}
       <section>
@@ -167,8 +167,8 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Ad */}
-      <AdInContent />
+      {/* Ad — Middle */}
+      <AdBannerMiddle />
 
       {/* Simulators */}
       <section>
@@ -304,7 +304,7 @@ export function LandingPage() {
       </section>
 
       {/* Ad — Bottom */}
-      <AdBanner />
+      <AdBannerBottom />
     </div>
   )
 }

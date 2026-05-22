@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { AD_CLIENT, AD_SLOTS } from './ad-config'
 
 interface AdUnitProps {
   adSlot: string
@@ -61,7 +62,7 @@ export function AdUnit({
         ref={adRef}
         className={`adsbygoogle ${adLoaded ? '' : 'absolute opacity-0 pointer-events-none'}`}
         style={style || { display: 'block', minHeight: '90px' }}
-        data-ad-client="ca-pub-3765222786344373"
+        data-ad-client={AD_CLIENT}
         data-ad-slot={adSlot}
         data-ad-format={adFormat}
         data-full-width-responsive="true"
@@ -70,41 +71,36 @@ export function AdUnit({
   )
 }
 
-export function AdBanner({ className = '' }: { className?: string }) {
+// ── Componentes de conveniência com slots centralizados ──
+
+export function AdBannerTop({ className = '' }: { className?: string }) {
   return (
     <div className={`w-full ${className}`}>
-      <AdUnit
-        adSlot="0000000000"
-        adFormat="horizontal"
-        style={{ display: 'block', minHeight: '90px' }}
-        label="Anúncio"
-      />
+      <AdUnit adSlot={AD_SLOTS.BANNER_TOP} adFormat="horizontal" style={{ display: 'block', minHeight: '90px' }} label="Anúncio" />
     </div>
   )
 }
 
-export function AdSidebar({ className = '' }: { className?: string }) {
+export function AdBannerMiddle({ className = '' }: { className?: string }) {
   return (
     <div className={`w-full ${className}`}>
-      <AdUnit
-        adSlot="0000000000"
-        adFormat="vertical"
-        style={{ display: 'block', minHeight: '250px', width: '300px' }}
-        label="Anúncio"
-      />
+      <AdUnit adSlot={AD_SLOTS.BANNER_MIDDLE} adFormat="horizontal" style={{ display: 'block', minHeight: '90px' }} label="Anúncio" />
     </div>
   )
 }
 
-export function AdInFeed({ className = '' }: { className?: string }) {
+export function AdBannerBottom({ className = '' }: { className?: string }) {
   return (
     <div className={`w-full ${className}`}>
-      <AdUnit
-        adSlot="0000000000"
-        adFormat="fluid"
-        style={{ display: 'block' }}
-        label="Anúncio"
-      />
+      <AdUnit adSlot={AD_SLOTS.BANNER_BOTTOM} adFormat="horizontal" style={{ display: 'block', minHeight: '90px' }} label="Anúncio" />
+    </div>
+  )
+}
+
+export function AdInContent({ className = '' }: { className?: string }) {
+  return (
+    <div className={`w-full my-6 ${className}`}>
+      <AdUnit adSlot={AD_SLOTS.IN_CONTENT} adFormat="fluid" style={{ display: 'block' }} label="Anúncio" />
     </div>
   )
 }
@@ -112,12 +108,28 @@ export function AdInFeed({ className = '' }: { className?: string }) {
 export function AdInArticle({ className = '' }: { className?: string }) {
   return (
     <div className={`w-full ${className}`}>
-      <AdUnit
-        adSlot="0000000000"
-        adFormat="fluid"
-        style={{ display: 'block', textAlign: 'center' }}
-        label="Anúncio"
-      />
+      <AdUnit adSlot={AD_SLOTS.IN_ARTICLE} adFormat="fluid" style={{ display: 'block', textAlign: 'center' }} label="Anúncio" />
     </div>
   )
+}
+
+export function AdSidebar({ className = '' }: { className?: string }) {
+  return (
+    <div className={`w-full ${className}`}>
+      <AdUnit adSlot={AD_SLOTS.SIDEBAR} adFormat="vertical" style={{ display: 'block', minHeight: '250px', width: '300px' }} label="Anúncio" />
+    </div>
+  )
+}
+
+export function AdInFeed({ className = '' }: { className?: string }) {
+  return (
+    <div className={`w-full ${className}`}>
+      <AdUnit adSlot={AD_SLOTS.IN_FEED} adFormat="fluid" style={{ display: 'block' }} label="Anúncio" />
+    </div>
+  )
+}
+
+// Legacy aliases (kept for backward compatibility with existing imports)
+export function AdBanner({ className = '' }: { className?: string }) {
+  return <AdBannerBottom className={className} />
 }
