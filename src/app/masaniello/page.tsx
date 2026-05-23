@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     canonical: 'https://betcalcpro.com.br/masaniello',
   },
   openGraph: {
-    title: 'Calculadora Masaniello | BetCalc Pro',
+    title: 'Calculadora Masaniello',
     description: 'Calculadora Masaniello para gestão avançada de capital e análise de cenários.',
     url: 'https://betcalcpro.com.br/masaniello',
   },

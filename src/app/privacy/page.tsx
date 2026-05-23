@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     canonical: 'https://betcalcpro.com.br/privacy',
   },
   openGraph: {
-    title: 'Política de Privacidade | BetCalc Pro',
+    title: 'Política de Privacidade',
     description: 'Política de Privacidade do BetCalc Pro. Saiba como tratamos seus dados e protegemos sua privacidade.',
     url: 'https://betcalcpro.com.br/privacy',
   },

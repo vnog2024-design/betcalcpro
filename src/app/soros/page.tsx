@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     canonical: 'https://betcalcpro.com.br/soros',
   },
   openGraph: {
-    title: 'Calculadora de Progressão Geométrica | BetCalc Pro',
+    title: 'Calculadora de Progressão Geométrica',
     description: 'Calcule progressões geométricas e estratégias de crescimento de capital.',
     url: 'https://betcalcpro.com.br/soros',
   },

@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     canonical: 'https://betcalcpro.com.br/terms',
   },
   openGraph: {
-    title: 'Termos de Uso | BetCalc Pro',
+    title: 'Termos de Uso',
     description: 'Termos de Uso do BetCalc Pro. Conheça as condições de utilização das nossas ferramentas.',
     url: 'https://betcalcpro.com.br/terms',
   },

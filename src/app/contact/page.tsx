@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     canonical: 'https://betcalcpro.com.br/contact',
   },
   openGraph: {
-    title: 'Contato | BetCalc Pro',
+    title: 'Contato',
     description: 'Entre em contato com a equipe BetCalc Pro. Fale conosco por e-mail ou formulário.',
     url: 'https://betcalcpro.com.br/contact',
   },

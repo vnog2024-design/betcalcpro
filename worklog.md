@@ -267,3 +267,69 @@ Stage Summary:
 - Bankroll support feature tells user exactly which cycle/step would break their bankroll
 - Visual design matches existing tool pages (neon theme, cards, charts, responsive layout)
 - Site now has 8 calculators (was 7)
+
+---
+Task ID: 1
+Agent: General-Purpose
+Task: Fix duplicate page titles (" | BetCalc Pro" suffix causing duplication with layout template)
+
+Work Log:
+- Searched all page.tsx files in /home/z/my-project/src/app/ for " | BetCalc Pro" pattern
+- Found 18 files with duplicate " | BetCalc Pro" in openGraph.title fields (top-level title fields were already fixed)
+- Also found 1 template literal in artigos/[slug]/page.tsx — explicitly excluded per instructions (dynamic, needs different fix)
+- Skipped ciclos/page.tsx — already fixed per instructions
+- Skipped user-panel/page.tsx and root page.tsx — no " | BetCalc Pro" present
+- Fixed openGraph.title in 18 files by removing " | BetCalc Pro" suffix:
+  1. hedging/page.tsx: 'Calculadora de Cobertura (Hedging) | BetCalc Pro' → 'Calculadora de Cobertura (Hedging)'
+  2. masaniello/page.tsx: 'Calculadora Masaniello | BetCalc Pro' → 'Calculadora Masaniello'
+  3. faq/page.tsx: 'Perguntas Frequentes | BetCalc Pro' → 'Perguntas Frequentes'
+  4. strategy-generator/page.tsx: 'Gerador de Estratégias de Gestão | BetCalc Pro' → 'Gerador de Estratégias de Gestão'
+  5. bankroll/page.tsx: 'Calculadora de Gestão de Capital | BetCalc Pro' → 'Calculadora de Gestão de Capital'
+  6. soros/page.tsx: 'Calculadora de Progressão Geométrica | BetCalc Pro' → 'Calculadora de Progressão Geométrica'
+  7. fibonacci/page.tsx: 'Calculadora de Sequência Fibonacci | BetCalc Pro' → 'Calculadora de Sequência Fibonacci'
+  8. cookies/page.tsx: 'Política de Cookies | BetCalc Pro' → 'Política de Cookies'
+  9. responsible-gaming/page.tsx: 'Uso Responsável | BetCalc Pro' → 'Uso Responsável'
+  10. martingale/page.tsx: 'Calculadora de Progressão Martingale | BetCalc Pro' → 'Calculadora de Progressão Martingale'
+  11. artigos/page.tsx: 'Artigos | BetCalc Pro' → 'Artigos sobre Probabilidade e Gestão de Risco'
+  12. sequence-analyzer/page.tsx: 'Analisador de Sequências | BetCalc Pro' → 'Analisador de Sequências'
+  13. contact/page.tsx: 'Contato | BetCalc Pro' → 'Contato'
+  14. terms/page.tsx: 'Termos de Uso | BetCalc Pro' → 'Termos de Uso'
+  15. privacy/page.tsx: 'Política de Privacidade | BetCalc Pro' → 'Política de Privacidade'
+  16. probability-simulator/page.tsx: 'Simulador de Probabilidades | BetCalc Pro' → 'Simulador de Probabilidades'
+  17. about/page.tsx: 'Sobre Nós | BetCalc Pro' → 'Sobre Nós'
+  18. recovery/page.tsx: 'Calculadora de Recuperação de Capital | BetCalc Pro' → 'Calculadora de Recuperação de Capital'
+- Verified no remaining " | BetCalc Pro" in any page.tsx except the template literal in artigos/[slug]/page.tsx
+- Ran `bun run lint` — passes cleanly with no errors
+
+Stage Summary:
+- Fixed duplicate " | BetCalc Pro" suffix in openGraph.title across 18 page.tsx files
+- The layout template `"%s | BetCalc Pro"` now correctly appends " | BetCalc Pro" once to all page titles
+- Before fix: titles rendered as "Title | BetCalc Pro | BetCalc Pro" (duplicate)
+- After fix: titles render as "Title | BetCalc Pro" (single, from layout template)
+- Note: artigos/[slug]/page.tsx still has `${article.title} | BetCalc Pro` template literal — excluded per instructions, needs different fix approach
+---
+Task ID: 1
+Agent: Main
+Task: Investigate and fix site not loading/updating in browser
+
+Work Log:
+- Checked dev server logs - server running fine, returning 200 for all routes
+- Ran lint - no errors
+- Ran TypeScript check - only pre-existing type errors in other files, none in cycles-calculator
+- Used agent-browser to test the site - confirmed it IS loading correctly
+- Homepage renders with age gate, header, sidebar, landing page content
+- Ciclos page (/ciclos) loads with full calculator UI
+- Soros page (/soros) loads correctly
+- No JavaScript errors in browser console
+- HMR (Hot Module Replacement) connected and working
+- Fixed duplicate "BetCalc Pro" in page titles (layout template already appends it)
+- Updated Service Worker cache version from v2 to v3 to force cache clear
+- Fixed ciclos/page.tsx title: removed " | BetCalc Pro" suffix
+- Fixed 18 other page.tsx files with same openGraph.title duplication issue
+- Fixed artigos/[slug]/page.tsx openGraph title template literal
+
+Stage Summary:
+- Site was actually working fine - the issue was likely browser/Service Worker cache
+- Service Worker cache version bumped to v3 to force cache invalidation
+- Fixed duplicate page titles across 19+ page files
+- All pages compile without errors, lint passes cleanly

@@ -70,7 +70,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       canonical: url,
     },
     openGraph: {
-      title: `${article.title} | BetCalc Pro`,
+      title: article.title,
       description: article.description,
       url,
       type: 'article',

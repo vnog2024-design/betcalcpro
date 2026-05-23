@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     canonical: 'https://betcalcpro.com.br/probability-simulator',
   },
   openGraph: {
-    title: 'Simulador de Probabilidades | BetCalc Pro',
+    title: 'Simulador de Probabilidades',
     description: 'Simule probabilidades e cenários com ferramentas matemáticas e estatísticas gratuitas.',
     url: 'https://betcalcpro.com.br/probability-simulator',
   },

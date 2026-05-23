@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     canonical: 'https://betcalcpro.com.br/fibonacci',
   },
   openGraph: {
-    title: 'Calculadora de Sequência Fibonacci | BetCalc Pro',
+    title: 'Calculadora de Sequência Fibonacci',
     description: 'Calcule progressões Fibonacci. Ferramenta matemática gratuita para análise de sequências.',
     url: 'https://betcalcpro.com.br/fibonacci',
   },

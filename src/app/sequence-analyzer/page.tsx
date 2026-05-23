@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     canonical: 'https://betcalcpro.com.br/sequence-analyzer',
   },
   openGraph: {
-    title: 'Analisador de Sequências | BetCalc Pro',
+    title: 'Analisador de Sequências',
     description: 'Analise padrões em sequências de resultados com ferramentas estatísticas gratuitas.',
     url: 'https://betcalcpro.com.br/sequence-analyzer',
   },

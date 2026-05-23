@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     canonical: 'https://betcalcpro.com.br/strategy-generator',
   },
   openGraph: {
-    title: 'Gerador de Estratégias de Gestão | BetCalc Pro',
+    title: 'Gerador de Estratégias de Gestão',
     description: 'Gere estratégias personalizadas de gestão de risco e capital.',
     url: 'https://betcalcpro.com.br/strategy-generator',
   },

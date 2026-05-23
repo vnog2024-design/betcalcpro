@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     canonical: 'https://betcalcpro.com.br/faq',
   },
   openGraph: {
-    title: 'Perguntas Frequentes | BetCalc Pro',
+    title: 'Perguntas Frequentes',
     description: 'Tire suas dúvidas sobre as ferramentas do BetCalc Pro.',
     url: 'https://betcalcpro.com.br/faq',
   },

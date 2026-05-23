@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     canonical: 'https://betcalcpro.com.br/artigos',
   },
   openGraph: {
-    title: 'Artigos | BetCalc Pro',
+    title: 'Artigos sobre Probabilidade e Gestão de Risco',
     description: 'Artigos educacionais sobre probabilidade, estatística e gestão de risco.',
     url: 'https://betcalcpro.com.br/artigos',
   },

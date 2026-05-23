@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     canonical: 'https://betcalcpro.com.br/hedging',
   },
   openGraph: {
-    title: 'Calculadora de Cobertura (Hedging) | BetCalc Pro',
+    title: 'Calculadora de Cobertura (Hedging)',
     description: 'Calcule estratégias de cobertura para dois resultados simultâneos com recuperação Martingale.',
     url: 'https://betcalcpro.com.br/hedging',
   },
