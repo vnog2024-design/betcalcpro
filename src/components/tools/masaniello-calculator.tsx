@@ -16,18 +16,17 @@ import {
 } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 
-interface OpStep {
+type OpResult = 'win' | 'loss' | 'pending'
+
+interface MasanielloStep {
   opNumber: number
-  remainingOps: number
-  remainingWinsNeeded: number
   betAmount: number
-  ifWin: number
-  ifLose: number
   ifWinCapital: number
   ifLoseCapital: number
+  ifWinReturn: number
+  winsNeeded: number
+  opsRemaining: number
 }
-
-type OpResult = 'win' | 'loss' | 'pending'
 
 function formatCurrency(value: number): string {
   if (!isFinite(value)) return '∞'
@@ -35,15 +34,90 @@ function formatCurrency(value: number): string {
   return `R$ ${value.toFixed(2)}`
 }
 
+/**
+ * Build the Masaniello coefficient table NE[events_done][wins_so_far]
+ * 
+ * This is the exact algorithm from the spreadsheet:
+ * - NE[e][w] = 1 if w >= winsNeeded (target reached)
+ * - NE[e][w] = O^(totalOps-e) if remaining_wins == remaining_ops (must win all remaining)
+ * - Otherwise: NE[e][w] = (O * NE[e+1][w] * NE[e+1][w+1]) / (NE[e+1][w] + (O-1) * NE[e+1][w+1])
+ */
+function buildCoefficientTable(totalOps: number, winsNeeded: number, payout: number): number[][] {
+  const NE: number[][] = []
+  for (let e = 0; e <= totalOps + 1; e++) {
+    NE[e] = new Array(winsNeeded + 2).fill(0)
+  }
+
+  // Boundary: wins >= winsNeeded -> 1
+  for (let e = 0; e <= totalOps + 1; e++) {
+    NE[e][winsNeeded] = 1
+    NE[e][winsNeeded + 1] = 1
+  }
+  // Beyond all events -> 1
+  for (let w = 0; w <= winsNeeded + 1; w++) {
+    NE[totalOps + 1][w] = 1
+  }
+
+  // All remaining events must be wins
+  for (let e = 0; e <= totalOps; e++) {
+    for (let w = 0; w <= winsNeeded; w++) {
+      const remWins = winsNeeded - w
+      const remEvents = totalOps - e
+      if (remWins > 0 && remWins === remEvents) {
+        NE[e][w] = Math.pow(payout, remEvents)
+      }
+    }
+  }
+
+  // Fill from bottom-right to top-left
+  for (let e = totalOps; e >= 0; e--) {
+    for (let w = winsNeeded - 1; w >= 0; w--) {
+      const remWins = winsNeeded - w
+      const remEvents = totalOps - e
+      if (remWins > 0 && remWins === remEvents) continue
+      if (w >= winsNeeded) continue
+
+      const below = NE[e + 1][w]
+      const belowRight = NE[e + 1][w + 1]
+
+      if (below === 0 || belowRight === 0) {
+        NE[e][w] = Infinity
+      } else {
+        NE[e][w] = (payout * below * belowRight) / (below + (payout - 1) * belowRight)
+      }
+    }
+  }
+
+  return NE
+}
+
+/**
+ * Calculate the investment amount using the exact Masaniello formula:
+ * 
+ * invest = bank * (1 - O * NE[events+1][wins+1] / (NE[events+1][wins] + (O-1) * NE[events+1][wins+1]))
+ */
+function calcInvestment(bank: number, eventsDone: number, winsSoFar: number, payout: number, NE: number[][]): number {
+  const A = NE[eventsDone + 1][winsSoFar + 1]
+  const B = NE[eventsDone + 1][winsSoFar]
+  
+  if (!A || !B || A === 0 || B === 0 || !isFinite(A) || !isFinite(B)) return 0
+  
+  const fraction = 1 - (payout * A) / (B + (payout - 1) * A)
+  
+  if (fraction <= 0 || !isFinite(fraction)) return 0
+  
+  return Math.min(bank * fraction, bank)
+}
+
 export function MasanielloCalculator() {
   const { toast } = useToast()
   const { addHistory, addFavorite, removeFavorite, isFavorite, unlockAchievement } = useAppStore()
 
   // Configuration
-  const [capital, setCapital] = useState('100')
-  const [totalOps, setTotalOps] = useState('10')
-  const [winsNeeded, setWinsNeeded] = useState('1')
-  const [multiplier, setMultiplier] = useState('2.0')
+  const [capital, setCapital] = useState('200')
+  const [totalOps, setTotalOps] = useState('7')
+  const [winsNeeded, setWinsNeeded] = useState('2')
+  const [payout, setPayout] = useState('2.0')
 
   // Interactive tracking
   const [results, setResults] = useState<OpResult[]>([])
@@ -52,87 +126,101 @@ export function MasanielloCalculator() {
   const parsedCapital = parseFloat(capital) || 0
   const parsedTotalOps = parseInt(totalOps) || 0
   const parsedWinsNeeded = parseInt(winsNeeded) || 0
-  const parsedMultiplier = parseFloat(multiplier) || 0
+  const parsedPayout = parseFloat(payout) || 0
 
-  // Calculate the full Masaniello table from current state
-  const calculations = useMemo(() => {
-    if (parsedCapital <= 0 || parsedTotalOps <= 0 || parsedWinsNeeded <= 0 || parsedMultiplier <= 1) return null
+  // Build coefficient table
+  const NE = useMemo(() => {
+    if (parsedTotalOps <= 0 || parsedWinsNeeded <= 0 || parsedPayout <= 1) return null
     if (parsedWinsNeeded > parsedTotalOps) return null
+    return buildCoefficientTable(parsedTotalOps, parsedWinsNeeded, parsedPayout)
+  }, [parsedTotalOps, parsedWinsNeeded, parsedPayout])
 
-    const steps: OpStep[] = []
-    let currentCapital = parsedCapital
-    let remWins = parsedWinsNeeded
-    let remOps = parsedTotalOps
+  // Simulate the full sequence based on current results
+  const calculations = useMemo(() => {
+    if (!NE || parsedCapital <= 0) return null
+
+    let currentBank = parsedCapital
+    let maxBank = parsedCapital
+    let winsSoFar = 0
+    let lossesSoFar = 0
+    let targetReached = false
+    let broke = false
 
     // Apply already-registered results
-    for (let i = 0; i < results.length && i < parsedTotalOps; i++) {
-      if (currentCapital <= 0 || remOps <= 0) break
+    for (let i = 0; i < results.length; i++) {
+      const eventsDone = winsSoFar + lossesSoFar
+      if (eventsDone >= parsedTotalOps || winsSoFar >= parsedWinsNeeded || currentBank <= 0) break
 
-      const proportion = remWins / remOps
-      const bet = Math.min(currentCapital * proportion / (parsedMultiplier - 1), currentCapital)
-
+      const invest = calcInvestment(currentBank, eventsDone, winsSoFar, parsedPayout, NE)
+      
       if (results[i] === 'win') {
-        currentCapital += bet * (parsedMultiplier - 1)
-        remWins--
-      } else if (results[i] === 'loss') {
-        currentCapital -= bet
+        const returnAmount = invest * (parsedPayout - 1)
+        currentBank = currentBank + returnAmount
+        winsSoFar++
+      } else {
+        currentBank = currentBank - invest
+        lossesSoFar++
       }
-      remOps--
+      
+      maxBank = Math.max(maxBank, currentBank)
     }
 
-    // Calculate remaining steps
-    const startOp = results.length
-    let simCapital = currentCapital
-    let simWins = remWins
-    let simOps = remOps
+    targetReached = winsSoFar >= parsedWinsNeeded
+    broke = currentBank <= 0
+    const allDone = (winsSoFar + lossesSoFar) >= parsedTotalOps
 
-    for (let i = 0; i < simOps; i++) {
-      if (simCapital <= 0 || simOps - i <= 0 || simWins <= 0) {
-        // No more bets needed (already hit target or broke)
-        if (simWins <= 0) break
-        if (simCapital <= 0) break
-      }
+    // Calculate next step
+    const eventsDoneSoFar = winsSoFar + lossesSoFar
+    const nextBet = (!targetReached && !broke && !allDone && eventsDoneSoFar < parsedTotalOps)
+      ? calcInvestment(currentBank, eventsDoneSoFar, winsSoFar, parsedPayout, NE)
+      : 0
 
-      const proportion = simWins / (simOps - i)
-      const bet = Math.min(simCapital * proportion / (parsedMultiplier - 1), simCapital)
-      const ifWin = bet * (parsedMultiplier - 1)
-      const ifLose = bet
-      const ifWinCapital = simCapital + ifWin
-      const ifLoseCapital = simCapital - ifLose
+    // Build full progression table (worst-case loss path from current state)
+    const steps: MasanielloStep[] = []
+    let simBank = currentBank
+    let simWins = winsSoFar
+    let simLosses = lossesSoFar
+
+    for (let op = eventsDoneSoFar; op < parsedTotalOps; op++) {
+      if (simWins >= parsedWinsNeeded || simBank <= 0) break
+
+      const simEventsDone = simWins + simLosses
+      const invest = calcInvestment(simBank, simEventsDone, simWins, parsedPayout, NE)
+      const ifWinReturn = invest * (parsedPayout - 1)
+      const ifWinCapital = simBank + ifWinReturn
+      const ifLoseCapital = simBank - invest
 
       steps.push({
-        opNumber: startOp + i + 1,
-        remainingOps: simOps - i,
-        remainingWinsNeeded: simWins,
-        betAmount: bet,
-        ifWin,
-        ifLose,
+        opNumber: op + 1,
+        betAmount: invest,
         ifWinCapital,
         ifLoseCapital,
+        ifWinReturn,
+        winsNeeded: parsedWinsNeeded - simWins,
+        opsRemaining: parsedTotalOps - simEventsDone,
       })
 
-      // Default path: assume loss for next calculation
-      simCapital -= ifLose
-      simWins = simWins // stays same on loss
+      // Assume loss for next calculation
+      simBank = ifLoseCapital
+      simLosses++
     }
 
-    const targetReached = remWins <= 0
-    const broke = currentCapital <= 0
-    const allDone = results.length >= parsedTotalOps
-    const profit = currentCapital - parsedCapital
+    const profit = currentBank - parsedCapital
 
     return {
       steps,
-      currentCapital,
-      remainingWins: remWins,
-      remainingOps: remOps,
+      currentBank,
+      maxBank,
+      winsSoFar,
+      lossesSoFar,
+      eventsDoneSoFar,
+      nextBet,
       targetReached,
       broke,
       allDone,
       profit,
-      nextBet: steps.length > 0 ? steps[0].betAmount : 0,
     }
-  }, [parsedCapital, parsedTotalOps, parsedWinsNeeded, parsedMultiplier, results])
+  }, [NE, parsedCapital, parsedTotalOps, parsedWinsNeeded, parsedPayout, results])
 
   const handleResult = useCallback((result: 'win' | 'loss') => {
     if (!calculations || calculations.targetReached || calculations.broke || calculations.allDone) return
@@ -140,10 +228,10 @@ export function MasanielloCalculator() {
   }, [calculations])
 
   const handleReset = () => {
-    setCapital('100')
-    setTotalOps('10')
-    setWinsNeeded('1')
-    setMultiplier('2.0')
+    setCapital('200')
+    setTotalOps('7')
+    setWinsNeeded('2')
+    setPayout('2.0')
     setResults([])
   }
 
@@ -155,13 +243,13 @@ export function MasanielloCalculator() {
     if (!calculations) return
     const lines = [
       `=== Masaniello — Planejamento de Capital ===`,
-      `Capital: R$ ${capital} | Operações: ${totalOps} | Vitórias necessárias: ${winsNeeded} | Multiplicador: ${multiplier}x`,
+      `Capital: R$ ${capital} | Operações: ${totalOps} | Vitórias necessárias: ${winsNeeded} | Multiplicador: ${payout}x`,
       ``,
       ...calculations.steps.map((s) =>
         `Op ${s.opNumber}: Aposta R$${s.betAmount.toFixed(2)} | Se ganhar: R$${s.ifWinCapital.toFixed(2)} | Se perder: R$${s.ifLoseCapital.toFixed(2)}`
       ),
       ``,
-      `Capital atual: R$ ${calculations.currentCapital.toFixed(2)}`,
+      `Capital atual: R$ ${calculations.currentBank.toFixed(2)}`,
       `Lucro: R$ ${calculations.profit.toFixed(2)}`,
     ].join('\n')
 
@@ -175,8 +263,8 @@ export function MasanielloCalculator() {
     addHistory({
       id: Math.random().toString(36).substring(7),
       tool: 'masaniello',
-      params: { capital, totalOps, winsNeeded, multiplier },
-      result: calculations ? { profit: calculations.profit.toFixed(2), capital: calculations.currentCapital.toFixed(2) } : {},
+      params: { capital, totalOps, winsNeeded, payout },
+      result: calculations ? { profit: calculations.profit.toFixed(2), capital: calculations.currentBank.toFixed(2) } : {},
       timestamp: Date.now(),
     })
     unlockAchievement('first-calc')
@@ -185,10 +273,9 @@ export function MasanielloCalculator() {
 
   const fav = isFavorite('masaniello')
 
-  // Win rate needed
+  // Probability analysis
   const winRateNeeded = parsedTotalOps > 0 ? ((parsedWinsNeeded / parsedTotalOps) * 100).toFixed(1) : '0'
-  // Break-even probability for this multiplier
-  const breakEvenProb = parsedMultiplier > 1 ? ((1 / parsedMultiplier) * 100).toFixed(1) : '0'
+  const breakEvenProb = parsedPayout > 1 ? ((1 / parsedPayout) * 100).toFixed(1) : '0'
 
   return (
     <div className="space-y-6">
@@ -242,7 +329,7 @@ export function MasanielloCalculator() {
               </div>
               <div className="space-y-2">
                 <Label className="text-sm">Multiplicador (payout)</Label>
-                <Input type="number" value={multiplier} onChange={(e) => { setMultiplier(e.target.value); setResults([]) }} className="bg-muted/50 border-border text-base h-11" min="1.1" step="0.1" />
+                <Input type="number" value={payout} onChange={(e) => { setPayout(e.target.value); setResults([]) }} className="bg-muted/50 border-border text-base h-11" min="1.1" step="0.1" />
                 <p className="text-xs text-muted-foreground">Quanto paga cada vitória (ex: 2.0 = dobra)</p>
               </div>
             </CardContent>
@@ -256,10 +343,10 @@ export function MasanielloCalculator() {
                 <h4 className="text-sm font-semibold text-neon">Como funciona</h4>
               </div>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                O <strong className="text-foreground">Masaniello</strong> redistribui seu capital automaticamente a cada operação. 
-                Se você precisa de <strong className="text-foreground">{winsNeeded} vitória{parseInt(winsNeeded) > 1 ? 's' : ''}</strong> em <strong className="text-foreground">{totalOps} operações</strong>,
-                a calculadora ajusta o valor de cada aposta conforme os resultados vão aparecendo. 
-                Se perder, as próximas apostas diminuem. Se ganhar, a meta é atingida e para.
+                O <strong className="text-foreground">Masaniello</strong> usa uma tabela de coeficientes recursivos para calcular 
+                a aposta exata a cada operação. A fórmula ajusta automaticamente: se perde, aposta menos; se ganha, 
+                a meta se aproxima e as apostas diminuem. Se você precisa de <strong className="text-foreground">{winsNeeded} vitória{parseInt(winsNeeded) > 1 ? 's' : ''}</strong> em <strong className="text-foreground">{totalOps} operações</strong>,
+                o algoritmo distribui o capital de forma que atingindo o mínimo, você lucra.
               </p>
             </CardContent>
           </Card>
@@ -293,7 +380,7 @@ export function MasanielloCalculator() {
                   <Badge className="bg-neon-blue/10 text-neon-blue border-0">{winRateNeeded}%</Badge>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Probabilidade de empate ({multiplier}x)</span>
+                  <span className="text-muted-foreground">Probabilidade de empate ({payout}x)</span>
                   <Badge className="bg-amber-500/10 text-amber-500 border-0">{breakEvenProb}%</Badge>
                 </div>
                 <div className="flex justify-between text-sm">
@@ -317,10 +404,10 @@ export function MasanielloCalculator() {
                   <CardContent className="p-4 text-center">
                     <Target className="h-4 w-4 text-neon mx-auto mb-1" />
                     <p className="text-xs text-muted-foreground">Capital Atual</p>
-                    <p className="text-xl font-black gradient-neon-text">{formatCurrency(calculations.currentCapital)}</p>
+                    <p className="text-xl font-black gradient-neon-text">{formatCurrency(calculations.currentBank)}</p>
                   </CardContent>
                 </Card>
-                <Card className={`border-${calculations.profit >= 0 ? 'neon' : 'red-500'}/20 bg-${calculations.profit >= 0 ? 'neon' : 'red-500'}/5`}>
+                <Card className={calculations.profit >= 0 ? 'border-neon/20 bg-neon/5' : 'border-red-500/20 bg-red-500/5'}>
                   <CardContent className="p-4 text-center">
                     <TrendingUp className="h-4 w-4 text-neon mx-auto mb-1" />
                     <p className="text-xs text-muted-foreground">Lucro/Prejuízo</p>
@@ -339,8 +426,8 @@ export function MasanielloCalculator() {
                 <Card className="border-purple-500/20 bg-purple-500/5">
                   <CardContent className="p-4 text-center">
                     <AlertTriangle className="h-4 w-4 text-purple-500 mx-auto mb-1" />
-                    <p className="text-xs text-muted-foreground">Restante</p>
-                    <p className="text-xl font-black text-purple-500">{calculations.remainingWins} vit. / {calculations.remainingOps} ops</p>
+                    <p className="text-xs text-muted-foreground">Progresso</p>
+                    <p className="text-xl font-black text-purple-500">{calculations.winsSoFar}/{parsedWinsNeeded} vit.</p>
                   </CardContent>
                 </Card>
               </div>
@@ -374,7 +461,7 @@ export function MasanielloCalculator() {
                   <CardContent className="p-5 text-center">
                     <p className="text-2xl font-black text-red-400">OPERAÇÕES ESGOTADAS ❌</p>
                     <p className="text-sm text-muted-foreground mt-2">
-                      Todas as {totalOps} operações foram realizadas sem atingir o mínimo de {winsNeeded} vitória{parseInt(winsNeeded) > 1 ? 's' : ''}.
+                      Todas as {totalOps} operações realizadas sem atingir {winsNeeded} vitória{parseInt(winsNeeded) > 1 ? 's' : ''}.
                     </p>
                   </CardContent>
                 </Card>
@@ -386,7 +473,10 @@ export function MasanielloCalculator() {
                   <CardHeader className="pb-2">
                     <CardTitle className="text-base font-semibold flex items-center gap-2">
                       <Play className="h-4 w-4 text-neon" />
-                      Operação {results.length + 1}
+                      Operação {calculations.eventsDoneSoFar + 1}
+                      <Badge className="bg-neon-blue/10 text-neon-blue border-0 text-xs ml-2">
+                        Faltam {parsedWinsNeeded - calculations.winsSoFar} vit. / {parsedTotalOps - calculations.eventsDoneSoFar} ops
+                      </Badge>
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -449,7 +539,8 @@ export function MasanielloCalculator() {
                 <CardHeader className="pb-2">
                   <CardTitle className="text-base font-semibold flex items-center gap-2">
                     <Calculator className="h-4 w-4 text-neon-blue" />
-                    Tabela de Progressão Completa
+                    Tabela de Progressão
+                    <span className="text-xs text-muted-foreground font-normal ml-1">(caminho de perdas consecutivas)</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
@@ -460,8 +551,8 @@ export function MasanielloCalculator() {
                           <th className="text-left p-3 font-semibold text-muted-foreground">Op</th>
                           <th className="text-center p-3 font-semibold text-muted-foreground">Faltam</th>
                           <th className="text-right p-3 font-semibold text-muted-foreground">Aposta</th>
-                          <th className="text-right p-3 font-semibold text-muted-foreground">Se Ganhar</th>
-                          <th className="text-right p-3 font-semibold text-muted-foreground">Se Perder</th>
+                          <th className="text-right p-3 font-semibold text-muted-foreground">Se Ganhar ✅</th>
+                          <th className="text-right p-3 font-semibold text-muted-foreground">Se Perder ❌</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -485,7 +576,7 @@ export function MasanielloCalculator() {
                               </td>
                               <td className="text-center p-3">
                                 <Badge className="bg-neon-blue/10 text-neon-blue border-0 text-xs">
-                                  {step.remainingWinsNeeded} vit. / {step.remainingOps} ops
+                                  {step.winsNeeded} vit. / {step.opsRemaining} ops
                                 </Badge>
                               </td>
                               <td className="text-right p-3 font-mono font-bold text-neon-blue">
@@ -519,7 +610,7 @@ export function MasanielloCalculator() {
                       Se você não atingir o mínimo de vitórias, o capital é perdido.
                     </p>
                     <p>
-                      A taxa de acerto necessária ({winRateNeeded}%) precisa ser realista comparada à probabilidade do evento ({breakEvenProb}% para {multiplier}x).
+                      A taxa de acerto necessária ({winRateNeeded}%) precisa ser realista comparada à probabilidade do evento ({breakEvenProb}% para {payout}x).
                       Se a taxa necessária for maior que a probabilidade, o sistema é matematicamente desfavorável.
                     </p>
                   </div>
