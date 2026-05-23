@@ -527,3 +527,37 @@ Stage Summary:
 - Visual elements added to all 12 articles: decorative heading emojis, formula highlight boxes, tip/warning callouts
 - 7 articles have at least one 💡 Dica or ⚠️ Atenção callout box
 - No existing functionality broken
+
+---
+Task ID: 1
+Agent: Main
+Task: Activate all 6 achievements in the panel and fix login (no more Demo user)
+
+Work Log:
+- Updated /src/store/app-store.ts:
+  - Added `checkAchievements()` function that checks all 6 achievement conditions against the current state
+  - `first-calc`: history.length >= 1
+  - `martingale-master`: martingale entries >= 10
+  - `explorer`: unique tools used >= 5
+  - `high-roller`: any entry with bankroll/totalInvested >= 10000
+  - `strategist`: favorites >= 3
+  - `veteran`: total calculations >= 50
+  - Modified `addHistory()` to call `checkAchievements()` after each entry
+  - Modified `addFavorite()` to call `checkAchievements()` after each favorite
+  - Added `checkAchievements` to AppState interface
+- Updated /src/components/tools/user-panel.tsx:
+  - Replaced hardcoded `setUser('Usuário Demo', ...)` with a proper Dialog that asks for name and email
+  - Dialog opens on "Crie sua conta grátis" click with name (required) and email (optional) fields
+  - Removed sampleAchievements — now always shows the real 6 achievements from the store
+  - Added achievement progress text (e.g., "3/10", "2/5 ferramentas") next to locked badges
+  - Quick Stats Cards now always show real data (no more hardcoded 42/1/3/33% when logged out)
+  - Added Sparkles icon to the create account button
+  - On login, calls `checkAchievements()` so existing history qualifies for achievements
+- Lint passes, all pages return 200
+- Pushed to GitHub (commit 852e531) — Vercel will auto-deploy
+
+Stage Summary:
+- All 6 achievements now automatically unlock based on user activity (calculations, favorites, bankroll amounts)
+- Login dialog no longer creates "Usuário Demo" — user enters their real name
+- Achievement progress indicators show how close user is to unlocking each one
+- No existing configurations broken
