@@ -9,6 +9,7 @@ import { CookieConsent } from '@/components/shared/cookie-consent'
 import { PWAInstallPrompt } from '@/components/shared/pwa-install-prompt'
 import { AgeGate } from '@/components/shared/age-gate'
 import { DisclaimerBar } from '@/components/shared/disclaimer-bar'
+import { UpdateDetector } from '@/components/shared/update-detector'
 import { Toaster } from '@/components/ui/toaster'
 import { useAppStore } from '@/store/app-store'
 import { useEffect } from 'react'
@@ -60,6 +61,7 @@ export default function Home() {
       <Footer />
       <CookieConsent />
       <PWAInstallPrompt />
+      <UpdateDetector />
       <Toaster />
     </div>
   )

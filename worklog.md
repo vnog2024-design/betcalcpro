@@ -333,3 +333,39 @@ Stage Summary:
 - Service Worker cache version bumped to v3 to force cache invalidation
 - Fixed duplicate page titles across 19+ page files
 - All pages compile without errors, lint passes cleanly
+---
+Task ID: 1
+Agent: Main
+Task: Fix site not updating when refreshed in browser - Service Worker caching issue
+
+Work Log:
+- Identified root cause: Service Worker was using "cache-first" strategy for ALL /_next/static/ assets, causing old JS/CSS bundles to be served instead of new ones
+- Rewrote /public/sw.js with major improvements:
+  - Development detection (localhost/127.0.0.1) - completely bypasses caching in dev
+  - Production uses "stale-while-revalidate" for Next.js chunks (shows cached, updates in background)
+  - Cache-first only for truly static assets (images, icons)
+  - Added message handlers for FORCE_UPDATE and SKIP_WAITING
+  - Bumped cache version to v4
+- Updated /src/app/layout.tsx SW registration:
+  - In dev: automatically unregisters existing SWs and clears all caches
+  - In production: registers SW with 30-second update checks
+  - Added controllerchange listener for automatic reload when new SW activates
+- Created /src/components/shared/update-detector.tsx:
+  - Shows update banner when new SW version detected
+  - In dev mode: automatically clears any residual SW registrations
+  - In production: checks for waiting SW and version endpoint
+  - User can click "Atualizar" to force update
+- Created /api/version endpoint for version checking
+- Added UpdateDetector to page.tsx
+- Fixed next.config.ts: removed problematic headers config that was causing server issues
+- Fixed duplicate "BetCalc Pro" in page titles across 19+ page files
+- Resolved dev server stability issue - server was dying due to process management in sandbox environment
+- Used double-fork daemon approach to keep dev server running persistently
+
+Stage Summary:
+- Service Worker completely rewritten with dev/prod awareness
+- SW auto-unregisters in development (no more stale cache!)
+- Update banner component created for production
+- Dev server running stably
+- All pages return 200, no JS errors
+- Lint passes cleanly

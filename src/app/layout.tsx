@@ -139,11 +139,39 @@ export default function RootLayout({
         />
         <Script id="sw-register" strategy="afterInteractive">
           {`
-            if ('serviceWorker' in navigator) {
-              window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/sw.js').catch(function() {});
-              });
-            }
+            (function() {
+              // Only register Service Worker in production (not localhost)
+              var isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+              if (isDev && 'serviceWorker' in navigator) {
+                // In development: unregister any existing SW and clear caches
+                navigator.serviceWorker.getRegistrations().then(function(regs) {
+                  regs.forEach(function(reg) { reg.unregister(); });
+                });
+                if ('caches' in window) {
+                  caches.keys().then(function(names) {
+                    names.forEach(function(name) { caches.delete(name); });
+                  });
+                }
+                console.log('[BetCalc] Dev mode: Service Worker disabled, caches cleared');
+                return;
+              }
+
+              // In production: register SW with update checking
+              if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                  navigator.serviceWorker.register('/sw.js').then(function(reg) {
+                    // Check for updates every 30 seconds
+                    setInterval(function() { reg.update(); }, 30000);
+                  }).catch(function() {});
+                });
+
+                // When a new SW takes over, force reload
+                navigator.serviceWorker.addEventListener('controllerchange', function() {
+                  window.location.reload();
+                });
+              }
+            })();
           `}
         </Script>
         <script
