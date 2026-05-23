@@ -63,46 +63,76 @@ export function HedgingCalculator() {
     const pB = parseFloat(payoutB) || 14
 
     if (bank <= 0 || risk <= 0 || pA <= 1 || pB <= 1) return null
+    // B must pay more than A for hedging to work
+    if (pB <= pA) return null
 
     // Target
     const targetCash = bank * (target / 100)
 
-    // Primary entry — Hedging proportion
-    // We want equal profit regardless of outcome
-    // Profit if A wins: (pA - 1) * a - b = Profit
-    // Profit if B wins: (pB - 1) * b - a = Profit
-    // Solving: a/b = (pB - 1) / (pA - 1)
-    // Total = a + b
-    const ratio = (pB - 1) / (pA - 1)
+    // ═══════════════════════════════════════════════════════════
+    // CÁLCULO DE COBERTURA (HEDGING)
+    // ═══════════════════════════════════════════════════════════
+    //
+    // Você aposta A no Resultado A (paga pA×) e B no Resultado B (paga pB×)
+    // Total investido = A + B
+    //
+    // Se A ganha: Lucro = pA×A - (A + B) = A(pA-1) - B
+    // Se B ganha: Lucro = pB×B - (A + B) = B(pB-1) - A
+    //
+    // Para lucro igual nos dois casos:
+    //   A(pA-1) - B = B(pB-1) - A
+    //   A×pA = B×pB
+    //   A/B = pB/pA    ← PROPORÇÃO CORRETA
+    //
+    // Exemplo: pA=2, pB=14 → A/B = 14/2 = 7 → A = 7B
+    // ═══════════════════════════════════════════════════════════
+
+    const ratio = pB / pA  // CORRETO: pB/pA (não (pB-1)/(pA-1))
+
     let pTotal = bank * (risk / 100)
     if (pTotal < 0.01) pTotal = 0.01
 
+    // Distribuir o total entre A e B na proporção correta
+    // A = ratio × B, Total = A + B = B(1 + ratio)
     const primaryOutcomeB = pTotal / (1 + ratio)
     const primaryOutcomeA = pTotal - primaryOutcomeB
-    const primaryProfit = (pA - 1) * primaryOutcomeA - primaryOutcomeB
 
-    // Gale 1 — Recovery entry
-    // Need to recover pTotal loss AND make primaryProfit
-    // Total needed: pTotal + primaryProfit
-    // Same hedging proportion
-    // Profit = (pA - 1) * ga - gb - pTotal = primaryProfit
-    // ga/gb = ratio, ga = ratio * gb
-    // (pA - 1) * ratio * gb - gb = primaryProfit + pTotal
-    // gb * ((pA - 1) * ratio - 1) = primaryProfit + pTotal
-    const galeDenom = (pA - 1) * ratio - 1
+    // Lucro líquido (descontando as duas apostas)
+    // Se A ganha: pA × A - (A + B) = A(pA-1) - B
+    const primaryProfit = primaryOutcomeA * (pA - 1) - primaryOutcomeB
+
+    // ═══════════════════════════════════════════════════════════
+    // GALE 1 — Recuperação após perda da entrada principal
+    // ═══════════════════════════════════════════════════════════
+    //
+    // Perdeu pTotal. Precisa recuperar E ainda lucrar primaryProfit.
+    // Nova entrada: gA no resultado A, gB no resultado B (mesma proporção)
+    // Lucro se A ganha: gA(pA-1) - gB = primaryProfit + pTotal
+    // gA = ratio × gB
+    // ratio × gB × (pA-1) - gB = primaryProfit + pTotal
+    // gB × (ratio × (pA-1) - 1) = primaryProfit + pTotal
+    //
+    // Para pA=2, ratio=7: gB × (7×1 - 1) = gB × 6 = primaryProfit + pTotal
+    // ═══════════════════════════════════════════════════════════
+
+    const galeDenom = ratio * (pA - 1) - 1
     if (galeDenom <= 0) return null
 
     const galeOutcomeB = (primaryProfit + pTotal) / galeDenom
     const galeOutcomeA = ratio * galeOutcomeB
     const galeTotal = galeOutcomeA + galeOutcomeB
-    const galeProfit = (pA - 1) * galeOutcomeA - galeOutcomeB - pTotal
+    // Lucro líquido no Gale 1 = lucro da entrada - perda acumulada
+    const galeProfit = galeOutcomeA * (pA - 1) - galeOutcomeB - pTotal
 
-    // Gale 2 — Second recovery
+    // ═══════════════════════════════════════════════════════════
+    // GALE 2 — Segunda recuperação
+    // ═══════════════════════════════════════════════════════════
+
     const gale2TotalLoss = pTotal + galeTotal
     const gale2OutcomeB = (primaryProfit + gale2TotalLoss) / galeDenom
     const gale2OutcomeA = ratio * gale2OutcomeB
     const gale2Total = gale2OutcomeA + gale2OutcomeB
-    const gale2Profit = (pA - 1) * gale2OutcomeA - gale2OutcomeB - gale2TotalLoss
+    const gale2Profit = gale2OutcomeA * (pA - 1) - gale2OutcomeB - gale2TotalLoss
 
     // Entries needed
     const entriesNeeded = primaryProfit > 0 ? Math.ceil(targetCash / primaryProfit) : Infinity
@@ -275,8 +305,10 @@ export function HedgingCalculator() {
               </div>
               <p className="text-xs text-muted-foreground leading-relaxed">
                 A <strong className="text-foreground">estratégia de cobertura (hedging)</strong> distribui o valor entre dois resultados 
-                na proporção exata para que o lucro seja <strong className="text-foreground">idêntico</strong> independente de qual acontece. 
-                A proporção é: <span className="text-neon font-mono">A/B = (payB-1)/(payA-1)</span>
+                para que o lucro líquido seja <strong className="text-foreground">idêntico</strong> independente de qual acontece. 
+                Se A paga {payoutA}× e B paga {payoutB}×: aposte na proporção{' '}
+                <span className="text-neon font-mono">A/B = {payoutB}/{payoutA} = {(parseFloat(payoutB)/parseFloat(payoutA)).toFixed(1)}</span>. 
+                O lucro desconta ambas as apostas feitas.
               </p>
             </CardContent>
           </Card>
