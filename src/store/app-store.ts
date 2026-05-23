@@ -58,6 +58,7 @@ interface AppState {
   isFavorite: (toolId: ToolPage) => boolean
   achievements: Achievement[]
   unlockAchievement: (id: string) => void
+  checkAchievements: () => void
   userName: string | null
   userEmail: string | null
   isLoggedIn: boolean
@@ -75,16 +76,22 @@ export const useAppStore = create<AppState>()(
       sidebarOpen: false,
       setSidebarOpen: (open) => set({ sidebarOpen: open }),
       calculationHistory: [],
-      addHistory: (entry) =>
+      addHistory: (entry) => {
         set((state) => ({
           calculationHistory: [entry, ...state.calculationHistory].slice(0, 100),
-        })),
+        }))
+        // Check achievements after adding history entry
+        get().checkAchievements()
+      },
       clearHistory: () => set({ calculationHistory: [] }),
       favorites: [],
-      addFavorite: (toolId) =>
+      addFavorite: (toolId) => {
         set((state) => ({
           favorites: [...state.favorites, { id: toolId, toolId, addedAt: Date.now() }],
-        })),
+        }))
+        // Check achievements after adding favorite
+        get().checkAchievements()
+      },
       removeFavorite: (toolId) =>
         set((state) => ({
           favorites: state.favorites.filter((f) => f.toolId !== toolId),
@@ -104,6 +111,49 @@ export const useAppStore = create<AppState>()(
             a.id === id && !a.unlockedAt ? { ...a, unlockedAt: Date.now() } : a
           ),
         })),
+      checkAchievements: () => {
+        const state = get()
+        const history = state.calculationHistory
+        const favs = state.favorites
+        const toUnlock: string[] = []
+
+        // first-calc: pelo menos 1 cálculo no histórico
+        if (history.length >= 1) toUnlock.push('first-calc')
+
+        // martingale-master: usar Martingale 10+ vezes
+        const martingaleCount = history.filter((e) => e.tool === 'martingale').length
+        if (martingaleCount >= 10) toUnlock.push('martingale-master')
+
+        // explorer: usar 5+ ferramentas diferentes
+        const uniqueTools = new Set(history.map((e) => e.tool))
+        if (uniqueTools.size >= 5) toUnlock.push('explorer')
+
+        // high-roller: calcular com banca >= R$10.000
+        const hasHighRoller = history.some((e) => {
+          const p = e.params
+          // Check common bankroll/capital param names
+          const bankroll = (p.bankroll ?? p.capital ?? p.banca ?? p.initialBet ?? 0) as number
+          if (typeof bankroll === 'number' && bankroll >= 10000) return true
+          // Also check totalInvested in result
+          const totalInvested = (e.result?.totalInvested ?? e.result?.totalBankroll ?? 0) as number
+          if (typeof totalInvested === 'number' && totalInvested >= 10000) return true
+          return false
+        })
+        if (hasHighRoller) toUnlock.push('high-roller')
+
+        // strategist: salvar 3+ favoritos
+        if (favs.length >= 3) toUnlock.push('strategist')
+
+        // veteran: realizar 50+ cálculos
+        if (history.length >= 50) toUnlock.push('veteran')
+
+        // Unlock all that qualify
+        for (const id of toUnlock) {
+          if (!state.achievements.find((a) => a.id === id)?.unlockedAt) {
+            state.unlockAchievement(id)
+          }
+        }
+      },
       userName: null,
       userEmail: null,
       isLoggedIn: false,

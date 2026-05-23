@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useAppStore, type ToolPage, toolInfo, toolHref } from '@/store/app-store'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -9,8 +9,18 @@ import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Progress } from '@/components/ui/progress'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import {
-  User, Trophy, Star, History, LogOut, Crown, Target, TrendingUp, Eye,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import {
+  User, Trophy, Star, History, LogOut, Crown, Target, TrendingUp, Eye, Sparkles,
 } from 'lucide-react'
 
 function formatDate(ts: number): string {
@@ -46,7 +56,13 @@ export function UserPanel() {
     favorites,
     removeFavorite,
     achievements,
+    checkAchievements,
   } = useAppStore()
+
+  // Login dialog state
+  const [loginOpen, setLoginOpen] = useState(false)
+  const [nameInput, setNameInput] = useState('')
+  const [emailInput, setEmailInput] = useState('')
 
   // Stats
   const totalCalculations = calculationHistory.length
@@ -80,21 +96,39 @@ export function UserPanel() {
       .slice(0, 2)
   }, [userName])
 
-  // Sample data for demo/preview state when not logged in
-  const sampleFavorites = [
-    { toolId: 'martingale' as ToolPage, id: 'sample-1' },
-    { toolId: 'soros' as ToolPage, id: 'sample-2' },
-    { toolId: 'fibonacci' as ToolPage, id: 'sample-3' },
-  ]
+  // Achievement progress descriptions (show how close the user is)
+  const achievementProgressText = useMemo(() => {
+    const martingaleCount = calculationHistory.filter((e) => e.tool === 'martingale').length
+    const uniqueTools = new Set(calculationHistory.map((e) => e.tool)).size
+    const hasHighRoller = calculationHistory.some((e) => {
+      const p = e.params
+      const bankroll = (p.bankroll ?? p.capital ?? p.banca ?? p.initialBet ?? 0) as number
+      if (typeof bankroll === 'number' && bankroll >= 10000) return true
+      const totalInvested = (e.result?.totalInvested ?? e.result?.totalBankroll ?? 0) as number
+      if (typeof totalInvested === 'number' && totalInvested >= 10000) return true
+      return false
+    })
 
-  const sampleAchievements = [
-    { id: 'sample-a1', title: 'Primeiro Cálculo', description: 'Faça seu primeiro cálculo', icon: '🎯', unlockedAt: Date.now() - 86400000 },
-    { id: 'sample-a2', title: 'Entusiasta', description: 'Faça 10 cálculos', icon: '🔥', unlockedAt: null },
-    { id: 'sample-a3', title: 'Estrategista', description: 'Use 3 ferramentas diferentes', icon: '🧠', unlockedAt: null },
-  ]
+    return {
+      'first-calc': `${Math.min(calculationHistory.length, 1)}/1`,
+      'martingale-master': `${Math.min(martingaleCount, 10)}/10`,
+      'explorer': `${Math.min(uniqueTools, 5)}/5 ferramentas`,
+      'high-roller': hasHighRoller ? '✓' : 'Nenhuma banca ≥ R$10.000',
+      'strategist': `${Math.min(favorites.length, 3)}/3 favoritos`,
+      'veteran': `${Math.min(calculationHistory.length, 50)}/50`,
+    }
+  }, [calculationHistory, favorites.length])
 
   const handleLogin = () => {
-    setUser('Usuário Demo', 'demo@casinotools.com')
+    const name = nameInput.trim()
+    const email = emailInput.trim()
+    if (!name) return
+    setUser(name, email || `${name.toLowerCase().replace(/\s+/g, '.')}@betcalcpro.com`)
+    setLoginOpen(false)
+    setNameInput('')
+    setEmailInput('')
+    // Check achievements on login (existing history might qualify)
+    checkAchievements()
   }
 
   const handleLogout = () => {
@@ -120,6 +154,74 @@ export function UserPanel() {
 
   return (
     <div className="space-y-6">
+      {/* Login Dialog */}
+      <Dialog open={loginOpen} onOpenChange={setLoginOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-neon" />
+              Criar minha conta
+            </DialogTitle>
+            <DialogDescription>
+              Salve seu progresso, desbloqueie conquistas e personalize sua experiência.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div className="space-y-2">
+              <Label htmlFor="name" className="text-sm font-medium">
+                Seu nome *
+              </Label>
+              <Input
+                id="name"
+                placeholder="Ex: João Silva"
+                value={nameInput}
+                onChange={(e) => setNameInput(e.target.value)}
+                className="bg-muted/50 border-border"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && nameInput.trim()) handleLogin()
+                }}
+                autoFocus
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-sm font-medium">
+                E-mail (opcional)
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="joao@email.com"
+                value={emailInput}
+                onChange={(e) => setEmailInput(e.target.value)}
+                className="bg-muted/50 border-border"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && nameInput.trim()) handleLogin()
+                }}
+              />
+              <p className="text-[10px] text-muted-foreground">
+                Seu e-mail fica salvo apenas no seu navegador. Nunca enviamos spam.
+              </p>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setLoginOpen(false)}
+              className="border-border/50"
+            >
+              Cancelar
+            </Button>
+            <Button
+              onClick={handleLogin}
+              disabled={!nameInput.trim()}
+              className="gradient-neon text-black font-bold"
+            >
+              Criar conta
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
@@ -178,27 +280,10 @@ export function UserPanel() {
                     Crie sua conta para salvar seu progresso e desbloquear conquistas
                   </p>
                   <Button
-                    onClick={handleLogin}
+                    onClick={() => setLoginOpen(true)}
                     className="w-full gradient-neon text-black font-bold text-sm"
                   >
-                    <svg className="h-4 w-4 mr-2" viewBox="0 0 24 24">
-                      <path
-                        fill="#4285F4"
-                        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
-                      />
-                      <path
-                        fill="#34A853"
-                        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                      />
-                      <path
-                        fill="#FBBC05"
-                        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                      />
-                      <path
-                        fill="#EA4335"
-                        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                      />
-                    </svg>
+                    <Sparkles className="h-4 w-4 mr-2" />
                     Crie sua conta grátis
                   </Button>
                 </div>
@@ -273,7 +358,7 @@ export function UserPanel() {
 
         {/* Right Column: Achievements + History + Favorites */}
         <div className="lg:col-span-2 space-y-4">
-          {/* Achievements Section */}
+          {/* Achievements Section — always show real achievements */}
           <Card className="border-border/50 bg-card/50 backdrop-blur relative">
             {!isLoggedIn && (
               <div className="absolute top-2 right-2 z-10">
@@ -288,20 +373,21 @@ export function UserPanel() {
                   <Trophy className="h-4 w-4 text-amber-500" /> Conquistas
                 </CardTitle>
                 <Badge className="bg-neon/10 text-neon border-neon/20 text-[10px]">
-                  {isLoggedIn ? `${unlockedCount}/${achievements.length}` : '1/3'}
+                  {unlockedCount}/{achievements.length}
                 </Badge>
               </div>
               <div className="mt-2">
-                <Progress value={isLoggedIn ? achievementProgress : 33} className="h-2 bg-muted/50 [&>[data-slot=progress-indicator]]:bg-neon" />
+                <Progress value={achievementProgress} className="h-2 bg-muted/50 [&>[data-slot=progress-indicator]]:bg-neon" />
                 <p className="text-[10px] text-muted-foreground mt-1">
-                  {isLoggedIn ? achievementProgress.toFixed(0) : '33'}% concluído
+                  {achievementProgress.toFixed(0)}% concluído
                 </p>
               </div>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {(isLoggedIn ? achievements : sampleAchievements).map((achievement) => {
+                {achievements.map((achievement) => {
                   const isUnlocked = !!achievement.unlockedAt
+                  const progressText = achievementProgressText[achievement.id as keyof typeof achievementProgressText] ?? ''
                   return (
                     <div
                       key={achievement.id}
@@ -331,15 +417,17 @@ export function UserPanel() {
                         <p className="text-[10px] text-muted-foreground leading-tight mt-0.5">
                           {achievement.description}
                         </p>
-                        {isUnlocked && (
+                        {isUnlocked ? (
                           <p className="text-[9px] text-neon/70 mt-1">
                             Desbloqueada em {formatDate(achievement.unlockedAt!)}
                           </p>
-                        )}
-                        {!isUnlocked && (
-                          <Badge variant="outline" className="mt-1 text-[9px] text-muted-foreground border-border/50">
-                            Bloqueada
-                          </Badge>
+                        ) : (
+                          <div className="flex items-center gap-1.5 mt-1">
+                            <Badge variant="outline" className="text-[9px] text-muted-foreground border-border/50">
+                              Bloqueada
+                            </Badge>
+                            <span className="text-[9px] text-muted-foreground/50">{progressText}</span>
+                          </div>
                         )}
                       </div>
                     </div>
@@ -366,39 +454,7 @@ export function UserPanel() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {!isLoggedIn ? (
-                  <div className="overflow-y-auto max-h-64">
-                    <div className="space-y-2 pr-2">
-                      {sampleFavorites.map((fav) => {
-                        const info = toolInfo[fav.toolId]
-                        const href = toolHref[fav.toolId]
-                        return (
-                          <div
-                            key={fav.id}
-                            className="flex items-center gap-2 p-2.5 rounded-lg border border-border/30 bg-muted/10 opacity-70"
-                          >
-                            <Link
-                              href={href}
-                              className="flex items-center gap-2 min-w-0 flex-1 text-left"
-                            >
-                              <div className="h-7 w-7 rounded-md bg-neon/10 flex items-center justify-center shrink-0">
-                                <Star className="h-3 w-3 text-neon fill-neon" />
-                              </div>
-                              <div className="min-w-0">
-                                <p className="text-sm font-semibold truncate">
-                                  {info?.name ?? fav.toolId}
-                                </p>
-                                <p className="text-[10px] text-muted-foreground truncate">
-                                  {info?.description ?? ''}
-                                </p>
-                              </div>
-                            </Link>
-                          </div>
-                        )
-                      })}
-                    </div>
-                  </div>
-                ) : favorites.length === 0 ? (
+                {favorites.length === 0 ? (
                   <div className="flex flex-col items-center gap-2 py-6 text-center">
                     <Star className="h-8 w-8 text-muted-foreground/30" />
                     <p className="text-sm text-muted-foreground">
@@ -526,28 +582,28 @@ export function UserPanel() {
               <CardContent className="p-3 text-center">
                 <Target className="h-4 w-4 text-neon mx-auto mb-1" />
                 <p className="text-[10px] text-muted-foreground">Cálculos</p>
-                <p className="text-xl font-black gradient-neon-text">{isLoggedIn ? totalCalculations : 42}</p>
+                <p className="text-xl font-black gradient-neon-text">{totalCalculations}</p>
               </CardContent>
             </Card>
             <Card className="border-neon-blue/20 bg-neon-blue/5">
               <CardContent className="p-3 text-center">
                 <Trophy className="h-4 w-4 text-neon-blue mx-auto mb-1" />
                 <p className="text-[10px] text-muted-foreground">Conquistas</p>
-                <p className="text-xl font-black neon-text-blue">{isLoggedIn ? unlockedCount : 1}</p>
+                <p className="text-xl font-black neon-text-blue">{unlockedCount}</p>
               </CardContent>
             </Card>
             <Card className="border-amber-500/20 bg-amber-500/5">
               <CardContent className="p-3 text-center">
                 <Star className="h-4 w-4 text-amber-500 mx-auto mb-1" />
                 <p className="text-[10px] text-muted-foreground">Favoritos</p>
-                <p className="text-xl font-black text-amber-500">{isLoggedIn ? favorites.length : 3}</p>
+                <p className="text-xl font-black text-amber-500">{favorites.length}</p>
               </CardContent>
             </Card>
             <Card className="border-purple-500/20 bg-purple-500/5">
               <CardContent className="p-3 text-center">
                 <TrendingUp className="h-4 w-4 text-purple-400 mx-auto mb-1" />
                 <p className="text-[10px] text-muted-foreground">Progresso</p>
-                <p className="text-xl font-black text-purple-400">{isLoggedIn ? achievementProgress.toFixed(0) : '33'}%</p>
+                <p className="text-xl font-black text-purple-400">{achievementProgress.toFixed(0)}%</p>
               </CardContent>
             </Card>
           </div>
