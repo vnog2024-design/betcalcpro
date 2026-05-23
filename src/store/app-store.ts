@@ -12,6 +12,7 @@ export type ToolPage =
   | 'sequence-analyzer'
   | 'probability-simulator'
   | 'strategy-generator'
+  | 'hedging'
   | 'artigos'
   | 'user-panel'
   | 'faq'
@@ -139,6 +140,7 @@ export const toolInfo: Record<ToolPage, { name: string; description: string; ico
   'sequence-analyzer': { name: 'Analisador de Sequências', description: 'Analise padrões em sequências de resultados', icon: 'Search', category: 'simulators' },
   'probability-simulator': { name: 'Simulador de Probabilidades', description: 'Simule probabilidades e cenários', icon: 'Percent', category: 'simulators' },
   'strategy-generator': { name: 'Gerador de Estratégias', description: 'Gere estratégias personalizadas de gestão', icon: 'Sparkles', category: 'simulators' },
+  hedging: { name: 'Cobertura (Hedging)', description: 'Calcule estratégias de cobertura para dois resultados simultâneos', icon: 'ShieldCheck', category: 'calculators' },
   artigos: { name: 'Artigos', description: 'Artigos educacionais', icon: 'BookOpen', category: 'content' },
   'user-panel': { name: 'Meu Painel', description: 'Seu painel pessoal', icon: 'User', category: 'nav' },
   'faq': { name: 'FAQ', description: 'Perguntas frequentes', icon: 'HelpCircle', category: 'legal' },
@@ -162,6 +164,7 @@ export const toolHref: Record<ToolPage, string> = {
   'sequence-analyzer': '/sequence-analyzer',
   'probability-simulator': '/probability-simulator',
   'strategy-generator': '/strategy-generator',
+  hedging: '/hedging',
   artigos: '/artigos',
   'user-panel': '/user-panel',
   faq: '/faq',

@@ -13,6 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     'sequence-analyzer',
     'probability-simulator',
     'strategy-generator',
+    'hedging',
   ]
 
   const legal = [
