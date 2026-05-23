@@ -10,7 +10,7 @@ import { HeroVisual } from '@/components/shared/hero-visual'
 import { 
   TrendingUp, BarChart3, Calculator, Sparkles, 
   ArrowRight, ChevronRight, Target, Coins, AlertTriangle,
-  Search, Percent, Shield, ShieldCheck, BookOpen, Lightbulb
+  Search, Percent, Shield, ShieldCheck, BookOpen, Lightbulb, RefreshCw
 } from 'lucide-react'
 
 const allTools: { id: ToolPage; icon: React.ComponentType<{ className?: string }>; color: string }[] = [
@@ -21,6 +21,7 @@ const allTools: { id: ToolPage; icon: React.ComponentType<{ className?: string }
   { id: 'masaniello', icon: Calculator, color: 'neon-blue' },
   { id: 'recovery', icon: Shield, color: 'neon' },
   { id: 'hedging', icon: ShieldCheck, color: 'neon-blue' },
+  { id: 'ciclos', icon: RefreshCw, color: 'neon' },
   { id: 'sequence-analyzer', icon: Search, color: 'neon-blue' },
   { id: 'probability-simulator', icon: Percent, color: 'amber-500' },
   { id: 'strategy-generator', icon: Sparkles, color: 'purple-500' },
@@ -112,7 +113,7 @@ export function LandingPage() {
             <div className="flex flex-wrap gap-x-8 gap-y-3 mt-8 pt-6 border-t border-border/30">
               <div className="flex items-center gap-2">
                 <Calculator className="h-4 w-4 text-neon" />
-                <span className="text-sm text-muted-foreground"><span className="font-bold text-foreground">7</span> Calculadoras</span>
+                <span className="text-sm text-muted-foreground"><span className="font-bold text-foreground">8</span> Calculadoras</span>
               </div>
               <div className="flex items-center gap-2">
                 <Sparkles className="h-4 w-4 text-neon-blue" />

@@ -231,3 +231,39 @@ Stage Summary:
 - Partial Soros (e.g., 30%) shows how much is protected vs reinvested at each step
 - If loss occurs, user can see exactly how much protected profit remains from previous wins
 - Dynamic alerts tell user when they're "in the green" even with a loss at that level
+
+---
+Task ID: 7
+Agent: Main
+Task: Build Calculadora de Ciclos — Martingale with cycle-based recovery
+
+Work Log:
+- Created /src/components/tools/cycles-calculator.tsx — complete Cycles Calculator component
+- Created /src/app/ciclos/page.tsx — route with metadata (title, description, canonical, OG)
+- Created /src/app/ciclos/client.tsx — client component wrapper with ToolPageLayout
+- Updated /src/store/app-store.ts — added 'ciclos' to ToolPage union, toolInfo (RefreshCw icon, calculators category), toolHref (/ciclos)
+- Updated /src/components/layout/sidebar.tsx — added RefreshCw import, iconMap entry, 'ciclos' to Calculadoras tools
+- Updated /src/components/landing/landing-page.tsx — added RefreshCw import, ciclos to allTools, updated calculator count 7→8
+- Calculation logic verified:
+  - Cycle N+1 entry = last bet of Cycle N × cycle multiplier
+  - Net profit = bet × payout - (cycle invested + previous losses)
+  - With payout 2x, cycle mult 2x, 2 gales: every win gives +R$1 (consistent profit)
+  - With cycle mult below minimum (1/(payout-1)): correctly shows negative profit
+- Visual features:
+  - Cycle-by-cycle expandable cards with detailed table (Jogada, Aposta, Investido Ciclo, Perdas Ant., Total Investido, Retorno, Lucro Líquido)
+  - Click any row to simulate a win at that step (GREEN highlight with profit display)
+  - Accumulated loss chart per cycle
+  - Bankroll support calculator — shows how many cycles your bankroll can handle
+  - Visual cycle map (compact cards showing entry/bet range/loss per cycle)
+  - Flow diagram showing cycle progression with multiplier arrows
+  - Warning when cycle multiplier is too low to recover losses
+  - "Como Funciona" expandable explanation section
+- Lint passes clean, both /ciclos and / return 200
+
+Stage Summary:
+- New "Calculadora de Ciclos" tool fully implemented at /ciclos
+- Logic: Martingale within cycles (configurable gales) + recovery between cycles (last bet × cycle mult)
+- Key difference from regular Martingale: limits gales per cycle, starts new cycle instead of continuing infinite gales
+- Bankroll support feature tells user exactly which cycle/step would break their bankroll
+- Visual design matches existing tool pages (neon theme, cards, charts, responsive layout)
+- Site now has 8 calculators (was 7)

@@ -13,6 +13,7 @@ export type ToolPage =
   | 'probability-simulator'
   | 'strategy-generator'
   | 'hedging'
+  | 'ciclos'
   | 'artigos'
   | 'user-panel'
   | 'faq'
@@ -141,6 +142,7 @@ export const toolInfo: Record<ToolPage, { name: string; description: string; ico
   'probability-simulator': { name: 'Simulador de Probabilidades', description: 'Simule probabilidades e cenários', icon: 'Percent', category: 'simulators' },
   'strategy-generator': { name: 'Gerador de Estratégias', description: 'Gere estratégias personalizadas de gestão', icon: 'Sparkles', category: 'simulators' },
   hedging: { name: 'Cobertura (Hedging)', description: 'Calcule estratégias de cobertura para dois resultados simultâneos', icon: 'ShieldCheck', category: 'calculators' },
+  ciclos: { name: 'Ciclos', description: 'Martingale em ciclos: limite os gales e recupere no próximo ciclo', icon: 'RefreshCw', category: 'calculators' },
   artigos: { name: 'Artigos', description: 'Artigos educacionais', icon: 'BookOpen', category: 'content' },
   'user-panel': { name: 'Meu Painel', description: 'Seu painel pessoal', icon: 'User', category: 'nav' },
   'faq': { name: 'FAQ', description: 'Perguntas frequentes', icon: 'HelpCircle', category: 'legal' },
@@ -165,6 +167,7 @@ export const toolHref: Record<ToolPage, string> = {
   'probability-simulator': '/probability-simulator',
   'strategy-generator': '/strategy-generator',
   hedging: '/hedging',
+  ciclos: '/ciclos',
   artigos: '/artigos',
   'user-panel': '/user-panel',
   faq: '/faq',

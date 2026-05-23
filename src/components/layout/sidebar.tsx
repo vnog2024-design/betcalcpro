@@ -6,16 +6,16 @@ import { useAppStore, toolInfo, toolHref, type ToolPage } from '@/store/app-stor
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
-import { X, Home, TrendingUp, Wallet, BarChart3, Calculator, Coins, Shield, ShieldCheck, Search, Percent, Sparkles, User, Star, ChevronRight, BookOpen } from 'lucide-react'
+import { X, Home, TrendingUp, Wallet, BarChart3, Calculator, Coins, Shield, ShieldCheck, Search, Percent, Sparkles, User, Star, ChevronRight, BookOpen, RefreshCw } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-  Home, TrendingUp, Wallet, BarChart3, Calculator, Coins, Shield, ShieldCheck, Search, Percent, Sparkles, User, BookOpen,
+  Home, TrendingUp, Wallet, BarChart3, Calculator, Coins, Shield, ShieldCheck, Search, Percent, Sparkles, User, BookOpen, RefreshCw,
 }
 
 const toolGroups = [
   { label: 'Menu', tools: ['home'] as const },
-  { label: 'Calculadoras', tools: ['martingale', 'bankroll', 'fibonacci', 'masaniello', 'soros', 'recovery', 'hedging'] as const },
+  { label: 'Calculadoras', tools: ['martingale', 'bankroll', 'fibonacci', 'masaniello', 'soros', 'recovery', 'hedging', 'ciclos'] as const },
   { label: 'Simuladores', tools: ['sequence-analyzer', 'probability-simulator', 'strategy-generator'] as const },
   { label: 'Conteúdo', tools: ['artigos'] as const },
   { label: 'Conta', tools: ['user-panel'] as const },
