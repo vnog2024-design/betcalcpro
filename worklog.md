@@ -199,3 +199,35 @@ Stage Summary:
 - When AdSense approves and serves real ads, placeholders automatically disappear and real ads show
 - Landing page: 3 ad blocks (top/middle/bottom), tools: 2 (in-content/bottom), articles: 3, other pages: 1-2
 - All changes deployed via GitHub push to Vercel
+
+---
+Task ID: 6
+Agent: Main
+Task: Improve Soros Calculator with Soros % (reinvestment percentage) and win/loss values per level
+
+Work Log:
+- Read current soros-calculator.tsx — found it had hardcoded 2x multiplier, no Soros percentage option, only showed win scenario
+- Completely rewrote soros-calculator.tsx with new features:
+  - Added Multiplicador (Odds) input — user can set any multiplier (1.5x, 2x, 3x, etc.)
+  - Added Soros % slider (1-100%) — controls how much of profit to reinvest vs protect
+  - Created detailed SorosStep interface with both WIN and LOSS scenarios per level
+  - WIN scenario shows: Lucro Bruto, Valor Protegido, Valor Reinvestido, Novo Capital, Banca Total, Protegido Acumulado
+  - LOSE scenario shows: Perda da Operação, Protegido Anterior, Banca Restante, Resultado Líquido
+  - Added contextual alerts: "Mesmo perdendo, você sai no lucro!" when partial Soros protects enough
+  - Added dual-area chart showing both total bankroll growth and protected profit accumulation
+  - Added compact summary table with all key values per step
+  - Added visual step cards showing total bankroll and protected amount
+- Created /src/components/ui/slider.tsx — shadcn/ui Slider component using @radix-ui/react-slider (package already installed)
+- Math verification:
+  - Soros 30% + 2x: Step 1 win → R$200 total (R$70 protected + R$130 working), if lose at step 3 → still +R$61 profit
+  - Soros 100% + 2x: Traditional doubling (R$200, R$400, R$800...) with no protection
+  - Soros 50% + 1.5x: Moderate growth with partial protection
+- All calculations verified correct via test scripts
+- Lint passes, page compiles and returns 200
+
+Stage Summary:
+- Soros Calculator now has full Soros % control (1-100%)
+- Each level shows both VITÓRIA and DERROTA scenarios with exact values
+- Partial Soros (e.g., 30%) shows how much is protected vs reinvested at each step
+- If loss occurs, user can see exactly how much protected profit remains from previous wins
+- Dynamic alerts tell user when they're "in the green" even with a loss at that level
