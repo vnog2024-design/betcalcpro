@@ -369,3 +369,24 @@ Stage Summary:
 - Dev server running stably
 - All pages return 200, no JS errors
 - Lint passes cleanly
+---
+Task ID: 2
+Agent: Main
+Task: Configure automatic deployment to Vercel via GitHub push
+
+Work Log:
+- Found existing Vercel project: betcalcpro (betcalcpro.com.br)
+- Last deploy was 8h ago - changes were not being pushed to GitHub
+- Discovered 5 unpushed commits on main branch
+- Pushed all commits to GitHub: git push origin main
+- Vercel auto-detected the push and triggered a new deployment
+- Deployment completed successfully in 45s
+- Created auto-deploy script at .zscripts/auto-deploy.sh
+- Added .zscripts/ to .gitignore (contains Vercel token)
+- Verified all production routes return 200
+
+Stage Summary:
+- Git push to GitHub now auto-triggers Vercel deployment
+- Auto-deploy script available: bash .zscripts/auto-deploy.sh "commit message"
+- Production site verified: https://betcalcpro.com.br (all routes 200)
+- The problem was: changes were being committed but NOT pushed to GitHub
