@@ -6,6 +6,7 @@ import { useAppStore, toolInfo, type ToolPage } from '@/store/app-store'
 import { Button } from '@/components/ui/button'
 import { Menu, X, User, Sun, Moon } from 'lucide-react'
 import { ThemePicker } from '@/components/shared/theme-picker'
+import { SiteSearch } from '@/components/shared/site-search'
 import { cn } from '@/lib/utils'
 
 const quickNavTools: ToolPage[] = ['martingale', 'bankroll', 'fibonacci', 'soros']
@@ -74,6 +75,9 @@ export function Header() {
 
         {/* Right: Actions */}
         <div className="flex items-center gap-2">
+          {/* Site Search */}
+          <SiteSearch />
+
           {/* Color theme picker */}
           <ThemePicker />
 

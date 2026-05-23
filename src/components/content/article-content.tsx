@@ -5,6 +5,55 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { ArrowLeft, BookOpen, Calculator, TrendingUp, BarChart3, Lightbulb, AlertTriangle } from 'lucide-react'
 import { AdInContent } from '@/components/shared/ad-banner'
+import { ArticleCTA } from '@/components/shared/article-cta'
+import { ShareButtons } from '@/components/shared/share-buttons'
+
+const ctaLinksMap: Record<string, { name: string; href: string; description: string }[]> = {
+  'introducao-probabilidade': [
+    { name: 'Simulador de Probabilidades', href: '/probability-simulator', description: 'Simule eventos e calcule probabilidades' },
+    { name: 'Calculadora Martingale', href: '/martingale', description: 'Analise a progressão Martingale' },
+  ],
+  'gestao-risco-capital': [
+    { name: 'Gestão de Capital', href: '/bankroll', description: 'Calcule o tamanho ideal da posição' },
+    { name: 'Recuperação de Capital', href: '/recovery', description: 'Planeje a recuperação de perdas' },
+  ],
+  'sequencia-fibonacci-matematica': [
+    { name: 'Calculadora Fibonacci', href: '/fibonacci', description: 'Gere e analise a sequência Fibonacci' },
+    { name: 'Calculadora Martingale', href: '/martingale', description: 'Compare com a progressão Martingale' },
+  ],
+  'progressao-martingale-analise': [
+    { name: 'Calculadora Martingale', href: '/martingale', description: 'Simule a progressão Martingale' },
+    { name: 'Calculadora de Ciclos', href: '/ciclos', description: 'Martingale com ciclos de recuperação' },
+  ],
+  'estatistica-descritiva-basica': [
+    { name: 'Simulador de Probabilidades', href: '/probability-simulator', description: 'Explore conceitos estatísticos na prática' },
+  ],
+  'simulacao-monte-carlo': [
+    { name: 'Simulador de Probabilidades', href: '/probability-simulator', description: 'Simule eventos aleatórios' },
+    { name: 'Gerador de Estratégias', href: '/strategy-generator', description: 'Crie estratégias com simulação' },
+  ],
+  'falacias-estatisticas': [
+    { name: 'Simulador de Probabilidades', href: '/probability-simulator', description: 'Teste falácias com simulação' },
+  ],
+  'valor-esperado-matematico': [
+    { name: 'Gestão de Capital', href: '/bankroll', description: 'Aplique valor esperado na gestão' },
+    { name: 'Calculadora de Hedging', href: '/hedging', description: 'Calcule coberturas de risco' },
+  ],
+  'paradoxo-monty-hall': [
+    { name: 'Simulador de Probabilidades', href: '/probability-simulator', description: 'Simule o paradoxo de Monty Hall' },
+  ],
+  'lei-grandes-numeros': [
+    { name: 'Simulador de Probabilidades', href: '/probability-simulator', description: 'Veja a LGN em ação' },
+    { name: 'Gerador de Estratégias', href: '/strategy-generator', description: 'Estratégias baseadas em simulação' },
+  ],
+  'distribuicao-normal-gaussiana': [
+    { name: 'Simulador de Probabilidades', href: '/probability-simulator', description: 'Explore a distribuição normal' },
+  ],
+  'introducao-teoria-jogos': [
+    { name: 'Gerador de Estratégias', href: '/strategy-generator', description: 'Crie estratégias com teoria dos jogos' },
+    { name: 'Calculadora de Hedging', href: '/hedging', description: 'Estratégias de cobertura de risco' },
+  ],
+}
 
 const articles: Record<string, {
   title: string
@@ -27,7 +76,7 @@ const articles: Record<string, {
           até a economia e a ciência da computação.
         </p>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">O que é Probabilidade?</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">🎲 O que é Probabilidade?</h2>
         <p className="text-base leading-relaxed">
           Probabilidade é uma medida numérica que quantifica a chance de um evento ocorrer. Ela é expressa como 
           um número entre 0 e 1 (ou 0% a 100%), onde 0 significa que o evento é impossível e 1 significa que 
@@ -39,7 +88,7 @@ const articles: Record<string, {
           </p>
         </div>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">Conceitos Fundamentais</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">📐 Conceitos Fundamentais</h2>
         <div className="space-y-4">
           <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
             <h3 className="font-bold text-base mb-2">Espaço Amostral (Ω)</h3>
@@ -74,7 +123,7 @@ const articles: Record<string, {
           </div>
         </div>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">Probabilidade Condicional</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">🔗 Probabilidade Condicional</h2>
         <p className="text-base leading-relaxed">
           A probabilidade condicional P(A|B) é a probabilidade do evento A ocorrer, sabendo que o evento B já ocorreu. 
           A fórmula é: P(A|B) = P(A e B) / P(B). Este conceito é fundamental para o Teorema de Bayes, que permite 
@@ -82,13 +131,18 @@ const articles: Record<string, {
           médico, filtros de spam, inteligência artificial e muitas outras áreas.
         </p>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">Aplicações Práticas</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">🚀 Aplicações Práticas</h2>
         <p className="text-base leading-relaxed">
           A teoria das probabilidades tem inúmeras aplicações práticas no dia a dia: previsão do tempo (probabilidade 
           de chuva), análise de risco em seguros e finanças, controle de qualidade na indústria, algoritmos de 
           machine learning, criptografia, e muito mais. Compreender os fundamentos da probabilidade é essencial 
           para tomar decisões mais informadas em qualquer área que envolva incerteza.
         </p>
+
+        <div className="flex gap-3 p-4 rounded-lg bg-neon/5 border border-neon/20 my-4">
+          <span className="text-lg">💡</span>
+          <div className="text-sm text-muted-foreground">Use o Simulador de Probabilidades para visualizar como a frequência relativa de eventos converge para a probabilidade teórica à medida que o número de tentativas aumenta.</div>
+        </div>
 
         <div className="mt-8 p-4 rounded-lg border border-amber-500/30 bg-amber-500/5">
           <div className="flex items-center gap-2 mb-2">
@@ -117,7 +171,7 @@ const articles: Record<string, {
           incerteza financeira, a gestão adequada do risco é fundamental para a sustentabilidade a longo prazo.
         </p>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">Princípios Fundamentais</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">🛡️ Princípios Fundamentais</h2>
         <div className="space-y-4">
           <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
             <h3 className="font-bold text-base mb-2">1. Proteção do Capital</h3>
@@ -146,7 +200,7 @@ const articles: Record<string, {
           </div>
         </div>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">Calculando o Tamanho da Posição</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">📏 Calculando o Tamanho da Posição</h2>
         <p className="text-base leading-relaxed">
           O cálculo do tamanho da posição é uma das aplicações mais práticas da gestão de risco. A fórmula básica é:
         </p>
@@ -161,7 +215,7 @@ const articles: Record<string, {
           na operação não exceda o valor predeterminado.
         </p>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">Stop Loss e Take Profit</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">🎯 Stop Loss e Take Profit</h2>
         <p className="text-base leading-relaxed">
           Stop loss é o nível de preço onde você automaticamente sai de uma operação para limitar perdas. 
           Take profit é o nível onde você garante o lucro. A relação entre o take profit e o stop loss 
@@ -169,7 +223,7 @@ const articles: Record<string, {
           ou seja, o ganho potencial deve ser pelo menos o dobro da perda potencial.
         </p>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">O Drawdown Máximo</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">📉 O Drawdown Máximo</h2>
         <p className="text-base leading-relaxed">
           Drawdown é a maior queda percentual do capital desde um ponto máximo até um ponto mínimo. É uma medida 
           fundamental de risco que mostra o pior cenário já vivido. Um drawdown de 50% exige um retorno de 100% 
@@ -204,7 +258,7 @@ const articles: Record<string, {
           subsequente é a soma dos dois anteriores: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, ...
         </p>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">Propriedades Matemáticas</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">🔢 Propriedades Matemáticas</h2>
         <p className="text-base leading-relaxed">
           A sequência de Fibonacci possui propriedades matemáticas notáveis:
         </p>
@@ -215,7 +269,7 @@ const articles: Record<string, {
           <li className="flex gap-2"><span className="text-neon">•</span> Dois termos consecutivos são sempre primos entre si (não têm divisores comuns)</li>
         </ul>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">O Número Áureo (φ)</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">✨ O Número Áureo (φ)</h2>
         <p className="text-base leading-relaxed">
           A proporção áurea, representada pela letra grega φ (phi), é aproximadamente 1,618. Ela surge 
           naturalmente na sequência de Fibonacci: à medida que os números crescem, a razão entre termos 
@@ -223,7 +277,14 @@ const articles: Record<string, {
           naturais e é considerado uma das proporções mais harmônicas da matemática.
         </p>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">Fibonacci na Natureza</h2>
+        <Card className="bg-neon/5 border-neon/20 p-4 my-4">
+          <CardContent className="p-0">
+            <p className="text-center font-mono text-lg">φ = (1 + √5) / 2 ≈ 1,6180339887...</p>
+            <p className="text-center text-sm text-muted-foreground mt-2">A proporção áurea — o limite da razão entre termos consecutivos de Fibonacci</p>
+          </CardContent>
+        </Card>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">🌻 Fibonacci na Natureza</h2>
         <p className="text-base leading-relaxed">
           A sequência de Fibonacci aparece em diversos fenômenos naturais: o número de pétalas de muitas 
           flores (3, 5, 8, 13, 21), a disposição das sementes no girassol, as espirais de conchas marinhas 
@@ -231,7 +292,7 @@ const articles: Record<string, {
           esta sequência por sua eficiência matemática no empacotamento e crescimento.
         </p>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">Aplicações Práticas</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">🛠️ Aplicações Práticas</h2>
         <p className="text-base leading-relaxed">
           A sequência de Fibonacci e o número áureo têm aplicações em diversas áreas: análise técnica de 
           mercados financeiros (níveis de suporte e resistência), design e arquitetura (proporções áureas), 
@@ -239,6 +300,11 @@ const articles: Record<string, {
           de capital. É importante notar que, embora fascinante, a sequência de Fibonacci não possui 
           propriedades mágicas — sua utilidade vem de suas propriedades matemáticas reais.
         </p>
+
+        <div className="flex gap-3 p-4 rounded-lg bg-amber-500/5 border border-amber-500/20 my-4">
+          <span className="text-lg">⚠️</span>
+          <div className="text-sm text-muted-foreground">Embora a sequência de Fibonacci apareça em muitos fenômenos naturais, nem toda ocorrência de números de Fibonacci na natureza é significativa. Cuidado para não ver padrões onde não existem — isso é chamado de apofenia.</div>
+        </div>
       </div>
     ),
   },
@@ -256,7 +322,7 @@ const articles: Record<string, {
           perdas anteriores e gere um lucro igual à aposta inicial.
         </p>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">Como Funciona a Progressão</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">⚙️ Como Funciona a Progressão</h2>
         <div className="p-4 rounded-lg bg-muted/30 border border-border/50">
           <p className="text-center font-mono">
             Nível 1: R$10 → Perda → Saldo: -R$10<br/>
@@ -271,7 +337,7 @@ const articles: Record<string, {
           R$10, após 3 perdas consecutivas seguidas de uma vitória no nível 4, o resultado líquido é +R$10.
         </p>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">Análise Estatística</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">📊 Análise Estatística</h2>
         <p className="text-base leading-relaxed">
           A progressão Martingale tem uma propriedade teórica interessante: em um cenário com probabilidade 
           de vitória de 50% e recursos infinitos, o valor esperado é positivo. No entanto, na prática, 
@@ -284,7 +350,7 @@ const articles: Record<string, {
           <li className="flex gap-2"><span className="text-amber-500">•</span> <strong>Probabilidade de ruína:</strong> A probabilidade de uma sequência longa de perdas não é tão baixa quanto parece</li>
         </ul>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">A Matemática da Ruína</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">💥 A Matemática da Ruína</h2>
         <p className="text-base leading-relaxed">
           Com probabilidade de 50% por evento, a chance de 10 perdas consecutivas é (0,5)^10 = 0,0977%, 
           ou aproximadamente 1 em 1.024. Isso parece pequeno, mas considere que em 1.000 sequências de 
@@ -293,7 +359,7 @@ const articles: Record<string, {
           com um prejuízo acumulado de R$10.230.
         </p>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">A Martingale como Ferramenta Educacional</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">🎓 A Martingale como Ferramenta Educacional</h2>
         <p className="text-base leading-relaxed">
           Embora a Martingale seja frequentemente discutida no contexto de apostas, ela é primeiramente um 
           conceito matemático importante. Estudar a Martingale ensina sobre progressões geométricas, 
@@ -328,7 +394,7 @@ const articles: Record<string, {
           tem — e é aí que a estatística descritiva entra.
         </p>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">Medidas de Tendência Central</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">📏 Medidas de Tendência Central</h2>
         <div className="space-y-4">
           <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
             <h3 className="font-bold text-base mb-2">Média Aritmética</h3>
@@ -355,7 +421,7 @@ const articles: Record<string, {
           </div>
         </div>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">Medidas de Dispersão</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">📊 Medidas de Dispersão</h2>
         <div className="space-y-4">
           <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
             <h3 className="font-bold text-base mb-2">Variância</h3>
@@ -375,7 +441,7 @@ const articles: Record<string, {
           </div>
         </div>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">Distribuição Normal</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">🔔 Distribuição Normal</h2>
         <p className="text-base leading-relaxed">
           A distribuição normal (ou gaussiana) é a distribuição mais importante da estatística. Sua forma 
           de &quot;sino&quot; simétrico aparece naturalmente em muitos fenômenos. As propriedades da distribuição 
@@ -398,7 +464,7 @@ const articles: Record<string, {
           aleatória das simulações.
         </p>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">Como Funciona</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">🔄 Como Funciona</h2>
         <p className="text-base leading-relaxed">
           O método de Monte Carlo funciona em três passos básicos:
         </p>
@@ -408,7 +474,7 @@ const articles: Record<string, {
           <li><strong className="text-foreground">Analisar os resultados:</strong> Calcular estatísticas (média, variância, percentis) a partir dos resultados simulados</li>
         </ol>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">Exemplo Prático: Estimativa de Pi</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">🎯 Exemplo Prático: Estimativa de Pi</h2>
         <p className="text-base leading-relaxed">
           Uma das demonstrações mais elegantes do método Monte Carlo é a estimativa do valor de π. 
           Imagine um quadrado de lado 1 com um círculo inscrito. A razão entre as áreas é π/4. 
@@ -417,7 +483,7 @@ const articles: Record<string, {
           precisão crescente.
         </p>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">Aplicações</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">🚀 Aplicações</h2>
         <ul className="space-y-2 text-base text-muted-foreground">
           <li className="flex gap-2"><span className="text-neon">•</span> Finanças: precificação de derivativos, análise de risco de portfólio (VaR)</li>
           <li className="flex gap-2"><span className="text-neon">•</span> Engenharia: análise de confiabilidade de sistemas complexos</li>
@@ -426,13 +492,18 @@ const articles: Record<string, {
           <li className="flex gap-2"><span className="text-neon">•</span> Inteligência artificial: métodos de amostragem em ML</li>
         </ul>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">Limitações</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">⚠️ Limitações</h2>
         <p className="text-base leading-relaxed">
           A principal limitação do Monte Carlo é a necessidade de muitas simulações para convergir, 
           especialmente para eventos raros. A qualidade dos resultados depende da qualidade do modelo 
           e das distribuições de probabilidade escolhidas. Além disso, eventos com probabilidade muito 
           baixa podem não ser adequadamente representados sem um número extremamente alto de simulações.
         </p>
+
+        <div className="flex gap-3 p-4 rounded-lg bg-neon/5 border border-neon/20 my-4">
+          <span className="text-lg">💡</span>
+          <div className="text-sm text-muted-foreground">Você pode experimentar simulações de Monte Carlo diretamente no nosso Simulador de Probabilidades — tente aumentar o número de simulações e observe como os resultados convergem!</div>
+        </div>
       </div>
     ),
   },
@@ -449,7 +520,7 @@ const articles: Record<string, {
           comuns é essencial para pensar de forma mais racional e tomar decisões melhores.
         </p>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">1. Viés do Sobrevivente</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">🛩️ 1. Viés do Sobrevivente</h2>
         <p className="text-base leading-relaxed">
           O viés do sobrevivente ocorre quando focamos apenas nos &quot;sobreviventes&quot; de um processo e 
           ignoramos os que falharam. Exemplo clássico: durante a Segunda Guerra, analistas queriam 
@@ -458,7 +529,7 @@ const articles: Record<string, {
           apesar dos danos; os que foram atingidos nas partes intactas não voltaram.
         </p>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">2. Falácia do Jogador</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">🎰 2. Falácia do Jogador</h2>
         <p className="text-base leading-relaxed">
           A falácia do jogador é a crença de que resultados passados de eventos independentes influenciam 
           resultados futuros. &quot;Saiu vermelho 5 vezes seguidas, então a próxima deve ser preto&quot; — errado! 
@@ -466,7 +537,7 @@ const articles: Record<string, {
           independentemente do histórico. Essa falácia é extremamente comum e pode levar a decisões ruins.
         </p>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">3. Regressão à Média</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">📉 3. Regressão à Média</h2>
         <p className="text-base leading-relaxed">
           A regressão à média é o fenômeno onde valores extremos tendem a ser seguidos por valores mais 
           próximos da média. Se alguém tem um desempenho excepcional, é provável que o próximo desempenho 
@@ -474,7 +545,7 @@ const articles: Record<string, {
           envolve sorte que não se repete. Ignorar a regressão à média leva a falsas causalidades.
         </p>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">4. Correlação não é Causalidade</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">🔗 4. Correlação não é Causalidade</h2>
         <p className="text-base leading-relaxed">
           Duas variáveis podem estar correlacionadas sem que uma cause a outra. O número de afogamentos 
           e vendas de sorvete estão correlacionados — não porque sorvete causa afogamento, mas porque 
@@ -482,7 +553,7 @@ const articles: Record<string, {
           variável confundidora (neste caso, a temperatura).
         </p>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">5. Lei dos Grandes Números Mal Compreendida</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">🔄 5. Lei dos Grandes Números Mal Compreendida</h2>
         <p className="text-base leading-relaxed">
           A lei dos grandes números diz que a média de muitos eventos converge para a probabilidade teórica. 
           Isso NÃO significa que desvios serão &quot;compensados&quot;. Se uma moeda cai 10 vezes em cara, 
@@ -490,6 +561,11 @@ const articles: Record<string, {
           pela diluição, não pela compensação — as 10 caras extras se tornam insignificantes 
           quando divididas por milhares de lançamentos.
         </p>
+
+        <div className="flex gap-3 p-4 rounded-lg bg-amber-500/5 border border-amber-500/20 my-4">
+          <span className="text-lg">⚠️</span>
+          <div className="text-sm text-muted-foreground">A falácia do jogador é uma das armadilhas cognitivas mais perigosas. Ela nos faz acreditar que &quot;estamos devendo&quot; uma vitória após uma sequência de perdas, mas cada evento é independente. Use nosso Simulador de Probabilidades para ver isso na prática!</div>
+        </div>
       </div>
     ),
   },
@@ -507,7 +583,7 @@ const articles: Record<string, {
           &quot;em média&quot; se repetir um experimento muitas vezes.
         </p>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">Fórmula do Valor Esperado</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">📐 Fórmula do Valor Esperado</h2>
         <div className="p-4 rounded-lg bg-muted/30 border border-border/50">
           <p className="text-center font-mono text-lg">
             E(X) = Σ (xᵢ × P(xᵢ))
@@ -517,7 +593,7 @@ const articles: Record<string, {
           </p>
         </div>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">Exemplo Prático</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">🧮 Exemplo Prático</h2>
         <p className="text-base leading-relaxed">
           Imagine uma aposta onde você paga R$10 para jogar. Se sair cara, ganha R$15; se sair coroa, 
           ganha R$0. O valor esperado é:
@@ -536,7 +612,7 @@ const articles: Record<string, {
           Qualquer aposta com valor esperado negativo é matematicamente desfavorável a longo prazo.
         </p>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">Aplicações do Valor Esperado</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">💼 Aplicações do Valor Esperado</h2>
         <ul className="space-y-2 text-base text-muted-foreground">
           <li className="flex gap-2"><span className="text-neon">•</span> <strong className="text-foreground">Seguros:</strong> Prêmios são calculados com base no valor esperado de sinistros</li>
           <li className="flex gap-2"><span className="text-neon">•</span> <strong className="text-foreground">Investimentos:</strong> Retorno esperado de um ativo é seu valor esperado</li>
@@ -544,7 +620,7 @@ const articles: Record<string, {
           <li className="flex gap-2"><span className="text-neon">•</span> <strong className="text-foreground">Análise de risco:</strong> Comparar valor esperado com variância para decisões informadas</li>
         </ul>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">Valor Esperado e Variância</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">⚖️ Valor Esperado e Variância</h2>
         <p className="text-base leading-relaxed">
           O valor esperado sozinho não conta a história completa. Duas distribuições podem ter o mesmo 
           valor esperado mas riscos muito diferentes. A variância (e o desvio padrão) complementa o 
@@ -579,7 +655,7 @@ const articles: Record<string, {
           desafia nossa intuição sobre probabilidade de forma surpreendente.
         </p>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">O Problema</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">🚪 O Problema</h2>
         <p className="text-base leading-relaxed">
           Imagine que você está em um programa de TV e há 3 portas. Atrás de uma porta há um prêmio (um carro) 
           e atrás das outras duas há bodes. Você escolhe uma porta (digamos, a porta 1). O apresentador, que 
@@ -587,7 +663,7 @@ const articles: Record<string, {
           Ele então pergunta: &quot;Você quer trocar para a porta 2?&quot;
         </p>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">A Resposta Contra-Intuitiva</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">🤯 A Resposta Contra-Intuitiva</h2>
         <p className="text-base leading-relaxed">
           A maioria das pessoas acredita que, com duas portas restantes, a probabilidade é 50-50, então tanto 
           faz trocar ou não. Mas a resposta correta é: <strong className="text-foreground">você deve sempre trocar</strong>, 
@@ -603,7 +679,7 @@ const articles: Record<string, {
           </p>
         </div>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">Por Que Funciona?</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">🔍 Por Que Funciona?</h2>
         <p className="text-base leading-relaxed">
           A chave está em entender que o apresentador NÃO abre uma porta aleatoriamente — ele sempre abre 
           uma porta com bode. Quando você escolhe inicialmente, há 1/3 de chance de ter escolhido o carro 
@@ -611,7 +687,7 @@ const articles: Record<string, {
           Se escolheu um bode (2/3), trocar faz você ganhar, pois o apresentador já eliminou o outro bode.
         </p>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">Simulação com 100 Portas</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">💯 Simulação com 100 Portas</h2>
         <p className="text-base leading-relaxed">
           Para entender melhor, imagine 100 portas: 1 carro e 99 bodes. Você escolhe uma porta (1% de chance 
           de ser o carro). O apresentador abre 98 portas com bodes, restando apenas a sua porta e mais uma. 
@@ -647,7 +723,7 @@ const articles: Record<string, {
           você repete um experimento, mais a média se aproxima do que a teoria prevê.
         </p>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">Exemplo com Moeda</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">🪙 Exemplo com Moeda</h2>
         <p className="text-base leading-relaxed">
           Se você lançar uma moeda justa 10 vezes, pode obter 7 caras (70%). Com 100 lançamentos, talvez 
           55 caras (55%). Com 1.000 lançamentos, provavelmente algo como 505 caras (50,5%). Com 1.000.000 
@@ -663,7 +739,7 @@ const articles: Record<string, {
           </p>
         </div>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">LGN Fraca vs. Forte</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">🔬 LGN Fraca vs. Forte</h2>
         <div className="space-y-4">
           <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
             <h3 className="font-bold text-base mb-2">Lei Fraca (Convergência em Probabilidade)</h3>
@@ -683,7 +759,7 @@ const articles: Record<string, {
           </div>
         </div>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">Aplicações Práticas</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">🚀 Aplicações Práticas</h2>
         <ul className="space-y-2 text-base text-muted-foreground">
           <li className="flex gap-2"><span className="text-neon">•</span> <strong className="text-foreground">Seguros:</strong> Com muitos segurados, o custo médio por apólice converge para o previsto</li>
           <li className="flex gap-2"><span className="text-neon">•</span> <strong className="text-foreground">Qualidade:</strong> Amostras grandes representam melhor a população</li>
@@ -691,13 +767,18 @@ const articles: Record<string, {
           <li className="flex gap-2"><span className="text-neon">•</span> <strong className="text-foreground">Casinos:</strong> A &quot;vantagem da casa&quot; se manifesta no longo prazo</li>
         </ul>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">Interpretação Equivocada Comum</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">⚠️ Interpretação Equivocada Comum</h2>
         <p className="text-base leading-relaxed">
           A LGN NÃO diz que desvios serão &quot;compensados&quot;. Se uma moeda cair 10 vezes em cara, a LGN não 
           garante que as próximas 10 serão coroa. A convergência ocorre pela diluição: as 10 caras extras 
           se tornam insignificantes quando divididas por milhares de lançamentos. A moeda não tem memória — 
           cada lançamento é independente.
         </p>
+
+        <div className="flex gap-3 p-4 rounded-lg bg-neon/5 border border-neon/20 my-4">
+          <span className="text-lg">💡</span>
+          <div className="text-sm text-muted-foreground">A LGN é a base matemática que explica por que casinos sempre lucram a longo prazo. A &quot;vantagem da casa&quot; em cada aposta é pequena, mas com milhões de apostas, o resultado converge para o valor esperado — garantindo lucro para o casino.</div>
+        </div>
 
         <div className="mt-8 p-4 rounded-lg border border-amber-500/30 bg-amber-500/5">
           <div className="flex items-center gap-2 mb-2">
@@ -727,7 +808,7 @@ const articles: Record<string, {
           qualquer análise estatística.
         </p>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">Características da Distribuição Normal</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">📐 Características da Distribuição Normal</h2>
         <div className="space-y-4">
           <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
             <h3 className="font-bold text-base mb-2">Simetria</h3>
@@ -746,7 +827,7 @@ const articles: Record<string, {
           </div>
         </div>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">A Regra 68-95-99,7</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">📊 A Regra 68-95-99,7</h2>
         <p className="text-base leading-relaxed">
           Esta é a propriedade mais útil da distribuição normal:
         </p>
@@ -762,7 +843,7 @@ const articles: Record<string, {
           têm entre 160cm e 180cm, 95% entre 150cm e 190cm, e 99,7% entre 140cm e 200cm.
         </p>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">Teorema Central do Limite</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">🌟 Teorema Central do Limite</h2>
         <p className="text-base leading-relaxed">
           O Teorema Central do Limite (TCL) explica por que a distribuição normal aparece em tantos lugares. 
           Ele afirma que a média de um grande número de variáveis aleatórias independentes, independentemente 
@@ -771,15 +852,17 @@ const articles: Record<string, {
           se combinam.
         </p>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">Pontuação Z (Z-Score)</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">📐 Pontuação Z (Z-Score)</h2>
         <p className="text-base leading-relaxed">
           A pontuação Z mede quantos desvios padrão um valor está acima ou abaixo da média. A fórmula é:
         </p>
-        <div className="p-4 rounded-lg bg-muted/30 border border-border/50">
-          <p className="text-center font-mono text-lg">
-            Z = (X - μ) / σ
-          </p>
-        </div>
+        <Card className="bg-neon/5 border-neon/20 p-4 my-4">
+          <CardContent className="p-0">
+            <p className="text-center font-mono text-lg">Z = (X - μ) / σ</p>
+            <p className="text-center text-sm text-muted-foreground mt-2">Onde X é o valor, μ é a média e σ é o desvio padrão</p>
+          </CardContent>
+        </Card>
+
         <p className="text-base leading-relaxed mt-4">
           Um Z-score de 2 significa que o valor está 2 desvios padrão acima da média. Isso permite comparar 
           valores de distribuições diferentes e calcular probabilidades usando a tabela Z padrão.
@@ -813,7 +896,7 @@ const articles: Record<string, {
           a biologia evolutiva e muitas outras áreas.
         </p>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">O Dilema do Prisioneiro</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">🔒 O Dilema do Prisioneiro</h2>
         <p className="text-base leading-relaxed">
           O dilema do prisioneiro é o exemplo mais famoso da teoria dos jogos. Dois suspeitos são presos 
           e interrogados separadamente. Cada um pode cooperar (ficar em silêncio) ou trair (confessar). 
@@ -849,7 +932,7 @@ const articles: Record<string, {
           às corridas armamentistas.
         </p>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">Conceitos Fundamentais</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">🧠 Conceitos Fundamentais</h2>
         <div className="space-y-4">
           <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
             <h3 className="font-bold text-base mb-2">Equilíbrio de Nash</h3>
@@ -878,13 +961,18 @@ const articles: Record<string, {
           </div>
         </div>
 
-        <h2 className="text-xl font-bold mt-8 mb-3">Aplicações no Mundo Real</h2>
+        <h2 className="text-xl font-bold mt-8 mb-3">🌍 Aplicações no Mundo Real</h2>
         <ul className="space-y-2 text-base text-muted-foreground">
           <li className="flex gap-2"><span className="text-neon">•</span> <strong className="text-foreground">Economia:</strong> Leilões, negociação, oligopólios, regulação</li>
           <li className="flex gap-2"><span className="text-neon">•</span> <strong className="text-foreground">Biologia:</strong> Evolução, seleção natural, comportamento animal</li>
           <li className="flex gap-2"><span className="text-neon">•</span> <strong className="text-foreground">Ciência Política:</strong> Votação, negociações internacionais, dissuasão</li>
           <li className="flex gap-2"><span className="text-neon">•</span> <strong className="text-foreground">Tecnologia:</strong> Design de mecanismos, sistemas de reputação, blockchain</li>
         </ul>
+
+        <div className="flex gap-3 p-4 rounded-lg bg-neon/5 border border-neon/20 my-4">
+          <span className="text-lg">💡</span>
+          <div className="text-sm text-muted-foreground">A teoria dos jogos se aplica diretamente à gestão de risco: ao decidir quanto apostar, você está jogando um jogo contra a variância. Estratégias de cobertura (hedging) são uma forma de mudar as regras do jogo a seu favor.</div>
+        </div>
 
         <div className="mt-8 p-4 rounded-lg border border-neon-blue/30 bg-neon-blue/5">
           <div className="flex items-center gap-2 mb-2">
@@ -918,6 +1006,8 @@ export function ArticleContent({ slug }: { slug: string }) {
   }
 
   const Icon = article.icon
+  const ctaLinks = ctaLinksMap[slug] || []
+  const articleUrl = typeof window !== 'undefined' ? window.location.href : ''
 
   return (
     <div className="space-y-6">
@@ -940,8 +1030,11 @@ export function ArticleContent({ slug }: { slug: string }) {
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold">{article.title}</h1>
         </div>
-        <div className="text-xs text-muted-foreground">
-          Atualizado em {new Date().toLocaleDateString('pt-BR', { year: 'numeric', month: 'long', day: 'numeric' })}
+        <div className="flex items-center justify-between flex-wrap gap-2">
+          <div className="text-xs text-muted-foreground">
+            Atualizado em {new Date().toLocaleDateString('pt-BR', { year: 'numeric', month: 'long', day: 'numeric' })}
+          </div>
+          <ShareButtons url={articleUrl} title={article.title} />
         </div>
       </div>
 
@@ -953,6 +1046,9 @@ export function ArticleContent({ slug }: { slug: string }) {
 
       {/* Article content */}
       {article.content}
+
+      {/* CTA — Experimente na Prática */}
+      <ArticleCTA links={ctaLinks} />
 
       {/* Ad — After content */}
       <AdInContent />

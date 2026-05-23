@@ -34,6 +34,7 @@ export function Footer() {
                 src="/logo-icon.png" 
                 alt="BetCalc Pro" 
                 className="h-7 w-7 rounded object-cover"
+                loading="lazy"
               />
               <span className="font-bold gradient-neon-text text-lg">BetCalc Pro</span>
             </div>

@@ -390,3 +390,140 @@ Stage Summary:
 - Auto-deploy script available: bash .zscripts/auto-deploy.sh "commit message"
 - Production site verified: https://betcalcpro.com.br (all routes 200)
 - The problem was: changes were being committed but NOT pushed to GitHub
+
+---
+Task ID: 2
+Agent: Main
+Task: UX Improvements — Reduce pop-ups for new users, improve empty panel state, collapse long Martingale table
+
+Work Log:
+- **Task 1: PWA Install Prompt** — pwa-install-prompt.tsx
+  - Changed from showing after 3-5 seconds to showing ONLY after 60 seconds on site OR after visiting a second page
+  - Added localStorage page view tracking (pwa-page-views, pwa-first-visit-ts keys)
+  - Added `trackPageView()` function called on component mount to increment page count
+  - Added `shouldShowByTimeOrPages()` helper that checks pageCount >= 2 OR firstVisitTs >= 60s ago
+  - Replaced immediate setTimeout with polling interval (5s) that checks conditions
+  - Kept the 7-day dismissal cooldown unchanged
+
+- **Task 1: Cookie Consent** — cookie-consent.tsx
+  - Changed delay from 300ms to 2000ms (2 seconds)
+  - Redesigned from large rounded card to slim bottom bar (border-t instead of rounded-xl)
+  - Reduced padding from p-5/p-6 to py-2.5 with compact layout
+  - Shortened text from full paragraph to concise "Usamos cookies..." one-liner
+  - Changed link text from "Política de Cookies" to "Saiba mais" for compactness
+  - Reduced button size (h-7, text-xs, px-2.5) and changed label from "Apenas essenciais" to "Essenciais"
+  - Changed from flex-col to inline horizontal layout (text + buttons in one row on desktop)
+  - Kept all functionality (accept, reject, gtag consent update)
+
+- **Task 2: User Panel Empty State** — user-panel.tsx
+  - Replaced "??" avatar text with `<User>` icon from lucide-react
+  - Added sample data for not-logged-in state: 42 calculations, "Martingale" most used, "Hoje" member since
+  - Added 3 sample achievements: "Primeiro Cálculo" (unlocked), "Entusiasta" (locked), "Estrategista" (locked)
+  - Added 3 sample favorite tools: Martingale, Progressão Geométrica, Fibonacci
+  - Changed login button text from "Login com Google" to "Crie sua conta grátis"
+  - Added "Dados ilustrativos" badge with Eye icon on Stats, Achievements, and Favorites cards
+  - Quick Stats Cards show demo values when not logged in (42, 1, 3, 33%)
+  - Demo data shown with opacity-70 to visually distinguish from real data
+
+- **Task 3: Martingale Table Collapse** — martingale-calculator.tsx
+  - Added `tableExpanded` state (default false)
+  - Added `maxVisibleRows = 8` constant
+  - Table renders `visibleLevels` (first 8 or all if expanded) instead of all `levels`
+  - Added expand/collapse button below table when levels > 8
+  - "Ver mais (+N gales)" button with ChevronDown icon when collapsed
+  - "Ver menos" button with ChevronUp icon when expanded
+  - Button styled with hover:text-neon transition for consistency
+  - Same styling and click-to-simulate functionality preserved
+
+- Ran `bun run lint` — passes cleanly with no errors
+- Verified dev server compiles and serves pages without errors
+
+Stage Summary:
+- New users see only Age Gate on first visit (cookie consent delayed 2s, PWA prompt delayed 60s/2nd page)
+- Cookie consent is now a slim, non-intrusive bottom bar
+- Not-logged-in user panel shows rich illustrative demo data instead of zeros and "??"
+- Martingale table is collapsed by default to 8 rows, expandable with clear CTA
+- All existing functionality preserved across all changes
+
+---
+Task ID: 1
+Agent: SEO-Performance Agent
+Task: Apply SEO and performance improvements (sitemap, lazy loading, structured data, AdSense lazy load)
+
+Work Log:
+- Read worklog.md and all target files (sitemap.ts, layout.tsx, artigos/[slug]/page.tsx, footer.tsx, header.tsx, landing-page.tsx, hero-visual.tsx, page.tsx)
+- Searched all .tsx files for <img and <Image tags — found 3 total: footer.tsx (logo), header.tsx (logo), page.tsx (loading shell logo)
+- Task 1: Added 'ciclos' to sitemap.ts tools array (same priority 0.7, monthly change frequency)
+- Task 2: Added loading="lazy" to footer.tsx logo image (below fold). Skipped header.tsx and page.tsx logos (in viewport on first load)
+- Task 3: Updated datePublished from "2025-01-01" to "2025-01-15" in artigos/[slug]/page.tsx Article JSON-LD. Confirmed dateModified already present (dynamic current date) and openGraph.type already set to 'article'
+- Task 4: Changed AdSense script strategy from "afterInteractive" to "lazyOnload" in layout.tsx. Verified google-adsense-account meta tag already present in metadata.other
+- Ran bun run lint — passes cleanly with no errors
+
+Stage Summary:
+- Sitemap now includes the /ciclos route (priority 0.7, monthly change frequency)
+- Footer logo image has loading="lazy" for performance (header/page logos exempt as above-fold)
+- Article structured data has correct datePublished "2025-01-15" + dynamic dateModified + openGraph.type 'article'
+- AdSense script uses strategy="lazyOnload" to avoid blocking initial render
+- google-adsense-account meta tag confirmed present (ca-pub-3765222786344373)
+
+---
+Task ID: 3
+Agent: Main
+Task: Add Site Search (#4) and Export Results (#5) features
+
+Work Log:
+- Read worklog.md, header.tsx, all target calculator components, and existing UI components (command.tsx, dialog.tsx, dropdown-menu.tsx)
+- Feature 1: Site Search
+  - Created /src/components/shared/site-search.tsx as a client component using shadcn CommandDialog
+  - Defined 23 searchable items across 3 categories (8 Calculators, 3 Simulators, 12 Articles)
+  - Each item has label, description, href, category, icon, and keywords for fuzzy matching
+  - Desktop: shows a search input button with ⌘K shortcut hint in the header
+  - Mobile: shows a search icon button that opens the same CommandDialog overlay
+  - Keyboard shortcut: Ctrl+K / Cmd+K toggles the search dialog
+  - ESC closes natively via CommandDialog
+  - Results grouped by category (Calculadoras, Simuladores, Artigos) with colored icons
+  - Footer shows navigation hints (↑↓ navigate, ↵ open, esc close)
+  - Updated /src/components/layout/header.tsx: imported SiteSearch, added to right actions area
+- Feature 2: Export Results
+  - Created /src/components/shared/export-button.tsx as a client component using shadcn DropdownMenu
+  - Supports 2 export formats:
+    1. CSV — Creates CSV string from data array and triggers download via Blob URL
+    2. Copy as image — Uses html2canvas (dynamically imported) to capture target element, copies to clipboard as PNG. Falls back to copying innerText if html2canvas unavailable
+  - Installed html2canvas@1.4.1 package
+  - Added ExportButton to 4 calculator components:
+    1. martingale-calculator.tsx — added useRef, exportData useMemo, ExportButton above table tab with tableRef
+    2. cycles-calculator.tsx — added useRef, exportData useMemo, ExportButton at top of results section with resultsRef
+    3. bankroll-calculator.tsx — added useRef, exportData useMemo, ExportButton at top of results section with resultsRef
+    4. fibonacci-calculator.tsx — added useRef, exportData useMemo, ExportButton in table card header with tableRef
+- Ran `bun run lint` — passes cleanly with no errors
+- Verified all 4 calculator pages return 200 (/martingale, /ciclos, /bankroll, /fibonacci)
+
+Stage Summary:
+- Site Search fully functional with keyboard shortcuts (⌘K/Ctrl+K), responsive design, and fuzzy matching across all calculators, simulators, and articles
+- Export functionality available on 4 calculator pages with CSV download and image copy support
+- All existing functionality preserved — no breaking changes
+- html2canvas@1.4.1 installed for image capture feature
+
+---
+Task ID: 4
+Agent: Main
+Task: Add content and sharing features — CTAs in articles (#6), social sharing buttons (#7), visual elements in articles (#10)
+
+Work Log:
+- Created /src/components/shared/article-cta.tsx — reusable CTA component with gradient border, "Experimente na Prática" title, and calculator links with hover effects
+- Created /src/components/shared/share-buttons.tsx — social sharing component with WhatsApp, Twitter/X, Telegram, Copy Link buttons (default and compact variants, with toast on copy)
+- Added ctaLinksMap to article-content.tsx mapping all 12 articles to their related calculators per spec
+- Updated ArticleContent component to include ShareButtons (below title, next to date) and ArticleCTA (after article content, before ad)
+- Updated tool-page-layout.tsx to include compact ShareButtons in top-right area of tool pages
+- Added decorative emojis to section headings across all 12 articles (🎲📐🔗🚀🛡️📏🎯📉🔢✨🌻⚙️📊💥🎓📏📊🔔🔄🎯🚀⚠️🛩️🎰📉🔗🔄📐🧮💼⚖️🚪🤯🔍💯🪙🔬🚀⚠️📐📊🌟📐🔒🧠🌍)
+- Added formula highlight boxes using Card component in Fibonacci article (φ formula) and Normal Distribution article (Z-score formula)
+- Added 💡 Dica callout boxes in 4 articles: introducao-probabilidade, simulacao-monte-carlo, lei-grandes-numeros, introducao-teoria-jogos
+- Added ⚠️ Atenção callout boxes in 3 articles: sequencia-fibonacci-matematica, falacias-estatisticas, lei-grandes-numeros
+- Lint passes cleanly, dev server compiles and serves all pages without errors
+
+Stage Summary:
+- All 12 articles now have CTAs ("Experimente na Prática") directing readers to related calculators
+- ShareButtons appear on article pages (below title, with WhatsApp/Twitter/Telegram/Copy) and tool pages (top-right compact variant)
+- Visual elements added to all 12 articles: decorative heading emojis, formula highlight boxes, tip/warning callouts
+- 7 articles have at least one 💡 Dica or ⚠️ Atenção callout box
+- No existing functionality broken

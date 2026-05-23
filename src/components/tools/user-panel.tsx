@@ -10,7 +10,7 @@ import { Separator } from '@/components/ui/separator'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Progress } from '@/components/ui/progress'
 import {
-  User, Trophy, Star, History, LogOut, Crown, Target, TrendingUp,
+  User, Trophy, Star, History, LogOut, Crown, Target, TrendingUp, Eye,
 } from 'lucide-react'
 
 function formatDate(ts: number): string {
@@ -71,7 +71,7 @@ export function UserPanel() {
   const achievementProgress = achievements.length > 0 ? (unlockedCount / achievements.length) * 100 : 0
 
   const initials = useMemo(() => {
-    if (!userName) return '??'
+    if (!userName) return ''
     return userName
       .split(' ')
       .map((n) => n[0])
@@ -79,6 +79,19 @@ export function UserPanel() {
       .toUpperCase()
       .slice(0, 2)
   }, [userName])
+
+  // Sample data for demo/preview state when not logged in
+  const sampleFavorites = [
+    { toolId: 'martingale' as ToolPage, id: 'sample-1' },
+    { toolId: 'soros' as ToolPage, id: 'sample-2' },
+    { toolId: 'fibonacci' as ToolPage, id: 'sample-3' },
+  ]
+
+  const sampleAchievements = [
+    { id: 'sample-a1', title: 'Primeiro Cálculo', description: 'Faça seu primeiro cálculo', icon: '🎯', unlockedAt: Date.now() - 86400000 },
+    { id: 'sample-a2', title: 'Entusiasta', description: 'Faça 10 cálculos', icon: '🔥', unlockedAt: null },
+    { id: 'sample-a3', title: 'Estrategista', description: 'Use 3 ferramentas diferentes', icon: '🧠', unlockedAt: null },
+  ]
 
   const handleLogin = () => {
     setUser('Usuário Demo', 'demo@casinotools.com')
@@ -157,12 +170,12 @@ export function UserPanel() {
               ) : (
                 <div className="flex flex-col items-center gap-3">
                   <Avatar className="h-20 w-20 border-2 border-border">
-                    <AvatarFallback className="bg-muted/50 text-muted-foreground text-xl">
-                      ??
+                    <AvatarFallback className="bg-muted/50 text-muted-foreground">
+                      <User className="h-10 w-10" />
                     </AvatarFallback>
                   </Avatar>
                   <p className="text-sm text-muted-foreground text-center">
-                    Faça login para salvar seu progresso e desbloquear conquistas
+                    Crie sua conta para salvar seu progresso e desbloquear conquistas
                   </p>
                   <Button
                     onClick={handleLogin}
@@ -186,7 +199,7 @@ export function UserPanel() {
                         d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                       />
                     </svg>
-                    Login com Google
+                    Crie sua conta grátis
                   </Button>
                 </div>
               )}
@@ -194,7 +207,14 @@ export function UserPanel() {
           </Card>
 
           {/* Stats Overview */}
-          <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <Card className="border-border/50 bg-card/50 backdrop-blur relative">
+            {!isLoggedIn && (
+              <div className="absolute top-2 right-2 z-10">
+                <Badge variant="outline" className="text-[9px] text-muted-foreground/60 border-border/40 gap-1">
+                  <Eye className="h-2.5 w-2.5" /> Dados ilustrativos
+                </Badge>
+              </div>
+            )}
             <CardHeader className="pb-3">
               <CardTitle className="text-base font-semibold flex items-center gap-2">
                 <TrendingUp className="h-4 w-4 text-neon-blue" /> Estatísticas
@@ -208,7 +228,9 @@ export function UserPanel() {
                   </div>
                   <div className="min-w-0">
                     <p className="text-[10px] text-muted-foreground">Total de Cálculos</p>
-                    <p className="text-xl font-black gradient-neon-text">{totalCalculations}</p>
+                    <p className={`text-xl font-black ${isLoggedIn ? 'gradient-neon-text' : 'gradient-neon-text opacity-70'}`}>
+                      {isLoggedIn ? totalCalculations : 42}
+                    </p>
                   </div>
                 </div>
 
@@ -218,12 +240,14 @@ export function UserPanel() {
                   </div>
                   <div className="min-w-0">
                     <p className="text-[10px] text-muted-foreground">Ferramenta Mais Usada</p>
-                    <p className="text-base font-bold truncate">
-                      {mostUsedTool ? getToolName(mostUsedTool.toolId) : '—'}
+                    <p className={`text-base font-bold truncate ${!isLoggedIn ? 'opacity-70' : ''}`}>
+                      {isLoggedIn
+                        ? (mostUsedTool ? getToolName(mostUsedTool.toolId) : '—')
+                        : 'Martingale'}
                     </p>
-                    {mostUsedTool && (
+                    {(isLoggedIn ? mostUsedTool : true) && (
                       <p className="text-[10px] text-muted-foreground">
-                        {mostUsedTool.count} cálculos
+                        {isLoggedIn ? (mostUsedTool ? `${mostUsedTool.count} cálculos` : '') : '18 cálculos'}
                       </p>
                     )}
                   </div>
@@ -235,8 +259,10 @@ export function UserPanel() {
                   </div>
                   <div className="min-w-0">
                     <p className="text-[10px] text-muted-foreground">Membro Desde</p>
-                    <p className="text-base font-bold">
-                      {memberSince ? formatDate(memberSince) : '—'}
+                    <p className={`text-base font-bold ${!isLoggedIn ? 'opacity-70' : ''}`}>
+                      {isLoggedIn
+                        ? (memberSince ? formatDate(memberSince) : '—')
+                        : 'Hoje'}
                     </p>
                   </div>
                 </div>
@@ -248,26 +274,33 @@ export function UserPanel() {
         {/* Right Column: Achievements + History + Favorites */}
         <div className="lg:col-span-2 space-y-4">
           {/* Achievements Section */}
-          <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <Card className="border-border/50 bg-card/50 backdrop-blur relative">
+            {!isLoggedIn && (
+              <div className="absolute top-2 right-2 z-10">
+                <Badge variant="outline" className="text-[9px] text-muted-foreground/60 border-border/40 gap-1">
+                  <Eye className="h-2.5 w-2.5" /> Dados ilustrativos
+                </Badge>
+              </div>
+            )}
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-base font-semibold flex items-center gap-2">
                   <Trophy className="h-4 w-4 text-amber-500" /> Conquistas
                 </CardTitle>
                 <Badge className="bg-neon/10 text-neon border-neon/20 text-[10px]">
-                  {unlockedCount}/{achievements.length}
+                  {isLoggedIn ? `${unlockedCount}/${achievements.length}` : '1/3'}
                 </Badge>
               </div>
               <div className="mt-2">
-                <Progress value={achievementProgress} className="h-2 bg-muted/50 [&>[data-slot=progress-indicator]]:bg-neon" />
+                <Progress value={isLoggedIn ? achievementProgress : 33} className="h-2 bg-muted/50 [&>[data-slot=progress-indicator]]:bg-neon" />
                 <p className="text-[10px] text-muted-foreground mt-1">
-                  {achievementProgress.toFixed(0)}% concluído
+                  {isLoggedIn ? achievementProgress.toFixed(0) : '33'}% concluído
                 </p>
               </div>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {achievements.map((achievement) => {
+                {(isLoggedIn ? achievements : sampleAchievements).map((achievement) => {
                   const isUnlocked = !!achievement.unlockedAt
                   return (
                     <div
@@ -319,14 +352,53 @@ export function UserPanel() {
           {/* Favorites & History in a 2-column grid on larger screens */}
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
             {/* Favorites */}
-            <Card className="border-border/50 bg-card/50 backdrop-blur">
+            <Card className="border-border/50 bg-card/50 backdrop-blur relative">
+              {!isLoggedIn && (
+                <div className="absolute top-2 right-2 z-10">
+                  <Badge variant="outline" className="text-[9px] text-muted-foreground/60 border-border/40 gap-1">
+                    <Eye className="h-2.5 w-2.5" /> Dados ilustrativos
+                  </Badge>
+                </div>
+              )}
               <CardHeader className="pb-3">
                 <CardTitle className="text-base font-semibold flex items-center gap-2">
                   <Star className="h-4 w-4 text-neon" /> Favoritos
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {favorites.length === 0 ? (
+                {!isLoggedIn ? (
+                  <div className="overflow-y-auto max-h-64">
+                    <div className="space-y-2 pr-2">
+                      {sampleFavorites.map((fav) => {
+                        const info = toolInfo[fav.toolId]
+                        const href = toolHref[fav.toolId]
+                        return (
+                          <div
+                            key={fav.id}
+                            className="flex items-center gap-2 p-2.5 rounded-lg border border-border/30 bg-muted/10 opacity-70"
+                          >
+                            <Link
+                              href={href}
+                              className="flex items-center gap-2 min-w-0 flex-1 text-left"
+                            >
+                              <div className="h-7 w-7 rounded-md bg-neon/10 flex items-center justify-center shrink-0">
+                                <Star className="h-3 w-3 text-neon fill-neon" />
+                              </div>
+                              <div className="min-w-0">
+                                <p className="text-sm font-semibold truncate">
+                                  {info?.name ?? fav.toolId}
+                                </p>
+                                <p className="text-[10px] text-muted-foreground truncate">
+                                  {info?.description ?? ''}
+                                </p>
+                              </div>
+                            </Link>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </div>
+                ) : favorites.length === 0 ? (
                   <div className="flex flex-col items-center gap-2 py-6 text-center">
                     <Star className="h-8 w-8 text-muted-foreground/30" />
                     <p className="text-sm text-muted-foreground">
@@ -454,28 +526,28 @@ export function UserPanel() {
               <CardContent className="p-3 text-center">
                 <Target className="h-4 w-4 text-neon mx-auto mb-1" />
                 <p className="text-[10px] text-muted-foreground">Cálculos</p>
-                <p className="text-xl font-black gradient-neon-text">{totalCalculations}</p>
+                <p className="text-xl font-black gradient-neon-text">{isLoggedIn ? totalCalculations : 42}</p>
               </CardContent>
             </Card>
             <Card className="border-neon-blue/20 bg-neon-blue/5">
               <CardContent className="p-3 text-center">
                 <Trophy className="h-4 w-4 text-neon-blue mx-auto mb-1" />
                 <p className="text-[10px] text-muted-foreground">Conquistas</p>
-                <p className="text-xl font-black neon-text-blue">{unlockedCount}</p>
+                <p className="text-xl font-black neon-text-blue">{isLoggedIn ? unlockedCount : 1}</p>
               </CardContent>
             </Card>
             <Card className="border-amber-500/20 bg-amber-500/5">
               <CardContent className="p-3 text-center">
                 <Star className="h-4 w-4 text-amber-500 mx-auto mb-1" />
                 <p className="text-[10px] text-muted-foreground">Favoritos</p>
-                <p className="text-xl font-black text-amber-500">{favorites.length}</p>
+                <p className="text-xl font-black text-amber-500">{isLoggedIn ? favorites.length : 3}</p>
               </CardContent>
             </Card>
             <Card className="border-purple-500/20 bg-purple-500/5">
               <CardContent className="p-3 text-center">
                 <TrendingUp className="h-4 w-4 text-purple-400 mx-auto mb-1" />
                 <p className="text-[10px] text-muted-foreground">Progresso</p>
-                <p className="text-xl font-black text-purple-400">{achievementProgress.toFixed(0)}%</p>
+                <p className="text-xl font-black text-purple-400">{isLoggedIn ? achievementProgress.toFixed(0) : '33'}%</p>
               </CardContent>
             </Card>
           </div>

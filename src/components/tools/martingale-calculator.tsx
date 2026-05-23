@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useCallback, useMemo, useRef } from 'react'
 import { useAppStore } from '@/store/app-store'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -11,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { AdInContent } from '@/components/shared/ad-banner'
 import { 
   TrendingUp, Copy, Star, RotateCcw, Play, Pause,
-  BarChart3, Check, Wallet, AlertTriangle
+  BarChart3, Check, Wallet, AlertTriangle, ChevronDown, ChevronUp
 } from 'lucide-react'
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
@@ -19,6 +19,7 @@ import {
 } from 'recharts'
 import { useToast } from '@/hooks/use-toast'
 import { useThemeColors } from '@/hooks/use-theme-colors'
+import { ExportButton } from '@/components/shared/export-button'
 
 interface GaleLevel {
   level: number
@@ -48,10 +49,12 @@ export function MartingaleCalculator() {
   const [galeCount, setGaleCount] = useState('20')
   const [targetMultiplier, setTargetMultiplier] = useState('2.0')
 
+  const tableRef = useRef<HTMLDivElement>(null)
   const [copied, setCopied] = useState(false)
   const [autoMode, setAutoMode] = useState(false)
   const [autoStep, setAutoStep] = useState(0)
   const [winAtGale, setWinAtGale] = useState<number | null>(null)
+  const [tableExpanded, setTableExpanded] = useState(false)
 
   const levels = useMemo(() => {
     const bet = parseFloat(initialBet) || 0
@@ -78,6 +81,11 @@ export function MartingaleCalculator() {
 
     return result
   }, [initialBet, multiplier, galeCount, targetMultiplier])
+
+  const maxVisibleRows = 8
+  const visibleLevels = tableExpanded ? levels : levels.slice(0, maxVisibleRows)
+  const hiddenCount = levels.length - maxVisibleRows
+  const canExpand = hiddenCount > 0
 
   const totalBankroll = levels[levels.length - 1]?.totalInvested || 0
   const maxProfit = levels[levels.length - 1]?.profit || 0
@@ -106,6 +114,17 @@ export function MartingaleCalculator() {
     }
     return sampled
   }, [levels])
+
+  const exportData = useMemo(() =>
+    levels.map((l) => ({
+      Gale: l.level,
+      Aposta: l.bet.toFixed(2),
+      Investido: l.totalInvested.toFixed(2),
+      Retorno: l.potentialWin.toFixed(2),
+      Lucro: l.profit.toFixed(2),
+    })),
+    [levels]
+  )
 
   const handleCopy = () => {
     const text = levels
@@ -284,9 +303,16 @@ export function MartingaleCalculator() {
             </TabsList>
 
             <TabsContent value="table" className="mt-4">
+              <div className="flex justify-end mb-2">
+                <ExportButton
+                  data={exportData}
+                  filename="martingale-progressao"
+                  targetRef={tableRef}
+                />
+              </div>
               <Card className="border-border/50 bg-card/50 backdrop-blur">
                 <CardContent className="p-0">
-                  <div className="overflow-y-auto max-h-[600px]">
+                  <div ref={tableRef} className="overflow-y-auto max-h-[600px]">
                     <table className="w-full text-sm">
                       <thead className="sticky top-0 bg-card z-10">
                         <tr className="border-b border-border">
@@ -298,7 +324,7 @@ export function MartingaleCalculator() {
                         </tr>
                       </thead>
                       <tbody>
-                        {levels.map((level, i) => {
+                        {visibleLevels.map((level, i) => {
                           const isWin = winAtGale === level.level
                           const isAutoActive = autoMode && autoStep === level.level
                           return (
@@ -316,6 +342,20 @@ export function MartingaleCalculator() {
                       </tbody>
                     </table>
                   </div>
+                  {canExpand && (
+                    <div className="border-t border-border/30">
+                      <button
+                        onClick={() => setTableExpanded(!tableExpanded)}
+                        className="w-full flex items-center justify-center gap-1.5 py-2.5 text-sm font-medium text-muted-foreground hover:text-neon transition-colors hover:bg-muted/10"
+                      >
+                        {tableExpanded ? (
+                          <><ChevronUp className="h-4 w-4" /> Ver menos</>
+                        ) : (
+                          <><ChevronDown className="h-4 w-4" /> Ver mais (+{hiddenCount} gales)</>
+                        )}
+                      </button>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </TabsContent>

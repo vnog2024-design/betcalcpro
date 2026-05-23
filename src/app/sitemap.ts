@@ -14,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     'probability-simulator',
     'strategy-generator',
     'hedging',
+    'ciclos',
   ]
 
   const legal = [

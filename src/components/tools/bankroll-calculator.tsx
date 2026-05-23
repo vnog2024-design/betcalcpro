@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef } from 'react'
 import { useAppStore } from '@/store/app-store'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 import { AdInContent } from '@/components/shared/ad-banner'
+import { ExportButton } from '@/components/shared/export-button'
 
 interface RiskLevel {
   name: string
@@ -49,6 +50,7 @@ export function BankrollCalculator() {
 
   // State
   const [copied, setCopied] = useState(false)
+  const resultsRef = useRef<HTMLDivElement>(null)
 
   const calculations = useMemo(() => {
     const br = parseFloat(bankroll) || 0
@@ -99,6 +101,28 @@ export function BankrollCalculator() {
       },
     }
   }, [bankroll, riskPercent, targetProfit, maxDailyLoss])
+
+  const exportData = useMemo(() => {
+    if (!calculations) return []
+    return [
+      ...calculations.results.map((r) => ({
+        'Nível de Risco': r.level.name,
+        'Percentual': `${r.level.percent}%`,
+        'Tamanho da Aposta': r.betSize.toFixed(2),
+        'Perda Máxima Diária': r.maxDailyLossAmount.toFixed(2),
+        'Lucro Alvo': r.profitTarget.toFixed(2),
+        'Apostas até Quebrar': r.betsBeforeBust,
+      })),
+      {
+        'Nível de Risco': 'Personalizado',
+        'Percentual': `${calculations.riskPercent}%`,
+        'Tamanho da Aposta': calculations.custom.betSize.toFixed(2),
+        'Perda Máxima Diária': calculations.custom.maxDailyLossAmount.toFixed(2),
+        'Lucro Alvo': calculations.custom.profitTarget.toFixed(2),
+        'Apostas até Quebrar': calculations.custom.betsBeforeBust,
+      },
+    ]
+  }, [calculations])
 
   const handleCopy = () => {
     if (!calculations) return
@@ -287,7 +311,16 @@ export function BankrollCalculator() {
         </div>
 
         {/* Right: Results */}
-        <div className="lg:col-span-2 space-y-4">
+        <div ref={resultsRef} className="lg:col-span-2 space-y-4">
+          {calculations && (
+            <div className="flex justify-end">
+              <ExportButton
+                data={exportData}
+                filename="bankroll-gestao"
+                targetRef={resultsRef}
+              />
+            </div>
+          )}
           {/* Risk Level Comparison */}
           {calculations && (
             <>

@@ -9,13 +9,16 @@ import { AgeGate } from '@/components/shared/age-gate'
 import { DisclaimerBar } from '@/components/shared/disclaimer-bar'
 import { AdBannerBottom } from '@/components/ads/ad-unit'
 import { Toaster } from '@/components/ui/toaster'
+import { ShareButtons } from '@/components/shared/share-buttons'
 import { useAppStore } from '@/store/app-store'
 import { useEffect } from 'react'
 import { useMounted } from '@/hooks/use-mounted'
+import { usePathname } from 'next/navigation'
 
 export function ToolPageLayout({ children }: { children: React.ReactNode }) {
   const { sidebarOpen, setSidebarOpen, colorTheme, theme } = useAppStore()
   const mounted = useMounted()
+  const pathname = usePathname()
 
   useEffect(() => {
     document.documentElement.setAttribute('data-color-theme', colorTheme)
@@ -49,6 +52,13 @@ export function ToolPageLayout({ children }: { children: React.ReactNode }) {
         <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
         <main className="flex-1 min-h-0 overflow-y-auto">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div className="flex justify-end mb-2">
+              <ShareButtons
+                url={typeof window !== 'undefined' ? window.location.href : ''}
+                title=""
+                variant="compact"
+              />
+            </div>
             {children}
             <AdBannerBottom className="mt-8" />
           </div>

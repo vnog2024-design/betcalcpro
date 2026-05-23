@@ -105,7 +105,7 @@ export default async function ArticlePage({ params }: PageProps) {
       "@id": `https://betcalcpro.com.br/artigos/${slug}`
     },
     "inLanguage": "pt-BR",
-    "datePublished": "2025-01-01",
+    "datePublished": "2025-01-15",
     "dateModified": new Date().toISOString().split('T')[0]
   } : null
 

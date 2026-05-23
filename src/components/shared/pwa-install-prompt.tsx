@@ -1,8 +1,11 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { Download, X, Smartphone } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+
+const PAGE_VIEWS_KEY = 'pwa-page-views'
+const PAGE_VIEW_TS_KEY = 'pwa-first-visit-ts'
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[]
@@ -13,13 +16,54 @@ interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>
 }
 
+function trackPageView(): { pageCount: number; firstVisitTs: number } {
+  try {
+    let pageCount = parseInt(localStorage.getItem(PAGE_VIEWS_KEY) || '0', 10)
+    let firstVisitTs = parseInt(localStorage.getItem(PAGE_VIEW_TS_KEY) || '0', 10)
+
+    if (pageCount === 0 || !firstVisitTs) {
+      firstVisitTs = Date.now()
+      localStorage.setItem(PAGE_VIEW_TS_KEY, firstVisitTs.toString())
+    }
+
+    pageCount += 1
+    localStorage.setItem(PAGE_VIEWS_KEY, pageCount.toString())
+
+    return { pageCount, firstVisitTs }
+  } catch {
+    return { pageCount: 1, firstVisitTs: Date.now() }
+  }
+}
+
+function shouldShowByTimeOrPages(): boolean {
+  try {
+    const pageCount = parseInt(localStorage.getItem(PAGE_VIEWS_KEY) || '1', 10)
+    const firstVisitTs = parseInt(localStorage.getItem(PAGE_VIEW_TS_KEY) || '0', 10)
+
+    // Show if user has visited a second page (pageCount >= 2)
+    if (pageCount >= 2) return true
+
+    // Show if user has been on the site for at least 60 seconds
+    if (firstVisitTs && Date.now() - firstVisitTs >= 60_000) return true
+
+    return false
+  } catch {
+    return false
+  }
+}
+
 export function PWAInstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null)
   const [showPrompt, setShowPrompt] = useState(false)
   const [isInstalled, setIsInstalled] = useState(false)
   const [showIOSHint, setShowIOSHint] = useState(false)
+  const readyRef = useRef(false)
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   useEffect(() => {
+    // Track this page view
+    trackPageView()
+
     // Check if already installed
     if (window.matchMedia('(display-mode: standalone)').matches) {
       setIsInstalled(true)
@@ -34,27 +78,39 @@ export function PWAInstallPrompt() {
       if (daysSince < 7) return
     }
 
+    // Helper: try to show the prompt if time/page conditions are met
+    const tryShow = () => {
+      if (readyRef.current && shouldShowByTimeOrPages()) {
+        setShowPrompt(true)
+        if (timerRef.current) {
+          clearInterval(timerRef.current)
+          timerRef.current = null
+        }
+      }
+    }
+
     // Detect iOS Safari (doesn't support beforeinstallprompt)
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !('MSStream' in window)
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
 
     if (isIOS && isSafari) {
-      // Show iOS hint after a short delay
-      const timer = setTimeout(() => {
-        setShowIOSHint(true)
-        setShowPrompt(true)
-      }, 5000)
-      return () => clearTimeout(timer)
+      readyRef.current = true
+      // Check every 5 seconds if the time/page condition is met
+      timerRef.current = setInterval(tryShow, 5000)
+      tryShow() // immediate check in case pageCount already >= 2
+      return () => {
+        if (timerRef.current) clearInterval(timerRef.current)
+      }
     }
 
     // Android/Chrome: listen for beforeinstallprompt
     const handler = (e: Event) => {
       e.preventDefault()
       setDeferredPrompt(e as BeforeInstallPromptEvent)
-      // Show prompt after a short delay so user sees the site first
-      setTimeout(() => {
-        setShowPrompt(true)
-      }, 3000)
+      readyRef.current = true
+      // Check every 5 seconds if the time/page condition is met
+      timerRef.current = setInterval(tryShow, 5000)
+      tryShow() // immediate check in case pageCount already >= 2
     }
 
     window.addEventListener('beforeinstallprompt', handler)
@@ -68,6 +124,7 @@ export function PWAInstallPrompt() {
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handler)
+      if (timerRef.current) clearInterval(timerRef.current)
     }
   }, [])
 

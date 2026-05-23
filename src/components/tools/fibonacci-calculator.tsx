@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef } from 'react'
 import { useAppStore } from '@/store/app-store'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -18,6 +18,7 @@ import {
 import { useToast } from '@/hooks/use-toast'
 import { useThemeColors } from '@/hooks/use-theme-colors'
 import { AdInContent } from '@/components/shared/ad-banner'
+import { ExportButton } from '@/components/shared/export-button'
 
 interface FibLevel {
   level: number
@@ -40,6 +41,7 @@ export function FibonacciCalculator() {
 
   // State
   const [copied, setCopied] = useState(false)
+  const tableRef = useRef<HTMLDivElement>(null)
 
   const calculations = useMemo(() => {
     const bet = parseFloat(initialBet) || 0
@@ -94,6 +96,20 @@ export function FibonacciCalculator() {
       fibNumber: l.fibNumber,
     }))
   }, [calculations])
+
+  const exportData = useMemo(() =>
+    calculations
+      ? calculations.fibLevels.map((l) => ({
+          'Nível': l.level,
+          'Fibonacci #': l.fibNumber,
+          'Valor da Aposta': l.betAmount.toFixed(2),
+          'Total Investido': l.totalInvested.toFixed(2),
+          'Retorno Potencial': l.potentialReturn.toFixed(2),
+          'Lucro': l.profit.toFixed(2),
+        }))
+      : [],
+    [calculations]
+  )
 
   const handleCopy = () => {
     if (!calculations) return
@@ -346,13 +362,18 @@ export function FibonacciCalculator() {
           {/* Detailed Table */}
           {calculations && (
             <Card className="border-border/50 bg-card/50 backdrop-blur">
-              <CardHeader className="pb-2">
+              <div className="flex items-center justify-between px-4 pt-4">
                 <CardTitle className="text-base font-semibold flex items-center gap-2">
                   <TrendingUp className="h-4 w-4 text-neon-blue" /> Tabela de Progressão
                 </CardTitle>
-              </CardHeader>
+                <ExportButton
+                  data={exportData}
+                  filename="fibonacci-progressao"
+                  targetRef={tableRef}
+                />
+              </div>
               <CardContent className="p-0">
-                <div className="overflow-y-auto max-h-[500px]">
+                <div ref={tableRef} className="overflow-y-auto max-h-[500px]">
                   <table className="w-full text-sm">
                     <thead className="sticky top-0 bg-card">
                       <tr className="border-b border-border">

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useCallback, useMemo, useRef } from 'react'
 import { useAppStore } from '@/store/app-store'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -18,6 +18,7 @@ import {
 import { useToast } from '@/hooks/use-toast'
 import { useThemeColors } from '@/hooks/use-theme-colors'
 import { AdInContent } from '@/components/shared/ad-banner'
+import { ExportButton } from '@/components/shared/export-button'
 
 interface CycleStep {
   cycle: number
@@ -63,6 +64,7 @@ export function CyclesCalculator() {
   const [showExplanation, setShowExplanation] = useState(false)
   const [copied, setCopied] = useState(false)
   const [winAtStep, setWinAtStep] = useState<string | null>(null)
+  const resultsRef = useRef<HTMLDivElement>(null)
 
   const calculateCycles = useCallback((): CycleGroup[] => {
     const bet = parseFloat(initialBet) || 0
@@ -162,6 +164,22 @@ export function CyclesCalculator() {
   // Minimum cycle multiplier to break even (for first cycle loss recovery)
   const minCycleMult = parseFloat(payout) > 1 ? (1 / (parseFloat(payout) - 1)) : Infinity
   const isCycleMultTooLow = parseFloat(cycleMultiplier) < minCycleMult && cycles.length > 1
+
+  const exportData = useMemo(() =>
+    cycles.flatMap((cycle) =>
+      cycle.steps.map((step) => ({
+        Ciclo: cycle.cycle,
+        Jogada: step.stepLabel,
+        Aposta: step.bet.toFixed(2),
+        'Investido Ciclo': step.cycleInvested.toFixed(2),
+        'Perdas Ant.': step.totalLoss.toFixed(2),
+        'Total Investido': step.totalInvested.toFixed(2),
+        Retorno: step.potentialReturn.toFixed(2),
+        'Lucro Líquido': step.netProfit.toFixed(2),
+      }))
+    ),
+    [cycles]
+  )
 
   const handleCopy = () => {
     if (cycles.length === 0) return
@@ -456,7 +474,16 @@ export function CyclesCalculator() {
         </div>
 
         {/* Right: Results */}
-        <div className="lg:col-span-2 space-y-4">
+        <div ref={resultsRef} className="lg:col-span-2 space-y-4">
+          {cycles.length > 0 && (
+            <div className="flex justify-end">
+              <ExportButton
+                data={exportData}
+                filename="ciclos-progressao"
+                targetRef={resultsRef}
+              />
+            </div>
+          )}
           {cycles.length === 0 ? (
             <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardContent className="p-8 text-center">
