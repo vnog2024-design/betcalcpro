@@ -170,7 +170,7 @@ export function CyclesCalculator() {
       cycle.steps.map((step) => ({
         Ciclo: cycle.cycle,
         Jogada: step.stepLabel,
-        Aposta: step.bet.toFixed(2),
+        Operação: step.bet.toFixed(2),
         'Investido Ciclo': step.cycleInvested.toFixed(2),
         'Perdas Ant.': step.totalLoss.toFixed(2),
         'Total Investido': step.totalInvested.toFixed(2),
@@ -190,7 +190,7 @@ export function CyclesCalculator() {
       lines.push(`--- CICLO ${cycle.cycle} ---`)
       for (const step of cycle.steps) {
         const profit = step.netProfit >= 0 ? `+R$${step.netProfit.toFixed(2)}` : `-R$${Math.abs(step.netProfit).toFixed(2)}`
-        lines.push(`  ${step.stepLabel}: Aposta R$${step.bet.toFixed(2)} | Investido R$${step.totalInvested.toFixed(2)} | Lucro ${profit}`)
+        lines.push(`  ${step.stepLabel}: Operação R$${step.bet.toFixed(2)} | Investido R$${step.totalInvested.toFixed(2)} | Lucro ${profit}`)
       }
       lines.push(`  Se perder: -R$${cycle.cycleLoss.toFixed(2)}`)
     }
@@ -274,7 +274,7 @@ export function CyclesCalculator() {
                   placeholder="Ex: 2.0"
                 />
                 <p className="text-[10px] text-muted-foreground">
-                  Retorno da aposta (2.0 = dobra)
+                  Retorno da operação (2.0 = dobra)
                 </p>
               </div>
 
@@ -331,7 +331,7 @@ export function CyclesCalculator() {
                       placeholder="Ex: 2.0"
                     />
                     <p className="text-[10px] text-muted-foreground">
-                      Entrada do próximo ciclo = última aposta × este valor
+                      Entrada do próximo ciclo = última operação × este valor
                     </p>
                     {isCycleMultTooLow && (
                       <p className="text-[10px] text-red-400 flex items-center gap-1">
@@ -368,7 +368,7 @@ export function CyclesCalculator() {
                   placeholder="Ex: 100"
                 />
                 <p className="text-[10px] text-muted-foreground">
-                  Para calcular quantos ciclos sua banca suporta
+                  Para calcular quantos ciclos seu capital suporta
                 </p>
               </div>
 
@@ -426,7 +426,7 @@ export function CyclesCalculator() {
             <Card className="border-neon-blue/20 bg-neon-blue/5">
               <CardContent className="p-3 text-center">
                 <TrendingUp className="h-4 w-4 text-neon-blue mx-auto mb-1" />
-                <p className="text-[10px] text-muted-foreground">Maior Aposta</p>
+                <p className="text-[10px] text-muted-foreground">Maior Operação</p>
                 <p className="text-lg font-black neon-text-blue">
                   {formatCurrency(maxBet)}
                 </p>
@@ -551,7 +551,7 @@ export function CyclesCalculator() {
                         <div>
                           <h3 className="text-sm font-bold text-foreground">Ciclo {cycle.cycle}</h3>
                           <p className="text-[10px] text-muted-foreground">
-                            Entrada: {formatCurrency(cycle.entryBet)} | Última aposta: {formatCurrency(cycle.lastBet)}
+                            Entrada: {formatCurrency(cycle.entryBet)} | Última operação: {formatCurrency(cycle.lastBet)}
                           </p>
                         </div>
                       </div>
@@ -577,7 +577,7 @@ export function CyclesCalculator() {
                         <thead>
                           <tr className="border-b border-border/30">
                             <th className="text-left p-2.5 font-semibold text-muted-foreground">Jogada</th>
-                            <th className="text-right p-2.5 font-semibold text-muted-foreground">Aposta</th>
+                            <th className="text-right p-2.5 font-semibold text-muted-foreground">Operação</th>
                             <th className="text-right p-2.5 font-semibold text-muted-foreground">Investido Ciclo</th>
                             <th className="text-right p-2.5 font-semibold text-muted-foreground">Perdas Ant.</th>
                             <th className="text-right p-2.5 font-semibold text-muted-foreground">Total Investido</th>
@@ -696,7 +696,7 @@ export function CyclesCalculator() {
                             perda: {formatCurrency(cycle.cycleLoss)}
                           </span>
                           {!isSupported && (
-                            <span className="text-[9px] text-red-400">⚠ Ultrapassa banca</span>
+                            <span className="text-[9px] text-red-400">⚠ Ultrapassa capital</span>
                           )}
                         </div>
                       )
@@ -731,7 +731,7 @@ export function CyclesCalculator() {
                     ))}
                   </div>
                   <p className="text-[10px] text-muted-foreground mt-3">
-                    Cada seta indica que a entrada do próximo ciclo = última aposta do ciclo anterior × {cycleMultiplier}x
+                    Cada seta indica que a entrada do próximo ciclo = última operação do ciclo anterior × {cycleMultiplier}x
                   </p>
                 </CardContent>
               </Card>
@@ -745,12 +745,12 @@ export function CyclesCalculator() {
             <CardContent className="p-4 flex gap-3">
               <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-semibold text-amber-500">Aviso - Jogo Responsável</p>
+                <p className="text-sm font-semibold text-amber-500">Aviso Educacional</p>
                 <p className="text-sm text-muted-foreground leading-relaxed mt-1">
-                  A estratégia de ciclos limita os gales por rodada, mas o prejuízo acumula exponencialmente
-                  entre ciclos. Verifique se sua banca suporta os ciclos planejados. O multiplicador do ciclo
-                  deve ser alto o suficiente para recuperar as perdas anteriores. Sempre defina limites e
-                  jogue com responsabilidade.
+                  A estratégia de ciclos limita as recuperações por rodada, mas o prejuízo acumula exponencialmente
+                  entre ciclos. Verifique se seu capital suporta os ciclos planejados. O multiplicador do ciclo
+                  deve ser alto o suficiente para recuperar as perdas anteriores. Este simulador é apenas
+                  educacional e não constitui aconselhamento financeiro. Nenhum modelo garante lucro.
                 </p>
               </div>
             </CardContent>

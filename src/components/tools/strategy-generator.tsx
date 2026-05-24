@@ -10,13 +10,13 @@ import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
   Sparkles, Target, Shield, AlertTriangle, TrendingUp,
-  Star, Copy, Check, RotateCcw, Zap, Dices
+  Star, Copy, Check, RotateCcw, BarChart3, PieChart, Activity
 } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 import { AdInContent } from '@/components/shared/ad-banner'
 
 type RiskTolerance = 'low' | 'medium' | 'high'
-type GameType = 'crash' | 'double' | 'other'
+type ModelType = 'fixed' | 'variable' | 'adaptive'
 
 interface StrategyStep {
   step: number
@@ -48,365 +48,128 @@ interface StrategySuggestion {
 function generateStrategies(
   bankrollAmount: number,
   risk: RiskTolerance,
-  game: GameType,
+  modelType: ModelType,
   duration: number
 ): StrategySuggestion[] {
   const strategies: StrategySuggestion[] = []
-  const betUnit = risk === 'low' ? bankrollAmount * 0.01 : risk === 'medium' ? bankrollAmount * 0.025 : bankrollAmount * 0.05
+  const baseUnit = risk === 'low' ? bankrollAmount * 0.01 : risk === 'medium' ? bankrollAmount * 0.025 : bankrollAmount * 0.05
 
-  if (game === 'crash') {
-    // Estratégia conservadora para Crash
-    strategies.push({
-      id: 'crash-conservative',
-      name: 'Crash Conservador',
-      description: 'Estratégia conservadora para Crash com auto cashout baixo e gerenciamento rigoroso',
-      riskLevel: 'low',
-      riskScore: 2,
-      rewardScore: 3,
-      progressionType: 'Flat (Aposta Fixa)',
-      entryRules: [
-        'Entrar apenas quando o último crash foi abaixo de 1.5x',
-        'Definir auto cashout em 1.5x - 2.0x',
-        'Nunca exceder 2% da banca por aposta',
-        'Aguardar no mínimo 3 rodadas após um crash alto (>10x)',
-      ],
-      exitRules: [
-        `Parar após ${Math.floor(duration * 0.75)} rodadas ou atingir meta`,
-        'Parar imediatamente após 3 reds consecutivos',
-        'Parar ao atingir +20% de lucro na sessão',
-        'Parar ao atingir -10% de perda na sessão',
-      ],
-      steps: [
-        { step: 1, action: 'Definir Banca', detail: `Aposta base: R$ ${betUnit.toFixed(2)} (1% da banca)` },
-        { step: 2, action: 'Configurar Auto Cashout', detail: 'Auto cashout em 1.5x para maximizar taxa de acerto' },
-        { step: 3, action: 'Iniciar Sessão', detail: 'Começar com aposta base e manter valor fixo' },
-        { step: 4, action: 'Monitorar Streaks', detail: 'Após 3 reds, pausar 5 rodadas antes de continuar' },
-        { step: 5, action: 'Encerrar Sessão', detail: 'Sair ao atingir meta de +20% ou limite de -10%' },
-      ],
-      expectedOutcomes: {
-        bestCase: `+R$ ${(bankrollAmount * 0.20).toFixed(2)} (meta atingida em ${Math.floor(duration * 0.5)} rodadas)`,
-        expectedCase: `+R$ ${(bankrollAmount * 0.05).toFixed(2)} a +R$ ${(bankrollAmount * 0.10).toFixed(2)}`,
-        worstCase: `-R$ ${(bankrollAmount * 0.10).toFixed(2)} (limite de perda atingido)`,
-      },
-      recommendedBankroll: bankrollAmount,
-      recommendedBetSize: betUnit,
-      maxDrawdown: '-15% da banca',
-    })
+  // Modelo Conservador - Flat risk management
+  strategies.push({
+    id: 'conservative',
+    name: 'Modelo Conservador',
+    description: 'Modelo de gestão de risco conservador com alocação fixa e foco em preservação de capital',
+    riskLevel: 'low',
+    riskScore: 2,
+    rewardScore: 3,
+    progressionType: 'Flat (Capital Fixo)',
+    entryRules: [
+      'Nunca arriscar mais que 2% do capital por operação',
+      'Definir stop-loss antes de cada entrada',
+      'Aguardar confirmação de cenário favorável antes de operar',
+      'Manter registro detalhado de todas as operações',
+    ],
+    exitRules: [
+      `Encerrar após ${Math.floor(duration * 0.75)} rodadas ou atingir meta`,
+      'Parar imediatamente após 3 resultados desfavoráveis consecutivos',
+      'Encerrar ao atingir +20% de valorização na sessão',
+      'Encerrar ao atingir -10% de perda na sessão',
+    ],
+    steps: [
+      { step: 1, action: 'Definir Capital', detail: `Valor base por operação: R$ ${baseUnit.toFixed(2)} (1% do capital)` },
+      { step: 2, action: 'Configurar Stop-Loss', detail: 'Definir limite de perda máximo de 2% por operação' },
+      { step: 3, action: 'Iniciar Sessão', detail: 'Começar com valor base e manter valor fixo' },
+      { step: 4, action: 'Monitorar Sequências', detail: 'Após 3 resultados desfavoráveis, pausar 5 rodadas antes de continuar' },
+      { step: 5, action: 'Encerrar Sessão', detail: 'Sair ao atingir meta de +20% ou limite de -10%' },
+    ],
+    expectedOutcomes: {
+      bestCase: `+R$ ${(bankrollAmount * 0.20).toFixed(2)} (meta atingida em ${Math.floor(duration * 0.5)} rodadas)`,
+      expectedCase: `+R$ ${(bankrollAmount * 0.05).toFixed(2)} a +R$ ${(bankrollAmount * 0.10).toFixed(2)}`,
+      worstCase: `-R$ ${(bankrollAmount * 0.10).toFixed(2)} (limite de perda atingido)`,
+    },
+    recommendedBankroll: bankrollAmount,
+    recommendedBetSize: baseUnit,
+    maxDrawdown: '-15% do capital',
+  })
 
-    // Estratégia moderada para Crash
-    strategies.push({
-      id: 'crash-moderate',
-      name: 'Crash Moderado',
-      description: 'Estratégia moderada com progressão leve e auto cashout intermediário',
-      riskLevel: 'medium',
-      riskScore: 5,
-      rewardScore: 6,
-      progressionType: 'Soros (Reinvestimento Parcial)',
-      entryRules: [
-        'Auto cashout em 2.0x - 3.0x',
-        'Reinvestir 50% do lucro na próxima aposta',
-        'Nunca exceder 3% da banca por aposta',
-        'Entrar em qualquer rodada (sem filtro)',
-      ],
-      exitRules: [
-        `Parar após ${duration} rodadas`,
-        'Parar após 4 reds consecutivos',
-        'Parar ao atingir +30% de lucro',
-        'Parar ao atingir -15% de perda',
-      ],
-      steps: [
-        { step: 1, action: 'Definir Banca', detail: `Aposta base: R$ ${(betUnit * 1.5).toFixed(2)} (2.5% da banca)` },
-        { step: 2, action: 'Configurar Auto Cashout', detail: 'Auto cashout em 2.0x para equilibrar risco/recompensa' },
-        { step: 3, action: 'Aplicar Soros', detail: 'Após green, apostar base + 50% do lucro' },
-        { step: 4, action: 'Após Red', detail: 'Voltar à aposta base imediatamente' },
-        { step: 5, action: 'Gerenciar Streaks', detail: 'Após 4 reds, reduzir aposta para 50% da base por 3 rodadas' },
-        { step: 6, action: 'Encerrar Sessão', detail: 'Sair ao atingir meta de +30% ou limite de -15%' },
-      ],
-      expectedOutcomes: {
-        bestCase: `+R$ ${(bankrollAmount * 0.30).toFixed(2)} (sessão excelente)`,
-        expectedCase: `+R$ ${(bankrollAmount * 0.08).toFixed(2)} a +R$ ${(bankrollAmount * 0.15).toFixed(2)}`,
-        worstCase: `-R$ ${(bankrollAmount * 0.15).toFixed(2)} (drawdown significativo)`,
-      },
-      recommendedBankroll: bankrollAmount,
-      recommendedBetSize: betUnit * 1.5,
-      maxDrawdown: '-25% da banca',
-    })
+  // Modelo Equilibrado - Progressive risk management
+  strategies.push({
+    id: 'balanced',
+    name: 'Modelo Equilibrado',
+    description: 'Modelo de gestão de risco progressivo com reinvestimento parcial e proteção de capital',
+    riskLevel: 'medium',
+    riskScore: 5,
+    rewardScore: 6,
+    progressionType: 'Proporcional (Capital Variável)',
+    entryRules: [
+      'Alocar até 3% do capital por operação',
+      'Reinvestir 50% do resultado favorável na próxima operação',
+      'Nunca exceder 5% do capital total em uma única entrada',
+      'Manter reserva de 30% do capital para proteção',
+    ],
+    exitRules: [
+      `Encerrar após ${duration} rodadas`,
+      'Parar após 4 resultados desfavoráveis consecutivos',
+      'Encerrar ao atingir +30% de valorização',
+      'Encerrar ao atingir -15% de perda',
+    ],
+    steps: [
+      { step: 1, action: 'Definir Capital', detail: `Valor base por operação: R$ ${(baseUnit * 1.5).toFixed(2)} (2.5% do capital)` },
+      { step: 2, action: 'Configurar Alocação', detail: 'Definir limite de 3% por operação para equilibrar risco/recompensa' },
+      { step: 3, action: 'Aplicar Proporcionalidade', detail: 'Após resultado favorável, operar com base + 50% do ganho' },
+      { step: 4, action: 'Após Resultado Desfavorável', detail: 'Retornar ao valor base imediatamente' },
+      { step: 5, action: 'Gerenciar Sequências', detail: 'Após 4 resultados desfavoráveis, reduzir valor para 50% da base por 3 rodadas' },
+      { step: 6, action: 'Encerrar Sessão', detail: 'Sair ao atingir meta de +30% ou limite de -15%' },
+    ],
+    expectedOutcomes: {
+      bestCase: `+R$ ${(bankrollAmount * 0.30).toFixed(2)} (sessão excelente)`,
+      expectedCase: `+R$ ${(bankrollAmount * 0.08).toFixed(2)} a +R$ ${(bankrollAmount * 0.15).toFixed(2)}`,
+      worstCase: `-R$ ${(bankrollAmount * 0.15).toFixed(2)} (drawdown significativo)`,
+    },
+    recommendedBankroll: bankrollAmount,
+    recommendedBetSize: baseUnit * 1.5,
+    maxDrawdown: '-25% do capital',
+  })
 
-    // Estratégia agressiva para Crash
-    strategies.push({
-      id: 'crash-aggressive',
-      name: 'Crash Agressivo',
-      description: 'Estratégia agressiva com progressão Martingale e auto cashout variável',
-      riskLevel: 'high',
-      riskScore: 8,
-      rewardScore: 8,
-      progressionType: 'Martingale Adaptativo',
-      entryRules: [
-        'Auto cashout variável: 1.5x no gale 0, 2.0x no gale 1, 2.5x no gale 2',
-        'Máximo 3 gales',
-        'Nunca exceder 5% da banca na aposta inicial',
-        'Reservar 30% da banca como reserva',
-      ],
-      exitRules: [
-        `Parar após ${Math.floor(duration * 0.5)} rodadas`,
-        'Parar após atingir o limite de 3 gales',
-        'Parar ao atingir +50% de lucro',
-        'Parar ao atingir -20% de perda',
-      ],
-      steps: [
-        { step: 1, action: 'Dividir Banca', detail: `Ativa: R$ ${(bankrollAmount * 0.7).toFixed(2)} | Reserva: R$ ${(bankrollAmount * 0.3).toFixed(2)}` },
-        { step: 2, action: 'Aposta Inicial', detail: `R$ ${(betUnit * 2).toFixed(2)} com auto cashout 1.5x` },
-        { step: 3, action: 'Gale 1', detail: `Dobrar aposta: R$ ${(betUnit * 4).toFixed(2)} com auto cashout 2.0x` },
-        { step: 4, action: 'Gale 2', detail: `Dobrar aposta: R$ ${(betUnit * 8).toFixed(2)} com auto cashout 2.5x` },
-        { step: 5, action: 'Após Green', detail: 'Voltar à aposta base inicial' },
-        { step: 6, action: 'Após 3 Gales', detail: 'ABORTAR - Voltar à aposta base e recomeçar' },
-        { step: 7, action: 'Encerrar Sessão', detail: 'Sair ao atingir +50% ou -20%' },
-      ],
-      expectedOutcomes: {
-        bestCase: `+R$ ${(bankrollAmount * 0.50).toFixed(2)} (sequência favorável)`,
-        expectedCase: `+R$ ${(bankrollAmount * 0.10).toFixed(2)} a +R$ ${(bankrollAmount * 0.25).toFixed(2)}`,
-        worstCase: `-R$ ${(bankrollAmount * 0.20).toFixed(2)} (limite atingido com gales)`,
-      },
-      recommendedBankroll: bankrollAmount,
-      recommendedBetSize: betUnit * 2,
-      maxDrawdown: '-40% da banca',
-    })
-  }
-
-  if (game === 'double') {
-    // Estratégia conservadora para Double
-    strategies.push({
-      id: 'double-conservative',
-      name: 'Double Conservador',
-      description: 'Estratégia conservadora para Double com apostas fixas e gerenciamento rigoroso',
-      riskLevel: 'low',
-      riskScore: 2,
-      rewardScore: 3,
-      progressionType: 'Flat (Aposta Fixa)',
-      entryRules: [
-        'Apostar sempre na mesma cor (vermelho ou preto)',
-        'Nunca exceder 1% da banca por aposta',
-        'Aguardar 2 resultados da cor oposta antes de entrar',
-        'Não apostar em branco (muito arriscado)',
-      ],
-      exitRules: [
-        `Parar após ${Math.floor(duration * 0.75)} rodadas`,
-        'Parar após 4 derrotas consecutivas',
-        'Parar ao atingir +15% de lucro',
-        'Parar ao atingir -8% de perda',
-      ],
-      steps: [
-        { step: 1, action: 'Definir Cor', detail: 'Escolher Vermelho ou Preto e manter consistência' },
-        { step: 2, action: 'Aguardar Entrada', detail: 'Esperar 2 resultados consecutivos da cor oposta' },
-        { step: 3, action: 'Fazer Aposta', detail: `Aposta fixa: R$ ${betUnit.toFixed(2)} (1% da banca)` },
-        { step: 4, action: 'Após Resultado', detail: 'Green: aguardar nova oportunidade | Red: aguardar 2 da oposta novamente' },
-        { step: 5, action: 'Encerrar Sessão', detail: 'Sair ao atingir +15% ou -8%' },
-      ],
-      expectedOutcomes: {
-        bestCase: `+R$ ${(bankrollAmount * 0.15).toFixed(2)} (meta atingida)`,
-        expectedCase: `+R$ ${(bankrollAmount * 0.03).toFixed(2)} a +R$ ${(bankrollAmount * 0.08).toFixed(2)}`,
-        worstCase: `-R$ ${(bankrollAmount * 0.08).toFixed(2)} (limite atingido)`,
-      },
-      recommendedBankroll: bankrollAmount,
-      recommendedBetSize: betUnit,
-      maxDrawdown: '-12% da banca',
-    })
-
-    // Estratégia moderada para Double
-    strategies.push({
-      id: 'double-moderate',
-      name: 'Double Moderado (Fibonacci)',
-      description: 'Estratégia moderada com progressão Fibonacci para recuperação controlada',
-      riskLevel: 'medium',
-      riskScore: 5,
-      rewardScore: 6,
-      progressionType: 'Fibonacci',
-      entryRules: [
-        'Apostar na cor escolhida com progressão Fibonacci',
-        'Após vitória, recuar 2 posições na sequência',
-        'Após derrota, avançar 1 posição na sequência',
-        'Nunca exceder 2.5% da banca na aposta inicial',
-      ],
-      exitRules: [
-        `Parar após ${duration} rodadas`,
-        'Parar após 5 derrotas consecutivas',
-        'Parar ao atingir +25% de lucro',
-        'Parar ao atingir -15% de perda',
-      ],
-      steps: [
-        { step: 1, action: 'Definir Sequência', detail: `Base: R$ ${(betUnit * 1.5).toFixed(2)} | Fib: 1,1,2,3,5,8,13` },
-        { step: 2, action: 'Primeira Aposta', detail: `R$ ${(betUnit * 1.5).toFixed(2)} (Fibonacci posição 1)` },
-        { step: 3, action: 'Após Vitória', detail: 'Recuar 2 posições na sequência Fibonacci' },
-        { step: 4, action: 'Após Derrota', detail: 'Avançar 1 posição na sequência' },
-        { step: 5, action: 'Limite de Sequência', detail: 'Se atingir posição 7, voltar ao início' },
-        { step: 6, action: 'Encerrar Sessão', detail: 'Sair ao atingir +25% ou -15%' },
-      ],
-      expectedOutcomes: {
-        bestCase: `+R$ ${(bankrollAmount * 0.25).toFixed(2)} (boa sequência de recuperação)`,
-        expectedCase: `+R$ ${(bankrollAmount * 0.05).toFixed(2)} a +R$ ${(bankrollAmount * 0.12).toFixed(2)}`,
-        worstCase: `-R$ ${(bankrollAmount * 0.15).toFixed(2)} (sequência desfavorável)`,
-      },
-      recommendedBankroll: bankrollAmount,
-      recommendedBetSize: betUnit * 1.5,
-      maxDrawdown: '-25% da banca',
-    })
-
-    // Estratégia agressiva para Double
-    strategies.push({
-      id: 'double-aggressive',
-      name: 'Double Agressivo (Martingale)',
-      description: 'Estratégia agressiva com progressão Martingale - alto risco, alto retorno',
-      riskLevel: 'high',
-      riskScore: 9,
-      rewardScore: 7,
-      progressionType: 'Martingale',
-      entryRules: [
-        'Dobrar a aposta após cada derrota',
-        'Máximo 5 gales (6 apostas total)',
-        'Apostar sempre na mesma cor',
-        'Reservar 40% da banca como reserva de segurança',
-      ],
-      exitRules: [
-        `Parar após ${Math.floor(duration * 0.5)} rodadas`,
-        'Parar após atingir limite de 5 gales sem green',
-        'Parar ao atingir +40% de lucro',
-        'Parar ao atingir -20% de perda',
-      ],
-      steps: [
-        { step: 1, action: 'Dividir Banca', detail: `Ativa: R$ ${(bankrollAmount * 0.6).toFixed(2)} | Reserva: R$ ${(bankrollAmount * 0.4).toFixed(2)}` },
-        { step: 2, action: 'Aposta Base', detail: `R$ ${(betUnit * 2).toFixed(2)} na cor escolhida` },
-        { step: 3, action: 'Gale 1', detail: `R$ ${(betUnit * 4).toFixed(2)} (dobro)` },
-        { step: 4, action: 'Gale 2', detail: `R$ ${(betUnit * 8).toFixed(2)} (dobro)` },
-        { step: 5, action: 'Gale 3', detail: `R$ ${(betUnit * 16).toFixed(2)} (dobro)` },
-        { step: 6, action: 'Gale 4', detail: `R$ ${(betUnit * 32).toFixed(2)} (dobro) - RISCO EXTREMO` },
-        { step: 7, action: 'Após Green', detail: 'Voltar à aposta base' },
-        { step: 8, action: 'Após 5 Gales', detail: 'ABORTAR - Reiniciar da aposta base' },
-      ],
-      expectedOutcomes: {
-        bestCase: `+R$ ${(bankrollAmount * 0.40).toFixed(2)} (sequência favorável com gales recuperados)`,
-        expectedCase: `+R$ ${(bankrollAmount * 0.05).toFixed(2)} a +R$ ${(bankrollAmount * 0.20).toFixed(2)}`,
-        worstCase: `-R$ ${(bankrollAmount * 0.35).toFixed(2)} (falha nos gales - prejuízo significativo)`,
-      },
-      recommendedBankroll: bankrollAmount,
-      recommendedBetSize: betUnit * 2,
-      maxDrawdown: '-50% da banca',
-    })
-  }
-
-  if (game === 'other') {
-    // Estratégias genéricas
-    strategies.push({
-      id: 'generic-conservative',
-      name: 'Gestão Conservadora',
-      description: 'Estratégia genérica conservadora com foco em preservação de capital',
-      riskLevel: 'low',
-      riskScore: 2,
-      rewardScore: 3,
-      progressionType: 'Flat com Meta Diária',
-      entryRules: [
-        'Apostar sempre 1% da banca atual',
-        'Definir meta diária de +10%',
-        'Não apostar após atingir a meta',
-        'Respeitar horário de sessão pré-definido',
-      ],
-      exitRules: [
-        `Sessão de ${Math.floor(duration * 0.5)} rodadas`,
-        'Parar ao atingir meta de +10%',
-        'Parar ao atingir -5%',
-        'Parar se sentir emoção excessiva',
-      ],
-      steps: [
-        { step: 1, action: 'Definir Meta', detail: `Meta: +R$ ${(bankrollAmount * 0.10).toFixed(2)} (10%)` },
-        { step: 2, action: 'Calcular Aposta', detail: `R$ ${betUnit.toFixed(2)} (1% da banca)` },
-        { step: 3, action: 'Executar Aposta', detail: 'Manter valor fixo independente do resultado' },
-        { step: 4, action: 'Recalcular', detail: 'Ajustar aposta se banca mudar significativamente' },
-        { step: 5, action: 'Encerrar', detail: 'Sair ao atingir meta ou limite' },
-      ],
-      expectedOutcomes: {
-        bestCase: `+R$ ${(bankrollAmount * 0.10).toFixed(2)} (meta atingida)`,
-        expectedCase: `+R$ ${(bankrollAmount * 0.02).toFixed(2)} a +R$ ${(bankrollAmount * 0.06).toFixed(2)}`,
-        worstCase: `-R$ ${(bankrollAmount * 0.05).toFixed(2)} (limite atingido)`,
-      },
-      recommendedBankroll: bankrollAmount,
-      recommendedBetSize: betUnit,
-      maxDrawdown: '-8% da banca',
-    })
-
-    strategies.push({
-      id: 'generic-moderate',
-      name: 'Equilíbrio Soros',
-      description: 'Estratégia moderada com reinvestimento parcial (Soros) e proteção de capital',
-      riskLevel: 'medium',
-      riskScore: 5,
-      rewardScore: 6,
-      progressionType: 'Soros (Reinvestimento Parcial)',
-      entryRules: [
-        'Apostar 2% da banca como base',
-        'Após vitória: apostar base + 50% do lucro',
-        'Após derrota: voltar à aposta base',
-        'Nunca exceder 5% da banca em uma aposta',
-      ],
-      exitRules: [
-        `Sessão de ${duration} rodadas`,
-        'Parar após 3 derrotas consecutivas',
-        'Parar ao atingir +20%',
-        'Parar ao atingir -12%',
-      ],
-      steps: [
-        { step: 1, action: 'Aposta Base', detail: `R$ ${(betUnit * 2).toFixed(2)} (2% da banca)` },
-        { step: 2, action: 'Após Vitória', detail: `Aposta: base + 50% do lucro = R$ ${(betUnit * 2 * 1.5).toFixed(2)}` },
-        { step: 3, action: 'Após 2 Vitórias', detail: 'Reavaliar - considerar proteger lucro' },
-        { step: 4, action: 'Após Derrota', detail: 'Voltar à aposta base imediatamente' },
-        { step: 5, action: 'Encerrar', detail: 'Sair ao atingir +20% ou -12%' },
-      ],
-      expectedOutcomes: {
-        bestCase: `+R$ ${(bankrollAmount * 0.20).toFixed(2)} (compounding favorável)`,
-        expectedCase: `+R$ ${(bankrollAmount * 0.05).toFixed(2)} a +R$ ${(bankrollAmount * 0.12).toFixed(2)}`,
-        worstCase: `-R$ ${(bankrollAmount * 0.12).toFixed(2)} (streak desfavorável)`,
-      },
-      recommendedBankroll: bankrollAmount,
-      recommendedBetSize: betUnit * 2,
-      maxDrawdown: '-20% da banca',
-    })
-
-    strategies.push({
-      id: 'generic-aggressive',
-      name: 'Alta Agressividade',
-      description: 'Estratégia agressiva com Martingale limitado e proteção parcial',
-      riskLevel: 'high',
-      riskScore: 8,
-      rewardScore: 7,
-      progressionType: 'Martingale Limitado (3 Gales)',
-      entryRules: [
-        'Aposta base: 2.5% da banca',
-        'Máximo 3 gales (4 apostas)',
-        'Green: voltar à base',
-        'Red: dobrar até limite',
-      ],
-      exitRules: [
-        `Sessão de ${Math.floor(duration * 0.6)} rodadas`,
-        'Parar após falha nos 3 gales',
-        'Parar ao atingir +35%',
-        'Parar ao atingir -20%',
-      ],
-      steps: [
-        { step: 1, action: 'Aposta Base', detail: `R$ ${(betUnit * 2.5).toFixed(2)} (2.5% da banca)` },
-        { step: 2, action: 'Gale 1', detail: `R$ ${(betUnit * 5).toFixed(2)}` },
-        { step: 3, action: 'Gale 2', detail: `R$ ${(betUnit * 10).toFixed(2)}` },
-        { step: 4, action: 'Gale 3', detail: `R$ ${(betUnit * 20).toFixed(2)} - RISCO ALTO` },
-        { step: 5, action: 'Após Green', detail: 'Voltar à aposta base' },
-        { step: 6, action: 'Após 3 Gales sem Green', detail: 'ABORTAR e voltar à base' },
-      ],
-      expectedOutcomes: {
-        bestCase: `+R$ ${(bankrollAmount * 0.35).toFixed(2)} (recuperações bem-sucedidas)`,
-        expectedCase: `+R$ ${(bankrollAmount * 0.05).toFixed(2)} a +R$ ${(bankrollAmount * 0.18).toFixed(2)}`,
-        worstCase: `-R$ ${(bankrollAmount * 0.25).toFixed(2)} (gales falharam)`,
-      },
-      recommendedBankroll: bankrollAmount,
-      recommendedBetSize: betUnit * 2.5,
-      maxDrawdown: '-35% da banca',
-    })
-  }
+  // Modelo Dinâmico - Adaptive risk management
+  strategies.push({
+    id: 'dynamic',
+    name: 'Modelo Dinâmico',
+    description: 'Modelo de gestão de risco adaptativo com alocação variável e proteção dinâmica de capital',
+    riskLevel: 'high',
+    riskScore: 8,
+    rewardScore: 8,
+    progressionType: 'Adaptativo (Capital Adaptativo)',
+    entryRules: [
+      'Valor base: até 3% do capital por operação',
+      'Ajustar alocação conforme desempenho da sessão',
+      'Nunca exceder 5% do capital na entrada inicial',
+      'Reservar 30% do capital como reserva de segurança',
+    ],
+    exitRules: [
+      `Encerrar após ${Math.floor(duration * 0.5)} rodadas`,
+      'Parar ao atingir limite de 3 recuperações consecutivas sem sucesso',
+      'Encerrar ao atingir +50% de valorização',
+      'Encerrar ao atingir -20% de perda',
+    ],
+    steps: [
+      { step: 1, action: 'Dividir Capital', detail: `Ativo: R$ ${(bankrollAmount * 0.7).toFixed(2)} | Reserva: R$ ${(bankrollAmount * 0.3).toFixed(2)}` },
+      { step: 2, action: 'Entrada Inicial', detail: `R$ ${(baseUnit * 2).toFixed(2)} com stop-loss definido` },
+      { step: 3, action: 'Recuperação 1', detail: `Ajustar para R$ ${(baseUnit * 3).toFixed(2)} após resultado desfavorável` },
+      { step: 4, action: 'Recuperação 2', detail: `Ajustar para R$ ${(baseUnit * 4.5).toFixed(2)} - limite de segurança` },
+      { step: 5, action: 'Após Resultado Favorável', detail: 'Retornar ao valor base inicial' },
+      { step: 6, action: 'Após 3 Recuperações sem Sucesso', detail: 'ABORTAR - Retornar ao valor base e recomeçar' },
+      { step: 7, action: 'Encerrar Sessão', detail: 'Sair ao atingir +50% ou -20%' },
+    ],
+    expectedOutcomes: {
+      bestCase: `+R$ ${(bankrollAmount * 0.50).toFixed(2)} (sequência favorável)`,
+      expectedCase: `+R$ ${(bankrollAmount * 0.10).toFixed(2)} a +R$ ${(bankrollAmount * 0.25).toFixed(2)}`,
+      worstCase: `-R$ ${(bankrollAmount * 0.20).toFixed(2)} (limite atingido)`,
+    },
+    recommendedBankroll: bankrollAmount,
+    recommendedBetSize: baseUnit * 2,
+    maxDrawdown: '-40% do capital',
+  })
 
   // Ordenar por alinhamento risco/recompensa com a preferência do usuário
   const riskOrder: Record<RiskTolerance, number> = { low: 0, medium: 1, high: 2 }
@@ -415,6 +178,24 @@ function generateStrategies(
     const bDiff = Math.abs(riskOrder[b.riskLevel] - riskOrder[risk])
     return aDiff - bDiff
   })
+
+  // If modelType is 'fixed', prioritize conservative; 'variable', prioritize balanced; 'adaptive', prioritize dynamic
+  if (modelType === 'fixed') {
+    strategies.sort((a, b) => {
+      const modelOrder: Record<string, number> = { conservative: 0, balanced: 1, dynamic: 2 }
+      return modelOrder[a.id] - modelOrder[b.id]
+    })
+  } else if (modelType === 'variable') {
+    strategies.sort((a, b) => {
+      const modelOrder: Record<string, number> = { balanced: 0, conservative: 1, dynamic: 2 }
+      return modelOrder[a.id] - modelOrder[b.id]
+    })
+  } else if (modelType === 'adaptive') {
+    strategies.sort((a, b) => {
+      const modelOrder: Record<string, number> = { dynamic: 0, balanced: 1, conservative: 2 }
+      return modelOrder[a.id] - modelOrder[b.id]
+    })
+  }
 
   return strategies
 }
@@ -431,13 +212,19 @@ const riskLabels: Record<RiskTolerance, string> = {
   high: 'Alto',
 }
 
+const modelLabels: Record<ModelType, string> = {
+  fixed: 'Capital Fixo',
+  variable: 'Capital Variável',
+  adaptive: 'Capital Adaptativo',
+}
+
 export function StrategyGenerator() {
   const { toast } = useToast()
   const { addHistory, addFavorite, removeFavorite, isFavorite, unlockAchievement } = useAppStore()
 
   const [bankroll, setBankroll] = useState('1000')
   const [riskTolerance, setRiskTolerance] = useState<RiskTolerance>('medium')
-  const [gameType, setGameType] = useState<GameType>('crash')
+  const [modelType, setModelType] = useState<ModelType>('fixed')
   const [sessionDuration, setSessionDuration] = useState('30')
 
   const [generatedStrategies, setGeneratedStrategies] = useState<StrategySuggestion[] | null>(null)
@@ -453,14 +240,14 @@ export function StrategyGenerator() {
       return
     }
 
-    const strategies = generateStrategies(bankrollAmount, riskTolerance, gameType, duration)
+    const strategies = generateStrategies(bankrollAmount, riskTolerance, modelType, duration)
     setGeneratedStrategies(strategies)
     setSelectedStrategy(strategies[0]?.id || null)
 
     addHistory({
       id: Math.random().toString(36).substring(7),
       tool: 'strategy-generator',
-      params: { bankroll, riskTolerance, gameType, sessionDuration },
+      params: { bankroll, riskTolerance, modelType, sessionDuration },
       result: {
         strategyCount: strategies.length,
         topStrategy: strategies[0]?.name,
@@ -468,13 +255,13 @@ export function StrategyGenerator() {
       timestamp: Date.now(),
     })
     unlockAchievement('first-calc')
-    toast({ title: 'Estratégias Geradas!', description: `${strategies.length} estratégias para ${gameType}` })
+    toast({ title: 'Modelos Gerados!', description: `${strategies.length} modelos de gestão gerados` })
   }
 
   const handleReset = () => {
     setBankroll('1000')
     setRiskTolerance('medium')
-    setGameType('crash')
+    setModelType('fixed')
     setSessionDuration('30')
     setGeneratedStrategies(null)
     setSelectedStrategy(null)
@@ -486,7 +273,7 @@ export function StrategyGenerator() {
     if (!strategy) return
 
     const text = [
-      `Estratégia: ${strategy.name}`,
+      `Modelo: ${strategy.name}`,
       `Risco: ${riskLabels[strategy.riskLevel]} | Progressão: ${strategy.progressionType}`,
       '',
       'Regras de Entrada:',
@@ -507,7 +294,7 @@ export function StrategyGenerator() {
     navigator.clipboard.writeText(text)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
-    toast({ title: 'Copiado!', description: 'Estratégia copiada para a área de transferência' })
+    toast({ title: 'Copiado!', description: 'Modelo copiado para a área de transferência' })
   }
 
   const currentStrategy = useMemo(() => {
@@ -517,16 +304,10 @@ export function StrategyGenerator() {
 
   const fav = isFavorite('strategy-generator')
 
-  const gameIcons: Record<GameType, React.ReactNode> = {
-    crash: <Zap className="h-4 w-4" />,
-    double: <Dices className="h-4 w-4" />,
-    other: <Target className="h-4 w-4" />,
-  }
-
-  const gameLabels: Record<GameType, string> = {
-    crash: 'Crash',
-    double: 'Double',
-    other: 'Outro',
+  const modelIcons: Record<ModelType, React.ReactNode> = {
+    fixed: <BarChart3 className="h-4 w-4" />,
+    variable: <PieChart className="h-4 w-4" />,
+    adaptive: <Activity className="h-4 w-4" />,
   }
 
   return (
@@ -536,10 +317,10 @@ export function StrategyGenerator() {
         <div>
           <h1 className="text-2xl sm:text-3xl font-black flex items-center gap-2">
             <Sparkles className="h-7 w-7 text-neon" />
-            Gerador de <span className="gradient-neon-text">Estratégias</span>
+            Gerador de <span className="gradient-neon-text">Modelos de Gestão</span>
           </h1>
           <p className="text-base text-muted-foreground mt-1">
-            Gere estratégias personalizadas com base no seu perfil e tipo de jogo
+            Gere modelos de gestão de risco personalizados com base no seu perfil
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -566,7 +347,7 @@ export function StrategyGenerator() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label className="text-sm text-muted-foreground">Banca Disponível (R$)</Label>
+                <Label className="text-sm text-muted-foreground">Capital Disponível (R$)</Label>
                 <Input
                   type="number"
                   value={bankroll}
@@ -598,20 +379,20 @@ export function StrategyGenerator() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-sm text-muted-foreground">Tipo de Jogo</Label>
+                <Label className="text-sm text-muted-foreground">Modelo Base</Label>
                 <div className="grid grid-cols-3 gap-1">
-                  {(['crash', 'double', 'other'] as GameType[]).map((g) => (
+                  {(['fixed', 'variable', 'adaptive'] as ModelType[]).map((m) => (
                     <button
-                      key={g}
-                      onClick={() => setGameType(g)}
+                      key={m}
+                      onClick={() => setModelType(m)}
                       className={`px-2 py-2 rounded-lg text-[10px] font-semibold transition-all flex items-center justify-center gap-1 ${
-                        gameType === g
+                        modelType === m
                           ? 'bg-neon/10 text-neon border border-neon/30'
                           : 'bg-muted/30 text-muted-foreground border border-border/30 hover:border-neon/20'
                       }`}
                     >
-                      {gameIcons[g]}
-                      {gameLabels[g]}
+                      {modelIcons[m]}
+                      {modelLabels[m]}
                     </button>
                   ))}
                 </div>
@@ -640,11 +421,11 @@ export function StrategyGenerator() {
             </Button>
           </div>
 
-          {/* Lista de Estratégias */}
+          {/* Lista de Modelos */}
           {generatedStrategies && (
             <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-semibold">Estratégias Sugeridas</CardTitle>
+                <CardTitle className="text-sm font-semibold">Modelos Sugeridos</CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
                 {generatedStrategies.map((s, i) => (
@@ -675,7 +456,7 @@ export function StrategyGenerator() {
           )}
         </div>
 
-        {/* Detalhes da Estratégia */}
+        {/* Detalhes do Modelo */}
         <div className="lg:col-span-2 space-y-4">
           {currentStrategy ? (
             <Tabs defaultValue="steps" className="w-full">
@@ -706,7 +487,7 @@ export function StrategyGenerator() {
                         <p className="text-sm font-bold text-neon">{currentStrategy.progressionType}</p>
                       </div>
                       <div className="text-center p-2 rounded-lg bg-muted/20">
-                        <p className="text-[10px] text-muted-foreground">Aposta Recomendada</p>
+                        <p className="text-[10px] text-muted-foreground">Valor Recomendado</p>
                         <p className="text-sm font-bold text-neon-blue">R$ {currentStrategy.recommendedBetSize.toFixed(2)}</p>
                       </div>
                       <div className="text-center p-2 rounded-lg bg-muted/20">
@@ -853,7 +634,7 @@ export function StrategyGenerator() {
                     <div className="mt-4">
                       <Button onClick={handleCopy} variant="outline" size="sm" className="w-full border-border text-sm">
                         {copied ? <Check className="h-3 w-3 mr-1" /> : <Copy className="h-3 w-3 mr-1" />}
-                        {copied ? 'Copiado!' : 'Copiar Estratégia'}
+                        {copied ? 'Copiado!' : 'Copiar Modelo'}
                       </Button>
                     </div>
                   </CardContent>
@@ -865,7 +646,7 @@ export function StrategyGenerator() {
               <CardContent className="p-12 text-center">
                 <Sparkles className="h-12 w-12 text-neon/30 mx-auto mb-4" />
                 <p className="text-muted-foreground text-base">
-                  Configure seu perfil e clique em <span className="text-neon font-semibold">Gerar</span> para criar estratégias personalizadas
+                  Configure seu perfil e clique em <span className="text-neon font-semibold">Gerar</span> para criar modelos de gestão personalizados
                 </p>
               </CardContent>
             </Card>
@@ -873,16 +654,33 @@ export function StrategyGenerator() {
 
           <AdInContent />
 
-          {/* Aviso */}
+          {/* Aviso Educacional */}
           <Card className="border-amber-500/20 bg-amber-500/5">
             <CardContent className="p-4 flex gap-3">
               <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-semibold text-amber-500">Jogo Responsável</p>
+                <p className="text-sm font-semibold text-amber-500">Aviso Educacional</p>
                 <p className="text-sm text-muted-foreground leading-relaxed mt-1">
-                  Nenhuma estratégia garante lucro em jogos de azar. As estratégias geradas são sugestões baseadas em
-                  gerenciamento de risco, mas a casa sempre tem vantagem matemática. Sempre defina limites e nunca aposte
-                  mais do que pode perder. Se precisar de ajuda, procure suporte profissional.
+                  Este conteúdo é exclusivamente para fins educacionais e matemáticos. Os modelos de gestão apresentados
+                  não constituem aconselhamento financeiro e não garantem resultados. Sempre defina limites claros e
+                  nunca arrisque mais do que pode se permitir perder. Consulte um profissional qualificado antes de
+                  tomar decisões financeiras.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Disclaimer AdSense */}
+          <Card className="border-red-500/20 bg-red-500/5">
+            <CardContent className="p-4 flex gap-3">
+              <Shield className="h-5 w-5 text-red-500 shrink-0 mt-0.5" />
+              <div>
+                <p className="text-sm font-semibold text-red-500">Aviso Importante</p>
+                <p className="text-sm text-muted-foreground leading-relaxed mt-1">
+                  Este aplicativo NÃO incentiva, facilita ou promove jogos de azar ou apostas. Os modelos matemáticos
+                  apresentados são ferramentas educacionais de gestão de risco e capital, aplicáveis a diversos contextos
+                  financeiros. Nenhum modelo garante lucro ou retorno financeiro. Utilize exclusivamente como material
+                  de estudo e aprendizado.
                 </p>
               </div>
             </CardContent>

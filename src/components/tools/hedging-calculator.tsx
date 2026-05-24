@@ -216,7 +216,7 @@ export function HedgingCalculator() {
             Calculadora de <span className="gradient-neon-text">Cobertura</span>
           </h1>
           <p className="text-base text-muted-foreground mt-2">
-            Estratégia de hedging — cubra dois resultados simultaneamente com lucro garantido em ambos
+            Cálculo de cobertura (hedging) — distribua o capital entre dois resultados simultâneos
           </p>
         </div>
         <Button
@@ -384,7 +384,7 @@ export function HedgingCalculator() {
                     </div>
                     <div className="flex justify-between items-center px-3 py-2 rounded-lg bg-green-500/5 border border-green-500/10">
                       <div>
-                        <p className="text-sm font-medium text-green-500">Lucro líquido (independente do resultado)</p>
+                        <p className="text-sm font-medium text-green-500">Retorno líquido (mesmo resultado em ambos os cenários)</p>
                       </div>
                       <span className="text-xl font-black text-green-500 font-mono">{formatCurrency(result.primaryProfit)}</span>
                     </div>
@@ -425,7 +425,7 @@ export function HedgingCalculator() {
                       <span className="text-base font-semibold font-mono text-amber-500">{formatCurrency(result.primaryTotal + result.galeTotal)}</span>
                     </div>
                     <div className="flex justify-between items-center px-3 py-2 rounded-lg bg-green-500/5 border border-green-500/10">
-                      <p className="text-sm font-medium text-green-500">Lucro líquido se ganhar no Gale</p>
+                      <p className="text-sm font-medium text-green-500">Retorno líquido com resultado favorável na recuperação</p>
                       <span className="text-xl font-black text-green-500 font-mono">{formatCurrency(result.galeProfit)}</span>
                     </div>
                   </div>
@@ -466,7 +466,7 @@ export function HedgingCalculator() {
                         <span className="text-base font-semibold font-mono text-red-500">{formatCurrency(result.totalRisk)}</span>
                       </div>
                       <div className="flex justify-between items-center px-3 py-2 rounded-lg bg-green-500/5 border border-green-500/10">
-                        <p className="text-sm font-medium text-green-500">Lucro líquido se ganhar no Gale 2</p>
+                        <p className="text-sm font-medium text-green-500">Retorno líquido com resultado favorável na 2ª recuperação</p>
                         <span className="text-xl font-black text-green-500 font-mono">{formatCurrency(result.gale2Profit)}</span>
                       </div>
                     </div>

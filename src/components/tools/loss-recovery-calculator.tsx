@@ -390,11 +390,11 @@ export function LossRecoveryCalculator() {
             <CardContent className="p-4 flex gap-3">
               <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-semibold text-amber-500">Aviso - Jogo Responsável</p>
+                <p className="text-sm font-semibold text-amber-500">Aviso Educacional</p>
                 <p className="text-sm text-muted-foreground leading-relaxed mt-1">
-                  Nenhuma estratégia garante recuperação de perdas. Cada aposta carrega risco real de perda adicional.
-                  A progressão de recuperação pode levar a apostas cada vez maiores. Defina limites claros e nunca
-                  aposte mais do que pode se permitir perder. Jogue com responsabilidade.
+                  Nenhuma estratégia garante recuperação de perdas. Cada operação carrega risco real de perda adicional.
+                  A progressão de recuperação pode levar a operações cada vez maiores. Este simulador é meramente
+                  educacional e não constitui aconselhamento financeiro. Nenhum modelo garante lucro.
                 </p>
               </div>
             </CardContent>

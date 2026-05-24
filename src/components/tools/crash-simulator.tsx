@@ -19,62 +19,62 @@ import { useToast } from '@/hooks/use-toast'
 import { useThemeColors } from '@/hooks/use-theme-colors'
 import { AdInContent } from '@/components/shared/ad-banner'
 
-interface CrashRound {
+interface MultiplierRound {
   round: number
-  crashPoint: number
-  cashout: number
-  result: 'green' | 'red'
-  bet: number
+  multiplier: number
+  target: number
+  result: 'favorable' | 'unfavorable'
+  operationValue: number
   payout: number
   balance: number
 }
 
-export function CrashSimulator() {
+export function MultiplierSimulator() {
   const { toast } = useToast()
   const { neon, neonBlue } = useThemeColors()
   const { addHistory, addFavorite, removeFavorite, isFavorite, unlockAchievement } = useAppStore()
 
-  const [initialBet, setInitialBet] = useState('10')
-  const [autoCashout, setAutoCashout] = useState('2.0')
+  const [initialOperation, setInitialOperation] = useState('10')
+  const [multiplierTarget, setMultiplierTarget] = useState('2.0')
   const [bankroll, setBankroll] = useState('1000')
   const [rounds, setRounds] = useState('50')
 
-  const [results, setResults] = useState<CrashRound[]>([])
+  const [results, setResults] = useState<MultiplierRound[]>([])
   const [isRunning, setIsRunning] = useState(false)
   const [copied, setCopied] = useState(false)
 
-  const generateCrashPoint = useCallback(() => {
+  const generateMultiplier = useCallback(() => {
     return Math.max(1.0, 0.99 / (1 - Math.random()))
   }, [])
 
   const runSimulation = useCallback(() => {
-    const bet = parseFloat(initialBet) || 0
-    const cashout = parseFloat(autoCashout) || 2
+    const operationValue = parseFloat(initialOperation) || 0
+    const target = parseFloat(multiplierTarget) || 2
     let balance = parseFloat(bankroll) || 0
     const numRounds = parseInt(rounds) || 0
 
-    if (bet <= 0 || cashout <= 1 || balance <= 0 || numRounds <= 0) {
+    if (operationValue <= 0 || target <= 1 || balance <= 0 || numRounds <= 0) {
       toast({ title: 'Erro', description: 'Verifique os valores inseridos', variant: 'destructive' })
       return
     }
 
     setIsRunning(true)
-    const simulationResults: CrashRound[] = []
+    const simulationResults: MultiplierRound[] = []
 
     for (let i = 0; i < numRounds; i++) {
-      if (balance < bet) break
+      if (balance < operationValue) break
 
-      const crashPoint = generateCrashPoint()
-      const isGreen = crashPoint >= cashout
-      const payout = isGreen ? bet * (cashout - 1) : -bet
+      const multiplier = generateMultiplier()
+      const isFavorable = multiplier >= target
+      const payout = isFavorable ? operationValue * (target - 1) : -operationValue
       balance += payout
 
       simulationResults.push({
         round: i + 1,
-        crashPoint: parseFloat(crashPoint.toFixed(2)),
-        cashout,
-        result: isGreen ? 'green' : 'red',
-        bet,
+        multiplier: parseFloat(multiplier.toFixed(2)),
+        target,
+        result: isFavorable ? 'favorable' : 'unfavorable',
+        operationValue,
         payout: parseFloat(payout.toFixed(2)),
         balance: parseFloat(balance.toFixed(2)),
       })
@@ -85,22 +85,22 @@ export function CrashSimulator() {
 
     addHistory({
       id: Math.random().toString(36).substring(7),
-      tool: 'crash-simulator',
-      params: { initialBet, autoCashout, bankroll, rounds },
+      tool: 'multiplier-simulator',
+      params: { initialOperation, multiplierTarget, bankroll, rounds },
       result: {
         totalRounds: simulationResults.length,
-        greens: simulationResults.filter(r => r.result === 'green').length,
-        reds: simulationResults.filter(r => r.result === 'red').length,
+        favorables: simulationResults.filter(r => r.result === 'favorable').length,
+        unfavorables: simulationResults.filter(r => r.result === 'unfavorable').length,
         finalBalance: simulationResults[simulationResults.length - 1]?.balance || 0,
       },
       timestamp: Date.now(),
     })
     unlockAchievement('first-calc')
-  }, [initialBet, autoCashout, bankroll, rounds, generateCrashPoint, addHistory, unlockAchievement, toast])
+  }, [initialOperation, multiplierTarget, bankroll, rounds, generateMultiplier, addHistory, unlockAchievement, toast])
 
   const handleReset = () => {
-    setInitialBet('10')
-    setAutoCashout('2.0')
+    setInitialOperation('10')
+    setMultiplierTarget('2.0')
     setBankroll('1000')
     setRounds('50')
     setResults([])
@@ -108,7 +108,7 @@ export function CrashSimulator() {
 
   const handleCopy = () => {
     const text = results
-      .map(r => `Rodada ${r.round}: Crash ${r.crashPoint}x | ${r.result === 'green' ? 'GREEN' : 'RED'} | Saldo: R$${r.balance.toFixed(2)}`)
+      .map(r => `Rodada ${r.round}: Multiplicador ${r.multiplier}x | ${r.result === 'favorable' ? 'FAVORÁVEL' : 'DESFAVORÁVEL'} | Saldo: R$${r.balance.toFixed(2)}`)
       .join('\n')
     navigator.clipboard.writeText(text)
     setCopied(true)
@@ -118,28 +118,28 @@ export function CrashSimulator() {
 
   const stats = useMemo(() => {
     if (results.length === 0) return null
-    const greens = results.filter(r => r.result === 'green').length
-    const reds = results.filter(r => r.result === 'red').length
+    const favorables = results.filter(r => r.result === 'favorable').length
+    const unfavorables = results.filter(r => r.result === 'unfavorable').length
     const finalBalance = results[results.length - 1]?.balance || 0
     const startBalance = parseFloat(bankroll) || 0
     const profitLoss = finalBalance - startBalance
-    const winRate = (greens / results.length) * 100
-    const avgCrash = results.reduce((sum, r) => sum + r.crashPoint, 0) / results.length
-    const maxCrash = Math.max(...results.map(r => r.crashPoint))
-    const minCrash = Math.min(...results.map(r => r.crashPoint))
+    const hitRate = (favorables / results.length) * 100
+    const avgMultiplier = results.reduce((sum, r) => sum + r.multiplier, 0) / results.length
+    const maxMultiplier = Math.max(...results.map(r => r.multiplier))
+    const minMultiplier = Math.min(...results.map(r => r.multiplier))
 
-    return { greens, reds, finalBalance, profitLoss, winRate, avgCrash, maxCrash, minCrash }
+    return { favorables, unfavorables, finalBalance, profitLoss, hitRate, avgMultiplier, maxMultiplier, minMultiplier }
   }, [results, bankroll])
 
   const chartData = useMemo(() => {
     return results.map(r => ({
       round: r.round,
       balance: r.balance,
-      crashPoint: r.crashPoint,
+      multiplier: r.multiplier,
     }))
   }, [results])
 
-  const fav = isFavorite('crash-simulator')
+  const fav = isFavorite('multiplier-simulator')
 
   return (
     <div className="space-y-6">
@@ -148,17 +148,17 @@ export function CrashSimulator() {
         <div>
           <h1 className="text-2xl sm:text-3xl font-black flex items-center gap-2">
             <Zap className="h-7 w-7 text-neon" />
-            Simulador <span className="gradient-neon-text">Crash</span>
+            Simulador de <span className="gradient-neon-text">Multiplicadores</span>
           </h1>
           <p className="text-base text-muted-foreground mt-1">
-            Simule rodadas de Crash com auto cashout e analise seus resultados
+            Simule cenários com multiplicadores variáveis para análise de risco
           </p>
         </div>
         <div className="flex items-center gap-2">
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => fav ? removeFavorite('crash-simulator') : addFavorite('crash-simulator')}
+            onClick={() => fav ? removeFavorite('multiplier-simulator') : addFavorite('multiplier-simulator')}
             className={fav ? 'text-neon' : 'text-muted-foreground'}
           >
             <Star className={`h-4 w-4 mr-1 ${fav ? 'fill-neon' : ''}`} />
@@ -177,12 +177,18 @@ export function CrashSimulator() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
+              <div className="p-3 rounded-lg bg-muted/20 border border-border/50">
+                <p className="text-[10px] text-muted-foreground leading-relaxed">
+                  Este simulador demonstra o comportamento estatístico de multiplicadores com distribuição exponencial, útil para estudo de probabilidade e gestão de risco.
+                </p>
+              </div>
+
               <div className="space-y-2">
-                <Label className="text-sm text-muted-foreground">Aposta Inicial (R$)</Label>
+                <Label className="text-sm text-muted-foreground">Valor da Operação (R$)</Label>
                 <Input
                   type="number"
-                  value={initialBet}
-                  onChange={(e) => setInitialBet(e.target.value)}
+                  value={initialOperation}
+                  onChange={(e) => setInitialOperation(e.target.value)}
                   className="bg-muted/50 border-border h-11"
                   min="0.01"
                   step="0.01"
@@ -190,11 +196,11 @@ export function CrashSimulator() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-sm text-muted-foreground">Auto Cashout (Multiplicador)</Label>
+                <Label className="text-sm text-muted-foreground">Alvo de Multiplicador</Label>
                 <Input
                   type="number"
-                  value={autoCashout}
-                  onChange={(e) => setAutoCashout(e.target.value)}
+                  value={multiplierTarget}
+                  onChange={(e) => setMultiplierTarget(e.target.value)}
                   className="bg-muted/50 border-border h-11"
                   min="1.01"
                   step="0.1"
@@ -202,7 +208,7 @@ export function CrashSimulator() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-sm text-muted-foreground">Banca Inicial (R$)</Label>
+                <Label className="text-sm text-muted-foreground">Capital Inicial (R$)</Label>
                 <Input
                   type="number"
                   value={bankroll}
@@ -250,14 +256,14 @@ export function CrashSimulator() {
             <div className="grid grid-cols-2 gap-3">
               <Card className="border-neon/20 bg-neon/5">
                 <CardContent className="p-3 text-center">
-                  <p className="text-[10px] text-muted-foreground">Greens</p>
-                  <p className="text-xl font-black text-neon">{stats.greens}</p>
+                  <p className="text-[10px] text-muted-foreground">Favoráveis</p>
+                  <p className="text-xl font-black text-neon">{stats.favorables}</p>
                 </CardContent>
               </Card>
               <Card className="border-red-500/20 bg-red-500/5">
                 <CardContent className="p-3 text-center">
-                  <p className="text-[10px] text-muted-foreground">Reds</p>
-                  <p className="text-xl font-black text-red-500">{stats.reds}</p>
+                  <p className="text-[10px] text-muted-foreground">Desfavoráveis</p>
+                  <p className="text-xl font-black text-red-500">{stats.unfavorables}</p>
                 </CardContent>
               </Card>
               <Card className="border-neon-blue/20 bg-neon-blue/5">
@@ -289,19 +295,19 @@ export function CrashSimulator() {
               <CardContent className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Taxa de Acerto</span>
-                  <span className="font-mono text-neon">{stats.winRate.toFixed(1)}%</span>
+                  <span className="font-mono text-neon">{stats.hitRate.toFixed(1)}%</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Crash Médio</span>
-                  <span className="font-mono text-neon-blue">{stats.avgCrash.toFixed(2)}x</span>
+                  <span className="text-muted-foreground">Multiplicador Médio</span>
+                  <span className="font-mono text-neon-blue">{stats.avgMultiplier.toFixed(2)}x</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Crash Máximo</span>
-                  <span className="font-mono text-neon">{stats.maxCrash.toFixed(2)}x</span>
+                  <span className="text-muted-foreground">Multiplicador Máximo</span>
+                  <span className="font-mono text-neon">{stats.maxMultiplier.toFixed(2)}x</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Crash Mínimo</span>
-                  <span className="font-mono text-red-500">{stats.minCrash.toFixed(2)}x</span>
+                  <span className="text-muted-foreground">Multiplicador Mínimo</span>
+                  <span className="font-mono text-red-500">{stats.minMultiplier.toFixed(2)}x</span>
                 </div>
               </CardContent>
             </Card>
@@ -325,11 +331,11 @@ export function CrashSimulator() {
                         <thead className="sticky top-0 bg-card">
                           <tr className="border-b border-border">
                             <th className="text-left p-3 font-semibold text-muted-foreground">Rodada</th>
-                            <th className="text-right p-3 font-semibold text-muted-foreground">Crash</th>
-                            <th className="text-right p-3 font-semibold text-muted-foreground">Cashout</th>
+                            <th className="text-right p-3 font-semibold text-muted-foreground">Multiplicador</th>
+                            <th className="text-right p-3 font-semibold text-muted-foreground">Alvo</th>
                             <th className="text-center p-3 font-semibold text-muted-foreground">Resultado</th>
-                            <th className="text-right p-3 font-semibold text-muted-foreground">Aposta</th>
-                            <th className="text-right p-3 font-semibold text-muted-foreground">Pagamento</th>
+                            <th className="text-right p-3 font-semibold text-muted-foreground">Operação</th>
+                            <th className="text-right p-3 font-semibold text-muted-foreground">Resultado</th>
                             <th className="text-right p-3 font-semibold text-muted-foreground">Saldo</th>
                           </tr>
                         </thead>
@@ -338,22 +344,22 @@ export function CrashSimulator() {
                             <tr
                               key={i}
                               className={`border-b border-border/30 transition-colors ${
-                                r.result === 'green' ? 'hover:bg-neon/5' : 'hover:bg-red-500/5'
+                                r.result === 'favorable' ? 'hover:bg-neon/5' : 'hover:bg-red-500/5'
                               }`}
                             >
                               <td className="p-3 font-bold">#{r.round}</td>
-                              <td className="text-right p-3 font-mono">{r.crashPoint}x</td>
-                              <td className="text-right p-3 font-mono">{r.cashout}x</td>
+                              <td className="text-right p-3 font-mono">{r.multiplier}x</td>
+                              <td className="text-right p-3 font-mono">{r.target}x</td>
                               <td className="text-center p-3">
                                 <Badge className={`border-0 text-[10px] ${
-                                  r.result === 'green'
+                                  r.result === 'favorable'
                                     ? 'bg-neon/10 text-neon'
                                     : 'bg-red-500/10 text-red-500'
                                 }`}>
-                                  {r.result === 'green' ? 'GREEN' : 'RED'}
+                                  {r.result === 'favorable' ? 'FAVORÁVEL' : 'DESFAVORÁVEL'}
                                 </Badge>
                               </td>
-                              <td className="text-right p-3 font-mono">R$ {r.bet.toFixed(2)}</td>
+                              <td className="text-right p-3 font-mono">R$ {r.operationValue.toFixed(2)}</td>
                               <td className={`text-right p-3 font-mono font-bold ${
                                 r.payout >= 0 ? 'text-neon' : 'text-red-500'
                               }`}>
@@ -395,7 +401,7 @@ export function CrashSimulator() {
                           labelStyle={{ color: "var(--foreground)" }}
                           formatter={(value: number, name: string) => {
                             if (name === 'balance') return [`R$ ${value.toFixed(2)}`, 'Saldo']
-                            return [`${value.toFixed(2)}x`, 'Crash']
+                            return [`${value.toFixed(2)}x`, 'Multiplicador']
                           }}
                         />
                         <Line
@@ -410,7 +416,7 @@ export function CrashSimulator() {
                     </ResponsiveContainer>
 
                     <div className="mt-4">
-                      <p className="text-sm text-muted-foreground mb-2">Pontos de Crash</p>
+                      <p className="text-sm text-muted-foreground mb-2">Pontos de Multiplicador</p>
                       <ResponsiveContainer width="100%" height={150}>
                         <LineChart data={chartData}>
                           <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
@@ -419,11 +425,11 @@ export function CrashSimulator() {
                           <Tooltip
                             contentStyle={{ background: "var(--card)", border: '1px solid var(--border)', borderRadius: '8px', fontSize: 12 }}
                             labelStyle={{ color: "var(--foreground)" }}
-                            formatter={(value: number) => [`${value.toFixed(2)}x`, 'Ponto Crash']}
+                            formatter={(value: number) => [`${value.toFixed(2)}x`, 'Multiplicador']}
                           />
                           <Line
                             type="monotone"
-                            dataKey="crashPoint"
+                            dataKey="multiplier"
                             stroke={neonBlue}
                             strokeWidth={1}
                             dot={{ r: 2, fill: neonBlue }}
@@ -453,10 +459,9 @@ export function CrashSimulator() {
             <CardContent className="p-4 flex gap-3">
               <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-semibold text-amber-500">Jogo Responsável</p>
+                <p className="text-sm font-semibold text-amber-500">Aviso Educacional</p>
                 <p className="text-sm text-muted-foreground leading-relaxed mt-1">
-                  Este simulador é apenas para fins educacionais. Resultados passados não garantem resultados futuros.
-                  Crash games são jogos de azar com vantagem da casa. Nunca aposte mais do que pode perder.
+                  Este simulador é uma ferramenta educacional para compreender o comportamento de multiplicadores em cenários de risco. Os resultados são gerados aleatoriamente e não representam nenhum produto financeiro ou jogo real. Não constitui aconselhamento financeiro.
                 </p>
               </div>
             </CardContent>

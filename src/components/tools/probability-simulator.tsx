@@ -273,7 +273,7 @@ export function ProbabilitySimulator() {
                   max="99.9"
                   step="0.1"
                 />
-                <p className="text-[10px] text-muted-foreground">Ex: 48.6% para vermelho no Double</p>
+                <p className="text-[10px] text-muted-foreground">Ex: 48.6% para evento com duas opções equiprováveis</p>
               </div>
 
               <div className="space-y-2">
@@ -443,7 +443,7 @@ export function ProbabilitySimulator() {
                       </span>
                     </div>
                     <div className="flex justify-between p-2 rounded-lg bg-muted/20">
-                      <span className="text-muted-foreground">Edge da Casa</span>
+                      <span className="text-muted-foreground">Vantagem Estatística</span>
                       <span className="font-mono font-bold text-red-500">
                         {((1 - 2 * parseFloat(probability) / 100) * 100).toFixed(1)}%
                       </span>
@@ -556,10 +556,11 @@ export function ProbabilitySimulator() {
             <CardContent className="p-4 flex gap-3">
               <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-semibold text-amber-500">Jogo Responsável</p>
+                <p className="text-sm font-semibold text-amber-500">Aviso Educacional</p>
                 <p className="text-sm text-muted-foreground leading-relaxed mt-1">
                   Simulações Monte Carlo mostram resultados probabilísticos de longo prazo. Na prática, resultados individuais
-                  podem variar significativamente. A casa sempre tem vantagem matemática. Nunca aposte mais do que pode perder.
+                  podem variar significativamente. Quando a probabilidade é inferior a 50%, o valor esperado é negativo a longo prazo.
+                  Este simulador é para fins educacionais e não constitui aconselhamento financeiro.
                 </p>
               </div>
             </CardContent>

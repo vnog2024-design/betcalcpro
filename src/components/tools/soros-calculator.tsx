@@ -277,8 +277,8 @@ export function SorosCalculator() {
                   </div>
                   <div className="p-2 rounded bg-muted/30 text-[10px] text-muted-foreground">
                     <strong>Exemplo:</strong> Banca R$100, Mult 2x, Soros 30%<br />
-                    Etapa 1: Aposta R$100 → Ganha R$100 → Protege R$70, Reinveste R$30<br />
-                    Etapa 2: Aposta R$130 → Se perder, ainda fica com R$70 protegidos!
+                    Etapa 1: Operação R$100 → Ganha R$100 → Protege R$70, Reinveste R$30<br />
+                    Etapa 2: Operação R$130 → Se perder, ainda fica com R$70 protegidos!
                   </div>
                 </div>
               )}
@@ -579,7 +579,7 @@ export function SorosCalculator() {
                       <thead className="sticky top-0 bg-card">
                         <tr className="border-b border-border">
                           <th className="text-left p-2.5 font-semibold text-muted-foreground">Etapa</th>
-                          <th className="text-right p-2.5 font-semibold text-muted-foreground">Aposta</th>
+                          <th className="text-right p-2.5 font-semibold text-muted-foreground">Operação</th>
                           <th className="text-right p-2.5 font-semibold text-amber-500">Reinveste</th>
                           <th className="text-right p-2.5 font-semibold text-emerald-500">Protege</th>
                           <th className="text-right p-2.5 font-semibold text-neon">Banca ✅</th>
@@ -656,12 +656,11 @@ export function SorosCalculator() {
             <CardContent className="p-4 flex gap-3">
               <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-semibold text-amber-500">Aviso - Jogo Responsável</p>
+                <p className="text-sm font-semibold text-amber-500">Aviso Educacional</p>
                 <p className="text-sm text-muted-foreground leading-relaxed mt-1">
-                  A estratégia Soros pressupõe vitórias consecutivas, o que é improvável a longo prazo.
-                  Use o % Soros parcial para proteger parte dos lucros. Uma perda pode eliminar o capital
-                  de trabalho, mas o lucro protegido permanece seguro. Sempre defina limites de perda e
-                  jogue com responsabilidade.
+                  Este simulador demonstra o conceito matemático de reinvestimento parcial (Soros). Os resultados
+                  são meramente ilustrativos e não constituem aconselhamento financeiro. Nenhum modelo
+                  garante lucro.
                 </p>
               </div>
             </CardContent>

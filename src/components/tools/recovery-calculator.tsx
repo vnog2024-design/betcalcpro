@@ -144,7 +144,7 @@ export function RecoveryCalculator() {
         name: 'Flat',
         icon: '🛡️',
         color: 'text-neon-blue',
-        description: 'Aposta fixa em cada etapa. Mais seguro, mas mais lento.',
+        description: 'Valor fixo em cada etapa. Mais seguro, mas mais lento.',
         steps: flatSteps,
         totalBets: flatSteps.length,
         totalWagered: flatTotalWagered,
@@ -155,7 +155,7 @@ export function RecoveryCalculator() {
         name: 'Progressiva',
         icon: '🎯',
         color: 'text-neon',
-        description: 'Aposta cresce com a banca. Equilíbrio entre velocidade e risco.',
+        description: 'Valor cresce com o capital. Equilíbrio entre velocidade e risco.',
         steps: progressiveSteps,
         totalBets: progressiveSteps.length,
         totalWagered: progTotalWagered,
@@ -187,7 +187,7 @@ export function RecoveryCalculator() {
           s.steps
             .map(
               (st) =>
-                `Etapa ${st.step}: Aposta R$${st.betAmount.toFixed(2)} | Se Ganhar R$${st.bankrollAfterWin.toFixed(2)} | Se Perder R$${st.bankrollAfterLoss.toFixed(2)}`
+                `Etapa ${st.step}: Operação R$${st.betAmount.toFixed(2)} | Se Favorável R$${st.bankrollAfterWin.toFixed(2)} | Se Desfavorável R$${st.bankrollAfterLoss.toFixed(2)}`
             )
             .join('\n')
       )
@@ -242,10 +242,10 @@ export function RecoveryCalculator() {
         <div>
           <h1 className="text-2xl sm:text-3xl font-black flex items-center gap-2">
             <Shield className="h-7 w-7 text-neon" />
-            Recuperação de <span className="gradient-neon-text">Banca</span>
+            Análise de <span className="gradient-neon-text">Cenários</span>
           </h1>
           <p className="text-base text-muted-foreground mt-1">
-            Compare estratégias de recuperação de banca lado a lado
+            Compare modelos de gestão de capital lado a lado
           </p>
         </div>
       </div>
@@ -261,7 +261,7 @@ export function RecoveryCalculator() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label className="text-sm text-muted-foreground">Banca Atual (R$)</Label>
+                <Label className="text-sm text-muted-foreground">Capital Atual (R$)</Label>
                 <Input
                   type="number"
                   value={currentBankroll}
@@ -273,7 +273,7 @@ export function RecoveryCalculator() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-sm text-muted-foreground">Banca Alvo (R$)</Label>
+                <Label className="text-sm text-muted-foreground">Capital Alvo (R$)</Label>
                 <Input
                   type="number"
                   value={targetBankroll}
@@ -285,7 +285,7 @@ export function RecoveryCalculator() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-sm text-muted-foreground">Odds por Aposta</Label>
+                <Label className="text-sm text-muted-foreground">Multiplicador por Operação</Label>
                 <Input
                   type="number"
                   value={oddsPerBet}
@@ -297,7 +297,7 @@ export function RecoveryCalculator() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-sm text-muted-foreground">% de Risco da Banca</Label>
+                <Label className="text-sm text-muted-foreground">% de Risco do Capital</Label>
                 <Input
                   type="number"
                   value={riskPercentage}
@@ -307,7 +307,7 @@ export function RecoveryCalculator() {
                   max="99"
                   step="0.1"
                 />
-                <p className="text-[10px] text-muted-foreground">Percentual da banca arriscado por aposta</p>
+                <p className="text-[10px] text-muted-foreground">Percentual do capital arriscado por operação</p>
               </div>
 
               <Button
@@ -325,14 +325,14 @@ export function RecoveryCalculator() {
                   <div className="flex items-start gap-2">
                     <Shield className="h-4 w-4 text-neon-blue shrink-0 mt-0.5" />
                     <p className="text-[10px] text-muted-foreground">
-                      <strong className="text-neon-blue">Flat:</strong> Aposta um valor fixo em cada rodada. 
-                      Mais conservador e previsível, porém requer mais apostas para recuperar.
+                      <strong className="text-neon-blue">Flat:</strong> Opera com valor fixo em cada rodada. 
+                      Mais conservador e previsível, porém requer mais operações para recuperar.
                     </p>
                   </div>
                   <div className="flex items-start gap-2">
                     <Target className="h-4 w-4 text-neon shrink-0 mt-0.5" />
                     <p className="text-[10px] text-muted-foreground">
-                      <strong className="text-neon">Progressiva:</strong> A aposta cresce proporcionalmente à banca.
+                      <strong className="text-neon">Progressiva:</strong> O valor cresce proporcionalmente ao capital.
                       Equilíbrio entre velocidade de recuperação e proteção contra perdas.
                     </p>
                   </div>
@@ -401,11 +401,11 @@ export function RecoveryCalculator() {
                       <p className="text-[10px] text-muted-foreground">{s.description}</p>
                       <div className="space-y-1.5">
                         <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">Apostas Necessárias</span>
+                          <span className="text-muted-foreground">Operações Necessárias</span>
                           <span className="font-bold">{s.totalBets}</span>
                         </div>
                         <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">Total Apostado</span>
+                          <span className="text-muted-foreground">Total Investido</span>
                           <span className="font-bold font-mono">R$ {s.totalWagered.toFixed(2)}</span>
                         </div>
                         <div className="flex justify-between text-sm">
@@ -438,13 +438,13 @@ export function RecoveryCalculator() {
                       </thead>
                       <tbody>
                         <tr className="border-b border-border/30 hover:bg-muted/20">
-                          <td className="p-3 text-muted-foreground">Apostas até o alvo</td>
+                          <td className="p-3 text-muted-foreground">Operações até o alvo</td>
                           <td className="text-center p-3 font-bold">{strategies[0]?.totalBets || 0}</td>
                           <td className="text-center p-3 font-bold">{strategies[1]?.totalBets || 0}</td>
                           <td className="text-center p-3 font-bold">{strategies[2]?.totalBets || 0}</td>
                         </tr>
                         <tr className="border-b border-border/30 hover:bg-muted/20">
-                          <td className="p-3 text-muted-foreground">Total apostado</td>
+                          <td className="p-3 text-muted-foreground">Total investido</td>
                           <td className="text-center p-3 font-mono">R$ {strategies[0]?.totalWagered.toFixed(2)}</td>
                           <td className="text-center p-3 font-mono">R$ {strategies[1]?.totalWagered.toFixed(2)}</td>
                           <td className="text-center p-3 font-mono">R$ {strategies[2]?.totalWagered.toFixed(2)}</td>
@@ -456,13 +456,13 @@ export function RecoveryCalculator() {
                           <td className="text-center p-3 font-mono text-red-400">R$ {strategies[2]?.maxDrawdown.toFixed(2)}</td>
                         </tr>
                         <tr className="border-b border-border/30 hover:bg-muted/20">
-                          <td className="p-3 text-muted-foreground">Primeira aposta</td>
+                          <td className="p-3 text-muted-foreground">Primeira operação</td>
                           <td className="text-center p-3 font-mono">R$ {strategies[0]?.steps[0]?.betAmount.toFixed(2)}</td>
                           <td className="text-center p-3 font-mono">R$ {strategies[1]?.steps[0]?.betAmount.toFixed(2)}</td>
                           <td className="text-center p-3 font-mono">R$ {strategies[2]?.steps[0]?.betAmount.toFixed(2)}</td>
                         </tr>
                         <tr className="border-b border-border/30 hover:bg-muted/20">
-                          <td className="p-3 text-muted-foreground">Última aposta</td>
+                          <td className="p-3 text-muted-foreground">Última operação</td>
                           <td className="text-center p-3 font-mono">
                             R$ {strategies[0]?.steps[strategies[0].steps.length - 1]?.betAmount.toFixed(2)}
                           </td>
@@ -510,7 +510,7 @@ export function RecoveryCalculator() {
                               <thead className="sticky top-0 bg-card">
                                 <tr className="border-b border-border">
                                   <th className="text-left p-3 font-semibold text-muted-foreground">Etapa</th>
-                                  <th className="text-right p-3 font-semibold text-muted-foreground">Aposta</th>
+                                  <th className="text-right p-3 font-semibold text-muted-foreground">Operação</th>
                                   <th className="text-right p-3 font-semibold text-muted-foreground">Lucro</th>
                                   <th className="text-right p-3 font-semibold text-muted-foreground">Se Ganhar</th>
                                   <th className="text-right p-3 font-semibold text-muted-foreground">Se Perder</th>
@@ -570,12 +570,12 @@ export function RecoveryCalculator() {
             <CardContent className="p-4 flex gap-3">
               <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-semibold text-amber-500">Aviso - Jogo Responsável</p>
+                <p className="text-sm font-semibold text-amber-500">Aviso Educacional</p>
                 <p className="text-sm text-muted-foreground leading-relaxed mt-1">
-                  Estas simulações consideram cenários onde todas as apostas são vencedoras, o que é altamente improvável.
-                  Na realidade, sequências de perdas podem ocorrer e levar à perda total da banca.
-                  Nenhuma estratégia garante lucro ou recuperação. Sempre jogue com dinheiro que pode perder
-                  e defina limites rigorosos de perda diária. Procure ajuda se o jogo estiver fora de controle.
+                  Estas simulações consideram cenários onde todas as operações são favoráveis, o que é altamente improvável.
+                  Na realidade, sequências de perdas podem ocorrer e levar à perda total do capital.
+                  Nenhum modelo garante lucro ou recuperação. Utilize sempre gestão de risco responsável
+                  e defina limites rigorosos. Os resultados são meramente ilustrativos e não constituem aconselhamento financeiro.
                 </p>
               </div>
             </CardContent>

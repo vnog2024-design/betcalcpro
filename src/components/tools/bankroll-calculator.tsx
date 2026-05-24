@@ -108,18 +108,18 @@ export function BankrollCalculator() {
       ...calculations.results.map((r) => ({
         'Nível de Risco': r.level.name,
         'Percentual': `${r.level.percent}%`,
-        'Tamanho da Aposta': r.betSize.toFixed(2),
+        'Valor da Operação': r.betSize.toFixed(2),
         'Perda Máxima Diária': r.maxDailyLossAmount.toFixed(2),
         'Lucro Alvo': r.profitTarget.toFixed(2),
-        'Apostas até Quebrar': r.betsBeforeBust,
+        'Operações até Falência': r.betsBeforeBust,
       })),
       {
         'Nível de Risco': 'Personalizado',
         'Percentual': `${calculations.riskPercent}%`,
-        'Tamanho da Aposta': calculations.custom.betSize.toFixed(2),
+        'Valor da Operação': calculations.custom.betSize.toFixed(2),
         'Perda Máxima Diária': calculations.custom.maxDailyLossAmount.toFixed(2),
         'Lucro Alvo': calculations.custom.profitTarget.toFixed(2),
-        'Apostas até Quebrar': calculations.custom.betsBeforeBust,
+        'Operações até Falência': calculations.custom.betsBeforeBust,
       },
     ]
   }, [calculations])
@@ -135,18 +135,18 @@ export function BankrollCalculator() {
         const r = calculations.results[i]
         return [
           `--- ${level.name} (${level.percent}%) ---`,
-          `Aposta Recomendada: R$ ${r.betSize.toFixed(2)}`,
+          `Valor Recomendado: R$ ${r.betSize.toFixed(2)}`,
           `Perda Máxima Diária: R$ ${r.maxDailyLossAmount.toFixed(2)}`,
           `Lucro Alvo: R$ ${r.profitTarget.toFixed(2)}`,
-          `Apostas até Quebrar: ${r.betsBeforeBust}`,
+          `Operações até Falência: ${r.betsBeforeBust}`,
         ].join('\n')
       }),
       ``,
       `--- Personalizado (${calculations.riskPercent}%) ---`,
-      `Aposta Recomendada: R$ ${calculations.custom.betSize.toFixed(2)}`,
+      `Valor Recomendado: R$ ${calculations.custom.betSize.toFixed(2)}`,
       `Perda Máxima Diária: R$ ${calculations.custom.maxDailyLossAmount.toFixed(2)}`,
       `Lucro Alvo: R$ ${calculations.custom.profitTarget.toFixed(2)}`,
-      `Apostas até Quebrar: ${calculations.custom.betsBeforeBust}`,
+      `Operações até Falência: ${calculations.custom.betsBeforeBust}`,
     ].join('\n')
 
     navigator.clipboard.writeText(text)
@@ -189,7 +189,7 @@ export function BankrollCalculator() {
             Gerenciamento de <span className="gradient-neon-text">Banca</span>
           </h1>
           <p className="text-base text-muted-foreground mt-1">
-            Calcule o tamanho ideal da aposta e gerencie o risco como um profissional
+            Calcule o tamanho ideal da operação e gerencie o risco como um profissional
           </p>
         </div>
       </div>
@@ -258,7 +258,7 @@ export function BankrollCalculator() {
               <div className="p-3 rounded-lg bg-muted/20 border border-border/50">
                 <p className="text-[10px] text-muted-foreground">
                   <Info className="h-3 w-3 inline mr-1" />
-                  A regra de 1-2% recomenda apostar apenas 1-2% da banca total por aposta.
+                  A regra de 1-2% recomenda operar apenas 1-2% do capital total por operação.
                   Isso protege contra sequências de perdas e garante sustentabilidade a longo prazo.
                 </p>
               </div>
@@ -271,7 +271,7 @@ export function BankrollCalculator() {
               <Card className="border-neon/20 bg-neon/5">
                 <CardContent className="p-3 text-center">
                   <Wallet className="h-4 w-4 text-neon mx-auto mb-1" />
-                  <p className="text-[10px] text-muted-foreground">Aposta Recomendada ({calculations.riskPercent}%)</p>
+                  <p className="text-[10px] text-muted-foreground">Valor Recomendado ({calculations.riskPercent}%)</p>
                   <p className="text-xl font-black gradient-neon-text">
                     R$ {calculations.custom.betSize.toFixed(2)}
                   </p>
@@ -337,7 +337,7 @@ export function BankrollCalculator() {
                     </CardHeader>
                     <CardContent className="space-y-2">
                       <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">Tamanho da Aposta</span>
+                        <span className="text-muted-foreground">Valor da Operação</span>
                         <span className={`font-mono font-bold ${result.level.color}`}>
                           R$ {result.betSize.toFixed(2)}
                         </span>
@@ -355,7 +355,7 @@ export function BankrollCalculator() {
                         </span>
                       </div>
                       <div className="flex justify-between text-sm border-t border-border/30 pt-2">
-                        <span className="text-muted-foreground">Apostas até Quebrar</span>
+                        <span className="text-muted-foreground">Operações até Falência</span>
                         <span className={`font-mono font-bold ${result.betsBeforeBust >= 10 ? 'text-neon' : result.betsBeforeBust >= 5 ? 'text-amber-500' : 'text-red-400'}`}>
                           {result.betsBeforeBust}
                         </span>
@@ -378,10 +378,10 @@ export function BankrollCalculator() {
                       <thead className="sticky top-0 bg-card">
                         <tr className="border-b border-border">
                           <th className="text-left p-3 font-semibold text-muted-foreground">Nível de Risco</th>
-                          <th className="text-right p-3 font-semibold text-muted-foreground">Tamanho da Aposta</th>
+                          <th className="text-right p-3 font-semibold text-muted-foreground">Valor da Operação</th>
                           <th className="text-right p-3 font-semibold text-muted-foreground">Perda Máxima Diária</th>
                           <th className="text-right p-3 font-semibold text-muted-foreground">Lucro Alvo</th>
-                          <th className="text-right p-3 font-semibold text-muted-foreground">Apostas até Quebrar</th>
+                          <th className="text-right p-3 font-semibold text-muted-foreground">Operações até Falência</th>
                           <th className="text-center p-3 font-semibold text-muted-foreground">Classificação</th>
                         </tr>
                       </thead>
@@ -560,11 +560,11 @@ export function BankrollCalculator() {
             <CardContent className="p-4 flex gap-3">
               <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-semibold text-amber-500">Aviso</p>
+                <p className="text-sm font-semibold text-amber-500">Aviso Educacional</p>
                 <p className="text-sm text-muted-foreground leading-relaxed mt-1">
-                  Nenhuma estratégia de apostas pode garantir lucros. A regra de 1-2% é uma orientação
-                  de gerenciamento de risco, não uma garantia de lucro. Sempre aposte com responsabilidade
-                  e nunca aposte mais do que pode perder. Resultados passados não garantem resultados futuros.
+                  Nenhum modelo de gestão de risco pode garantir lucros. A regra de 1-2% é uma orientação
+                  de gerenciamento de capital, não uma garantia de resultado. Sempre utilize gestão de risco responsável
+                  e nunca arrisque mais do que pode perder. Resultados passados não garantem resultados futuros.
                 </p>
               </div>
             </CardContent>

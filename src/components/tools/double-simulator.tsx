@@ -20,31 +20,31 @@ import { useThemeColors } from '@/hooks/use-theme-colors'
 import { AdInContent } from '@/components/shared/ad-banner'
 
 type Strategy = 'martingale' | 'fibonacci' | 'flat'
-type TargetColor = 'red' | 'black' | 'white'
-type SpinResult = 'red' | 'black' | 'white'
+type TargetOption = 'A' | 'B' | 'C'
+type OutcomeResult = 'A' | 'B' | 'C'
 
-interface DoubleRound {
+interface BinaryRound {
   round: number
-  result: SpinResult
-  target: TargetColor
-  isWin: boolean
-  bet: number
+  result: OutcomeResult
+  target: TargetOption
+  isFavorable: boolean
+  operationValue: number
   payout: number
   balance: number
   streak: number
 }
 
-const COLOR_MAP: Record<SpinResult, { bg: string; text: string; label: string }> = {
-  red: { bg: 'bg-red-500/10', text: 'text-red-500', label: 'Vermelho' },
-  black: { bg: 'bg-gray-500/10', text: 'text-gray-300', label: 'Preto' },
-  white: { bg: 'bg-white/10', text: 'text-white', label: 'Branco' },
+const OPTION_MAP: Record<OutcomeResult, { bg: string; text: string; label: string }> = {
+  A: { bg: 'bg-neon/10', text: 'text-neon', label: 'Opção A' },
+  B: { bg: 'bg-neon-blue/10', text: 'text-neon-blue', label: 'Opção B' },
+  C: { bg: 'bg-amber-500/10', text: 'text-amber-500', label: 'Opção C' },
 }
 
-function spinWheel(): SpinResult {
+function generateOutcome(): OutcomeResult {
   const rand = Math.random()
-  if (rand < 0.486) return 'red'
-  if (rand < 0.972) return 'black'
-  return 'white'
+  if (rand < 0.486) return 'A'
+  if (rand < 0.972) return 'B'
+  return 'C'
 }
 
 function getFibonacciBet(fibIndex: number, baseBet: number): number {
@@ -53,48 +53,48 @@ function getFibonacciBet(fibIndex: number, baseBet: number): number {
   return baseBet * fibs[idx]
 }
 
-export function DoubleSimulator() {
+export function BinaryScenarioSimulator() {
   const { toast } = useToast()
   const { neon } = useThemeColors()
   const { addHistory, addFavorite, removeFavorite, isFavorite, unlockAchievement } = useAppStore()
 
-  const [initialBet, setInitialBet] = useState('10')
+  const [initialOperation, setInitialOperation] = useState('10')
   const [strategy, setStrategy] = useState<Strategy>('martingale')
   const [bankroll, setBankroll] = useState('1000')
-  const [targetColor, setTargetColor] = useState<TargetColor>('red')
+  const [targetOption, setTargetOption] = useState<TargetOption>('A')
   const [numRounds, setNumRounds] = useState('50')
 
-  const [results, setResults] = useState<DoubleRound[]>([])
+  const [results, setResults] = useState<BinaryRound[]>([])
   const [isRunning, setIsRunning] = useState(false)
   const [copied, setCopied] = useState(false)
 
   const runSimulation = useCallback(() => {
-    const baseBet = parseFloat(initialBet) || 0
+    const baseOperationValue = parseFloat(initialOperation) || 0
     let balance = parseFloat(bankroll) || 0
     const totalRounds = parseInt(numRounds) || 0
 
-    if (baseBet <= 0 || balance <= 0 || totalRounds <= 0) {
+    if (baseOperationValue <= 0 || balance <= 0 || totalRounds <= 0) {
       toast({ title: 'Erro', description: 'Verifique os valores inseridos', variant: 'destructive' })
       return
     }
 
     setIsRunning(true)
-    const simulationResults: DoubleRound[] = []
-    let currentBet = baseBet
+    const simulationResults: BinaryRound[] = []
+    let currentOperationValue = baseOperationValue
     let fibIndex = 0
     let currentStreak = 0
 
     for (let i = 0; i < totalRounds; i++) {
-      if (balance < currentBet) break
+      if (balance < currentOperationValue) break
 
-      const spinResult = spinWheel()
-      const isWin = spinResult === targetColor
+      const outcomeResult = generateOutcome()
+      const isFavorable = outcomeResult === targetOption
 
-      const multiplier = targetColor === 'white' ? 14 : 2
-      const payout = isWin ? currentBet * (multiplier - 1) : -currentBet
+      const multiplier = targetOption === 'C' ? 14 : 2
+      const payout = isFavorable ? currentOperationValue * (multiplier - 1) : -currentOperationValue
       balance += payout
 
-      if (isWin) {
+      if (isFavorable) {
         currentStreak = currentStreak > 0 ? currentStreak + 1 : 1
       } else {
         currentStreak = currentStreak < 0 ? currentStreak - 1 : -1
@@ -102,32 +102,32 @@ export function DoubleSimulator() {
 
       simulationResults.push({
         round: i + 1,
-        result: spinResult,
-        target: targetColor,
-        isWin,
-        bet: currentBet,
+        result: outcomeResult,
+        target: targetOption,
+        isFavorable,
+        operationValue: currentOperationValue,
         payout: parseFloat(payout.toFixed(2)),
         balance: parseFloat(balance.toFixed(2)),
         streak: currentStreak,
       })
 
-      // Update bet based on strategy
+      // Update operation value based on strategy
       if (strategy === 'martingale') {
-        currentBet = isWin ? baseBet : currentBet * 2
+        currentOperationValue = isFavorable ? baseOperationValue : currentOperationValue * 2
       } else if (strategy === 'fibonacci') {
-        if (isWin) {
+        if (isFavorable) {
           fibIndex = Math.max(0, fibIndex - 2)
         } else {
           fibIndex = fibIndex + 1
         }
-        currentBet = getFibonacciBet(fibIndex, baseBet)
+        currentOperationValue = getFibonacciBet(fibIndex, baseOperationValue)
       } else {
-        currentBet = baseBet
+        currentOperationValue = baseOperationValue
       }
 
-      // Ensure bet doesn't exceed balance
-      currentBet = Math.min(currentBet, balance)
-      if (currentBet <= 0) break
+      // Ensure operation value doesn't exceed balance
+      currentOperationValue = Math.min(currentOperationValue, balance)
+      if (currentOperationValue <= 0) break
     }
 
     setResults(simulationResults)
@@ -135,31 +135,31 @@ export function DoubleSimulator() {
 
     addHistory({
       id: Math.random().toString(36).substring(7),
-      tool: 'double-simulator',
-      params: { initialBet, strategy, bankroll, targetColor, numRounds },
+      tool: 'binary-scenario-simulator',
+      params: { initialOperation, strategy, bankroll, targetOption, numRounds },
       result: {
         totalRounds: simulationResults.length,
-        wins: simulationResults.filter(r => r.isWin).length,
-        losses: simulationResults.filter(r => !r.isWin).length,
+        favorables: simulationResults.filter(r => r.isFavorable).length,
+        unfavorables: simulationResults.filter(r => !r.isFavorable).length,
         finalBalance: simulationResults[simulationResults.length - 1]?.balance || 0,
       },
       timestamp: Date.now(),
     })
     unlockAchievement('first-calc')
-  }, [initialBet, strategy, bankroll, targetColor, numRounds, addHistory, unlockAchievement, toast])
+  }, [initialOperation, strategy, bankroll, targetOption, numRounds, addHistory, unlockAchievement, toast])
 
   const handleReset = () => {
-    setInitialBet('10')
+    setInitialOperation('10')
     setStrategy('martingale')
     setBankroll('1000')
-    setTargetColor('red')
+    setTargetOption('A')
     setNumRounds('50')
     setResults([])
   }
 
   const handleCopy = () => {
     const text = results
-      .map(r => `Rodada ${r.round}: ${COLOR_MAP[r.result].label} | ${r.isWin ? 'GANHOU' : 'PERDEU'} | Aposta: R$${r.bet.toFixed(2)} | Saldo: R$${r.balance.toFixed(2)}`)
+      .map(r => `Rodada ${r.round}: ${OPTION_MAP[r.result].label} | ${r.isFavorable ? 'FAVORÁVEL' : 'DESFAVORÁVEL'} | Operação: R$${r.operationValue.toFixed(2)} | Saldo: R$${r.balance.toFixed(2)}`)
       .join('\n')
     navigator.clipboard.writeText(text)
     setCopied(true)
@@ -169,20 +169,20 @@ export function DoubleSimulator() {
 
   const stats = useMemo(() => {
     if (results.length === 0) return null
-    const wins = results.filter(r => r.isWin).length
-    const losses = results.filter(r => !r.isWin).length
+    const favorables = results.filter(r => r.isFavorable).length
+    const unfavorables = results.filter(r => !r.isFavorable).length
     const finalBalance = results[results.length - 1]?.balance || 0
     const startBalance = parseFloat(bankroll) || 0
     const profitLoss = finalBalance - startBalance
-    const winRate = (wins / results.length) * 100
-    const maxBet = Math.max(...results.map(r => r.bet))
+    const hitRate = (favorables / results.length) * 100
+    const maxOperationValue = Math.max(...results.map(r => r.operationValue))
     const maxStreak = Math.max(...results.map(r => Math.abs(r.streak)))
-    const maxWinStreak = Math.max(...results.map(r => r.streak))
-    const maxLossStreak = Math.min(...results.map(r => r.streak))
+    const maxFavorableStreak = Math.max(...results.map(r => r.streak))
+    const maxUnfavorableStreak = Math.min(...results.map(r => r.streak))
 
     return {
-      wins, losses, finalBalance, profitLoss, winRate,
-      maxBet, maxStreak, maxWinStreak, maxLossStreak,
+      favorables, unfavorables, finalBalance, profitLoss, hitRate,
+      maxOperationValue, maxStreak, maxFavorableStreak, maxUnfavorableStreak,
     }
   }, [results, bankroll])
 
@@ -193,12 +193,12 @@ export function DoubleSimulator() {
     }))
   }, [results])
 
-  const fav = isFavorite('double-simulator')
+  const fav = isFavorite('binary-scenario-simulator')
 
   const strategyLabels: Record<Strategy, string> = {
     martingale: 'Martingale',
     fibonacci: 'Fibonacci',
-    flat: 'Aposta Fixa',
+    flat: 'Valor Fixo',
   }
 
   return (
@@ -208,17 +208,17 @@ export function DoubleSimulator() {
         <div>
           <h1 className="text-2xl sm:text-3xl font-black flex items-center gap-2">
             <Dices className="h-7 w-7 text-neon" />
-            Simulador <span className="gradient-neon-text">Double</span>
+            Simulador de <span className="gradient-neon-text">Cenários Binários</span>
           </h1>
           <p className="text-base text-muted-foreground mt-1">
-            Simule estratégias para jogos Double/Roleta com diferentes progressões
+            Simule cenários com resultados binários e múltiplas progressões matemáticas
           </p>
         </div>
         <div className="flex items-center gap-2">
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => fav ? removeFavorite('double-simulator') : addFavorite('double-simulator')}
+            onClick={() => fav ? removeFavorite('binary-scenario-simulator') : addFavorite('binary-scenario-simulator')}
             className={fav ? 'text-neon' : 'text-muted-foreground'}
           >
             <Star className={`h-4 w-4 mr-1 ${fav ? 'fill-neon' : ''}`} />
@@ -238,11 +238,11 @@ export function DoubleSimulator() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label className="text-sm text-muted-foreground">Aposta Inicial (R$)</Label>
+                <Label className="text-sm text-muted-foreground">Valor da Operação (R$)</Label>
                 <Input
                   type="number"
-                  value={initialBet}
-                  onChange={(e) => setInitialBet(e.target.value)}
+                  value={initialOperation}
+                  onChange={(e) => setInitialOperation(e.target.value)}
                   className="bg-muted/50 border-border h-11"
                   min="0.01"
                   step="0.01"
@@ -269,30 +269,30 @@ export function DoubleSimulator() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-sm text-muted-foreground">Cor Alvo</Label>
+                <Label className="text-sm text-muted-foreground">Opção Alvo</Label>
                 <div className="grid grid-cols-3 gap-1">
-                  {(['red', 'black', 'white'] as TargetColor[]).map((c) => (
+                  {(['A', 'B', 'C'] as TargetOption[]).map((opt) => (
                     <button
-                      key={c}
-                      onClick={() => setTargetColor(c)}
+                      key={opt}
+                      onClick={() => setTargetOption(opt)}
                       className={`px-2 py-2 rounded-lg text-[10px] font-semibold transition-all ${
-                        targetColor === c
-                          ? c === 'red'
-                            ? 'bg-red-500/20 text-red-400 border border-red-500/30'
-                            : c === 'black'
-                            ? 'bg-gray-500/20 text-gray-300 border border-gray-500/30'
-                            : 'bg-white/20 text-white border border-white/30'
+                        targetOption === opt
+                          ? opt === 'A'
+                            ? 'bg-neon/20 text-neon border border-neon/30'
+                            : opt === 'B'
+                            ? 'bg-neon-blue/20 text-neon-blue border border-neon-blue/30'
+                            : 'bg-amber-500/20 text-amber-500 border border-amber-500/30'
                           : 'bg-muted/30 text-muted-foreground border border-border/30 hover:border-neon/20'
                       }`}
                     >
-                      {c === 'red' ? 'Vermelho' : c === 'black' ? 'Preto' : 'Branco'}
+                      Opção {opt}
                     </button>
                   ))}
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label className="text-sm text-muted-foreground">Banca Inicial (R$)</Label>
+                <Label className="text-sm text-muted-foreground">Capital Inicial (R$)</Label>
                 <Input
                   type="number"
                   value={bankroll}
@@ -317,7 +317,7 @@ export function DoubleSimulator() {
 
               <div className="p-3 rounded-lg bg-muted/20 border border-border/50">
                 <p className="text-[10px] text-muted-foreground leading-relaxed">
-                  Probabilidades: Vermelho 48.6% | Preto 48.6% | Branco 2.7% (paga 14x)
+                  Probabilidades: Opção A: 48.6% | Opção B: 48.6% | Opção C: 2.7% (paga 14x)
                 </p>
               </div>
             </CardContent>
@@ -346,14 +346,14 @@ export function DoubleSimulator() {
             <div className="grid grid-cols-2 gap-3">
               <Card className="border-neon/20 bg-neon/5">
                 <CardContent className="p-3 text-center">
-                  <p className="text-[10px] text-muted-foreground">Vitórias</p>
-                  <p className="text-xl font-black text-neon">{stats.wins}</p>
+                  <p className="text-[10px] text-muted-foreground">Favoráveis</p>
+                  <p className="text-xl font-black text-neon">{stats.favorables}</p>
                 </CardContent>
               </Card>
               <Card className="border-red-500/20 bg-red-500/5">
                 <CardContent className="p-3 text-center">
-                  <p className="text-[10px] text-muted-foreground">Derrotas</p>
-                  <p className="text-xl font-black text-red-500">{stats.losses}</p>
+                  <p className="text-[10px] text-muted-foreground">Desfavoráveis</p>
+                  <p className="text-xl font-black text-red-500">{stats.unfavorables}</p>
                 </CardContent>
               </Card>
               <Card className="border-neon-blue/20 bg-neon-blue/5">
@@ -384,20 +384,20 @@ export function DoubleSimulator() {
               </CardHeader>
               <CardContent className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Taxa de Vitória</span>
-                  <span className="font-mono text-neon">{stats.winRate.toFixed(1)}%</span>
+                  <span className="text-muted-foreground">Taxa Favorável</span>
+                  <span className="font-mono text-neon">{stats.hitRate.toFixed(1)}%</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Aposta Máxima</span>
-                  <span className="font-mono text-amber-500">R$ {stats.maxBet.toFixed(2)}</span>
+                  <span className="text-muted-foreground">Valor Máximo da Operação</span>
+                  <span className="font-mono text-amber-500">R$ {stats.maxOperationValue.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Maior Streak Vitória</span>
-                  <span className="font-mono text-neon">{stats.maxWinStreak}</span>
+                  <span className="text-muted-foreground">Sequência Favorável Máxima</span>
+                  <span className="font-mono text-neon">{stats.maxFavorableStreak}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Maior Streak Derrota</span>
-                  <span className="font-mono text-red-500">{Math.abs(stats.maxLossStreak)}</span>
+                  <span className="text-muted-foreground">Sequência Desfavorável Máxima</span>
+                  <span className="font-mono text-red-500">{Math.abs(stats.maxUnfavorableStreak)}</span>
                 </div>
               </CardContent>
             </Card>
@@ -424,8 +424,8 @@ export function DoubleSimulator() {
                             <th className="text-center p-3 font-semibold text-muted-foreground">Resultado</th>
                             <th className="text-center p-3 font-semibold text-muted-foreground">Alvo</th>
                             <th className="text-center p-3 font-semibold text-muted-foreground">Status</th>
-                            <th className="text-right p-3 font-semibold text-muted-foreground">Aposta</th>
-                            <th className="text-right p-3 font-semibold text-muted-foreground">Pagamento</th>
+                            <th className="text-right p-3 font-semibold text-muted-foreground">Operação</th>
+                            <th className="text-right p-3 font-semibold text-muted-foreground">Resultado</th>
                             <th className="text-right p-3 font-semibold text-muted-foreground">Saldo</th>
                           </tr>
                         </thead>
@@ -434,28 +434,28 @@ export function DoubleSimulator() {
                             <tr
                               key={i}
                               className={`border-b border-border/30 transition-colors ${
-                                r.isWin ? 'hover:bg-neon/5' : 'hover:bg-red-500/5'
+                                r.isFavorable ? 'hover:bg-neon/5' : 'hover:bg-red-500/5'
                               }`}
                             >
                               <td className="p-3 font-bold">#{r.round}</td>
                               <td className="text-center p-3">
-                                <Badge className={`border-0 text-[10px] ${COLOR_MAP[r.result].bg} ${COLOR_MAP[r.result].text}`}>
-                                  {COLOR_MAP[r.result].label}
+                                <Badge className={`border-0 text-[10px] ${OPTION_MAP[r.result].bg} ${OPTION_MAP[r.result].text}`}>
+                                  {OPTION_MAP[r.result].label}
                                 </Badge>
                               </td>
                               <td className="text-center p-3">
-                                <Badge className={`border-0 text-[10px] ${COLOR_MAP[r.target].bg} ${COLOR_MAP[r.target].text}`}>
-                                  {COLOR_MAP[r.target].label}
+                                <Badge className={`border-0 text-[10px] ${OPTION_MAP[r.target].bg} ${OPTION_MAP[r.target].text}`}>
+                                  {OPTION_MAP[r.target].label}
                                 </Badge>
                               </td>
                               <td className="text-center p-3">
                                 <Badge className={`border-0 text-[10px] ${
-                                  r.isWin ? 'bg-neon/10 text-neon' : 'bg-red-500/10 text-red-500'
+                                  r.isFavorable ? 'bg-neon/10 text-neon' : 'bg-red-500/10 text-red-500'
                                 }`}>
-                                  {r.isWin ? 'GANHOU' : 'PERDEU'}
+                                  {r.isFavorable ? 'FAVORÁVEL' : 'DESFAVORÁVEL'}
                                 </Badge>
                               </td>
-                              <td className="text-right p-3 font-mono">R$ {r.bet.toFixed(2)}</td>
+                              <td className="text-right p-3 font-mono">R$ {r.operationValue.toFixed(2)}</td>
                               <td className={`text-right p-3 font-mono font-bold ${
                                 r.payout >= 0 ? 'text-neon' : 'text-red-500'
                               }`}>
@@ -529,10 +529,9 @@ export function DoubleSimulator() {
             <CardContent className="p-4 flex gap-3">
               <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-semibold text-amber-500">Jogo Responsável</p>
+                <p className="text-sm font-semibold text-amber-500">Aviso Educacional</p>
                 <p className="text-sm text-muted-foreground leading-relaxed mt-1">
-                  Este simulador é apenas para fins educacionais. Estratégias como Martingale e Fibonacci não garantem lucro
-                  e podem levar a perdas significativas. A casa sempre tem vantagem. Nunca aposte mais do que pode perder.
+                  Este simulador demonstra conceitos matemáticos de progressões (Martingale, Fibonacci) em cenários hipotéticos. Nenhum modelo matemático garante resultados positivos. As probabilidades utilizadas são ilustrativas e não representam nenhum produto real.
                 </p>
               </div>
             </CardContent>
