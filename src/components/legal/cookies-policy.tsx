@@ -34,7 +34,7 @@ export function CookiesPolicy() {
         <h1 className="text-2xl font-bold">Política de Cookies</h1>
       </div>
 
-      <p className="text-xs text-muted-foreground">Última atualização: Março de 2025</p>
+      <p className="text-xs text-muted-foreground">Última atualização: Junho de 2025</p>
 
       {/* O Que São Cookies */}
       <Card>

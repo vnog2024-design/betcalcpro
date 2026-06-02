@@ -13,6 +13,10 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// Flags de controle — lidas em tempo de build via environment variables
+const ADSENSE_ENABLED = process.env.NEXT_PUBLIC_ADSENSE_ENABLED === "true";
+const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "";
+
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
@@ -72,6 +76,7 @@ export const metadata: Metadata = {
     "mobile-web-app-capable": "yes",
     "apple-mobile-web-app-capable": "yes",
     "apple-mobile-web-app-status-bar-style": "black-translucent",
+    // Mantido mesmo antes da aprovação — é necessário para o Google verificar a titularidade da conta
     "google-adsense-account": "ca-pub-3765222786344373",
     "google-site-verification": "Kf7SATy7yvEEuCFxk4av2Y9nv07qi_DDuw9TJP9LxJ8",
   },
@@ -131,12 +136,21 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <head>
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3765222786344373"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
+        {/* 
+          AdSense script — SÓ carrega quando NEXT_PUBLIC_ADSENSE_ENABLED=true.
+          Antes da aprovação, NÃO carregue este script para evitar erros JS
+          e para que o site pareça limpo e profissional ao crawler do Google.
+          Após aprovação, defina NEXT_PUBLIC_ADSENSE_ENABLED=true no .env
+        */}
+        {ADSENSE_ENABLED && (
+          <Script
+            async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3765222786344373"
+            crossOrigin="anonymous"
+            strategy="afterInteractive"
+          />
+        )}
+
         <Script id="sw-register" strategy="afterInteractive">
           {`
             (function() {
@@ -231,26 +245,37 @@ export default function RootLayout({
             `,
           }}
         />
-        {/* Google Analytics (gtag.js) — required for Consent Mode v2 to work with AdSense.
-            IMPORTANT: Replace G-X1B2C3D4E5 with your real GA4 Measurement ID.
-            Create one at https://analytics.google.com → Admin → Create Property → Data Streams → Web.
-            Even without a real ID, Consent Mode v2 signals are sent via dataLayer. */}
-        <Script
-          async
-          src="https://www.googletagmanager.com/gtag/js?id=G-X1B2C3D4E5"
-          strategy="afterInteractive"
-        />
-        <Script id="gtag-init" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-X1B2C3D4E5', {
-              anonymize_ip: true,
-              cookie_flags: 'SameSite=None;Secure',
-            });
-          `}
-        </Script>
+        {/*
+          Google Analytics (gtag.js) — só carrega quando o GA_ID real estiver configurado.
+          Para obter o ID:
+          1. Acesse https://analytics.google.com
+          2. Admin → Criar Propriedade → Fluxos de Dados → Web
+          3. Copie o Measurement ID (formato G-XXXXXXXXXX)
+          4. Defina NEXT_PUBLIC_GA_MEASUREMENT_ID no .env
+
+          O Consent Mode v2 segue funcionando via dataLayer mesmo sem o script do GA,
+          pois os defaults são configurados no script inline acima.
+        */}
+        {GA_ID && (
+          <>
+            <Script
+              async
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="gtag-init" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${GA_ID}', {
+                  anonymize_ip: true,
+                  cookie_flags: 'SameSite=None;Secure',
+                });
+              `}
+            </Script>
+          </>
+        )}
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}

@@ -320,54 +320,56 @@ export function AboutPage() {
         </CardContent>
       </Card>
 
-      {/* AdSense Disclosure */}
-      <Card>
-        <CardContent className="p-6 space-y-4 text-sm text-muted-foreground leading-relaxed">
-          <section className="space-y-3">
-            <div className="flex items-center gap-2">
-              <DollarSign className="h-5 w-5 text-neon shrink-0" />
-              <h2 className="text-lg font-semibold text-foreground">Divulgação de Publicidade</h2>
-            </div>
-            <p>
-              Para manter todas as nossas ferramentas gratuitas e acessíveis, o BetCalc Pro exibe anúncios fornecidos
-              pelo <strong className="text-foreground">Google AdSense</strong>. Esses anúncios nos ajudam a cobrir os
-              custos de manutenção do site, hospedagem, desenvolvimento contínuo de novas funcionalidades e produção
-              de conteúdo educacional de qualidade.
-            </p>
-            <p>
-              O Google AdSense utiliza cookies e tecnologias similares para exibir anúncios relevantes com base em seus
-              interesses e histórico de navegação. Essa personalização é realizada pelo Google com base em seus próprios
-              algoritmos e políticas de publicidade. Você pode gerenciar suas preferências de publicidade pessoal visitando
-              as{' '}
-              <a
-                href="https://www.google.com/settings/ads"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-neon underline hover:no-underline"
-              >
-                Configurações de Anúncios do Google
-              </a>.
-            </p>
-            <p>
-              A presença de anúncios não influencia o conteúdo ou os resultados de nossas ferramentas. Nossa prioridade
-              é sempre a qualidade, a precisão e a integridade dos cálculos, simulações e conteúdos educacionais que
-              oferecemos. O conteúdo editorial do BetCalc Pro é completamente independente da veiculação publicitária.
-            </p>
-            <div className="bg-muted/30 rounded-lg p-3">
-              <p className="text-xs italic">
-                Para mais informações sobre como seus dados são utilizados para publicidade, consulte nossa{' '}
-                <Link href="/privacy" className="text-neon underline hover:no-underline">
-                  Política de Privacidade
-                </Link>{' '}
-                e{' '}
-                <Link href="/cookies" className="text-neon underline hover:no-underline">
-                  Política de Cookies
-                </Link>.
+      {/* AdSense Disclosure — só exibe quando AdSense estiver ativado */}
+      {process.env.NEXT_PUBLIC_ADSENSE_ENABLED === 'true' && (
+        <Card>
+          <CardContent className="p-6 space-y-4 text-sm text-muted-foreground leading-relaxed">
+            <section className="space-y-3">
+              <div className="flex items-center gap-2">
+                <DollarSign className="h-5 w-5 text-neon shrink-0" />
+                <h2 className="text-lg font-semibold text-foreground">Divulgação de Publicidade</h2>
+              </div>
+              <p>
+                Para manter todas as nossas ferramentas gratuitas e acessíveis, o BetCalc Pro exibe anúncios fornecidos
+                pelo <strong className="text-foreground">Google AdSense</strong>. Esses anúncios nos ajudam a cobrir os
+                custos de manutenção do site, hospedagem, desenvolvimento contínuo de novas funcionalidades e produção
+                de conteúdo educacional de qualidade.
               </p>
-            </div>
-          </section>
-        </CardContent>
-      </Card>
+              <p>
+                O Google AdSense utiliza cookies e tecnologias similares para exibir anúncios relevantes com base em seus
+                interesses e histórico de navegação. Essa personalização é realizada pelo Google com base em seus próprios
+                algoritmos e políticas de publicidade. Você pode gerenciar suas preferências de publicidade pessoal visitando
+                as{' '}
+                <a
+                  href="https://www.google.com/settings/ads"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-neon underline hover:no-underline"
+                >
+                  Configurações de Anúncios do Google
+                </a>.
+              </p>
+              <p>
+                A presença de anúncios não influencia o conteúdo ou os resultados de nossas ferramentas. Nossa prioridade
+                é sempre a qualidade, a precisão e a integridade dos cálculos, simulações e conteúdos educacionais que
+                oferecemos. O conteúdo editorial do BetCalc Pro é completamente independente da veiculação publicitária.
+              </p>
+              <div className="bg-muted/30 rounded-lg p-3">
+                <p className="text-xs italic">
+                  Para mais informações sobre como seus dados são utilizados para publicidade, consulte nossa{' '}
+                  <Link href="/privacy" className="text-neon underline hover:no-underline">
+                    Política de Privacidade
+                  </Link>{' '}
+                  e{' '}
+                  <Link href="/cookies" className="text-neon underline hover:no-underline">
+                    Política de Cookies
+                  </Link>.
+                </p>
+              </div>
+            </section>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Informações de Contato */}
       <Card>

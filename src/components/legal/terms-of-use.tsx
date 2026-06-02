@@ -36,7 +36,7 @@ export function TermsOfUse() {
         <h1 className="text-2xl font-bold">Termos de Uso</h1>
       </div>
 
-      <p className="text-xs text-muted-foreground">Última atualização: Março de 2025</p>
+      <p className="text-xs text-muted-foreground">Última atualização: Junho de 2025</p>
 
       <Card>
         <CardContent className="p-6 space-y-6 text-sm text-muted-foreground leading-relaxed">

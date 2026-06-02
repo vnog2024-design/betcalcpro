@@ -133,8 +133,14 @@ export function Footer() {
             </div>
           </div>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-2 text-[11px] text-muted-foreground/60">
-            <span>Este site exibe anúncios do Google AdSense.</span>
-            <span className="hidden sm:inline">•</span>
+            {/* Texto de AdSense — só exibe quando AdSense estiver ativado.
+                Antes da aprovação, mostra apenas os links legais. */}
+            {process.env.NEXT_PUBLIC_ADSENSE_ENABLED === 'true' && (
+              <>
+                <span>Este site exibe anúncios do Google AdSense.</span>
+                <span className="hidden sm:inline">•</span>
+              </>
+            )}
             <span>
               Ao utilizar nosso site, você concorda com nossos{' '}
               <Link href="/terms" className="text-[11px] text-muted-foreground/60 hover:text-neon-blue underline transition-colors">

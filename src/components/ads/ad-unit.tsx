@@ -3,6 +3,17 @@
 import { useEffect, useRef, useState } from 'react'
 import { AD_CLIENT, AD_SLOTS } from './ad-config'
 
+/**
+ * Flag de controle — lê a env var em tempo de execução no cliente.
+ * Quando NEXT_PUBLIC_ADSENSE_ENABLED !== "true", NENHUM componente de
+ * anúncio é renderizado (nem placeholder, nem script). Isso garante que
+ * o site fique limpo e profissional antes da aprovação do AdSense.
+ *
+ * Após a aprovação, defina NEXT_PUBLIC_ADSENSE_ENABLED=true no .env
+ * e todos os anúncios passarão a funcionar automaticamente.
+ */
+const ADSENSE_ENABLED = process.env.NEXT_PUBLIC_ADSENSE_ENABLED === 'true'
+
 interface AdUnitProps {
   adSlot: string
   adFormat?: 'auto' | 'rectangle' | 'horizontal' | 'vertical' | 'fluid'
@@ -21,6 +32,9 @@ export function AdUnit({
   const adRef = useRef<HTMLInsElement>(null)
   const isPushed = useRef(false)
   const [adLoaded, setAdLoaded] = useState(false)
+
+  // Se AdSense não está ativado, não renderiza NADA
+  if (!ADSENSE_ENABLED) return null
 
   useEffect(() => {
     if (isPushed.current) return
