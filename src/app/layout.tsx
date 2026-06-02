@@ -131,10 +131,11 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <head>
-        <script
+        <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3765222786344373"
           crossOrigin="anonymous"
+          strategy="afterInteractive"
         />
         <Script id="sw-register" strategy="afterInteractive">
           {`
@@ -190,10 +191,28 @@ export default function RootLayout({
                   var state = stored && stored.state ? stored.state : {};
                   var theme = state.theme || 'dark';
                   var colorTheme = state.colorTheme || 'neon-green';
-                  var consent = localStorage.getItem('cookie-consent');
-                  if(!consent) {
-                    window.dataLayer = window.dataLayer || [];
-                    function gtag(){dataLayer.push(arguments);}
+
+                  // Initialize dataLayer and gtag BEFORE loading gtag.js
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+
+                  // Check stored consent and set Consent Mode v2 defaults
+                  var consentRaw = localStorage.getItem('cookie-consent');
+                  var consentData = null;
+                  try {
+                    consentData = consentRaw ? JSON.parse(consentRaw) : null;
+                  } catch(e) {}
+
+                  if (consentData && consentData.accepted === true) {
+                    // User previously accepted all cookies
+                    gtag('consent', 'default', {
+                      'ad_storage': 'granted',
+                      'analytics_storage': 'granted',
+                      'ad_user_data': 'granted',
+                      'ad_personalization': 'granted',
+                    });
+                  } else {
+                    // No consent or essential-only: deny all by default
                     gtag('consent', 'default', {
                       'ad_storage': 'denied',
                       'analytics_storage': 'denied',
@@ -201,6 +220,7 @@ export default function RootLayout({
                       'ad_personalization': 'denied',
                     });
                   }
+
                   document.documentElement.classList.toggle('dark', theme === 'dark');
                   document.documentElement.setAttribute('data-color-theme', colorTheme);
                 } catch(e) {
@@ -211,6 +231,26 @@ export default function RootLayout({
             `,
           }}
         />
+        {/* Google Analytics (gtag.js) — required for Consent Mode v2 to work with AdSense.
+            IMPORTANT: Replace G-X1B2C3D4E5 with your real GA4 Measurement ID.
+            Create one at https://analytics.google.com → Admin → Create Property → Data Streams → Web.
+            Even without a real ID, Consent Mode v2 signals are sent via dataLayer. */}
+        <Script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-X1B2C3D4E5"
+          strategy="afterInteractive"
+        />
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-X1B2C3D4E5', {
+              anonymize_ip: true,
+              cookie_flags: 'SameSite=None;Secure',
+            });
+          `}
+        </Script>
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}

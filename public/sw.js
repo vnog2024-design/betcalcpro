@@ -2,8 +2,8 @@
 // Only caches in production. In development (localhost), passes through all requests.
 
 const IS_DEV = self.location.hostname === 'localhost' || self.location.hostname === '127.0.0.1'
-const CACHE_NAME = 'betcalc-v4'
-const APP_VERSION = 'v4' // bump this to force cache clear for all users
+const CACHE_NAME = 'betcalc-v5'
+const APP_VERSION = 'v5' // bump this to force cache clear for all users
 
 const STATIC_ASSETS = [
   '/manifest.json',
@@ -12,7 +12,7 @@ const STATIC_ASSETS = [
   '/favicon-16x16.png',
   '/apple-touch-icon.png',
   '/android-chrome-192x192.png',
-  '/android-chrome-512-512.png',
+  '/android-chrome-512x512.png',
 ]
 
 // Install: only pre-cache static assets in production
@@ -56,18 +56,11 @@ self.addEventListener('fetch', (event) => {
 
   // PRODUCTION: Smart caching strategies
 
-  // Network first, cache fallback for navigation (HTML pages)
+  // Navigation (HTML pages): ALWAYS network-first, NO caching
+  // Caching HTML can serve stale ad slots, causing AdSense invalid traffic issues
   if (request.mode === 'navigate') {
     event.respondWith(
       fetch(request)
-        .then((response) => {
-          // Only cache successful responses
-          if (response.ok) {
-            const clone = response.clone()
-            caches.open(CACHE_NAME).then((cache) => cache.put(request, clone))
-          }
-          return response
-        })
         .catch(() => caches.match('/'))
     )
     return

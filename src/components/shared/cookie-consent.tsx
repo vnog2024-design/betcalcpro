@@ -26,7 +26,7 @@ function storeConsent(accepted: boolean): void {
   const data: ConsentData = { accepted, timestamp: Date.now() }
   localStorage.setItem(CONSENT_KEY, JSON.stringify(data))
 
-  // Update Google Consent Mode
+  // Update Google Consent Mode v2
   if (typeof window !== 'undefined' && typeof (window as any).gtag === 'function') {
     if (accepted) {
       ;(window as any).gtag('consent', 'update', {
@@ -35,8 +35,15 @@ function storeConsent(accepted: boolean): void {
         ad_user_data: 'granted',
         ad_personalization: 'granted',
       })
+    } else {
+      // Explicitly deny non-essential cookies when user chooses essential-only
+      ;(window as any).gtag('consent', 'update', {
+        ad_storage: 'denied',
+        analytics_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+      })
     }
-    // If not accepted, consent remains denied (set in layout.tsx default)
   }
 }
 
@@ -52,7 +59,7 @@ export function CookieConsent() {
     if (!consent) {
       const timer = setTimeout(() => {
         setVisible(true)
-      }, 2000)
+      }, 500)
       return () => clearTimeout(timer)
     }
   }, [])

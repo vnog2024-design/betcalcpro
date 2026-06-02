@@ -1,6 +1,7 @@
 'use client'
 
 import { useSyncExternalStore, useCallback } from 'react'
+import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { AlertTriangle } from 'lucide-react'
 
@@ -73,8 +74,8 @@ export function AgeGate() {
 
         <p className="text-xs text-muted-foreground/60 leading-relaxed">
           Ao confirmar, você declara ter pelo menos 18 anos e concorda com nossos{' '}
-          <span className="text-muted-foreground">Termos de Uso</span> e{' '}
-          <span className="text-muted-foreground">Política de Privacidade</span>.
+          <Link href="/terms" target="_blank" className="text-muted-foreground underline hover:text-neon transition-colors">Termos de Uso</Link> e{' '}
+          <Link href="/privacy" target="_blank" className="text-muted-foreground underline hover:text-neon transition-colors">Política de Privacidade</Link>.
         </p>
       </div>
     </div>
