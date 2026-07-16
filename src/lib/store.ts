@@ -178,7 +178,7 @@ export const AdsStore = {
     return result
   },
 
-  async upsertMany(updates: Array<{ key: string; value?: string; enabled?: boolean; label?: string }>): Promise<void> {
+  async upsertMany(updates: Array<{ key: string; value?: string; enabled?: boolean; label?: string; position?: string }>): Promise<void> {
     const ads = await this.getAll()
     const map = new Map(ads.map((a) => [a.key, a]))
 
@@ -188,16 +188,42 @@ export const AdsStore = {
         if (u.value !== undefined) existing.value = u.value
         if (u.enabled !== undefined) existing.enabled = u.enabled
         if (u.label !== undefined) existing.label = u.label
+        if (u.position !== undefined) (existing as any).position = u.position
       } else {
         map.set(u.key, {
           key: u.key,
           value: u.value || '',
           label: u.label || u.key,
           enabled: u.enabled ?? false,
+          ...(u.position ? { position: u.position } : {}),
         })
       }
     }
 
     await setData(ADS_KEY, Array.from(map.values()))
+  },
+
+  async delete(key: string): Promise<boolean> {
+    const ads = await this.getAll()
+    const filtered = ads.filter((a) => a.key !== key)
+    if (filtered.length === ads.length) return false
+    await setData(ADS_KEY, filtered)
+    return true
+  },
+
+  /** Ensure default ad slots exist (merge with stored data, never overwrite user edits) */
+  async initDefaults(): Promise<void> {
+    const stored = await getData(ADS_KEY) as AdConfigData[] | null
+    if (!stored || stored.length === 0) {
+      await setData(ADS_KEY, this.getDefaults())
+      return
+    }
+    const storedMap = new Map(stored.map(a => [a.key, a]))
+    for (const def of this.getDefaults()) {
+      if (!storedMap.has(def.key)) {
+        stored.push(def)
+      }
+    }
+    await setData(ADS_KEY, stored)
   },
 }

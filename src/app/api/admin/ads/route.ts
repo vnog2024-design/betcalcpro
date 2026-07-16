@@ -17,9 +17,9 @@ export async function GET() {
   try {
     await AdsStore.initDefaults()
     const ads = await AdsStore.getAll()
-    const config: Record<string, { value: string; enabled: boolean; label: string }> = {}
+    const config: Record<string, { value: string; enabled: boolean; label: string; position?: string }> = {}
     for (const ad of ads) {
-      config[ad.key] = { value: ad.value, enabled: ad.enabled, label: ad.label }
+      config[ad.key] = { value: ad.value, enabled: ad.enabled, label: ad.label, ...(ad as any).position ? { position: (ad as any).position } : {} }
     }
     return NextResponse.json(config)
   } catch {
@@ -32,11 +32,31 @@ export async function PUT(request: NextRequest) {
 
   try {
     const body = await request.json()
-    const updates: Array<{ key: string; value?: string; enabled?: boolean; label?: string }> = Array.isArray(body) ? body : [body]
+    const updates: Array<{ key: string; value?: string; enabled?: boolean; label?: string; position?: string }> = Array.isArray(body) ? body : [body]
     await AdsStore.upsertMany(updates)
     return NextResponse.json({ success: true })
   } catch (error) {
     const msg = error instanceof Error ? error.message : 'Erro ao salvar'
+    return NextResponse.json({ error: msg }, { status: 500 })
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  if (!await requireAuth()) return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
+
+  try {
+    const { searchParams } = new URL(request.url)
+    const key = searchParams.get('key')
+    if (!key) {
+      return NextResponse.json({ error: 'Key é obrigatório' }, { status: 400 })
+    }
+    const deleted = await AdsStore.delete(key)
+    if (!deleted) {
+      return NextResponse.json({ error: 'Bloco não encontrado' }, { status: 404 })
+    }
+    return NextResponse.json({ success: true })
+  } catch (error) {
+    const msg = error instanceof Error ? error.message : 'Erro ao excluir'
     return NextResponse.json({ error: msg }, { status: 500 })
   }
 }
