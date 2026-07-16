@@ -1,17 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
-import { requireAdminApi } from '@/lib/admin-auth'
+import { PostsStore } from '@/lib/store'
+import { verifyToken } from '@/lib/auth'
+import { cookies } from 'next/headers'
+
+async function requireAuth(): Promise<boolean> {
+  const cookieStore = await cookies()
+  const token = cookieStore.get('admin_session')?.value
+  if (!token) return false
+  const payload = await verifyToken(token)
+  return !!payload
+}
 
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const auth = await requireAdminApi()
-  if (auth instanceof Response) return auth
+  if (!await requireAuth()) return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
 
   try {
     const { id } = await params
-    const post = await db.post.findUnique({ where: { id } })
-    if (!post) {
-      return NextResponse.json({ error: 'Postagem não encontrada' }, { status: 404 })
-    }
+    const post = await PostsStore.getById(id)
+    if (!post) return NextResponse.json({ error: 'Postagem não encontrada' }, { status: 404 })
     return NextResponse.json(post)
   } catch {
     return NextResponse.json({ error: 'Erro ao buscar postagem' }, { status: 500 })
@@ -19,40 +25,14 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
 }
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const auth = await requireAdminApi()
-  if (auth instanceof Response) return auth
+  if (!await requireAuth()) return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
 
   try {
     const { id } = await params
     const data = await request.json()
-
-    const post = await db.post.findUnique({ where: { id } })
-    if (!post) {
-      return NextResponse.json({ error: 'Postagem não encontrada' }, { status: 404 })
-    }
-
-    if (data.slug && data.slug !== post.slug) {
-      const existing = await db.post.findUnique({ where: { slug: data.slug } })
-      if (existing) {
-        return NextResponse.json({ error: 'Já existe uma postagem com esse slug' }, { status: 409 })
-      }
-    }
-
-    const updated = await db.post.update({
-      where: { id },
-      data: {
-        ...(data.title !== undefined && { title: data.title }),
-        ...(data.slug !== undefined && { slug: data.slug }),
-        ...(data.description !== undefined && { description: data.description }),
-        ...(data.content !== undefined && { content: data.content }),
-        ...(data.category !== undefined && { category: data.category }),
-        ...(data.readTime !== undefined && { readTime: data.readTime }),
-        ...(data.iconName !== undefined && { iconName: data.iconName }),
-        ...(data.published !== undefined && { published: data.published }),
-      },
-    })
-
-    return NextResponse.json(updated)
+    const post = await PostsStore.update(id, data)
+    if (!post) return NextResponse.json({ error: 'Postagem não encontrada' }, { status: 404 })
+    return NextResponse.json(post)
   } catch (error) {
     const msg = error instanceof Error ? error.message : 'Erro ao atualizar postagem'
     return NextResponse.json({ error: msg }, { status: 500 })
@@ -60,17 +40,12 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 }
 
 export async function DELETE(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const auth = await requireAdminApi()
-  if (auth instanceof Response) return auth
+  if (!await requireAuth()) return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
 
   try {
     const { id } = await params
-    const post = await db.post.findUnique({ where: { id } })
-    if (!post) {
-      return NextResponse.json({ error: 'Postagem não encontrada' }, { status: 404 })
-    }
-
-    await db.post.delete({ where: { id } })
+    const deleted = await PostsStore.delete(id)
+    if (!deleted) return NextResponse.json({ error: 'Postagem não encontrada' }, { status: 404 })
     return NextResponse.json({ success: true })
   } catch {
     return NextResponse.json({ error: 'Erro ao deletar postagem' }, { status: 500 })

@@ -33,3 +33,31 @@ export async function verifyToken(token: string): Promise<{ username: string; ro
 export function getSessionCookieName(): string {
   return 'admin_session'
 }
+
+// Admin credentials from environment (works on Vercel without DB)
+export function getAdminCredentials(): { username: string; passwordHash: string } {
+  const username = process.env.ADMIN_USERNAME || 'admin'
+  // In production, use the hash from env. In dev, use default.
+  const passwordHash = process.env.ADMIN_PASSWORD_HASH || ''
+  return { username, passwordHash }
+}
+
+// Verify admin login against env vars (no DB needed)
+export async function verifyAdminLogin(username: string, password: string): Promise<boolean> {
+  const creds = getAdminCredentials()
+  
+  if (username !== creds.username) return false
+  
+  // If no hash is set in env, check against default password
+  if (!creds.passwordHash) {
+    // Default password for first setup
+    return password === 'admin123'
+  }
+  
+  return verifyPassword(password, creds.passwordHash)
+}
+
+// Check if default password is still in use
+export function isUsingDefaultPassword(): boolean {
+  return !process.env.ADMIN_PASSWORD_HASH
+}

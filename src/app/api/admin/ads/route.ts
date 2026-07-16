@@ -1,15 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
-import { requireAdminApi } from '@/lib/admin-auth'
+import { AdsStore } from '@/lib/store'
+import { verifyToken } from '@/lib/auth'
+import { cookies } from 'next/headers'
+
+async function requireAuth(): Promise<boolean> {
+  const cookieStore = await cookies()
+  const token = cookieStore.get('admin_session')?.value
+  if (!token) return false
+  const payload = await verifyToken(token)
+  return !!payload
+}
 
 export async function GET() {
-  const auth = await requireAdminApi()
-  if (auth instanceof Response) return auth
+  if (!await requireAuth()) return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
 
   try {
-    const ads = await db.adConfig.findMany({
-      orderBy: { key: 'asc' },
-    })
+    await AdsStore.initDefaults()
+    const ads = await AdsStore.getAll()
     const config: Record<string, { value: string; enabled: boolean; label: string }> = {}
     for (const ad of ads) {
       config[ad.key] = { value: ad.value, enabled: ad.enabled, label: ad.label }
@@ -21,33 +28,12 @@ export async function GET() {
 }
 
 export async function PUT(request: NextRequest) {
-  const auth = await requireAdminApi()
-  if (auth instanceof Response) return auth
+  if (!await requireAuth()) return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
 
   try {
     const body = await request.json()
-    const updates: { key: string; value: string; enabled: boolean; label?: string }[] = Array.isArray(body) ? body : [body]
-
-    for (const update of updates) {
-      const data: Record<string, unknown> = {
-        value: update.value ?? '',
-        enabled: update.enabled ?? false,
-      }
-      if (update.label !== undefined) {
-        data.label = update.label
-      }
-      await db.adConfig.upsert({
-        where: { key: update.key },
-        update: data,
-        create: {
-          key: update.key,
-          value: update.value ?? '',
-          label: update.label || update.key,
-          enabled: update.enabled ?? false,
-        },
-      })
-    }
-
+    const updates: Array<{ key: string; value?: string; enabled?: boolean; label?: string }> = Array.isArray(body) ? body : [body]
+    await AdsStore.upsertMany(updates)
     return NextResponse.json({ success: true })
   } catch (error) {
     const msg = error instanceof Error ? error.message : 'Erro ao salvar'

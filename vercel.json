@@ -1,0 +1,14 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "functions": {
+    "src/app/api/admin/**/*.ts": {
+      "runtime": "nodejs",
+      "maxDuration": 10
+    },
+    "src/app/api/ads/**/*.ts": {
+      "runtime": "nodejs",
+      "maxDuration": 10
+    }
+  }
+}
