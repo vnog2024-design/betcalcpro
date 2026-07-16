@@ -1,7 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -12,8 +11,6 @@ const nextConfig: NextConfig = {
     ".z.ai",
     "localhost",
   ],
-  // Required for Prisma with SQLite (better-sqlite3 native module) on Vercel
-  serverExternalPackages: ["better-sqlite3"],
 };
 
 export default nextConfig;
