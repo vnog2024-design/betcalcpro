@@ -3,7 +3,6 @@ import { AdsStore } from '@/lib/store'
 
 export async function GET() {
   try {
-    await AdsStore.initDefaults()
     const ads = await AdsStore.getEnabled()
     return NextResponse.json(ads)
   } catch {
