@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
+import { DynamicHeaderCode } from "@/components/ads/dynamic-header-code";
+import { Videowall } from "@/components/ads/videowall";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -280,6 +282,8 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
+        <DynamicHeaderCode />
+        <Videowall />
         {children}
       </body>
     </html>

@@ -8,6 +8,7 @@ import { CookieConsent } from '@/components/shared/cookie-consent'
 import { AgeGate } from '@/components/shared/age-gate'
 import { DisclaimerBar } from '@/components/shared/disclaimer-bar'
 import { AdBannerBottom } from '@/components/ads/ad-unit'
+import { DynamicAd } from '@/components/ads/dynamic-ad'
 import { Toaster } from '@/components/ui/toaster'
 import { ShareButtons } from '@/components/shared/share-buttons'
 import { useAppStore } from '@/store/app-store'
@@ -59,8 +60,11 @@ export function ToolPageLayout({ children }: { children: React.ReactNode }) {
                 variant="compact"
               />
             </div>
+            <DynamicAd position="banner_top" className="mb-4" />
             {children}
-            <AdBannerBottom className="mt-8" />
+            <DynamicAd position="banner_middle" className="my-6" />
+            <DynamicAd position="banner_bottom" className="mt-6" />
+            <AdBannerBottom className="mt-4" />
           </div>
         </main>
       </div>
