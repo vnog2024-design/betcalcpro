@@ -1,8 +1,6 @@
 /**
  * Prisma database client.
- * 
- * On Vercel with Turso: DATABASE_URL=libsql://... + DATABASE_AUTH_TOKEN=...
- * On local dev: DATABASE_URL=file:./dev.db (SQLite file)
+ * Uses better-sqlite3 (serverExternalPackages in next.config.ts handles bundling).
  */
 
 import { PrismaClient } from '@prisma/client'
