@@ -22,8 +22,8 @@ export function Videowall() {
       const res = await fetch('/api/ads/public')
       if (res.ok) {
         const data = await res.json()
-        if (data.videowall_code) {
-          setCode(data.videowall_code)
+        if (data.videowall) {
+          setCode(data.videowall)
           setCountdown(5)
           setVisible(true)
         }

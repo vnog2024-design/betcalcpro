@@ -50,6 +50,12 @@ interface NewBlockForm {
   enabled: boolean
 }
 
+interface NewVideowallForm {
+  name: string
+  code: string
+  enabled: boolean
+}
+
 /* ───────────── Constants ───────────── */
 
 // Default system ad keys (cannot be deleted)
@@ -57,6 +63,8 @@ const SYSTEM_KEYS = new Set([
   'header_code', 'ads_txt', 'banner_top', 'banner_middle', 'banner_bottom',
   'in_content', 'in_article', 'sidebar_ad', 'in_feed', 'videowall_code',
 ])
+
+const VIDEOWALL_SYSTEM_KEY = 'videowall_code'
 
 const AD_ICONS: Record<string, React.ElementType> = {
   header_code: Code,
@@ -131,6 +139,12 @@ export default function AdminAnunciosPage() {
   const [newBlock, setNewBlock] = useState<NewBlockForm>({
     name: '',
     position: 'content_middle',
+    code: '',
+    enabled: false,
+  })
+  const [vwDialogOpen, setVwDialogOpen] = useState(false)
+  const [newVideowall, setNewVideowall] = useState<NewVideowallForm>({
+    name: '',
     code: '',
     enabled: false,
   })
@@ -226,11 +240,107 @@ export default function AdminAnunciosPage() {
     }
   }
 
+  const handleCreateVideowall = async () => {
+    if (!newVideowall.name.trim()) return
+    const key = `videowall_${Date.now().toString(36)}`
+    const label = `Videowall — ${newVideowall.name.trim()}`
+
+    setConfigs((prev) => ({
+      ...prev,
+      [key]: {
+        value: newVideowall.code,
+        enabled: newVideowall.enabled,
+        label,
+      },
+    }))
+    setSaved(false)
+    setVwDialogOpen(false)
+    setNewVideowall({ name: '', code: '', enabled: false })
+
+    const res = await fetch('/api/admin/ads', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify([{ key, value: newVideowall.code, enabled: newVideowall.enabled, label }]),
+    })
+    if (res.ok) {
+      setSaved(true)
+      setTimeout(() => setSaved(false), 3000)
+    }
+  }
+
   // Separate system ads from custom ads
-  const customAdKeys = Object.keys(configs).filter(k => !SYSTEM_KEYS.has(k))
+  const customAdKeys = Object.keys(configs).filter(k => !SYSTEM_KEYS.has(k) && !k.startsWith('videowall_'))
   const generalAds = ['header_code', 'ads_txt'].filter(k => configs[k])
   const locationAds = ['banner_top', 'banner_middle', 'banner_bottom', 'in_content', 'in_article', 'sidebar_ad', 'in_feed'].filter(k => configs[k])
-  const videowallAds = ['videowall_code'].filter(k => configs[k])
+  // All videowall entries: system videowall_code + custom videowall_* entries
+  const videowallKeys = Object.keys(configs).filter(k => k === 'videowall_code' || k.startsWith('videowall_'))
+
+  const renderVideowallCard = (key: string) => {
+    const config = configs[key]
+    if (!config) return null
+    const isSystem = key === VIDEOWALL_SYSTEM_KEY
+
+    return (
+      <Card key={key} className="border-gray-800 bg-gray-900/50">
+        <CardHeader className="pb-3">
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex items-start gap-3 flex-1 min-w-0">
+              <div className={`p-2 rounded-lg shrink-0 mt-0.5 ${isSystem ? 'bg-gray-800' : 'bg-purple-500/10'}`}>
+                <Film className={`w-4 h-4 ${isSystem ? 'text-green-400' : 'text-purple-400'}`} />
+              </div>
+              <div className="flex-1 min-w-0">
+                <CardTitle className="text-sm font-semibold text-white flex items-center gap-2 flex-wrap">
+                  {isSystem ? 'Videowall Padrão' : config.label.replace('Videowall — ', '')}
+                  {!isSystem && (
+                    <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 text-[10px]">
+                      Personalizado
+                    </Badge>
+                  )}
+                  {config.enabled ? (
+                    <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-[10px]">Ativo</Badge>
+                  ) : (
+                    <Badge className="bg-gray-800 text-gray-500 text-[10px]">Inativo</Badge>
+                  )}
+                </CardTitle>
+                <CardDescription className="text-xs text-gray-500 mt-1 leading-relaxed">
+                  {config.label}
+                </CardDescription>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              {!isSystem && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 text-gray-500 hover:text-red-400 hover:bg-red-500/10"
+                  onClick={() => handleDelete(key)}
+                  disabled={deleting === key}
+                >
+                  {deleting === key ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+                </Button>
+              )}
+              <Switch
+                checked={config.enabled}
+                onCheckedChange={(checked) => updateConfig(key, 'enabled', checked)}
+              />
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-1.5">
+            <Label className="text-gray-400 text-xs">Código do Anúncio Videowall</Label>
+            <Textarea
+              value={config.value}
+              onChange={(e) => updateConfig(key, 'value', e.target.value)}
+              placeholder={'<!-- Código do anúncio em tela cheia -->\n<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#000;">\n  <!-- Seu código de anúncio aqui -->\n</div>'}
+              rows={6}
+              className="bg-gray-800/50 border-gray-700 text-green-400 font-mono text-xs resize-y"
+            />
+          </div>
+        </CardContent>
+      </Card>
+    )
+  }
 
   const renderAdCard = (key: string, showDelete = false) => {
     const config = configs[key]
@@ -384,18 +494,65 @@ export default function AdminAnunciosPage() {
 
             {/* ── Videowall ── */}
             <section>
-              <div className="flex items-center gap-2 mb-4">
-                <Film className="w-5 h-5 text-green-400" />
-                <h2 className="text-lg font-semibold text-white">Videowall (Anúncio Tela Cheia)</h2>
-                <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30">Especial</Badge>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Film className="w-5 h-5 text-green-400" />
+                  <h2 className="text-lg font-semibold text-white">Videowall (Anúncio Tela Cheia)</h2>
+                  <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30">Especial</Badge>
+                  <Badge className="bg-gray-800 text-gray-400 text-[10px]">
+                    {videowallKeys.length} anúncio{videowallKeys.length !== 1 ? 's' : ''}
+                  </Badge>
+                </div>
+                <Button
+                  onClick={() => setVwDialogOpen(true)}
+                  className="bg-purple-600 hover:bg-purple-500 text-white"
+                  size="sm"
+                >
+                  <Plus className="w-4 h-4 mr-1.5" />
+                  Novo Videowall
+                </Button>
               </div>
               <p className="text-sm text-gray-400 mb-4">
                 O Videowall é um anúncio em tela cheia que aparece quando o usuário entra no site pela primeira vez.
                 O usuário precisa fechar o anúncio para continuar navegando. Após fechar, o anúncio não aparece mais por 24 horas.
+                Se houver múltiplos videowalls ativos, um será escolhido aleatoriamente a cada visita.
               </p>
-              <div className="space-y-4">
-                {videowallAds.map(renderAdCard)}
-              </div>
+              {videowallKeys.length === 0 ? (
+                <Card className="border-dashed border-gray-700 bg-gray-900/30">
+                  <CardContent className="p-8 text-center">
+                    <Film className="w-10 h-10 text-gray-600 mx-auto mb-3" />
+                    <p className="text-gray-400 text-sm font-medium mb-1">Nenhum anúncio videowall</p>
+                    <p className="text-gray-600 text-xs mb-4">
+                      Crie anúncios videowall que aparecem em tela cheia na entrada do site.
+                    </p>
+                    <Button
+                      variant="outline"
+                      onClick={() => setVwDialogOpen(true)}
+                      className="border-purple-500/30 text-purple-400 hover:text-purple-300 hover:bg-purple-500/10"
+                      size="sm"
+                    >
+                      <Plus className="w-4 h-4 mr-1.5" />
+                      Criar Primeiro Videowall
+                    </Button>
+                  </CardContent>
+                </Card>
+              ) : (
+                <div className="space-y-4">
+                  {videowallKeys.map(renderVideowallCard)}
+                </div>
+              )}
+              {videowallKeys.length > 0 && (
+                <div className="mt-4">
+                  <Button
+                    variant="outline"
+                    onClick={() => setVwDialogOpen(true)}
+                    className="w-full border-dashed border-gray-700 text-gray-400 hover:text-purple-400 hover:border-purple-500/50 hover:bg-purple-500/5"
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Adicionar Novo Anúncio Videowall
+                  </Button>
+                </div>
+              )}
             </section>
 
             <Separator className="bg-gray-800" />
@@ -462,6 +619,70 @@ export default function AdminAnunciosPage() {
             </section>
           </div>
         )}
+
+        {/* ── New Videowall Dialog ── */}
+        <Dialog open={vwDialogOpen} onOpenChange={setVwDialogOpen}>
+          <DialogContent className="bg-gray-900 border-gray-800 text-white max-w-lg">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <Film className="w-5 h-5 text-purple-400" />
+                Novo Anúncio Videowall
+              </DialogTitle>
+              <DialogDescription className="text-gray-400">
+                Crie um novo anúncio videowall. Ele aparecerá em tela cheia quando o usuário entrar no site.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-5 py-2">
+              <div className="space-y-2">
+                <Label className="text-gray-300 text-sm">Nome do Videowall</Label>
+                <Input
+                  value={newVideowall.name}
+                  onChange={(e) => setNewVideowall(p => ({ ...p, name: e.target.value }))}
+                  placeholder="Ex: Promo Black Friday, Oferta Especial, Campanha Natal..."
+                  className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-600"
+                />
+                <p className="text-[11px] text-gray-500">Um nome descritivo para identificar este videowall facilmente</p>
+              </div>
+              <div className="space-y-2">
+                <Label className="text-gray-300 text-sm">Código do Anúncio</Label>
+                <Textarea
+                  value={newVideowall.code}
+                  onChange={(e) => setNewVideowall(p => ({ ...p, code: e.target.value }))}
+                  placeholder={'<!-- Código do anúncio em tela cheia -->\n<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#000;">\n  <!-- Seu código de anúncio aqui -->\n</div>'}
+                  rows={8}
+                  className="bg-gray-800 border-gray-700 text-green-400 font-mono text-xs resize-y"
+                />
+              </div>
+              <div className="flex items-center justify-between p-3 rounded-lg bg-gray-800/50">
+                <div>
+                  <p className="text-sm text-gray-300">Ativar imediatamente</p>
+                  <p className="text-[11px] text-gray-500">O videowall começará a aparecer assim que salvar</p>
+                </div>
+                <Switch
+                  checked={newVideowall.enabled}
+                  onCheckedChange={(checked) => setNewVideowall(p => ({ ...p, enabled: checked }))}
+                />
+              </div>
+            </div>
+            <DialogFooter className="gap-2">
+              <Button
+                variant="outline"
+                onClick={() => setVwDialogOpen(false)}
+                className="border-gray-700 text-gray-300 hover:text-white"
+              >
+                Cancelar
+              </Button>
+              <Button
+                onClick={handleCreateVideowall}
+                disabled={!newVideowall.name.trim()}
+                className="bg-purple-600 hover:bg-purple-500 text-white"
+              >
+                <Plus className="w-4 h-4 mr-1.5" />
+                Criar Videowall
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
 
         {/* ── New Block Dialog ── */}
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
