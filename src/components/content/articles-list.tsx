@@ -165,9 +165,10 @@ export function ArticlesList() {
                   </CardContent>
                 </Card>
               </Link>
-              {index === 3 && (
+              {/* In-Feed ads: a cada 4 artigos (posicoes 3, 7) — respeita politica Google */}
+              {(index === 3 || index === 7) && (
                 <div className="md:col-span-2">
-                  <DynamicAd position="in_feed" />
+                  <DynamicAd position="in_feed" minH={120} />
                 </div>
               )}
             </>

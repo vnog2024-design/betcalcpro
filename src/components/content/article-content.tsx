@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { ArrowLeft, BookOpen, Calculator, TrendingUp, BarChart3, Lightbulb, AlertTriangle } from 'lucide-react'
-import { AdInContent } from '@/components/shared/ad-banner'
+import { DynamicAd } from '@/components/ads/dynamic-ad'
 import { ArticleCTA } from '@/components/shared/article-cta'
 import { ShareButtons } from '@/components/shared/share-buttons'
 
@@ -1042,7 +1042,7 @@ export function ArticleContent({ slug }: { slug: string }) {
       <hr className="border-border/50" />
 
       {/* Ad — After header */}
-      <AdInContent />
+      <DynamicAd position="in_article" minH={250} />
 
       {/* Article content */}
       {article.content}
@@ -1051,7 +1051,7 @@ export function ArticleContent({ slug }: { slug: string }) {
       <ArticleCTA links={ctaLinks} />
 
       {/* Ad — After content */}
-      <AdInContent />
+      <DynamicAd position="in_content" minH={250} />
     </div>
   )
 }

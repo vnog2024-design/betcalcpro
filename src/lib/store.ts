@@ -156,16 +156,16 @@ export const AdsStore = {
 
   getDefaults(): AdConfigData[] {
     return [
-      { key: 'header_code', label: 'Codigo no Header (<head>) — Scripts, pixels, meta tags que rodam no cabecalho do site', value: '', enabled: false },
-      { key: 'ads_txt', label: 'Ads.txt — Conteudo do arquivo ads.txt para verificacao de anunciantes', value: '', enabled: false },
-      { key: 'banner_top', label: 'Banner Topo — Anuncio horizontal acima do conteudo principal', value: '', enabled: false },
-      { key: 'banner_middle', label: 'Banner Meio — Anuncio horizontal no meio da pagina, apos resultado da ferramenta', value: '', enabled: false },
-      { key: 'banner_bottom', label: 'Banner Rodape — Anuncio horizontal acima do rodape do site', value: '', enabled: false },
-      { key: 'in_content', label: 'In-Content — Anuncio nativo entre o formulario e o resultado da ferramenta (AdsKeeper recomendado)', value: '', enabled: false },
-      { key: 'in_article', label: 'In-Article — Anuncio formatado para dentro do corpo de artigos', value: '', enabled: false },
-      { key: 'sidebar_ad', label: 'Sidebar — Anuncio nativo no final da barra lateral (AdsKeeper recomendado)', value: '', enabled: false },
-      { key: 'in_feed', label: 'In-Feed — Anuncio nativo entre os cards de artigos (AdsKeeper recomendado)', value: '', enabled: false },
-      { key: 'videowall_code', label: 'Videowall (Tela Cheia) — Anuncio em tela cheia na entrada do site', value: '', enabled: false },
+      { key: 'header_code', label: 'Header (<head>) — Cole aqui o preloader do Adskeeper: <script async src="https://jsc.adskeeper.com/site/SEU_SITE_ID.js"><\/script>. Tambem aceita pixels, meta tags e outros scripts.', value: '', enabled: false },
+      { key: 'ads_txt', label: 'Ads.txt — Conteudo do arquivo ads.txt para verificacao de anunciantes (Google AdSense + Adskeeper)', value: '', enabled: false },
+      { key: 'banner_top', label: 'Banner Topo (728x90) — Anuncio horizontal acima do conteudo principal. Cole o codigo do widget Adskeeper ou AdSense aqui.', value: '', enabled: false },
+      { key: 'banner_middle', label: 'Banner Meio (728x90) — Anuncio horizontal apos resultado da ferramenta. Ideal para Adskeeper native ad.', value: '', enabled: false },
+      { key: 'banner_bottom', label: 'Banner Rodape (728x90) — Anuncio horizontal acima do rodape. Boa posicao para recovery ads.', value: '', enabled: false },
+      { key: 'in_content', label: 'In-Content (fluid) — Anuncio nativo entre formulario e resultado. Melhor performace com Adskeeper native.', value: '', enabled: false },
+      { key: 'in_article', label: 'In-Article (fluid) — Anuncio dentro do corpo de artigos, entre paragrafos. Formato nativo recomendado.', value: '', enabled: false },
+      { key: 'sidebar_ad', label: 'Sidebar (300x250) — Anuncio nativo no final da barra lateral. Adskeeper recomendado para esta posicao.', value: '', enabled: false },
+      { key: 'in_feed', label: 'In-Feed (fluid) — Anuncio nativo entre os cards de artigos. Aparece a cada 4 artigos na listagem.', value: '', enabled: false },
+      { key: 'videowall_code', label: 'Videowall (Tela Cheia) — Anuncio em tela cheia na entrada do site. Adskeeper video ad recomendado.', value: '', enabled: false },
     ]
   },
 

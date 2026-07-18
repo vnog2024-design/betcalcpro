@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { DynamicHeaderCode } from "@/components/ads/dynamic-header-code";
+import { ServerHeaderCode } from "@/components/ads/server-header-code";
 import { Videowall } from "@/components/ads/videowall";
 
 const geistSans = Geist({
@@ -154,7 +155,15 @@ export default function RootLayout({
           />
         )}
 
-        {/* AdsKeeper — preloader do SimpleJS, carrega quando NEXT_PUBLIC_ADSKEEPER_SITE_ID estiver configurado */}
+        {/* 
+          AdsKeeper — 3 estrategias de carregamento (em ordem de prioridade):
+          1. ServerHeaderCode: Le header_code do store (admin) e injeta no <head>.
+             O admin pode colar o preloader completo do Adskeeper la.
+          2. Env var: Se NEXT_PUBLIC_ADSKEEPER_SITE_ID estiver setado, carrega
+             o preloader padrao do SimpleJS.
+          3. DynamicHeaderCode (client): Fallback client-side.
+        */}
+        <ServerHeaderCode />
         {ADSKEEPER_SITE_ID && (
           <Script
             async
