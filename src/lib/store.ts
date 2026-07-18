@@ -19,6 +19,11 @@ let pgAvailable: boolean | null = null
 async function getKV() {
   if (kvAvailable === false) return null
   if (kv) return kv
+  // Skip KV entirely if env vars are not set (avoids import crash)
+  if (!process.env.KV_REST_API_URL || !process.env.KV_REST_API_TOKEN) {
+    kvAvailable = false
+    return null
+  }
   try {
     const mod = await import('@vercel/kv')
     kv = mod.kv
