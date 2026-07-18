@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { AdBanner } from '@/components/shared/ad-banner'
+import { DynamicAd } from '@/components/ads/dynamic-ad'
 import { Calculator, BarChart3, TrendingUp, BookOpen, Lightbulb, AlertTriangle, ArrowRight } from 'lucide-react'
 
 const articles = [
@@ -132,37 +133,44 @@ export function ArticlesList() {
 
       {/* Articles Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {articles.map((article) => {
+        {articles.map((article, index) => {
           const Icon = article.icon
           return (
-            <Link key={article.slug} href={`/artigos/${article.slug}`}>
-              <Card className="card-hover border-border/50 bg-card/50 backdrop-blur cursor-pointer group h-full">
-                <CardContent className="p-6">
-                  <div className="flex items-start gap-4">
-                    <div className="p-2.5 rounded-lg bg-muted/30 shrink-0">
-                      <Icon className="h-5 w-5 text-neon" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Badge variant="outline" className={`text-xs ${categoryColors[article.category] || ''}`}>
-                          {article.category}
-                        </Badge>
-                        <span className="text-xs text-muted-foreground">{article.readTime}</span>
+            <>
+              <Link key={article.slug} href={`/artigos/${article.slug}`}>
+                <Card className="card-hover border-border/50 bg-card/50 backdrop-blur cursor-pointer group h-full">
+                  <CardContent className="p-6">
+                    <div className="flex items-start gap-4">
+                      <div className="p-2.5 rounded-lg bg-muted/30 shrink-0">
+                        <Icon className="h-5 w-5 text-neon" />
                       </div>
-                      <h3 className="font-bold text-base mb-1.5 group-hover:text-neon transition-colors">
-                        {article.title}
-                      </h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">
-                        {article.description}
-                      </p>
-                      <div className="flex items-center gap-1 mt-3 text-sm text-neon font-medium">
-                        Ler artigo <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Badge variant="outline" className={`text-xs ${categoryColors[article.category] || ''}`}>
+                            {article.category}
+                          </Badge>
+                          <span className="text-xs text-muted-foreground">{article.readTime}</span>
+                        </div>
+                        <h3 className="font-bold text-base mb-1.5 group-hover:text-neon transition-colors">
+                          {article.title}
+                        </h3>
+                        <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">
+                          {article.description}
+                        </p>
+                        <div className="flex items-center gap-1 mt-3 text-sm text-neon font-medium">
+                          Ler artigo <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
+                  </CardContent>
+                </Card>
+              </Link>
+              {index === 3 && (
+                <div className="md:col-span-2">
+                  <DynamicAd position="in_feed" />
+                </div>
+              )}
+            </>
           )
         })}
       </div>

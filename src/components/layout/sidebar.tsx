@@ -8,6 +8,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { X, Home, TrendingUp, Wallet, BarChart3, Calculator, Coins, Shield, ShieldCheck, Search, Percent, Sparkles, User, Star, ChevronRight, BookOpen, RefreshCw } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { DynamicAd } from '@/components/ads/dynamic-ad'
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Home, TrendingUp, Wallet, BarChart3, Calculator, Coins, Shield, ShieldCheck, Search, Percent, Sparkles, User, BookOpen, RefreshCw,
@@ -117,6 +118,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                 {group.label !== 'Conta' && <Separator className="my-3 bg-border/50" />}
               </div>
             ))}
+            <DynamicAd position="sidebar_ad" className="mt-4" />
           </div>
         </ScrollArea>
       </aside>

@@ -62,6 +62,7 @@ export function ToolPageLayout({ children }: { children: React.ReactNode }) {
             </div>
             <DynamicAd position="banner_top" className="mb-4" />
             {children}
+            <DynamicAd position="in_content" className="my-6" />
             <DynamicAd position="banner_middle" className="my-6" />
             <DynamicAd position="banner_bottom" className="mt-6" />
             <AdBannerBottom className="mt-4" />

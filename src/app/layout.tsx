@@ -18,6 +18,7 @@ const geistMono = Geist_Mono({
 // Flags de controle — lidas em tempo de build via environment variables
 const ADSENSE_ENABLED = process.env.NEXT_PUBLIC_ADSENSE_ENABLED === "true";
 const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "";
+const ADSKEEPER_SITE_ID = process.env.NEXT_PUBLIC_ADSKEEPER_SITE_ID || "";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -149,6 +150,15 @@ export default function RootLayout({
             async
             src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3765222786344373"
             crossOrigin="anonymous"
+            strategy="afterInteractive"
+          />
+        )}
+
+        {/* AdsKeeper — preloader do SimpleJS, carrega quando NEXT_PUBLIC_ADSKEEPER_SITE_ID estiver configurado */}
+        {ADSKEEPER_SITE_ID && (
+          <Script
+            async
+            src={`https://jsc.adskeeper.com/site/${ADSKEEPER_SITE_ID}.js`}
             strategy="afterInteractive"
           />
         )}

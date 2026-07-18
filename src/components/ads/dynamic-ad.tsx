@@ -23,7 +23,7 @@ export function DynamicAd({ position, className = '', fallback = null }: Dynamic
   if (!code) return <>{fallback}</>
 
   return (
-    <div className={`w-full flex justify-center ${className}`}>
+    <div className={`w-full flex justify-center min-h-[90px] ${className}`}>
       <div dangerouslySetInnerHTML={{ __html: code }} />
     </div>
   )
