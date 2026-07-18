@@ -3,7 +3,8 @@
  * 
  * Priority:
  * 1. @vercel/kv (Vercel KV / Redis) — persists across deployments
- * 2. File system — works locally, ephemeral on Vercel
+ * 2. Neon PostgreSQL (DATABASE_URL) — persists across deployments
+ * 3. File system — works locally, ephemeral on Vercel
  * 
  * To set up Vercel KV (recommended for production):
  * 1. Go to Vercel Dashboard → Storage → Create Database → KV
@@ -13,6 +14,7 @@
 
 let kv: ReturnType<typeof import('@vercel/kv')['kv']> | null = null
 let kvAvailable: boolean | null = null
+let pgAvailable: boolean | null = null
 
 async function getKV() {
   if (kvAvailable === false) return null
@@ -28,9 +30,41 @@ async function getKV() {
   }
 }
 
+// ── Neon PostgreSQL fallback (uses DATABASE_URL already configured) ──
+
+async function getPG(): Promise<import('pg').PoolClient | null> {
+  if (pgAvailable === false) return null
+  try {
+    const { Pool } = await import('pg')
+    const pool = new Pool({ connectionString: process.env.DATABASE_URL })
+    const client = await pool.connect()
+    pgAvailable = true
+    // Release pool resources (we just needed to test the connection)
+    pool.end()
+    return client
+  } catch {
+    pgAvailable = false
+    return null
+  }
+}
+
+async function pgQuery<T = unknown>(text: string, params: unknown[] = []): Promise<T | null> {
+  try {
+    const { Pool } = await import('pg')
+    const pool = new Pool({ connectionString: process.env.DATABASE_URL, max: 1, idleTimeoutMillis: 10000 })
+    const result = await pool.query(text, params)
+    await pool.end()
+    return result.rows[0] as T || null
+  } catch {
+    pgAvailable = false
+    return null
+  }
+}
+
 // ── Low-level helpers ──
 
 async function getData(key: string): Promise<unknown | null> {
+  // 1. Try KV
   const redis = await getKV()
   if (redis) {
     try {
@@ -41,10 +75,24 @@ async function getData(key: string): Promise<unknown | null> {
     }
   }
 
-  // File system fallback
-  const { promises: fs } = await import('fs')
-  const path = await import('path')
+  // 2. Try Neon PostgreSQL
+  if (pgAvailable !== false && process.env.DATABASE_URL) {
+    try {
+      const row = await pgQuery<{ value: string }>(
+        'SELECT value FROM app_store WHERE key = $1',
+        [key]
+      )
+      if (row) return JSON.parse(row.value)
+      return null
+    } catch {
+      pgAvailable = false
+    }
+  }
+
+  // 3. File system fallback (local dev only)
   try {
+    const { promises: fs } = await import('fs')
+    const path = await import('path')
     const dir = path.join(process.cwd(), 'data')
     await fs.mkdir(dir, { recursive: true })
     const content = await fs.readFile(path.join(dir, `${key}.json`), 'utf-8')
@@ -55,18 +103,48 @@ async function getData(key: string): Promise<unknown | null> {
 }
 
 async function setData(key: string, value: unknown): Promise<void> {
+  // 1. Try KV
   const redis = await getKV()
   if (redis) {
     await redis.set(key, JSON.stringify(value))
     return
   }
 
-  // File system fallback
-  const { promises: fs } = await import('fs')
-  const path = await import('path')
-  const dir = path.join(process.cwd(), 'data')
-  await fs.mkdir(dir, { recursive: true })
-  await fs.writeFile(path.join(dir, `${key}.json`), JSON.stringify(value, null, 2), 'utf-8')
+  // 2. Try Neon PostgreSQL
+  if (pgAvailable !== false && process.env.DATABASE_URL) {
+    try {
+      const { Pool } = await import('pg')
+      const pool = new Pool({ connectionString: process.env.DATABASE_URL, max: 1, idleTimeoutMillis: 10000 })
+      await pool.query(`
+        CREATE TABLE IF NOT EXISTS app_store (
+          key TEXT PRIMARY KEY,
+          value JSONB NOT NULL,
+          updated_at TIMESTAMPTZ DEFAULT now()
+        )
+      `)
+      await pool.query(
+        'INSERT INTO app_store (key, value) VALUES ($1, $2::jsonb) ON CONFLICT (key) DO UPDATE SET value = $2::jsonb, updated_at = now()',
+        [key, JSON.stringify(value)]
+      )
+      await pool.end()
+      pgAvailable = true
+      return
+    } catch {
+      pgAvailable = false
+      // Fall through to file system
+    }
+  }
+
+  // 3. File system fallback (local dev only)
+  try {
+    const { promises: fs } = await import('fs')
+    const path = await import('path')
+    const dir = path.join(process.cwd(), 'data')
+    await fs.mkdir(dir, { recursive: true })
+    await fs.writeFile(path.join(dir, `${key}.json`), JSON.stringify(value, null, 2), 'utf-8')
+  } catch {
+    // Silently fail on Vercel read-only filesystem
+  }
 }
 
 // ── Posts ──
