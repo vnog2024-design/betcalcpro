@@ -13,10 +13,11 @@ export async function GET() {
     const adsTxt = ads.ads_txt
 
     if (!adsTxt) {
-      // Default ads.txt vazio (antes da configuração)
+      // Default ads.txt (antes da configuracao)
       return new NextResponse(
-        '# BetCalc Pro - ads.txt\n# Configure no painel admin em Anúncios > Ads.txt\n',
+        '# BetCalc Pro - ads.txt\n# Configure no painel admin: betcalcpro.com.br/admin/anuncios\n',
         {
+          status: 200,
           headers: {
             'Content-Type': 'text/plain; charset=utf-8',
             'Cache-Control': 'public, max-age=3600, s-maxage=3600',
@@ -26,15 +27,18 @@ export async function GET() {
     }
 
     return new NextResponse(adsTxt, {
+      status: 200,
       headers: {
         'Content-Type': 'text/plain; charset=utf-8',
         'Cache-Control': 'public, max-age=3600, s-maxage=3600',
       },
     })
-  } catch {
-    return new NextResponse('# Error loading ads.txt\n', {
+  } catch (error) {
+    const msg = error instanceof Error ? error.message : String(error)
+    console.error('[ads.txt] Error:', msg)
+    return new NextResponse(`# Error: ${msg}\n`, {
+      status: 200, // Return 200 to avoid Google crawl errors
       headers: { 'Content-Type': 'text/plain' },
-      status: 500,
     })
   }
 }
