@@ -7,15 +7,18 @@ const AK_WIDGET_ID = '2056131'
 const AK_PRELOADER = '<script src="https://jsc.adskeeper.com/site/' + AK_SITE_ID + '.js" async></' + 'script>'
 const AK_PLACEMENT = '<div data-type="_mgwidget" data-widget-id="' + AK_WIDGET_ID + '"></div><script>(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");</' + 'script>'
 
-// Google policy: max 3 ads per page. Selected positions per page type:
-// - Tool pages:     banner_top + sidebar_ad = 2 ads
+// Ads por tipo de página (respeita política Google máx 3-4):
+// - Tool pages:     banner_top + sidebar_ad + in_content = 3 ads
 // - Article pages:   banner_top + in_article + sidebar_ad = 3 ads
-// - Articles list:   banner_top + in_feed + sidebar_ad = 3 ads
-// - Landing:         banner_top + sidebar_ad = 2 ads
-// DISABLED: videowall (blocks site), banner_middle, banner_bottom, in_content
+// - Articles list:   banner_top + in_feed(x2) + sidebar_ad = 4 ads
+// - Landing:         banner_top = 1 ad
+// - Legal pages:     banner_bottom = 1 ad
+// DISABLED: videowall (blocks site), banner_middle
 const FALLBACK_ADS: Record<string, string> = {
   header_code: AK_PRELOADER,
   banner_top: AK_PLACEMENT,
+  banner_bottom: AK_PLACEMENT,
+  in_content: AK_PLACEMENT,
   sidebar_ad: AK_PLACEMENT,
   in_article: AK_PLACEMENT,
   in_feed: AK_PLACEMENT,
