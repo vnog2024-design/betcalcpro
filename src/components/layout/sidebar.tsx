@@ -9,7 +9,6 @@ import { Separator } from '@/components/ui/separator'
 import { DynamicAd } from '@/components/ads/dynamic-ad'
 import { X, Home, TrendingUp, Wallet, BarChart3, Calculator, Coins, Shield, ShieldCheck, Search, Percent, Sparkles, User, Star, ChevronRight, BookOpen, RefreshCw } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { DynamicAd } from '@/components/ads/dynamic-ad'
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Home, TrendingUp, Wallet, BarChart3, Calculator, Coins, Shield, ShieldCheck, Search, Percent, Sparkles, User, BookOpen, RefreshCw,
