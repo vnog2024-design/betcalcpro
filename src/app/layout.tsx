@@ -141,11 +141,11 @@ export default function RootLayout({
           Após aprovação, defina NEXT_PUBLIC_ADSENSE_ENABLED=true no .env
         */}
         {/* 
-          AdsKeeper Preloader — PRECISA estar como <script> direto no <head>.
-          NÃO usar next/script pois ele coloca no <body>, e o Adskeeper
-          verifica explicitamente se o script está no <head>.
+          AdsKeeper Preloader — no <head> via <script> raw.
+          Adskeeper exige script no <head>. Usamos <script> raw pois
+          next/script coloca no <body>.
         */}
-        <script src="https://jsc.adskeeper.com/site/1104734.js" async></script>
+        <script async src="https://jsc.adskeeper.com/site/1104734.js"></script>
 
         <Script id="sw-register" strategy="afterInteractive">
           {`

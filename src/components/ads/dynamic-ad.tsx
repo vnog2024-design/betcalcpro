@@ -12,14 +12,13 @@ interface DynamicAdProps {
 
 // ═══════════════════════════════════════════════════════════════════
 // HARDCODED Adskeeper placements — sem depender de API/store/DB
-// O preloader (1104734.js) já carrega server-side no layout.tsx
+// O preloader (1104734.js) já carrega no <head> via <script> raw.
 // Aqui só precisamos do div + placement script para cada posição.
 // ═══════════════════════════════════════════════════════════════════
 
 const AK_SITE_ID = '1104734'
 
-// Widgets mapeados por posição — usar o mesmo widget em múltiplas
-// posições é PERMITIDO pelo Adskeeper (eles fazem fill diferenciado)
+// Widgets mapeados por posição
 const WIDGET_MAP: Record<string, string> = {
   banner_top: '2056131',
   banner_bottom: '2056131',
@@ -50,11 +49,38 @@ function executeScripts(container: HTMLElement) {
 }
 
 /**
+ * Espera o preloader do Adskeeper estar pronto.
+ * O preloader define window._mgc quando carrega.
+ * Polling a cada 200ms, timeout de 15s.
+ */
+function waitForPreloader(): Promise<boolean> {
+  return new Promise((resolve) => {
+    // Verificação imediata
+    if (typeof window !== 'undefined' && (window as any)._mgc) {
+      resolve(true)
+      return
+    }
+
+    let elapsed = 0
+    const interval = setInterval(() => {
+      elapsed += 200
+      if (typeof window !== 'undefined' && (window as any)._mgc) {
+        clearInterval(interval)
+        resolve(true)
+      } else if (elapsed > 15000) {
+        clearInterval(interval)
+        // Mesmo sem preloader, tenta injetar (o preloader pode carregar depois)
+        resolve(false)
+      }
+    }, 200)
+  })
+}
+
+/**
  * DynamicAd — Renderiza anúncio Adskeeper na posição indicada.
  *
- * Funciona 100% client-side, sem depender de API route ou banco de dados.
- * O preloader do Adskeeper (1104734.js) já foi carregado no <head>
- * via next/script server-side (layout.tsx).
+ * Espera o preloader do Adskeeper estar pronto antes de injetar
+ * o widget, garantindo que o _mgc.load será processado.
  */
 export const DynamicAd = memo(function DynamicAd({
   position,
@@ -88,10 +114,15 @@ export const DynamicAd = memo(function DynamicAd({
     return () => observer.disconnect()
   }, [injected])
 
-  // Injeta o HTML do anúncio quando visível
-  const injectAd = useCallback(() => {
+  // Injeta o HTML do anúncio quando visível E preloader está pronto
+  const injectAd = useCallback(async () => {
     const widgetId = WIDGET_MAP[position]
     if (!widgetId || !adRef.current) return
+
+    // ESPERAR o preloader estar pronto antes de injetar o widget
+    await waitForPreloader()
+
+    if (!adRef.current) return
 
     const html = buildPlacementHtml(widgetId)
     adRef.current.innerHTML = html
@@ -102,12 +133,13 @@ export const DynamicAd = memo(function DynamicAd({
   useEffect(() => {
     if (!visible || injected) return
 
-    // Pequeno delay para garantir que o preloader carregou
-    const timer = setTimeout(() => {
-      injectAd()
-    }, 300)
+    let cancelled = false
+    const run = () => {
+      if (!cancelled) injectAd()
+    }
 
-    return () => clearTimeout(timer)
+    run()
+    return () => { cancelled = true }
   }, [visible, injected, injectAd])
 
   return (
