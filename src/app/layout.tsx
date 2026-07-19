@@ -141,16 +141,11 @@ export default function RootLayout({
           Após aprovação, defina NEXT_PUBLIC_ADSENSE_ENABLED=true no .env
         */}
         {/* 
-          AdsKeeper Preloader — carregado SERVER-SIDE via next/script.
-          Este script PRECISA estar no <head> antes dos widgets renderizarem.
-          O DynamicHeaderCode foi mantido como fallback, mas este Script 
-          garante que o preloader carrega imediatamente no HTML inicial.
+          AdsKeeper Preloader — PRECISA estar como <script> direto no <head>.
+          NÃO usar next/script pois ele coloca no <body>, e o Adskeeper
+          verifica explicitamente se o script está no <head>.
         */}
-        <Script
-          async
-          src="https://jsc.adskeeper.com/site/1104734.js"
-          strategy="afterInteractive"
-        />
+        <script src="https://jsc.adskeeper.com/site/1104734.js" async></script>
 
         <Script id="sw-register" strategy="afterInteractive">
           {`
