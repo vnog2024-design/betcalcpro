@@ -42,19 +42,30 @@ export function getAdminCredentials(): { username: string; passwordHash: string 
   return { username, passwordHash }
 }
 
-// Verify admin login against env vars (no DB needed)
+// Verify admin login against env vars and/or DB-stored hash
 export async function verifyAdminLogin(username: string, password: string): Promise<boolean> {
   const creds = getAdminCredentials()
   
   if (username !== creds.username) return false
   
-  // If no hash is set in env, check against default password
-  if (!creds.passwordHash) {
-    // Default password for first setup
-    return password === 'admin123'
+  // 1. Check env var hash first
+  if (creds.passwordHash) {
+    return verifyPassword(password, creds.passwordHash)
   }
   
-  return verifyPassword(password, creds.passwordHash)
+  // 2. Check DB-stored hash (set by change-password endpoint)
+  try {
+    const { getData } = await import('./store')
+    const data = await getData('admin_password_hash') as { hash: string } | null
+    if (data?.hash) {
+      return verifyPassword(password, data.hash)
+    }
+  } catch {
+    // DB unavailable
+  }
+  
+  // 3. Fallback: default password for first setup
+  return password === 'admin123'
 }
 
 // Check if default password is still in use

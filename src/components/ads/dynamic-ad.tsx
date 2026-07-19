@@ -10,34 +10,51 @@ interface DynamicAdProps {
   minH?: number
 }
 
+// ═══════════════════════════════════════════════════════════════════
+// HARDCODED Adskeeper placements — sem depender de API/store/DB
+// O preloader (1104734.js) já carrega server-side no layout.tsx
+// Aqui só precisamos do div + placement script para cada posição.
+// ═══════════════════════════════════════════════════════════════════
+
+const AK_SITE_ID = '1104734'
+
+// Widgets mapeados por posição — usar o mesmo widget em múltiplas
+// posições é PERMITIDO pelo Adskeeper (eles fazem fill diferenciado)
+const WIDGET_MAP: Record<string, string> = {
+  banner_top: '2056131',
+  banner_bottom: '2056131',
+  in_content: '2056131',
+  in_article: '2056131',
+  in_feed: '2056131',
+  sidebar_ad: '2056131',
+}
+
+function buildPlacementHtml(widgetId: string): string {
+  return `<div data-type="_mgwidget" data-widget-id="${widgetId}"></div><script>(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");</script>`
+}
+
 /**
  * Executa todos os <script> filhos de um elemento container.
- * Necessário porque dangerouslySetInnerHTML / innerHTML NÃO executam scripts.
+ * Necessário porque innerHTML NÃO executa scripts automaticamente.
  */
 function executeScripts(container: HTMLElement) {
   const scripts = container.querySelectorAll('script')
   scripts.forEach((oldScript) => {
     const newScript = document.createElement('script')
-    // Copiar atributos (src, async, type, etc.)
     for (const attr of Array.from(oldScript.attributes)) {
       newScript.setAttribute(attr.name, attr.value)
     }
-    // Copiar conteúdo inline
     newScript.textContent = oldScript.textContent
-    // Substituir o script antigo pelo novo (que o browser vai executar)
     oldScript.parentNode?.replaceChild(newScript, oldScript)
   })
 }
 
 /**
- * DynamicAd — Carrega código de anúncio dinâmico do admin store.
+ * DynamicAd — Renderiza anúncio Adskeeper na posição indicada.
  *
- * Otimizações:
- * - Lazy loading com IntersectionObserver (só fetcha quando visível)
- * - Altura mínima para evitar CLS
- * - Tentativa única de fetch (não retria em caso de erro)
- * - Memoizado para evitar re-renders desnecessários
- * - Executa scripts do HTML injetado (necessário para Adskeeper etc.)
+ * Funciona 100% client-side, sem depender de API route ou banco de dados.
+ * O preloader do Adskeeper (1104734.js) já foi carregado no <head>
+ * via next/script server-side (layout.tsx).
  */
 export const DynamicAd = memo(function DynamicAd({
   position,
@@ -46,14 +63,13 @@ export const DynamicAd = memo(function DynamicAd({
   minH = 90,
 }: DynamicAdProps) {
   const [visible, setVisible] = useState(false)
-  const [fetched, setFetched] = useState(false)
-  const [loaded, setLoaded] = useState(false)
+  const [injected, setInjected] = useState(false)
   const placeholderRef = useRef<HTMLDivElement>(null)
   const adRef = useRef<HTMLDivElement>(null)
 
-  // IntersectionObserver — só busca o ad quando o container fica visível
+  // IntersectionObserver — só injeta quando visível (lazy loading)
   useEffect(() => {
-    if (fetched) return
+    if (injected) return
 
     const el = placeholderRef.current
     if (!el) return
@@ -70,48 +86,37 @@ export const DynamicAd = memo(function DynamicAd({
 
     observer.observe(el)
     return () => observer.disconnect()
-  }, [fetched])
+  }, [injected])
 
-  // Fetch do código do anúncio quando visível e injeta no DOM executando scripts
-  const injectAd = useCallback(async () => {
-    if (!adRef.current) return
+  // Injeta o HTML do anúncio quando visível
+  const injectAd = useCallback(() => {
+    const widgetId = WIDGET_MAP[position]
+    if (!widgetId || !adRef.current) return
 
-    try {
-      const res = await fetch('/api/ads/public')
-      const data = await res.json()
-      const html = data[position]
-
-      if (html && adRef.current) {
-        adRef.current.innerHTML = html
-        // CRÍTICO: Executar scripts injetados (dangerouslySetInnerHTML não faz isso)
-        executeScripts(adRef.current)
-        setLoaded(true)
-      }
-    } catch {
-      /* silencioso */
-    }
+    const html = buildPlacementHtml(widgetId)
+    adRef.current.innerHTML = html
+    executeScripts(adRef.current)
+    setInjected(true)
   }, [position])
 
   useEffect(() => {
-    if (!visible || fetched) return
+    if (!visible || injected) return
 
-    let cancelled = false
-    setFetched(true)
-
-    if (!cancelled) {
+    // Pequeno delay para garantir que o preloader carregou
+    const timer = setTimeout(() => {
       injectAd()
-    }
+    }, 300)
 
-    return () => { cancelled = true }
-  }, [visible, fetched, injectAd])
+    return () => clearTimeout(timer)
+  }, [visible, injected, injectAd])
 
   return (
     <div
-      ref={loaded ? undefined : placeholderRef}
+      ref={injected ? undefined : placeholderRef}
       className={`w-full flex justify-center ${className}`}
-      style={{ minHeight: loaded ? undefined : minH }}
+      style={{ minHeight: injected ? undefined : minH }}
     >
-      {visible || loaded ? (
+      {visible || injected ? (
         <div ref={adRef} className="w-full max-w-4xl" />
       ) : (
         fallback

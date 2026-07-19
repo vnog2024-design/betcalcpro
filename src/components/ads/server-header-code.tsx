@@ -1,30 +1,16 @@
 /**
- * ServerHeaderCode — Server Component
+ * ServerHeaderCode — Server Component (DEPRECATED / REMOVED)
  * 
- * Lê o `header_code` do store (KV/Neon/file) e injeta diretamente no <head>,
- * sem depender de fetch client-side. Isso garante que scripts de preload
- * (Adskeeper, pixels, etc.) carreguem o mais cedo possível.
+ * PREVIOUSLY: Used dangerouslySetInnerHTML which does NOT execute <script> tags.
+ * This meant the Adskeeper preloader never actually loaded.
+ * 
+ * NOW: DynamicHeaderCode (client component) handles this correctly by
+ * parsing HTML and appending real script elements to <head>.
+ * 
+ * This component is kept as an empty shell for backwards compatibility.
  */
-import { AdsStore } from '@/lib/store'
-
 export async function ServerHeaderCode() {
-  let headerCode = ''
-  try {
-    const ads = await AdsStore.getEnabled()
-    headerCode = ads.header_code || ''
-  } catch {
-    // Silently fail — sem header code é o default seguro
-  }
-
-  if (!headerCode) return null
-
-  return (
-    <>
-      {/* Renderiza scripts do header_code diretamente no <head> */}
-      <div
-        suppressHydrationWarning
-        dangerouslySetInnerHTML={{ __html: headerCode }}
-      />
-    </>
-  )
+  // NO-OP: DynamicHeaderCode in layout.tsx <body> handles all header code injection.
+  // dangerouslySetInnerHTML does NOT execute scripts — it was a silent bug.
+  return null
 }

@@ -15,7 +15,8 @@ export async function GET() {
   if (!await requireAuth()) return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
 
   try {
-    await AdsStore.initDefaults()
+    // Do NOT call initDefaults() here — it would overwrite user's configuration.
+    // If storage is empty, getAll() already returns hardcoded defaults.
     const ads = await AdsStore.getAll()
     const config: Record<string, { value: string; enabled: boolean; label: string; position?: string }> = {}
     for (const ad of ads) {

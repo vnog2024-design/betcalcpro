@@ -1,7 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { hashPassword, verifyPassword } from '@/lib/auth'
+import { hashPassword, verifyPassword, verifyAdminLogin } from '@/lib/auth'
 import { cookies } from 'next/headers'
 import { verifyToken } from '@/lib/auth'
+
+// Simple DB helper for password storage (reuses store infrastructure)
+const PASSWORD_KEY = 'admin_password_hash'
+
+async function getStoredPasswordHash(): Promise<string | null> {
+  try {
+    const { getData } = await import('@/lib/store' as any)
+    const data = await getData(PASSWORD_KEY)
+    return data?.hash || null
+  } catch {
+    return null
+  }
+}
+
+async function setStoredPasswordHash(hash: string): Promise<void> {
+  try {
+    const { setData } = await import('@/lib/store' as any)
+    await setData(PASSWORD_KEY, { hash })
+  } catch {
+    // Silently fail
+  }
+}
 
 async function requireAuth(): Promise<{ username: string } | Response> {
   const cookieStore = await cookies()
@@ -27,21 +49,19 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Nova senha deve ter no mínimo 6 caracteres' }, { status: 400 })
     }
 
-    // Verify current password
-    const { verifyAdminLogin } = await import('@/lib/auth')
+    // Verify current password (checks env var first, then default)
     const valid = await verifyAdminLogin(auth.username, currentPassword)
     if (!valid) {
       return NextResponse.json({ error: 'Senha atual incorreta' }, { status: 401 })
     }
 
-    // For production: user must set ADMIN_PASSWORD_HASH env var manually with the new hash
-    // We return the new hash so the user can set it in Vercel env vars
+    // Hash new password and save to database
     const newHash = await hashPassword(newPassword)
+    await setStoredPasswordHash(newHash)
 
     return NextResponse.json({
       success: true,
-      message: 'Senha alterada. Copie o hash abaixo e defina como ADMIN_PASSWORD_HASH nas variáveis de ambiente da Vercel.',
-      hash: newHash,
+      message: 'Senha alterada com sucesso!',
     })
   } catch {
     return NextResponse.json({ error: 'Erro interno' }, { status: 500 })

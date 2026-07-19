@@ -68,7 +68,7 @@ async function pgQuery<T = unknown>(text: string, params: unknown[] = []): Promi
 
 // ── Low-level helpers ──
 
-async function getData(key: string): Promise<unknown | null> {
+export async function getData(key: string): Promise<unknown | null> {
   // 1. Try KV
   const redis = await getKV()
   if (redis) {
@@ -107,7 +107,7 @@ async function getData(key: string): Promise<unknown | null> {
   }
 }
 
-async function setData(key: string, value: unknown): Promise<void> {
+export async function setData(key: string, value: unknown): Promise<void> {
   // 1. Try KV
   const redis = await getKV()
   if (redis) {
@@ -232,19 +232,16 @@ export const PostsStore = {
 
 export const AdsStore = {
   async getAll(): Promise<AdConfigData[]> {
-    // Try to init defaults into storage (best-effort, may fail on Vercel)
-    try { await this.initDefaults() } catch { /* storage unavailable */ }
-
-    // Read from storage
+    // Read from storage FIRST — do NOT call initDefaults() here!
+    // initDefaults() was overwriting user-configured values on every read.
     const data = await getData(ADS_KEY) as AdConfigData[] | null
 
-    // If storage has data with real values, use it
+    // If storage has data, return it as-is (respect user's configuration)
     if (data && data.length > 0) {
-      const hasRealValues = data.some(a => a.key === 'header_code' && a.value && a.enabled)
-      if (hasRealValues) return data
+      return data
     }
 
-    // Storage empty, stale, or unavailable — return hardcoded defaults
+    // Storage empty or unavailable — return hardcoded defaults
     return this.getDefaults()
   },
 
@@ -318,30 +315,16 @@ export const AdsStore = {
     return true
   },
 
-  /** Ensure all 9 Adskeeper ad positions have correct values.
-   *  Always overwrites known positions to guarantee ads show even if
-   *  stale empty data was previously stored.
+  /** Seed defaults into storage ONLY if storage is completely empty.
+   *  NEVER overwrites existing user-configured values.
+   *  Called explicitly when needed (e.g., seed endpoint), NOT on every read.
    */
   async initDefaults(): Promise<void> {
     const stored = await getData(ADS_KEY) as AdConfigData[] | null
-    const defaults = this.getDefaults()
+    // Only seed if nothing exists in storage
     if (!stored || stored.length === 0) {
-      await setData(ADS_KEY, defaults)
-      return
+      await setData(ADS_KEY, this.getDefaults())
     }
-    const storedMap = new Map(stored.map(a => [a.key, a]))
-    // Always force correct values for known Adskeeper positions
-    for (const def of defaults) {
-      const existing = storedMap.get(def.key)
-      if (existing) {
-        // Always overwrite value and enabled state for known positions
-        existing.value = def.value
-        existing.enabled = def.enabled
-        if (def.label) existing.label = def.label
-      } else {
-        stored.push(def)
-      }
-    }
-    await setData(ADS_KEY, stored)
+    // If data already exists, DO NOTHING — respect user's configuration
   },
 }

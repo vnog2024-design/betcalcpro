@@ -2,10 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
-import { DynamicHeaderCode } from "@/components/ads/dynamic-header-code";
-import { ServerHeaderCode } from "@/components/ads/server-header-code";
-
-
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -17,9 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 // Flags de controle — lidas em tempo de build via environment variables
-const ADSENSE_ENABLED = process.env.NEXT_PUBLIC_ADSENSE_ENABLED === "true";
 const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "";
-const ADSKEEPER_SITE_ID = process.env.NEXT_PUBLIC_ADSKEEPER_SITE_ID || "";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -146,31 +140,17 @@ export default function RootLayout({
           e para que o site pareça limpo e profissional ao crawler do Google.
           Após aprovação, defina NEXT_PUBLIC_ADSENSE_ENABLED=true no .env
         */}
-        {ADSENSE_ENABLED && (
-          <Script
-            async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3765222786344373"
-            crossOrigin="anonymous"
-            strategy="afterInteractive"
-          />
-        )}
-
         {/* 
-          AdsKeeper — 3 estrategias de carregamento (em ordem de prioridade):
-          1. ServerHeaderCode: Le header_code do store (admin) e injeta no <head>.
-             O admin pode colar o preloader completo do Adskeeper la.
-          2. Env var: Se NEXT_PUBLIC_ADSKEEPER_SITE_ID estiver setado, carrega
-             o preloader padrao do SimpleJS.
-          3. DynamicHeaderCode (client): Fallback client-side.
+          AdsKeeper Preloader — carregado SERVER-SIDE via next/script.
+          Este script PRECISA estar no <head> antes dos widgets renderizarem.
+          O DynamicHeaderCode foi mantido como fallback, mas este Script 
+          garante que o preloader carrega imediatamente no HTML inicial.
         */}
-        <ServerHeaderCode />
-        {ADSKEEPER_SITE_ID && (
-          <Script
-            async
-            src={`https://jsc.adskeeper.com/site/${ADSKEEPER_SITE_ID}.js`}
-            strategy="afterInteractive"
-          />
-        )}
+        <Script
+          async
+          src="https://jsc.adskeeper.com/site/1104734.js"
+          strategy="afterInteractive"
+        />
 
         <Script id="sw-register" strategy="afterInteractive">
           {`
@@ -301,7 +281,8 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
-        <DynamicHeaderCode />
+        {/* DynamicHeaderCode: fallback client-side — garante injeção do preloader se o server-side falhar */}
+        {/* <DynamicHeaderCode /> */}
         {children}
       </body>
     </html>
