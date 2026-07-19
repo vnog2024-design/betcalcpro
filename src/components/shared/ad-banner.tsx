@@ -1,12 +1,10 @@
-'use client'
-
 import { DynamicAd } from '@/components/ads/dynamic-ad'
 
 /**
  * Re-export componentes de anúncio usando Adskeeper DynamicAd.
- * Antes usava AdSense (ad-unit.tsx) que retornava null.
- * Agora todos os imports existentes de AdInContent e AdBanner
- * automaticamente renderizam anúncios Adskeeper.
+ * DynamicAd agora é um Server Component que renderiza apenas
+ * um <div data-type="_mgwidget"> — o preloader do Adskeeper
+ * escaneia o DOM e renderiza os anúncios automaticamente.
  */
 
 export function AdInContent({ className = '' }: { className?: string }) {

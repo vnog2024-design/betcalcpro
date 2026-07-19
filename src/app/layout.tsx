@@ -134,13 +134,8 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <head>
-        {/* 
-          AdSense script — SÓ carrega quando NEXT_PUBLIC_ADSENSE_ENABLED=true.
-          Antes da aprovação, NÃO carregue este script para evitar erros JS
-          e para que o site pareça limpo e profissional ao crawler do Google.
-          Após aprovação, defina NEXT_PUBLIC_ADSENSE_ENABLED=true no .env
-        */}
-        {/* Scripts e meta tags do Next.js */}
+        {/* Adskeeper preloader — carrega no <head> e escaneia o DOM automaticamente */}
+        <script async src="https://jsc.adskeeper.com/site/1104734.js" />
 
         <Script id="sw-register" strategy="afterInteractive">
           {`
@@ -272,16 +267,6 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
         {children}
-        {/* 
-          AdsKeeper widget container — SSR, fora do controle do React.
-          O preloader escaneia o DOM e renderiza o anúncio aqui.
-          Este div NÃO é gerenciado pelo React, então o Adskeeper
-          pode modificar seu conteúdo livremente.
-        */}
-        <div id="ak-banner-top" style={{ minHeight: 90 }}>
-          <div data-type="_mgwidget" data-widget-id="2056131"></div>
-        </div>
-        <script async src="https://jsc.adskeeper.com/site/1104734.js"></script>
       </body>
     </html>
   );

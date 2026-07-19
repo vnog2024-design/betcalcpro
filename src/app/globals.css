@@ -747,19 +747,7 @@ input:focus, select:focus, textarea:focus {
   50% { filter: brightness(1.05); }
 }
 
-/* ── Adskeeper widget constraints ── */
-/* Limit feed widgets to prevent infinite scroll ads */
+/* ── Adskeeper widget ── */
 div[data-type="_mgwidget"] {
-  max-height: 250px;
-  overflow: hidden;
   width: 100%;
-}
-/* Sidebar: smaller ad */
-aside div[data-type="_mgwidget"] {
-  max-height: 300px;
-}
-/* Banner positions: compact */
-.ad-banner-top div[data-type="_mgwidget"],
-.ad-banner-bottom div[data-type="_mgwidget"] {
-  max-height: 120px;
 }
