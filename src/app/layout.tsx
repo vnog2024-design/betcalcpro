@@ -140,12 +140,7 @@ export default function RootLayout({
           e para que o site pareça limpo e profissional ao crawler do Google.
           Após aprovação, defina NEXT_PUBLIC_ADSENSE_ENABLED=true no .env
         */}
-        {/* 
-          AdsKeeper Preloader — no <head> via <script> raw.
-          Adskeeper exige script no <head>. Usamos <script> raw pois
-          next/script coloca no <body>.
-        */}
-        <script async src="https://jsc.adskeeper.com/site/1104734.js"></script>
+        {/* Scripts e meta tags do Next.js */}
 
         <Script id="sw-register" strategy="afterInteractive">
           {`
@@ -276,9 +271,17 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
-        {/* DynamicHeaderCode: fallback client-side — garante injeção do preloader se o server-side falhar */}
-        {/* <DynamicHeaderCode /> */}
         {children}
+        {/* 
+          AdsKeeper widget container — SSR, fora do controle do React.
+          O preloader escaneia o DOM e renderiza o anúncio aqui.
+          Este div NÃO é gerenciado pelo React, então o Adskeeper
+          pode modificar seu conteúdo livremente.
+        */}
+        <div id="ak-banner-top" style={{ minHeight: 90 }}>
+          <div data-type="_mgwidget" data-widget-id="2056131"></div>
+        </div>
+        <script async src="https://jsc.adskeeper.com/site/1104734.js"></script>
       </body>
     </html>
   );
