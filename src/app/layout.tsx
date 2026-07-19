@@ -4,7 +4,7 @@ import Script from "next/script";
 import "./globals.css";
 import { DynamicHeaderCode } from "@/components/ads/dynamic-header-code";
 import { ServerHeaderCode } from "@/components/ads/server-header-code";
-import { Videowall } from "@/components/ads/videowall";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -302,7 +302,6 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
         <DynamicHeaderCode />
-        <Videowall />
         {children}
       </body>
     </html>
