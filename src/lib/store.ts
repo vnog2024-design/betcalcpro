@@ -254,17 +254,20 @@ export const AdsStore = {
     const preloader = '<script src="https://jsc.adskeeper.com/site/1104734.js" async></' + 'script>'
     const placement = '<div data-type="_mgwidget" data-widget-id="2056131"></div><script>(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");</' + 'script>'
 
+    // Google policy: max 3 ads per page
+    // Ativos: header_code (preloader), banner_top, sidebar_ad, in_article, in_feed
+    // Desativados: videowall (bloqueia o site), banner_middle, banner_bottom, in_content
     return [
       { key: 'header_code', label: 'Header (<head>) — Adskeeper preloader script', value: preloader, enabled: true },
       { key: 'ads_txt', label: 'Ads.txt — Conteudo do arquivo ads.txt para verificacao de anunciantes (Google AdSense + Adskeeper)', value: '', enabled: false },
-      { key: 'banner_top', label: 'Banner Topo (728x90) — Adskeeper widget', value: placement, enabled: true },
-      { key: 'banner_middle', label: 'Banner Meio (728x90) — Adskeeper widget', value: placement, enabled: true },
-      { key: 'banner_bottom', label: 'Banner Rodape (728x90) — Adskeeper widget', value: placement, enabled: true },
-      { key: 'in_content', label: 'In-Content (fluid) — Adskeeper widget', value: placement, enabled: true },
-      { key: 'in_article', label: 'In-Article (fluid) — Adskeeper widget', value: placement, enabled: true },
-      { key: 'sidebar_ad', label: 'Sidebar (300x250) — Adskeeper widget', value: placement, enabled: true },
-      { key: 'in_feed', label: 'In-Feed (fluid) — Adskeeper widget', value: placement, enabled: true },
-      { key: 'videowall_code', label: 'Videowall (Tela Cheia) — Adskeeper widget', value: placement, enabled: true },
+      { key: 'banner_top', label: 'Banner Topo — Adskeeper widget', value: placement, enabled: true },
+      { key: 'banner_middle', label: 'Banner Meio — Adskeeper widget (desativado — politica Google)', value: placement, enabled: false },
+      { key: 'banner_bottom', label: 'Banner Rodape — Adskeeper widget (desativado — politica Google)', value: placement, enabled: false },
+      { key: 'in_content', label: 'In-Content — Adskeeper widget (desativado — politica Google)', value: placement, enabled: false },
+      { key: 'in_article', label: 'In-Article — Adskeeper widget', value: placement, enabled: true },
+      { key: 'sidebar_ad', label: 'Sidebar — Adskeeper widget', value: placement, enabled: true },
+      { key: 'in_feed', label: 'In-Feed — Adskeeper widget', value: placement, enabled: true },
+      { key: 'videowall_code', label: 'Videowall — Adskeeper widget (desativado — bloqueia navegação)', value: placement, enabled: false },
     ]
   },
 
