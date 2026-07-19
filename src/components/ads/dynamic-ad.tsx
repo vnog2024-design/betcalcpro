@@ -1,14 +1,15 @@
+'use client'
+
 /**
- * Adskeeper widget — Server Component (SIMPLE)
+ * Adskeeper widget — Client Component ultra-simple
  *
  * O preloader (1104734.js) carrega no <head> e escaneia o DOM automaticamente
- * procurando por <div data-type="_mgwidget">. Não precisa de JavaScript client-side,
- * IntersectionObserver, polling, nem executeScripts.
+ * procurando por <div data-type="_mgwidget">. Não precisa de IntersectionObserver,
+ * polling, nem executeScripts. Apenas renderiza o div.
  *
  * Cada posição usa um widget ID diferente para maximizar fill rate.
  */
 
-// Widget IDs do Adskeeper (todos ativos no painel)
 const WIDGET_MAP: Record<string, string> = {
   banner_top:    '2056131',
   banner_bottom: '2056209',
