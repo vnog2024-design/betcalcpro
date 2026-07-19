@@ -3,7 +3,6 @@
 import Link from 'next/link'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { AdBanner } from '@/components/shared/ad-banner'
 import { DynamicAd } from '@/components/ads/dynamic-ad'
 import { Calculator, BarChart3, TrendingUp, BookOpen, Lightbulb, AlertTriangle, ArrowRight } from 'lucide-react'
 
@@ -137,6 +136,12 @@ export function ArticlesList() {
           const Icon = article.icon
           return (
             <>
+              {/* In-Feed ads: a cada 4 artigos (posicoes 3, 7) — respeita politica Google */}
+              {(index === 3 || index === 7) && (
+                <div className="md:col-span-2">
+                  <DynamicAd position="in_feed" minH={120} />
+                </div>
+              )}
               <Link key={article.slug} href={`/artigos/${article.slug}`}>
                 <Card className="card-hover border-border/50 bg-card/50 backdrop-blur cursor-pointer group h-full">
                   <CardContent className="p-6">
@@ -165,19 +170,13 @@ export function ArticlesList() {
                   </CardContent>
                 </Card>
               </Link>
-              {/* In-Feed ads: a cada 4 artigos (posicoes 3, 7) — respeita politica Google */}
-              {(index === 3 || index === 7) && (
-                <div className="md:col-span-2">
-                  <DynamicAd position="in_feed" minH={120} />
-                </div>
-              )}
             </>
           )
         })}
       </div>
 
       {/* Ad */}
-      <AdBanner className="mt-6" />
+      <DynamicAd position="in_feed" className="mt-6" />
     </div>
   )
 }

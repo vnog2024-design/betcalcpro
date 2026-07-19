@@ -1,9 +1,14 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
+/**
+ * Fetches header_code from the ad API and injects it into <head>.
+ * Properly handles <script> tags by parsing HTML and appending child elements.
+ */
 export function DynamicHeaderCode() {
   const [code, setCode] = useState('')
+  const addedElements = useRef<HTMLElement[]>([])
 
   useEffect(() => {
     fetch('/api/ads/public')
@@ -14,7 +19,28 @@ export function DynamicHeaderCode() {
       .catch(() => {})
   }, [])
 
-  if (!code) return null
+  useEffect(() => {
+    if (!code) return
 
-  return <script dangerouslySetInnerHTML={{ __html: code }} />
+    // Parse the HTML string and append all elements to <head>
+    const container = document.createElement('div')
+    container.innerHTML = code
+    const children = Array.from(container.children) as HTMLElement[]
+    addedElements.current = children
+
+    for (const child of children) {
+      document.head.appendChild(child)
+    }
+
+    return () => {
+      for (const child of addedElements.current) {
+        if (child.parentNode === document.head) {
+          document.head.removeChild(child)
+        }
+      }
+      addedElements.current = []
+    }
+  }, [code])
+
+  return null
 }

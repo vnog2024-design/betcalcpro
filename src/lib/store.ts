@@ -232,23 +232,30 @@ export const PostsStore = {
 
 export const AdsStore = {
   async getAll(): Promise<AdConfigData[]> {
+    // Always ensure defaults are merged in (handles stale/empty stored values)
+    await this.initDefaults()
     const data = await getData(ADS_KEY) as AdConfigData[] | null
     if (data && data.length > 0) return data
     return this.getDefaults()
   },
 
   getDefaults(): AdConfigData[] {
+    // Adskeeper configuration — site ID 1104734, widget ID 2056131
+    // Same widget can be placed in multiple positions
+    const preloader = '<script src="https://jsc.adskeeper.com/site/1104734.js" async></' + 'script>'
+    const placement = '<div data-type="_mgwidget" data-widget-id="2056131"></div><script>(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");</' + 'script>'
+
     return [
-      { key: 'header_code', label: 'Header (<head>) — Cole aqui o preloader do Adskeeper: <script async src="https://jsc.adskeeper.com/site/SEU_SITE_ID.js"><\/script>. Tambem aceita pixels, meta tags e outros scripts.', value: '', enabled: false },
+      { key: 'header_code', label: 'Header (<head>) — Adskeeper preloader script', value: preloader, enabled: true },
       { key: 'ads_txt', label: 'Ads.txt — Conteudo do arquivo ads.txt para verificacao de anunciantes (Google AdSense + Adskeeper)', value: '', enabled: false },
-      { key: 'banner_top', label: 'Banner Topo (728x90) — Anuncio horizontal acima do conteudo principal. Cole o codigo do widget Adskeeper ou AdSense aqui.', value: '', enabled: false },
-      { key: 'banner_middle', label: 'Banner Meio (728x90) — Anuncio horizontal apos resultado da ferramenta. Ideal para Adskeeper native ad.', value: '', enabled: false },
-      { key: 'banner_bottom', label: 'Banner Rodape (728x90) — Anuncio horizontal acima do rodape. Boa posicao para recovery ads.', value: '', enabled: false },
-      { key: 'in_content', label: 'In-Content (fluid) — Anuncio nativo entre formulario e resultado. Melhor performace com Adskeeper native.', value: '', enabled: false },
-      { key: 'in_article', label: 'In-Article (fluid) — Anuncio dentro do corpo de artigos, entre paragrafos. Formato nativo recomendado.', value: '', enabled: false },
-      { key: 'sidebar_ad', label: 'Sidebar (300x250) — Anuncio nativo no final da barra lateral. Adskeeper recomendado para esta posicao.', value: '', enabled: false },
-      { key: 'in_feed', label: 'In-Feed (fluid) — Anuncio nativo entre os cards de artigos. Aparece a cada 4 artigos na listagem.', value: '', enabled: false },
-      { key: 'videowall_code', label: 'Videowall (Tela Cheia) — Anuncio em tela cheia na entrada do site. Adskeeper video ad recomendado.', value: '', enabled: false },
+      { key: 'banner_top', label: 'Banner Topo (728x90) — Adskeeper widget', value: placement, enabled: true },
+      { key: 'banner_middle', label: 'Banner Meio (728x90) — Adskeeper widget', value: placement, enabled: true },
+      { key: 'banner_bottom', label: 'Banner Rodape (728x90) — Adskeeper widget', value: placement, enabled: true },
+      { key: 'in_content', label: 'In-Content (fluid) — Adskeeper widget', value: placement, enabled: true },
+      { key: 'in_article', label: 'In-Article (fluid) — Adskeeper widget', value: placement, enabled: true },
+      { key: 'sidebar_ad', label: 'Sidebar (300x250) — Adskeeper widget', value: placement, enabled: true },
+      { key: 'in_feed', label: 'In-Feed (fluid) — Adskeeper widget', value: placement, enabled: true },
+      { key: 'videowall_code', label: 'Videowall (Tela Cheia) — Adskeeper widget', value: placement, enabled: true },
     ]
   },
 
@@ -294,16 +301,27 @@ export const AdsStore = {
     return true
   },
 
-  /** Ensure default ad slots exist (merge with stored data, never overwrite user edits) */
+  /** Ensure all 9 Adskeeper ad positions have correct values.
+   *  Always overwrites known positions to guarantee ads show even if
+   *  stale empty data was previously stored.
+   */
   async initDefaults(): Promise<void> {
     const stored = await getData(ADS_KEY) as AdConfigData[] | null
+    const defaults = this.getDefaults()
     if (!stored || stored.length === 0) {
-      await setData(ADS_KEY, this.getDefaults())
+      await setData(ADS_KEY, defaults)
       return
     }
     const storedMap = new Map(stored.map(a => [a.key, a]))
-    for (const def of this.getDefaults()) {
-      if (!storedMap.has(def.key)) {
+    // Always force correct values for known Adskeeper positions
+    for (const def of defaults) {
+      const existing = storedMap.get(def.key)
+      if (existing) {
+        // Always overwrite value and enabled state for known positions
+        existing.value = def.value
+        existing.enabled = def.enabled
+        if (def.label) existing.label = def.label
+      } else {
         stored.push(def)
       }
     }

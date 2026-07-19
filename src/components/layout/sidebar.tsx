@@ -6,6 +6,7 @@ import { useAppStore, toolInfo, toolHref, type ToolPage } from '@/store/app-stor
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
+import { DynamicAd } from '@/components/ads/dynamic-ad'
 import { X, Home, TrendingUp, Wallet, BarChart3, Calculator, Coins, Shield, ShieldCheck, Search, Percent, Sparkles, User, Star, ChevronRight, BookOpen, RefreshCw } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { DynamicAd } from '@/components/ads/dynamic-ad'

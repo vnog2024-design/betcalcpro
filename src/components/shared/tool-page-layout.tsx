@@ -7,7 +7,6 @@ import { AnimatedBackground } from '@/components/shared/animated-background'
 import { CookieConsent } from '@/components/shared/cookie-consent'
 import { AgeGate } from '@/components/shared/age-gate'
 import { DisclaimerBar } from '@/components/shared/disclaimer-bar'
-import { AdBannerBottom } from '@/components/ads/ad-unit'
 import { DynamicAd } from '@/components/ads/dynamic-ad'
 import { Toaster } from '@/components/ui/toaster'
 import { ShareButtons } from '@/components/shared/share-buttons'
@@ -65,7 +64,6 @@ export function ToolPageLayout({ children }: { children: React.ReactNode }) {
             <DynamicAd position="in_content" className="my-6" minH={250} />
             <DynamicAd position="banner_middle" className="my-6" minH={90} />
             <DynamicAd position="banner_bottom" className="mt-6" minH={90} />
-            <AdBannerBottom className="mt-4" />
           </div>
         </main>
       </div>
