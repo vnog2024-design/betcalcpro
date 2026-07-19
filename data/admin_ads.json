@@ -1,0 +1,62 @@
+[
+  {
+    "key": "header_code",
+    "label": "Header (<head>) — Adskeeper preloader script",
+    "value": "<script src=\"https://jsc.adskeeper.com/site/1104734.js\" async></script>",
+    "enabled": true
+  },
+  {
+    "key": "ads_txt",
+    "label": "Ads.txt — Conteudo do arquivo ads.txt para verificacao de anunciantes (Google AdSense + Adskeeper)",
+    "value": "",
+    "enabled": false
+  },
+  {
+    "key": "banner_top",
+    "label": "Banner Topo — Adskeeper widget",
+    "value": "<div data-type=\"_mgwidget\" data-widget-id=\"2056131\"></div><script>(function(w,q){w[q]=w[q]||[];w[q].push([\"_mgc.load\"])})(window,\"_mgq\");</script>",
+    "enabled": true
+  },
+  {
+    "key": "banner_middle",
+    "label": "Banner Meio — Adskeeper widget (desativado — politica Google)",
+    "value": "<div data-type=\"_mgwidget\" data-widget-id=\"2056131\"></div><script>(function(w,q){w[q]=w[q]||[];w[q].push([\"_mgc.load\"])})(window,\"_mgq\");</script>",
+    "enabled": false
+  },
+  {
+    "key": "banner_bottom",
+    "label": "Banner Rodape — Adskeeper widget (desativado — politica Google)",
+    "value": "<div data-type=\"_mgwidget\" data-widget-id=\"2056131\"></div><script>(function(w,q){w[q]=w[q]||[];w[q].push([\"_mgc.load\"])})(window,\"_mgq\");</script>",
+    "enabled": false
+  },
+  {
+    "key": "in_content",
+    "label": "In-Content — Adskeeper widget (desativado — politica Google)",
+    "value": "<div data-type=\"_mgwidget\" data-widget-id=\"2056131\"></div><script>(function(w,q){w[q]=w[q]||[];w[q].push([\"_mgc.load\"])})(window,\"_mgq\");</script>",
+    "enabled": false
+  },
+  {
+    "key": "in_article",
+    "label": "In-Article — Adskeeper widget",
+    "value": "<div data-type=\"_mgwidget\" data-widget-id=\"2056131\"></div><script>(function(w,q){w[q]=w[q]||[];w[q].push([\"_mgc.load\"])})(window,\"_mgq\");</script>",
+    "enabled": true
+  },
+  {
+    "key": "sidebar_ad",
+    "label": "Sidebar — Adskeeper widget",
+    "value": "<div data-type=\"_mgwidget\" data-widget-id=\"2056131\"></div><script>(function(w,q){w[q]=w[q]||[];w[q].push([\"_mgc.load\"])})(window,\"_mgq\");</script>",
+    "enabled": true
+  },
+  {
+    "key": "in_feed",
+    "label": "In-Feed — Adskeeper widget",
+    "value": "<div data-type=\"_mgwidget\" data-widget-id=\"2056131\"></div><script>(function(w,q){w[q]=w[q]||[];w[q].push([\"_mgc.load\"])})(window,\"_mgq\");</script>",
+    "enabled": true
+  },
+  {
+    "key": "videowall_code",
+    "label": "Videowall — Adskeeper widget (desativado — bloqueia navegação)",
+    "value": "<div data-type=\"_mgwidget\" data-widget-id=\"2056131\"></div><script>(function(w,q){w[q]=w[q]||[];w[q].push([\"_mgc.load\"])})(window,\"_mgq\");</script>",
+    "enabled": false
+  }
+]

@@ -171,7 +171,7 @@ export function ArticlesList() {
                   </CardContent>
                 </Card>
               </Link>
-            </>
+            </Fragment>
           )
         })}
       </div>
