@@ -1,13 +1,13 @@
 'use client'
 
+import { useEffect } from 'react'
+
 /**
- * Adskeeper widget — Client Component ultra-simple
+ * Adskeeper widget — Client Component
  *
- * O preloader (1104734.js) carrega no <head> e escaneia o DOM automaticamente
- * procurando por <div data-type="_mgwidget">. Não precisa de IntersectionObserver,
- * polling, nem executeScripts. Apenas renderiza o div.
- *
- * Cada posição usa um widget ID diferente para maximizar fill rate.
+ * O preloader (1104734.js) carrega no <head>. Quando o React hidrata e
+ * renderiza este componente, chamamos window._mgc.load() para avisar
+ * o preloader que há novos widgets no DOM para escanear.
  */
 
 const WIDGET_MAP: Record<string, string> = {
@@ -27,6 +27,20 @@ interface DynamicAdProps {
 
 export function DynamicAd({ position, className = '', minH = 90 }: DynamicAdProps) {
   const widgetId = WIDGET_MAP[position]
+
+  useEffect(() => {
+    // Avisar o preloader que há widgets novos no DOM
+    const tryLoad = () => {
+      const mgc = (window as any)._mgc
+      if (mgc && typeof mgc.load === 'function') {
+        mgc.load()
+      }
+    }
+    // Tentar imediatamente e novamente após 1s (caso preloader ainda não carregou)
+    tryLoad()
+    const timer = setTimeout(tryLoad, 1000)
+    return () => clearTimeout(timer)
+  }, [])
 
   if (!widgetId) return null
 
