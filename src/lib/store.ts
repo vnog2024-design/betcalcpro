@@ -232,10 +232,19 @@ export const PostsStore = {
 
 export const AdsStore = {
   async getAll(): Promise<AdConfigData[]> {
-    // Always ensure defaults are merged in (handles stale/empty stored values)
-    await this.initDefaults()
+    // Try to init defaults into storage (best-effort, may fail on Vercel)
+    try { await this.initDefaults() } catch { /* storage unavailable */ }
+
+    // Read from storage
     const data = await getData(ADS_KEY) as AdConfigData[] | null
-    if (data && data.length > 0) return data
+
+    // If storage has data with real values, use it
+    if (data && data.length > 0) {
+      const hasRealValues = data.some(a => a.key === 'header_code' && a.value && a.enabled)
+      if (hasRealValues) return data
+    }
+
+    // Storage empty, stale, or unavailable — return hardcoded defaults
     return this.getDefaults()
   },
 
@@ -260,7 +269,12 @@ export const AdsStore = {
   },
 
   async getEnabled(): Promise<Record<string, string>> {
-    const ads = await this.getAll()
+    let ads: AdConfigData[]
+    try {
+      ads = await this.getAll()
+    } catch {
+      ads = this.getDefaults()
+    }
     const result: Record<string, string> = {}
     for (const ad of ads) {
       if (ad.enabled && ad.value) result[ad.key] = ad.value
