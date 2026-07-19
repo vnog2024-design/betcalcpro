@@ -1,5 +1,6 @@
 'use client'
 
+import { Fragment } from 'react'
 import Link from 'next/link'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -135,14 +136,14 @@ export function ArticlesList() {
         {articles.map((article, index) => {
           const Icon = article.icon
           return (
-            <>
+            <Fragment key={article.slug}>
               {/* In-Feed ads: a cada 4 artigos (posicoes 3, 7) — respeita politica Google */}
               {(index === 3 || index === 7) && (
                 <div className="md:col-span-2">
                   <DynamicAd position="in_feed" minH={120} />
                 </div>
               )}
-              <Link key={article.slug} href={`/artigos/${article.slug}`}>
+              <Link href={`/artigos/${article.slug}`}>
                 <Card className="card-hover border-border/50 bg-card/50 backdrop-blur cursor-pointer group h-full">
                   <CardContent className="p-6">
                     <div className="flex items-start gap-4">
@@ -175,8 +176,6 @@ export function ArticlesList() {
         })}
       </div>
 
-      {/* Ad */}
-      <DynamicAd position="in_feed" className="mt-6" />
     </div>
   )
 }

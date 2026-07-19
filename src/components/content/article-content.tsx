@@ -1041,20 +1041,14 @@ export function ArticleContent({ slug }: { slug: string }) {
       {/* Separator */}
       <hr className="border-border/50" />
 
-      {/* Ad — After header */}
-      <DynamicAd position="in_article" minH={250} />
-
       {/* Article content */}
       {article.content}
 
-      {/* Ad — Mid article */}
+      {/* Ad — Mid article (only 1 ad per article) */}
       <DynamicAd position="in_article" className="my-6" />
 
       {/* CTA — Experimente na Prática */}
       <ArticleCTA links={ctaLinks} />
-
-      {/* Ad — After content */}
-      <DynamicAd position="in_content" minH={250} />
     </div>
   )
 }

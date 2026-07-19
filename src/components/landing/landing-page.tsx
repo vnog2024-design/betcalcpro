@@ -169,9 +169,6 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Ad — Middle */}
-      <DynamicAd position="banner_middle" className="my-6" />
-
       {/* Simulators */}
       <section>
         <h2 className="text-2xl sm:text-3xl font-bold mb-2">Simuladores</h2>
@@ -304,9 +301,6 @@ export function LandingPage() {
           </Card>
         </div>
       </section>
-
-      {/* Ad — Bottom */}
-      <DynamicAd position="banner_bottom" className="mt-6" />
     </div>
   )
 }
