@@ -5,9 +5,10 @@ import { useEffect } from 'react'
 /**
  * Adskeeper widget — Client Component
  *
- * O preloader (1104734.js) carrega no <head>. Quando o React hidrata e
- * renderiza este componente, chamamos window._mgc.load() para avisar
- * o preloader que há novos widgets no DOM para escanear.
+ * Como a pagina usa useMounted() que delaya o conteudo apos hidratacao,
+ * o preloader escaneia o DOM antes dos widgets existirem.
+ * Apos a montagem, usamos _mgq (fila de comandos do Adskeeper)
+ * e _mgc.load() para forcar o re-scan do DOM.
  */
 
 const WIDGET_MAP: Record<string, string> = {
@@ -17,6 +18,18 @@ const WIDGET_MAP: Record<string, string> = {
   in_article:    '2056236',
   in_feed:       '2056237',
   sidebar_ad:    '2056238',
+}
+
+/** Dispara o scan do Adskeeper de todas as formas possiveis */
+function triggerAdskeeperScan() {
+  const w = window as any
+  // Metodo 1: _mgq queue (API padrao do Adskeeper)
+  w._mgq = w._mgq || []
+  w._mgq.push(['_mgc.load'])
+  // Metodo 2: chamar _mgc.load diretamente
+  if (w._mgc && typeof w._mgc.load === 'function') {
+    w._mgc.load()
+  }
 }
 
 interface DynamicAdProps {
@@ -29,17 +42,12 @@ export function DynamicAd({ position, className = '', minH = 90 }: DynamicAdProp
   const widgetId = WIDGET_MAP[position]
 
   useEffect(() => {
-    // Avisar o preloader que há widgets novos no DOM
-    const tryLoad = () => {
-      const mgc = (window as any)._mgc
-      if (mgc && typeof mgc.load === 'function') {
-        mgc.load()
-      }
-    }
-    // Tentar imediatamente e novamente após 1s (caso preloader ainda não carregou)
-    tryLoad()
-    const timer = setTimeout(tryLoad, 1000)
-    return () => clearTimeout(timer)
+    // Tentar em varios momentos pois o preloader pode carregar em qualquer hora
+    triggerAdskeeperScan()
+    const t1 = setTimeout(triggerAdskeeperScan, 500)
+    const t2 = setTimeout(triggerAdskeeperScan, 1500)
+    const t3 = setTimeout(triggerAdskeeperScan, 3000)
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3) }
   }, [])
 
   if (!widgetId) return null
