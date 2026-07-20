@@ -7,8 +7,6 @@ interface DynamicAdProps {
   position: string
   className?: string
   minH?: number
-  /** Limita a altura (para feed ads que podem crescer demais) */
-  limitHeight?: number
   /** Mostra apenas em mobile */
   mobileOnly?: boolean
 }
@@ -16,19 +14,18 @@ interface DynamicAdProps {
 /**
  * Componente de anúncio dinâmico — lê config do AdConfigProvider.
  * Se o slot estiver habilitado e tiver widgetId, renderiza o widget MGID.
+ * NENHUM limite de altura ou overflow — o MGID controla o tamanho automaticamente.
  */
 export function DynamicAd({
   position,
   className = '',
   minH = 90,
-  limitHeight,
   mobileOnly = false,
 }: DynamicAdProps) {
   const slot = useAdConfig(position)
 
   useEffect(() => {
     if (!slot) return
-    // Scan em vários momentos para garantir que o preloader encontrou o widget
     triggerAdskeeperScan()
     const t1 = setTimeout(triggerAdskeeperScan, 500)
     const t2 = setTimeout(triggerAdskeeperScan, 1500)
@@ -42,16 +39,10 @@ export function DynamicAd({
 
   if (!slot) return null
 
-  const style: React.CSSProperties = { minHeight: minH }
-  if (limitHeight) {
-    style.maxHeight = limitHeight
-    style.overflow = 'hidden'
-  }
-
   return (
     <div
-      className={`w-full flex justify-center ${className} ${mobileOnly ? 'lg:hidden' : ''}`}
-      style={style}
+      className={`mgid-ad-container ${className} ${mobileOnly ? 'lg:hidden' : ''}`}
+      style={{ minHeight: minH }}
     >
       <div data-type="_mgwidget" data-widget-id={slot.widgetId} />
     </div>

@@ -232,17 +232,36 @@ export const PostsStore = {
 
 export const AdsStore = {
   async getAll(): Promise<AdConfigData[]> {
-    // Read from storage FIRST — do NOT call initDefaults() here!
-    // initDefaults() was overwriting user-configured values on every read.
+    const defaults = this.getDefaults()
+
     const data = await getData(ADS_KEY) as AdConfigData[] | null
 
-    // If storage has data, return it as-is (respect user's configuration)
+    // Se o storage tem dados, faz merge: defaults como base, stored como override
     if (data && data.length > 0) {
-      return data
+      const storedMap = new Map(data.map((d) => [d.key, d]))
+      const result: AdConfigData[] = []
+
+      // Primeiro, adiciona todos os defaults
+      for (const def of defaults) {
+        const stored = storedMap.get(def.key)
+        if (stored) {
+          // Se tem dado no storage, usa o valor salvo (mas se o valor está vazio, usa o default)
+          result.push({
+            ...def,
+            value: stored.value || def.value,
+            enabled: stored.enabled,
+          })
+        } else {
+          // Slot novo que não existe no storage — usa default
+          result.push({ ...def })
+        }
+      }
+
+      return result
     }
 
-    // Storage empty or unavailable — return hardcoded defaults
-    return this.getDefaults()
+    // Storage vazio ou indisponível — retorna defaults
+    return defaults
   },
 
   getDefaults(): AdConfigData[] {
@@ -253,18 +272,18 @@ export const AdsStore = {
       { key: 'header_code', label: 'Código no Header', value: preloader, enabled: true },
 
       // ── Widgets Adskeeper (valor = widget ID do MGID) ──
-      { key: 'header_banner',  label: 'Widget do Cabeçalho',          value: '', enabled: false },
-      { key: 'sidebar',        label: 'Widget da Barra Lateral',      value: '', enabled: false },
-      { key: 'below_article',  label: 'Widget Embaixo do Artigo',    value: '', enabled: false },
-      { key: 'feed',           label: 'Feed',                         value: '', enabled: false },
-      { key: 'standard_block', label: 'Bloco de Anúncios Padrão',    value: '', enabled: false },
-      { key: 'mobile_widget',  label: 'Widget de Site para Celular', value: '', enabled: false },
+      { key: 'header_banner',  label: 'Widget do Cabeçalho',          value: '2056714', enabled: true },
+      { key: 'sidebar',        label: 'Widget da Barra Lateral',      value: '2056714', enabled: true },
+      { key: 'below_article',  label: 'Widget Embaixo do Artigo',    value: '2056714', enabled: true },
+      { key: 'feed',           label: 'Feed',                         value: '2056714', enabled: true },
+      { key: 'standard_block', label: 'Bloco de Anúncios Padrão',    value: '2056714', enabled: true },
+      { key: 'mobile_widget',  label: 'Widget de Site para Celular', value: '2056714', enabled: true },
 
       // ── Formatos Especiais ──
-      { key: 'notification',   label: 'Notificação no Site',          value: '', enabled: false },
-      { key: 'exit_popup',     label: 'Sair do Pop-up',              value: '', enabled: false },
-      { key: 'interstitial',   label: 'Interstitial',                 value: '', enabled: false },
-      { key: 'videowall',      label: 'Videowall',                    value: '', enabled: false },
+      { key: 'notification',   label: 'Notificação no Site',          value: '2056714', enabled: true },
+      { key: 'exit_popup',     label: 'Sair do Pop-up',              value: '2056714', enabled: true },
+      { key: 'interstitial',   label: 'Interstitial',                 value: '2056714', enabled: true },
+      { key: 'videowall',      label: 'Videowall',                    value: '2056714', enabled: true },
     ]
   },
 

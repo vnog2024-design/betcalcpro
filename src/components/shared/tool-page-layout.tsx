@@ -59,9 +59,10 @@ export function ToolPageLayout({ children }: { children: React.ReactNode }) {
                 variant="compact"
               />
             </div>
-            <DynamicAd position="header_banner" className="mb-4" minH={90} />
+            <DynamicAd position="header_banner" className="mb-4" />
             {children}
-            <DynamicAd position="standard_block" className="mt-8" />
+            <DynamicAd position="below_article" className="my-8" />
+            <DynamicAd position="feed" className="my-8" />
             <DynamicAd position="mobile_widget" className="mt-6" mobileOnly />
           </div>
         </main>
