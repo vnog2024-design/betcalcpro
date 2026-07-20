@@ -273,6 +273,12 @@ export default function RootLayout({
       >
         <AdConfigProvider>
           {children}
+          {/* MGID trigger — must run AFTER all widget divs are in DOM */}
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");`,
+            }}
+          />
           <VideowallOverlay />
           <AdNotification />
           <AdExitPopup />

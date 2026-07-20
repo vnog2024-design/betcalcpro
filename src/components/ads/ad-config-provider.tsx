@@ -39,6 +39,17 @@ export function AdConfigProvider({ children }: { children: ReactNode }) {
       .catch(() => { /* usa defaults */ })
   }, [])
 
+  // Trigger MGID scan on every mount/navigation
+  useEffect(() => {
+    triggerAdskeeperScan()
+    const t1 = setTimeout(triggerAdskeeperScan, 1000)
+    const t2 = setTimeout(triggerAdskeeperScan, 3000)
+    return () => {
+      clearTimeout(t1)
+      clearTimeout(t2)
+    }
+  }, [])
+
   return (
     <AdConfigContext.Provider value={config}>
       {children}
