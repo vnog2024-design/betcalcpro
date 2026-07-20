@@ -80,8 +80,8 @@ export async function getData(key: string): Promise<unknown | null> {
     }
   }
 
-  // 2. Try Neon PostgreSQL
-  if (pgAvailable !== false && process.env.DATABASE_URL) {
+  // 2. Try Neon PostgreSQL (skip if DATABASE_URL is SQLite/file:)
+  if (pgAvailable !== false && process.env.DATABASE_URL && !process.env.DATABASE_URL.startsWith('file:')) {
     try {
       const row = await pgQuery<{ value: string }>(
         'SELECT value FROM app_store WHERE key = $1',
@@ -115,8 +115,8 @@ export async function setData(key: string, value: unknown): Promise<void> {
     return
   }
 
-  // 2. Try Neon PostgreSQL
-  if (pgAvailable !== false && process.env.DATABASE_URL) {
+  // 2. Try Neon PostgreSQL (skip if DATABASE_URL is SQLite/file:)
+  if (pgAvailable !== false && process.env.DATABASE_URL && !process.env.DATABASE_URL.startsWith('file:')) {
     try {
       const { Pool } = await import('pg')
       const pool = new Pool({ connectionString: process.env.DATABASE_URL, max: 1, idleTimeoutMillis: 10000 })
@@ -279,11 +279,11 @@ export const AdsStore = {
       { key: 'standard_block', label: 'Bloco de Anúncios Padrão',    value: '2056714', enabled: true },
       { key: 'mobile_widget',  label: 'Widget de Site para Celular', value: '2056714', enabled: true },
 
-      // ── Formatos Especiais ──
-      { key: 'notification',   label: 'Notificação no Site',          value: '2056714', enabled: true },
-      { key: 'exit_popup',     label: 'Sair do Pop-up',              value: '2056714', enabled: true },
-      { key: 'interstitial',   label: 'Interstitial',                 value: '2056714', enabled: true },
-      { key: 'videowall',      label: 'Videowall',                    value: '2056714', enabled: true },
+      // ── Formatos Especiais (precisam de widget ID específico no Adskeeper) ──
+      { key: 'notification',   label: 'Notificação no Site',          value: '2056714', enabled: false },
+      { key: 'exit_popup',     label: 'Sair do Pop-up',              value: '2056714', enabled: false },
+      { key: 'interstitial',   label: 'Interstitial',                 value: '2056714', enabled: false },
+      { key: 'videowall',      label: 'Videowall',                    value: '2056714', enabled: false },
     ]
   },
 
