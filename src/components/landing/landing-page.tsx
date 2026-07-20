@@ -132,9 +132,6 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Ad — Top */}
-      <DynamicAd position="banner_top" className="mb-6" />
-
       {/* Calculators */}
       <section>
         <h2 className="text-2xl sm:text-3xl font-bold mb-2">Calculadoras</h2>
@@ -168,6 +165,9 @@ export function LandingPage() {
           })}
         </div>
       </section>
+
+      {/* Ad — Between Calculators and Simulators */}
+      <DynamicAd position="banner_top" className="my-8" />
 
       {/* Simulators */}
       <section>
@@ -241,6 +241,9 @@ export function LandingPage() {
           Ver todos os artigos <ArrowRight className="h-4 w-4" />
         </Link>
       </section>
+
+      {/* Ad — Between Articles and Risk Management */}
+      <DynamicAd position="banner_bottom" className="my-8" />
 
       {/* Risk Management Principles */}
       <section>

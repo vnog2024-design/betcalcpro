@@ -25,32 +25,32 @@
   },
   {
     "key": "banner_bottom",
-    "label": "Banner Rodape — Adskeeper widget (desativado — politica Google)",
-    "value": "<div data-type=\"_mgwidget\" data-widget-id=\"2056131\"></div><script>(function(w,q){w[q]=w[q]||[];w[q].push([\"_mgc.load\"])})(window,\"_mgq\");</script>",
-    "enabled": false
+    "label": "Banner Rodape — Adskeeper widget",
+    "value": "<div data-type=\"_mgwidget\" data-widget-id=\"2056209\"></div><script>(function(w,q){w[q]=w[q]||[];w[q].push([\"_mgc.load\"])})(window,\"_mgq\");</script>",
+    "enabled": true
   },
   {
     "key": "in_content",
-    "label": "In-Content — Adskeeper widget (desativado — politica Google)",
-    "value": "<div data-type=\"_mgwidget\" data-widget-id=\"2056131\"></div><script>(function(w,q){w[q]=w[q]||[];w[q].push([\"_mgc.load\"])})(window,\"_mgq\");</script>",
-    "enabled": false
+    "label": "In-Content — Adskeeper widget (paginas de ferramentas)",
+    "value": "<div data-type=\"_mgwidget\" data-widget-id=\"2056235\"></div><script>(function(w,q){w[q]=w[q]||[];w[q].push([\"_mgc.load\"])})(window,\"_mgq\");</script>",
+    "enabled": true
   },
   {
     "key": "in_article",
     "label": "In-Article — Adskeeper widget",
-    "value": "<div data-type=\"_mgwidget\" data-widget-id=\"2056131\"></div><script>(function(w,q){w[q]=w[q]||[];w[q].push([\"_mgc.load\"])})(window,\"_mgq\");</script>",
+    "value": "<div data-type=\"_mgwidget\" data-widget-id=\"2056236\"></div><script>(function(w,q){w[q]=w[q]||[];w[q].push([\"_mgc.load\"])})(window,\"_mgq\");</script>",
     "enabled": true
   },
   {
     "key": "sidebar_ad",
     "label": "Sidebar — Adskeeper widget",
-    "value": "<div data-type=\"_mgwidget\" data-widget-id=\"2056131\"></div><script>(function(w,q){w[q]=w[q]||[];w[q].push([\"_mgc.load\"])})(window,\"_mgq\");</script>",
+    "value": "<div data-type=\"_mgwidget\" data-widget-id=\"2056238\"></div><script>(function(w,q){w[q]=w[q]||[];w[q].push([\"_mgc.load\"])})(window,\"_mgq\");</script>",
     "enabled": true
   },
   {
     "key": "in_feed",
     "label": "In-Feed — Adskeeper widget",
-    "value": "<div data-type=\"_mgwidget\" data-widget-id=\"2056131\"></div><script>(function(w,q){w[q]=w[q]||[];w[q].push([\"_mgc.load\"])})(window,\"_mgq\");</script>",
+    "value": "<div data-type=\"_mgwidget\" data-widget-id=\"2056237\"></div><script>(function(w,q){w[q]=w[q]||[];w[q].push([\"_mgc.load\"])})(window,\"_mgq\");</script>",
     "enabled": true
   },
   {

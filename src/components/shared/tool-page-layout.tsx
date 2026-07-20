@@ -37,10 +37,6 @@ export function ToolPageLayout({ children }: { children: React.ReactNode }) {
             </div>
           </div>
         </div>
-        {/* Widget Adskeeper no HTML inicial para o preloader encontrar */}
-        <div style={{ minHeight: 90 }}>
-          <div data-type="_mgwidget" data-widget-id="2056131" />
-        </div>
         <Footer />
       </div>
     )

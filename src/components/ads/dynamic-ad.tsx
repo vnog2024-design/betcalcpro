@@ -53,7 +53,7 @@ export function DynamicAd({ position, className = '', minH = 90 }: DynamicAdProp
   if (!widgetId) return null
 
   return (
-    <div className={`w-full flex justify-center ${className}`} style={{ minHeight: minH }}>
+    <div className={`w-full flex justify-center ${className}`} style={{ minHeight: minH, maxHeight: 300, overflow: 'hidden' }}>
       <div data-type="_mgwidget" data-widget-id={widgetId} />
     </div>
   )
