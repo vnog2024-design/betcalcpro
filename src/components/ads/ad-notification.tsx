@@ -17,15 +17,12 @@ export function AdNotification() {
   useEffect(() => {
     if (!slot) return
     if (sessionStorage.getItem('betcalc_ad_notif_dismissed')) return
-
-    // Delay de 2s para não atrapalhar o carregamento
     const t = setTimeout(() => setVisible(true), 2000)
     return () => clearTimeout(t)
   }, [slot])
 
   useEffect(() => {
     if (!visible || !barRef.current) return
-    // Observa a altura do conteúdo do anúncio
     const observer = new ResizeObserver((entries) => {
       for (const entry of entries) {
         setHeight(entry.contentRect.height)
@@ -64,6 +61,11 @@ export function AdNotification() {
       </button>
       <div className="max-w-5xl mx-auto px-4 py-2">
         <div data-type="_mgwidget" data-widget-id={slot.widgetId} />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");`,
+          }}
+        />
       </div>
     </div>
   )

@@ -6,6 +6,7 @@ import { toolInfo, toolHref, type ToolPage } from '@/store/app-store'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { HeroVisual } from '@/components/shared/hero-visual'
+import { MgidWidget } from '@/components/ads/mgid-widget'
 import {
   TrendingUp, BarChart3, Calculator, Sparkles,
   ArrowRight, ChevronRight, Target, Coins, AlertTriangle,
@@ -34,35 +35,13 @@ const colorMap: Record<string, { bg: string; text: string; border: string }> = {
 }
 
 const featuredArticles = [
-  {
-    slug: 'introducao-probabilidade',
-    title: 'Introdução à Teoria das Probabilidades',
-    desc: 'Aprenda os conceitos fundamentais da probabilidade e como aplicá-los na tomada de decisão.',
-    icon: Calculator,
-  },
-  {
-    slug: 'gestao-risco-capital',
-    title: 'Gestão de Risco e Capital',
-    desc: 'Princípios fundamentais de gestão de risco para proteger seu capital contra variações adversas.',
-    icon: TrendingUp,
-  },
-  {
-    slug: 'falacias-estatisticas',
-    title: 'Falácias Estatísticas Comuns',
-    desc: 'Conheça os vieses cognitivos mais comuns e aprenda a pensar de forma mais racional.',
-    icon: AlertTriangle,
-  },
-  {
-    slug: 'paradoxo-monty-hall',
-    title: 'O Paradoxo de Monty Hall',
-    desc: 'Descubra por que trocar de porta dobra suas chances neste famoso problema de probabilidade.',
-    icon: Lightbulb,
-  },
+  { slug: 'introducao-probabilidade', title: 'Introdução à Teoria das Probabilidades', desc: 'Aprenda os conceitos fundamentais da probabilidade e como aplicá-los na tomada de decisão.', icon: Calculator },
+  { slug: 'gestao-risco-capital', title: 'Gestão de Risco e Capital', desc: 'Princípios fundamentais de gestão de risco para proteger seu capital contra variações adversas.', icon: TrendingUp },
+  { slug: 'falacias-estatisticas', title: 'Falácias Estatísticas Comuns', desc: 'Conheça os vieses cognitivos mais comuns e aprenda a pensar de forma mais racional.', icon: AlertTriangle },
+  { slug: 'paradoxo-monty-hall', title: 'O Paradoxo de Monty Hall', desc: 'Descubra por que trocar de porta dobra suas chances neste famoso problema de probabilidade.', icon: Lightbulb },
 ]
 
 const HERO_TITLE_HTML = 'Ferramentas de <span class="gradient-neon-text">Probabilidade</span> e <span class="gradient-neon-text">Gestão de Risco</span>'
-
-const MGID_WIDGET_ID = '2056714'
 
 export function LandingPage() {
   const router = useRouter()
@@ -74,14 +53,12 @@ export function LandingPage() {
       {/* Hero */}
       <section className="relative overflow-hidden rounded-2xl border border-neon/20 min-h-[420px] sm:min-h-[480px] flex items-center">
         <HeroVisual />
-
         <div className="relative z-10 w-full p-8 sm:p-12 lg:p-16">
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-neon/10 border border-neon/20 mb-6">
               <div className="h-1.5 w-1.5 rounded-full bg-neon neon-pulse" />
               <span className="text-xs font-medium text-neon">100% Gratuito</span>
             </div>
-
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-5 leading-tight" dangerouslySetInnerHTML={{ __html: HERO_TITLE_HTML }} />
             <p className="text-lg sm:text-xl text-muted-foreground mb-8 max-w-2xl leading-relaxed">
               Calculadoras, simuladores e artigos educacionais gratuitos.
@@ -89,27 +66,19 @@ export function LandingPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <Link href="/martingale">
-                <Button
-                  size="lg"
-                  className="gradient-neon text-black font-bold hover:opacity-90 text-base h-12 px-6 neon-glow"
-                >
+                <Button size="lg" className="gradient-neon text-black font-bold hover:opacity-90 text-base h-12 px-6 neon-glow">
                   <TrendingUp className="h-5 w-5 mr-2" />
                   Calculadora Martingale
                   <ArrowRight className="h-5 w-5 ml-2" />
                 </Button>
               </Link>
               <Link href="/artigos">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-neon-blue/30 text-neon-blue hover:bg-neon-blue/10 text-base h-12 px-6"
-                >
+                <Button size="lg" variant="outline" className="border-neon-blue/30 text-neon-blue hover:bg-neon-blue/10 text-base h-12 px-6">
                   <BookOpen className="h-5 w-5 mr-2" />
                   Artigos Educacionais
                 </Button>
               </Link>
             </div>
-
             <div className="flex flex-wrap gap-x-8 gap-y-3 mt-8 pt-6 border-t border-border/30">
               <div className="flex items-center gap-2">
                 <Calculator className="h-4 w-4 text-neon" />
@@ -133,9 +102,7 @@ export function LandingPage() {
       </section>
 
       {/* Ad — Header Banner */}
-      <div className="mgid-ad-container my-6" style={{ minHeight: 90 }}>
-        <div data-type="_mgwidget" data-widget-id={MGID_WIDGET_ID} />
-      </div>
+      <MgidWidget widgetId="2056714" className="my-6" />
 
       {/* Calculators */}
       <section>
@@ -148,11 +115,7 @@ export function LandingPage() {
             const color = colorMap[tool.color]
             const href = toolHref[tool.id] || `/${tool.id}`
             return (
-              <Card
-                key={tool.id}
-                className={`card-hover border-border/50 bg-card/50 backdrop-blur cursor-pointer group h-full ${color.border}`}
-                onClick={() => router.push(href)}
-              >
+              <Card key={tool.id} className={`card-hover border-border/50 bg-card/50 backdrop-blur cursor-pointer group h-full ${color.border}`} onClick={() => router.push(href)}>
                 <CardContent className="p-5 flex flex-col h-full">
                   <div className="flex items-center gap-3 mb-3">
                     <div className={`inline-flex p-2.5 rounded-lg ${color.bg}`}>
@@ -172,9 +135,7 @@ export function LandingPage() {
       </section>
 
       {/* Ad — Standard Block */}
-      <div className="mgid-ad-container my-8" style={{ minHeight: 90 }}>
-        <div data-type="_mgwidget" data-widget-id={MGID_WIDGET_ID} />
-      </div>
+      <MgidWidget widgetId="2056714" className="my-8" />
 
       {/* Simulators */}
       <section>
@@ -187,11 +148,7 @@ export function LandingPage() {
             const color = colorMap[tool.color]
             const href = toolHref[tool.id] || `/${tool.id}`
             return (
-              <Card
-                key={tool.id}
-                className={`card-hover border-border/50 bg-card/50 backdrop-blur cursor-pointer group h-full ${color.border}`}
-                onClick={() => router.push(href)}
-              >
+              <Card key={tool.id} className={`card-hover border-border/50 bg-card/50 backdrop-blur cursor-pointer group h-full ${color.border}`} onClick={() => router.push(href)}>
                 <CardContent className="p-5 flex flex-col h-full">
                   <div className="flex items-center gap-3 mb-3">
                     <div className={`inline-flex p-2.5 rounded-lg ${color.bg}`}>
@@ -225,11 +182,7 @@ export function LandingPage() {
           {featuredArticles.map((article) => {
             const Icon = article.icon
             return (
-              <Card
-                key={article.slug}
-                className="card-hover border-border/50 bg-card/50 backdrop-blur cursor-pointer group"
-                onClick={() => router.push(`/artigos/${article.slug}`)}
-              >
+              <Card key={article.slug} className="card-hover border-border/50 bg-card/50 backdrop-blur cursor-pointer group" onClick={() => router.push(`/artigos/${article.slug}`)}>
                 <CardContent className="p-5">
                   <div className="flex items-center gap-2 mb-3">
                     <Icon className="h-5 w-5 text-neon" />
@@ -250,11 +203,9 @@ export function LandingPage() {
       </section>
 
       {/* Ad — Feed */}
-      <div className="mgid-ad-container my-8" style={{ minHeight: 90 }}>
-        <div data-type="_mgwidget" data-widget-id={MGID_WIDGET_ID} />
-      </div>
+      <MgidWidget widgetId="2056714" className="my-8" />
 
-      {/* Risk Management Principles */}
+      {/* Risk Management */}
       <section>
         <h2 className="text-2xl sm:text-3xl font-bold mb-2">Gestão de Risco</h2>
         <p className="text-base text-muted-foreground mb-6">Princípios fundamentais para tomada de decisão informada</p>
@@ -278,7 +229,6 @@ export function LandingPage() {
               ))}
             </CardContent>
           </Card>
-
           <Card className="border-amber-500/20 bg-amber-500/5">
             <CardContent className="p-5">
               <div className="flex items-center gap-2 mb-3">
@@ -288,7 +238,6 @@ export function LandingPage() {
               <p className="text-sm text-muted-foreground leading-relaxed mb-4">
                 As ferramentas deste site são para fins <strong className="text-foreground">educacionais</strong>.
                 Não garantem resultados e não devem ser interpretadas como aconselhamento financeiro.
-                Toda decisão envolve risco e deve ser tomada com responsabilidade.
               </p>
               <div className="space-y-2.5">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -315,9 +264,7 @@ export function LandingPage() {
       </section>
 
       {/* Mobile-only Widget */}
-      <div className="mgid-ad-container mb-6 lg:hidden" style={{ minHeight: 90 }}>
-        <div data-type="_mgwidget" data-widget-id={MGID_WIDGET_ID} />
-      </div>
+      <MgidWidget widgetId="2056714" className="mb-6 lg:hidden" />
     </div>
   )
 }

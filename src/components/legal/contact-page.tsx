@@ -104,7 +104,7 @@ export function ContactPage() {
     {
       question: 'O site é gratuito?',
       answer:
-        'Sim, todas as ferramentas do BetCalc Pro são gratuitas. Mantemos o site através de publicidade (Google AdSense) para que possamos continuar oferecendo ferramentas de qualidade sem custo para o usuário.',
+        'Sim, todas as ferramentas do BetCalc Pro são gratuitas. Mantemos o site através de publicidade (Adskeeper/MGID) para que possamos continuar oferecendo ferramentas de qualidade sem custo para o usuário.',
     },
     {
       question: 'Como reporto um erro em uma calculadora?',

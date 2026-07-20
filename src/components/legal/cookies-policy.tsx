@@ -56,7 +56,7 @@ export function CookiesPolicy() {
             </p>
             <ul className="list-disc list-inside space-y-2 ml-2">
               <li><strong className="text-foreground">Cookies primários:</strong> Definidos pelo site que você está visitando (betcalcpro.com.br);</li>
-              <li><strong className="text-foreground">Cookies de terceiros:</strong> Definidos por um domínio diferente do site que você está visitando (ex.: Google, DoubleClick);</li>
+              <li><strong className="text-foreground">Cookies de terceiros:</strong> Definidos por um domínio diferente do site que você está visitando (ex.: MGID, Adskeeper);</li>
               <li><strong className="text-foreground">Cookies de sessão:</strong> Temporários, excluídos quando você fecha o navegador;</li>
               <li><strong className="text-foreground">Cookies persistentes:</strong> Permanecem no seu dispositivo por um período determinado ou até serem excluídos manualmente.</li>
             </ul>
@@ -202,7 +202,7 @@ export function CookiesPolicy() {
               <p>
                 Estes cookies são usados para exibir anúncios relevantes para você, limitar o número de vezes que
                 você vê um anúncio e ajudar a medir a eficácia da campanha publicitária. Eles são definidos
-                principalmente pelo Google AdSense e DoubleClick e podem rastrear sua navegação em diferentes sites.
+                principalmente pelo Adskeeper (MGID) e podem rastrear sua navegação em diferentes sites.
               </p>
               <p>
                 <strong className="text-foreground">Base legal:</strong> Consentimento (Art. 7º, I, LGPD). Estes cookies só são
@@ -220,46 +220,22 @@ export function CookiesPolicy() {
                   </thead>
                   <tbody>
                     <tr className="border-b border-border/50">
-                      <td className="py-2 pr-4 font-mono">__gads</td>
-                      <td className="py-2 pr-4">Cookie do Google AdSense — rastreia interações com anúncios e preferências do usuário</td>
-                      <td className="py-2 pr-4">13 meses</td>
-                      <td className="py-2 pr-4">Terceiro (Google/DoubleClick)</td>
+                      <td className="py-2 pr-4 font-mono">_mgq</td>
+                      <td className="py-2 pr-4">MGID command queue — fila de comandos para carregamento de widgets e anúncios do Adskeeper</td>
+                      <td className="py-2 pr-4">Persistente</td>
+                      <td className="py-2 pr-4">Terceiro (MGID/Adskeeper)</td>
                     </tr>
                     <tr className="border-b border-border/50">
-                      <td className="py-2 pr-4 font-mono">__gpi</td>
-                      <td className="py-2 pr-4">Cookie do Google Publisher — identifica sessões de anúncios e informações do publisher</td>
-                      <td className="py-2 pr-4">13 meses</td>
-                      <td className="py-2 pr-4">Terceiro (Google)</td>
-                    </tr>
-                    <tr className="border-b border-border/50">
-                      <td className="py-2 pr-4 font-mono">IDE</td>
-                      <td className="py-2 pr-4">DoubleClick (Google) — publicidade direcionada, remarketing e segmentação por interesses</td>
-                      <td className="py-2 pr-4">13 meses</td>
-                      <td className="py-2 pr-4">Terceiro (Google/DoubleClick)</td>
-                    </tr>
-                    <tr className="border-b border-border/50">
-                      <td className="py-2 pr-4 font-mono">DSID</td>
-                      <td className="py-2 pr-4">DoubleClick — segmentação de anúncios e identificação de sessão</td>
-                      <td className="py-2 pr-4">2 semanas</td>
-                      <td className="py-2 pr-4">Terceiro (Google/DoubleClick)</td>
-                    </tr>
-                    <tr className="border-b border-border/50">
-                      <td className="py-2 pr-4 font-mono">_gcl_au</td>
-                      <td className="py-2 pr-4">Google Conversion Linker — rastreia conversões de anúncios e eficácia de campanhas</td>
-                      <td className="py-2 pr-4">3 meses</td>
-                      <td className="py-2 pr-4">Terceiro (Google)</td>
-                    </tr>
-                    <tr className="border-b border-border/50">
-                      <td className="py-2 pr-4 font-mono">NID</td>
-                      <td className="py-2 pr-4">Google — armazena preferências do usuário para anúncios personalizados e idioma</td>
-                      <td className="py-2 pr-4">6 meses</td>
-                      <td className="py-2 pr-4">Terceiro (Google)</td>
+                      <td className="py-2 pr-4 font-mono">_mgc</td>
+                      <td className="py-2 pr-4">MGID control — cookie de controle do Adskeeper para segmentação e personalização de anúncios</td>
+                      <td className="py-2 pr-4">Persistente</td>
+                      <td className="py-2 pr-4">Terceiro (MGID/Adskeeper)</td>
                     </tr>
                     <tr>
-                      <td className="py-2 pr-4 font-mono">FLC</td>
-                      <td className="py-2 pr-4">DoubleClick — rastreamento de conversão e frequência de anúncios</td>
-                      <td className="py-2 pr-4">1 dia</td>
-                      <td className="py-2 pr-4">Terceiro (Google/DoubleClick)</td>
+                      <td className="py-2 pr-4 font-mono">Cookies de parceiros</td>
+                      <td className="py-2 pr-4">Cookies de terceiros definidos por parceiros publicitários do Adskeeper para rastreamento e segmentação</td>
+                      <td className="py-2 pr-4">Variável</td>
+                      <td className="py-2 pr-4">Terceiro (parceiros MGID)</td>
                     </tr>
                   </tbody>
                 </table>
@@ -269,17 +245,17 @@ export function CookiesPolicy() {
         </CardContent>
       </Card>
 
-      {/* Google AdSense Cookies */}
+      {/* Adskeeper (MGID) Cookies */}
       <Card>
         <CardContent className="p-6 space-y-6 text-sm text-muted-foreground leading-relaxed">
           <section className="space-y-3">
             <div className="flex items-center gap-2">
               <Megaphone className="h-5 w-5 text-neon shrink-0" />
-              <h2 className="text-lg font-semibold text-foreground">3. Detalhamento dos Cookies do Google AdSense</h2>
+              <h2 className="text-lg font-semibold text-foreground">3. Detalhamento dos Cookies do Adskeeper (MGID)</h2>
             </div>
             <p>
-              O Google AdSense é o serviço de publicidade que utilizamos para exibir anúncios em nosso site, permitindo
-              que nossas ferramentas permaneçam gratuitas. Quando você visita nosso site, o Google AdSense pode definir
+              O Adskeeper (MGID) é o serviço de publicidade nativa que utilizamos para exibir anúncios em nosso site, permitindo
+              que nossas ferramentas permaneçam gratuitas. Quando você visita nosso site, o Adskeeper pode definir
               cookies no seu dispositivo para as seguintes finalidades:
             </p>
             <ul className="list-disc list-inside space-y-2 ml-2">
@@ -291,18 +267,16 @@ export function CookiesPolicy() {
               <li><strong className="text-foreground">Relatórios:</strong> Fornecer relatórios de desempenho aos anunciantes e publishers.</li>
             </ul>
             <p>
-              Os cookies do Google AdSense (incluindo DoubleClick) coletam informações como: endereço IP (anonimizado),
-              tipo de navegador, idioma, resolução de tela, URL da página visitada, dados sobre interações com anúncios,
-              identificador único do cookie e dados demográficos estimados.
+              Os cookies do Adskeeper (MGID) incluem o <strong className="text-foreground">_mgq</strong> (fila de comandos do MGID para
+              carregamento de widgets), o <strong className="text-foreground">_mgc</strong> (cookie de controle para segmentação e
+              personalização) e cookies de terceiros definidos por parceiros publicitários. Esses cookies coletam informações
+              como: endereço IP (anonimizado), tipo de navegador, idioma, resolução de tela, URL da página visitada,
+              dados sobre interações com anúncios e identificador único do cookie.
             </p>
             <p>
-              Essas informações são processadas pelo Google conforme sua{' '}
-              <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-neon underline hover:no-underline">
+              Essas informações são processadas pelo MGID conforme sua{' '}
+              <a href="https://www.mgid.com/privacy-policy/" target="_blank" rel="noopener noreferrer" className="text-neon underline hover:no-underline">
                 Política de Privacidade
-              </a>{' '}
-              e seus{' '}
-              <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer" className="text-neon underline hover:no-underline">
-                termos de uso de publicidade
               </a>.
             </p>
           </section>
@@ -474,7 +448,7 @@ export function CookiesPolicy() {
               Estes terceiros são responsáveis por seus próprios cookies e práticas de privacidade:
             </p>
             <ul className="list-disc list-inside space-y-2 ml-2">
-              <li><strong className="text-foreground">Google AdSense / DoubleClick:</strong> Para exibição de anúncios, remarketing e medição de eficácia publicitária;</li>
+              <li><strong className="text-foreground">Adskeeper (MGID):</strong> Para exibição de anúncios, remarketing e medição de eficácia publicitária;</li>
               <li><strong className="text-foreground">Google Analytics:</strong> Para análise de tráfego, comportamento dos usuários e melhoria contínua do site;</li>
               <li><strong className="text-foreground">Google (geral):</strong> Para serviços de autenticação, preferências do usuário e infraestrutura técnica.</li>
             </ul>
@@ -485,18 +459,8 @@ export function CookiesPolicy() {
             </p>
             <ul className="space-y-1 ml-4">
               <li>
-                <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-neon underline hover:no-underline">
-                  Política de Privacidade do Google
-                </a>
-              </li>
-              <li>
-                <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer" className="text-neon underline hover:no-underline">
-                  Como o Google usa informações de sites ou apps que usam nossos serviços
-                </a>
-              </li>
-              <li>
-                <a href="https://policies.google.com/technologies/cookies" target="_blank" rel="noopener noreferrer" className="text-neon underline hover:no-underline">
-                  Como o Google usa cookies
+                <a href="https://www.mgid.com/privacy-policy/" target="_blank" rel="noopener noreferrer" className="text-neon underline hover:no-underline">
+                  Política de Privacidade do MGID
                 </a>
               </li>
             </ul>

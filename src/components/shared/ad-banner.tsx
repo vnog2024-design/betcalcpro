@@ -1,18 +1,18 @@
-import { DynamicAd } from '@/components/ads/dynamic-ad'
+import { MgidWidget } from '@/components/ads/mgid-widget'
 
 /**
- * Facade components — mapeiam para posições MGID-compatible.
- * Cada uma usa um slot diferente configurável no painel admin.
+ * Facade components — mapeiam para posições MGID.
+ * Cada uma usa um widget ID fixo (configurável via admin).
  */
 
 export function AdInContent({ className = '' }: { className?: string }) {
-  return <DynamicAd position="standard_block" className={`my-6 ${className}`} minH={90} />
+  return <MgidWidget widgetId="2056714" className={`my-6 ${className}`} />
 }
 
 export function AdBanner({ className = '' }: { className?: string }) {
-  return <DynamicAd position="standard_block" className={className} minH={90} />
+  return <MgidWidget widgetId="2056714" className={className} />
 }
 
 export function AdSidebar({ className = '' }: { className?: string }) {
-  return <DynamicAd position="sidebar" className={className} minH={250} />
+  return <MgidWidget widgetId="2056714" className={className} minH={250} />
 }

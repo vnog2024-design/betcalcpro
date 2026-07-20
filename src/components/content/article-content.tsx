@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { ArrowLeft, BookOpen, Calculator, TrendingUp, BarChart3, Lightbulb, AlertTriangle } from 'lucide-react'
-import { DynamicAd } from '@/components/ads/dynamic-ad'
+import { MgidWidget } from '@/components/ads/mgid-widget'
 import { ArticleCTA } from '@/components/shared/article-cta'
 import { ShareButtons } from '@/components/shared/share-buttons'
 
@@ -1045,7 +1045,7 @@ export function ArticleContent({ slug }: { slug: string }) {
       {article.content}
 
       {/* Ad — Mid article (only 1 ad per article) */}
-      <DynamicAd position="below_article" className="my-6" />
+      <MgidWidget widgetId="2056714" className="my-6" />
 
       {/* CTA — Experimente na Prática */}
       <ArticleCTA links={ctaLinks} />

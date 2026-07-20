@@ -670,7 +670,7 @@ export function StrategyGenerator() {
             </CardContent>
           </Card>
 
-          {/* Disclaimer AdSense */}
+          {/* Disclaimer Publicidade */}
           <Card className="border-red-500/20 bg-red-500/5">
             <CardContent className="p-4 flex gap-3">
               <Shield className="h-5 w-5 text-red-500 shrink-0 mt-0.5" />

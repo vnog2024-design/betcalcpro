@@ -117,7 +117,7 @@ export function PrivacyPolicy() {
             <ul className="list-disc list-inside space-y-2 ml-2">
               <li>Prover, manter e melhorar nossos serviços e ferramentas educacionais;</li>
               <li>Personalizar a experiência do usuário no site, adaptando conteúdos e funcionalidades;</li>
-              <li>Exibir anúncios relevantes por meio do Google AdSense, de forma a sustentar a gratuidade das ferramentas;</li>
+              <li>Exibir anúncios relevantes por meio do Adskeeper (MGID), de forma a sustentar a gratuidade das ferramentas;</li>
               <li>Analisar o tráfego e o comportamento dos usuários para aprimorar o conteúdo e a usabilidade do site;</li>
               <li>Garantir a segurança, a integridade e o funcionamento adequado do site;</li>
               <li>Responder a solicitações de contato, dúvidas e reclamações dos usuários;</li>
@@ -142,29 +142,27 @@ export function PrivacyPolicy() {
               informações apenas nas seguintes situações:
             </p>
             <ul className="list-disc list-inside space-y-2 ml-2">
-              <li><strong className="text-foreground">Google (AdSense e Analytics):</strong> Compartilhamos dados de navegação e uso com o Google para fins de exibição de anúncios personalizados e análise de tráfego, conforme detalhado nas seções 6 e 7;</li>
+              <li><strong className="text-foreground">Adskeeper (MGID) e Google Analytics:</strong> Compartilhamos dados de navegação e uso com o Adskeeper e o Google para fins de exibição de anúncios personalizados e análise de tráfego, conforme detalhado nas seções 6 e 7;</li>
               <li><strong className="text-foreground">Obrigação legal:</strong> Quando exigido por lei, ordem judicial ou requisição de autoridade competente;</li>
               <li><strong className="text-foreground">Proteção de direitos:</strong> Para proteger os direitos, a segurança e a propriedade do BetCalc Pro, de nossos usuários ou de terceiros;</li>
               <li><strong className="text-foreground">Provedores de serviço:</strong> Com prestadores de serviços que atuam em nosso nome (hospedagem, análise de dados), sempre sob contratos que garantam a proteção adequada dos dados.</li>
             </ul>
           </section>
 
-          {/* Google AdSense */}
+          {/* Adskeeper (MGID) */}
           <section className="space-y-3">
             <div className="flex items-center gap-2">
               <Lock className="h-5 w-5 text-neon shrink-0" />
-              <h2 className="text-lg font-semibold text-foreground">6. Google AdSense e Publicidade Personalizada</h2>
+              <h2 className="text-lg font-semibold text-foreground">6. Adskeeper (MGID)</h2>
             </div>
             <p>
-              Utilizamos o <strong className="text-foreground">Google AdSense</strong> para exibir anúncios em nosso site.
-              O Google AdSense é um serviço de publicidade fornecido pela Google LLC (1600 Amphitheatre Parkway, Mountain
-              View, CA 94043, EUA) que utiliza cookies e web beacons para exibir anúncios baseados em visitas anteriores
-              a este e a outros sites na internet.
+              Utilizamos o <strong className="text-foreground">Adskeeper (MGID)</strong> para exibir anúncios em nosso site.
+              O Adskeeper é um serviço de publicidade nativa fornecido pela MGID Inc. que utiliza cookies e tecnologias
+              similares para exibir anúncios relevantes com base em suas visitas a este e a outros sites na internet.
             </p>
             <p>
-              O uso de cookies de publicidade pelo Google permite que o Google e seus parceiros exibam anúncios
-              personalizados com base no seu perfil de navegação. Os cookies do Google AdSense podem coletar as
-              seguintes informações:
+              O Adskeeper (MGID) pode utilizar cookies para personalização de anúncios, segmentação por interesses e
+              análise de desempenho publicitário. Esses cookies podem coletar as seguintes informações:
             </p>
             <ul className="list-disc list-inside space-y-2 ml-2">
               <li>Endereço IP (anonimizado);</li>
@@ -176,8 +174,13 @@ export function PrivacyPolicy() {
               <li>Identificadores únicos de cookie e publicidade.</li>
             </ul>
             <p>
-              Esses dados são utilizados pelo Google para segmentação de anúncios, medição de eficácia publicitária
-              e remarketing. O Google pode compartilhar esses dados com seus parceiros de publicidade conforme suas
+              Os cookies utilizados pelo Adskeeper incluem o <strong className="text-foreground">_mgq</strong> (fila de comandos do MGID),
+              o <strong className="text-foreground">_mgc</strong> (cookie de controle do MGID) e cookies de terceiros
+              definidos por parceiros publicitários do Adskeeper. Esses dados são utilizados para segmentação de
+              anúncios, medição de eficácia publicitária e remarketing.
+            </p>
+            <p>
+              O Adskeeper (MGID) pode compartilhar esses dados com seus parceiros de publicidade conforme suas
               próprias políticas de privacidade.
             </p>
             <p>
@@ -185,13 +188,8 @@ export function PrivacyPolicy() {
             </p>
             <ul className="space-y-1 ml-4">
               <li>
-                <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" className="text-neon underline hover:no-underline">
-                  Configurações de Anúncios do Google
-                </a>
-              </li>
-              <li>
-                <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" className="text-neon underline hover:no-underline">
-                  Configurações de Anúncios (adssettings.google.com)
+                <a href="https://www.mgid.com/privacy-policy/" target="_blank" rel="noopener noreferrer" className="text-neon underline hover:no-underline">
+                  Política de Privacidade do MGID
                 </a>
               </li>
               <li>
@@ -329,7 +327,7 @@ export function PrivacyPolicy() {
           <section className="space-y-3">
             <h2 className="text-lg font-semibold text-foreground">11. Transferência Internacional de Dados</h2>
             <p>
-              Ao utilizar serviços do Google (AdSense e Analytics), seus dados podem ser transferidos para servidores
+              Ao utilizar serviços do Adskeeper (MGID) e do Google Analytics, seus dados podem ser transferidos para servidores
               localizados fora do Brasil, predominantemente nos Estados Unidos. Essas transferências são realizadas
               em conformidade com as salvaguardas adequadas previstas na LGPD (Art. 33), incluindo:
             </p>
@@ -410,7 +408,7 @@ export function PrivacyPolicy() {
             <p className="text-xs text-muted-foreground italic">
               Esta Política de Privacidade é válida para todos os usuários do site BetCalc Pro e está em conformidade com a
               Lei Geral de Proteção de Dados (LGPD — Lei nº 13.709/2018), o Marco Civil da Internet (Lei nº 12.965/2014)
-              e com os requisitos do Google AdSense. Para informações sobre cookies, consulte nossa{' '}
+              e com os requisitos da LGPD. Para informações sobre cookies, consulte nossa{' '}
               <Link href="/cookies" className="text-neon underline hover:no-underline">Política de Cookies</Link>.
               Para informações sobre os termos de uso, consulte nossos{' '}
               <Link href="/terms" className="text-neon underline hover:no-underline">Termos de Uso</Link>.

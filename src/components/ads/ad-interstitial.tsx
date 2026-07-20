@@ -18,17 +18,13 @@ export function AdInterstitial() {
   useEffect(() => {
     if (!slot) return
     if (sessionStorage.getItem('betcalc_ad_interstitial_shown')) return
-
-    // Mostra após 3s na página
     const showTimer = setTimeout(() => {
       setVisible(true)
       sessionStorage.setItem('betcalc_ad_interstitial_shown', '1')
     }, 3000)
-
     return () => clearTimeout(showTimer)
   }, [slot])
 
-  // Countdown
   useEffect(() => {
     if (!visible) return
     timerRef.current = setInterval(() => {
@@ -44,7 +40,6 @@ export function AdInterstitial() {
     return () => { if (timerRef.current) clearInterval(timerRef.current) }
   }, [visible])
 
-  // Scan MGID
   useEffect(() => {
     if (!visible || !slot) return
     triggerAdskeeperScan()
@@ -57,7 +52,6 @@ export function AdInterstitial() {
     setVisible(false)
   }, [canClose])
 
-  // Escape
   useEffect(() => {
     if (!visible || !canClose) return
     const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') close() }
@@ -76,7 +70,6 @@ export function AdInterstitial() {
         className="relative w-full max-w-3xl mx-4 bg-card rounded-xl overflow-hidden shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Close / countdown */}
         <div className="absolute top-3 right-3 z-10">
           {canClose ? (
             <button
@@ -95,9 +88,13 @@ export function AdInterstitial() {
           )}
         </div>
 
-        {/* Ad */}
         <div className="min-h-[350px] sm:min-h-[450px] flex items-center justify-center">
           <div data-type="_mgwidget" data-widget-id={slot.widgetId} />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");`,
+            }}
+          />
         </div>
       </div>
     </div>

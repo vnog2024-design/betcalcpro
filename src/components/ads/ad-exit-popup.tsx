@@ -17,7 +17,6 @@ export function AdExitPopup() {
     setVisible(false)
   }, [])
 
-  // Detect exit intent (mouse leaves viewport through top)
   useEffect(() => {
     if (!slot) return
     if (sessionStorage.getItem('betcalc_ad_exit_shown')) return
@@ -34,7 +33,6 @@ export function AdExitPopup() {
     return () => document.removeEventListener('mouseleave', handleMouseLeave)
   }, [slot])
 
-  // Scan MGID quando o popup abrir
   useEffect(() => {
     if (!visible || !slot) return
     triggerAdskeeperScan()
@@ -42,7 +40,6 @@ export function AdExitPopup() {
     return () => clearTimeout(t)
   }, [visible, slot?.widgetId])
 
-  // Fechar com Escape
   useEffect(() => {
     if (!visible) return
     const handleKey = (e: KeyboardEvent) => {
@@ -63,7 +60,6 @@ export function AdExitPopup() {
         className="relative w-full max-w-lg mx-4 bg-card rounded-xl overflow-hidden shadow-2xl border border-border/50"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
         <div className="flex items-center justify-between px-4 py-2 border-b border-border/30 bg-muted/20">
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <ExternalLink className="h-3.5 w-3.5" />
@@ -78,12 +74,15 @@ export function AdExitPopup() {
           </button>
         </div>
 
-        {/* Ad */}
         <div className="min-h-[300px] sm:min-h-[350px] flex items-center justify-center">
           <div data-type="_mgwidget" data-widget-id={slot.widgetId} />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");`,
+            }}
+          />
         </div>
 
-        {/* Footer */}
         <div className="px-4 py-2 border-t border-border/30 flex justify-end">
           <button
             onClick={close}

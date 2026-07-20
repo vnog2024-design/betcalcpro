@@ -17,7 +17,6 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// Flags de controle — lidas em tempo de build via environment variables
 const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "";
 
 export const viewport: Viewport = {
@@ -79,8 +78,6 @@ export const metadata: Metadata = {
     "mobile-web-app-capable": "yes",
     "apple-mobile-web-app-capable": "yes",
     "apple-mobile-web-app-status-bar-style": "black-translucent",
-    // Mantido mesmo antes da aprovação — é necessário para o Google verificar a titularidade da conta
-    "google-adsense-account": "ca-pub-3765222786344373",
     "google-site-verification": "Kf7SATy7yvEEuCFxk4av2Y9nv07qi_DDuw9TJP9LxJ8",
   },
 };
@@ -139,17 +136,14 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <head>
-        {/* Adskeeper preloader — carrega no <head> e escaneia o DOM automaticamente */}
-        <script async src="https://jsc.adskeeper.com/site/1104734.js" />
+        {/* Adskeeper/MGID preloader — obrigatório no <head> */}
+        <script src="https://jsc.adskeeper.com/site/1104734.js" async />
 
         <Script id="sw-register" strategy="afterInteractive">
           {`
             (function() {
-              // Only register Service Worker in production (not localhost)
               var isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-
               if (isDev && 'serviceWorker' in navigator) {
-                // In development: unregister any existing SW and clear caches
                 navigator.serviceWorker.getRegistrations().then(function(regs) {
                   regs.forEach(function(reg) { reg.unregister(); });
                 });
@@ -161,17 +155,12 @@ export default function RootLayout({
                 console.log('[BetCalc] Dev mode: Service Worker disabled, caches cleared');
                 return;
               }
-
-              // In production: register SW with update checking
               if ('serviceWorker' in navigator) {
                 window.addEventListener('load', function() {
                   navigator.serviceWorker.register('/sw.js').then(function(reg) {
-                    // Check for updates every 30 seconds
                     setInterval(function() { reg.update(); }, 30000);
                   }).catch(function() {});
                 });
-
-                // When a new SW takes over, force reload
                 navigator.serviceWorker.addEventListener('controllerchange', function() {
                   window.location.reload();
                 });
@@ -197,11 +186,9 @@ export default function RootLayout({
                   var theme = state.theme || 'dark';
                   var colorTheme = state.colorTheme || 'neon-green';
 
-                  // Initialize dataLayer and gtag BEFORE loading gtag.js
                   window.dataLayer = window.dataLayer || [];
                   function gtag(){dataLayer.push(arguments);}
 
-                  // Check stored consent and set Consent Mode v2 defaults
                   var consentRaw = localStorage.getItem('cookie-consent');
                   var consentData = null;
                   try {
@@ -209,7 +196,6 @@ export default function RootLayout({
                   } catch(e) {}
 
                   if (consentData && consentData.accepted === true) {
-                    // User previously accepted all cookies
                     gtag('consent', 'default', {
                       'ad_storage': 'granted',
                       'analytics_storage': 'granted',
@@ -217,7 +203,6 @@ export default function RootLayout({
                       'ad_personalization': 'granted',
                     });
                   } else {
-                    // No consent or essential-only: deny all by default
                     gtag('consent', 'default', {
                       'ad_storage': 'denied',
                       'analytics_storage': 'denied',
@@ -236,17 +221,6 @@ export default function RootLayout({
             `,
           }}
         />
-        {/*
-          Google Analytics (gtag.js) — só carrega quando o GA_ID real estiver configurado.
-          Para obter o ID:
-          1. Acesse https://analytics.google.com
-          2. Admin → Criar Propriedade → Fluxos de Dados → Web
-          3. Copie o Measurement ID (formato G-XXXXXXXXXX)
-          4. Defina NEXT_PUBLIC_GA_MEASUREMENT_ID no .env
-
-          O Consent Mode v2 segue funcionando via dataLayer mesmo sem o script do GA,
-          pois os defaults são configurados no script inline acima.
-        */}
         {GA_ID && (
           <>
             <Script
@@ -273,12 +247,6 @@ export default function RootLayout({
       >
         <AdConfigProvider>
           {children}
-          {/* MGID trigger — must run AFTER all widget divs are in DOM */}
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");`,
-            }}
-          />
           <VideowallOverlay />
           <AdNotification />
           <AdExitPopup />

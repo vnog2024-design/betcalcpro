@@ -21,13 +21,10 @@ export function VideowallOverlay() {
   useEffect(() => {
     if (!slot) return
     if (sessionStorage.getItem(SESSION_KEY)) return
-
-    // Small delay to not block initial paint
     const t = setTimeout(() => setVisible(true), 500)
     return () => clearTimeout(t)
   }, [slot])
 
-  // Countdown
   useEffect(() => {
     if (!visible) return
     timerRef.current = setInterval(() => {
@@ -43,7 +40,6 @@ export function VideowallOverlay() {
     return () => { if (timerRef.current) clearInterval(timerRef.current) }
   }, [visible])
 
-  // Scan MGID when visible
   useEffect(() => {
     if (!visible || !slot) return
     triggerAdskeeperScan()
@@ -57,7 +53,6 @@ export function VideowallOverlay() {
     setVisible(false)
   }, [canClose])
 
-  // Escape key
   useEffect(() => {
     if (!visible || !canClose) return
     const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') close() }
@@ -96,6 +91,11 @@ export function VideowallOverlay() {
 
         <div className="min-h-[300px] sm:min-h-[400px] flex items-center justify-center">
           <div data-type="_mgwidget" data-widget-id={slot.widgetId} />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");`,
+            }}
+          />
         </div>
       </div>
     </div>

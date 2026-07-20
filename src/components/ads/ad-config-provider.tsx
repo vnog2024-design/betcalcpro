@@ -22,12 +22,12 @@ const DEFAULT_CONFIG: Record<string, AdSlot> = {
   videowall:      { widgetId: '2056714', enabled: false, label: 'Videowall' },
 }
 
-/** Contexto global com as configurações de anúncios vindas do store */
 const AdConfigContext = createContext<Record<string, AdSlot>>(DEFAULT_CONFIG)
 
 export function AdConfigProvider({ children }: { children: ReactNode }) {
   const [config, setConfig] = useState<Record<string, AdSlot>>(DEFAULT_CONFIG)
 
+  // Busca config da API (para pegar overrides do admin)
   useEffect(() => {
     fetch('/api/ads/config')
       .then((r) => r.json())
@@ -37,17 +37,6 @@ export function AdConfigProvider({ children }: { children: ReactNode }) {
         }
       })
       .catch(() => { /* usa defaults */ })
-  }, [])
-
-  // Trigger MGID scan on every mount/navigation
-  useEffect(() => {
-    triggerAdskeeperScan()
-    const t1 = setTimeout(triggerAdskeeperScan, 1000)
-    const t2 = setTimeout(triggerAdskeeperScan, 3000)
-    return () => {
-      clearTimeout(t1)
-      clearTimeout(t2)
-    }
   }, [])
 
   return (
@@ -66,7 +55,7 @@ export function useAdConfig(position: string): AdSlot | null {
   return slot
 }
 
-/** Dispara o scan do Adskeeper */
+/** Dispara o scan do Adskeeper — usado pelos formatos especiais (popup, interstitial, etc.) */
 export function triggerAdskeeperScan() {
   const w = window as any
   if (!w._mgq) w._mgq = []

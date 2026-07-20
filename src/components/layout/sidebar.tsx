@@ -9,6 +9,7 @@ import { Separator } from '@/components/ui/separator'
 
 import { X, Home, TrendingUp, Wallet, BarChart3, Calculator, Coins, Shield, ShieldCheck, Search, Percent, Sparkles, User, Star, ChevronRight, BookOpen, RefreshCw } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { MgidWidget } from '@/components/ads/mgid-widget'
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Home, TrendingUp, Wallet, BarChart3, Calculator, Coins, Shield, ShieldCheck, Search, Percent, Sparkles, User, BookOpen, RefreshCw,
@@ -118,9 +119,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                 {group.label !== 'Conta' && <Separator className="my-3 bg-border/50" />}
               </div>
             ))}
-            <div className="mgid-ad-container mt-4" style={{ minHeight: 250 }}>
-              <div data-type="_mgwidget" data-widget-id="2056714" />
-            </div>
+            <MgidWidget widgetId="2056714" className="mt-4" minH={250} />
           </div>
         </ScrollArea>
       </aside>

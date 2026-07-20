@@ -17,7 +17,7 @@ const faqSections = [
       },
       {
         q: 'O BetCalc Pro é gratuito?',
-        a: 'Sim, o BetCalc Pro é 100% gratuito. Todas as calculadoras, simuladores e artigos estão disponíveis sem custo. Nosso site é mantido por anúncios do Google AdSense.'
+        a: 'Sim, o BetCalc Pro é 100% gratuito. Todas as calculadoras, simuladores e artigos estão disponíveis sem custo. Nosso site é mantido por anúncios do Adskeeper (MGID).'
       },
       {
         q: 'O BetCalc Pro é um site de apostas?',
@@ -109,7 +109,7 @@ const faqSections = [
       },
       {
         q: 'O site usa cookies?',
-        a: 'Sim, utilizamos cookies essenciais para o funcionamento do site e cookies do Google AdSense para exibição de anúncios. Você pode gerenciar suas preferências de cookies através do banner de consentimento que aparece ao acessar o site.'
+        a: 'Sim, utilizamos cookies essenciais para o funcionamento do site e cookies do Adskeeper (MGID) para exibição de anúncios. Você pode gerenciar suas preferências de cookies através do banner de consentimento que aparece ao acessar o site.'
       },
       {
         q: 'Como entro em contato?',

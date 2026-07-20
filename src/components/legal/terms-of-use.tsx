@@ -156,7 +156,7 @@ export function TermsOfUse() {
               <li>Decisões tomadas com base nos resultados de nossas calculadoras ou simuladores;</li>
               <li>Erros, imprecisões ou falhas nas ferramentas de cálculo ou simulação;</li>
               <li>Interrupções, indisponibilidade ou mau funcionamento do site, inclusive por motivos de força maior;</li>
-              <li>Conteúdo de terceiros, incluindo anúncios exibidos pelo Google AdSense;</li>
+              <li>Conteúdo de terceiros, incluindo anúncios exibidos pelo Adskeeper (MGID);</li>
               <li>Danos resultantes de acesso não autorizado a sua conta ou dados;</li>
               <li>Qualquer dano direto, indireto, incidental, especial ou consequencial decorrente do uso ou impossibilidade
               de uso do site;</li>
