@@ -5,10 +5,9 @@ import { useRouter } from 'next/navigation'
 import { toolInfo, toolHref, type ToolPage } from '@/store/app-store'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { DynamicAd } from '@/components/ads/dynamic-ad'
 import { HeroVisual } from '@/components/shared/hero-visual'
-import { 
-  TrendingUp, BarChart3, Calculator, Sparkles, 
+import {
+  TrendingUp, BarChart3, Calculator, Sparkles,
   ArrowRight, ChevronRight, Target, Coins, AlertTriangle,
   Search, Percent, Shield, ShieldCheck, BookOpen, Lightbulb, RefreshCw
 } from 'lucide-react'
@@ -63,6 +62,8 @@ const featuredArticles = [
 
 const HERO_TITLE_HTML = 'Ferramentas de <span class="gradient-neon-text">Probabilidade</span> e <span class="gradient-neon-text">Gestão de Risco</span>'
 
+const MGID_WIDGET_ID = '2056714'
+
 export function LandingPage() {
   const router = useRouter()
   const calculators = allTools.filter(t => toolInfo[t.id]?.category === 'calculators')
@@ -73,10 +74,9 @@ export function LandingPage() {
       {/* Hero */}
       <section className="relative overflow-hidden rounded-2xl border border-neon/20 min-h-[420px] sm:min-h-[480px] flex items-center">
         <HeroVisual />
-        
+
         <div className="relative z-10 w-full p-8 sm:p-12 lg:p-16">
           <div className="max-w-3xl">
-            {/* Badge */}
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-neon/10 border border-neon/20 mb-6">
               <div className="h-1.5 w-1.5 rounded-full bg-neon neon-pulse" />
               <span className="text-xs font-medium text-neon">100% Gratuito</span>
@@ -84,7 +84,7 @@ export function LandingPage() {
 
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-5 leading-tight" dangerouslySetInnerHTML={{ __html: HERO_TITLE_HTML }} />
             <p className="text-lg sm:text-xl text-muted-foreground mb-8 max-w-2xl leading-relaxed">
-              Calculadoras, simuladores e artigos educacionais gratuitos. 
+              Calculadoras, simuladores e artigos educacionais gratuitos.
               Aprenda probabilidade, estatística e gestão de risco para tomar decisões mais informadas.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
@@ -132,8 +132,10 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Ad — Header Banner (below hero) */}
-      <DynamicAd position="header_banner" className="my-6" />
+      {/* Ad — Header Banner */}
+      <div className="mgid-ad-container my-6" style={{ minHeight: 90 }}>
+        <div data-type="_mgwidget" data-widget-id={MGID_WIDGET_ID} />
+      </div>
 
       {/* Calculators */}
       <section>
@@ -169,8 +171,10 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Ad — Between Calculators and Simulators */}
-      <DynamicAd position="standard_block" className="my-8" />
+      {/* Ad — Standard Block */}
+      <div className="mgid-ad-container my-8" style={{ minHeight: 90 }}>
+        <div data-type="_mgwidget" data-widget-id={MGID_WIDGET_ID} />
+      </div>
 
       {/* Simulators */}
       <section>
@@ -245,8 +249,10 @@ export function LandingPage() {
         </Link>
       </section>
 
-      {/* Ad — Between Articles and Risk Management */}
-      <DynamicAd position="feed" className="my-8" />
+      {/* Ad — Feed */}
+      <div className="mgid-ad-container my-8" style={{ minHeight: 90 }}>
+        <div data-type="_mgwidget" data-widget-id={MGID_WIDGET_ID} />
+      </div>
 
       {/* Risk Management Principles */}
       <section>
@@ -280,8 +286,8 @@ export function LandingPage() {
                 <h3 className="text-base font-semibold text-amber-500">Aviso Importante</h3>
               </div>
               <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-                As ferramentas deste site são para fins <strong className="text-foreground">educacionais</strong>. 
-                Não garantem resultados e não devem ser interpretadas como aconselhamento financeiro. 
+                As ferramentas deste site são para fins <strong className="text-foreground">educacionais</strong>.
+                Não garantem resultados e não devem ser interpretadas como aconselhamento financeiro.
                 Toda decisão envolve risco e deve ser tomada com responsabilidade.
               </p>
               <div className="space-y-2.5">
@@ -309,7 +315,9 @@ export function LandingPage() {
       </section>
 
       {/* Mobile-only Widget */}
-      <DynamicAd position="mobile_widget" className="mb-6" mobileOnly />
+      <div className="mgid-ad-container mb-6 lg:hidden" style={{ minHeight: 90 }}>
+        <div data-type="_mgwidget" data-widget-id={MGID_WIDGET_ID} />
+      </div>
     </div>
   )
 }

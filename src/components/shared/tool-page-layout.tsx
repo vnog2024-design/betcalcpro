@@ -7,40 +7,22 @@ import { AnimatedBackground } from '@/components/shared/animated-background'
 import { CookieConsent } from '@/components/shared/cookie-consent'
 import { AgeGate } from '@/components/shared/age-gate'
 import { DisclaimerBar } from '@/components/shared/disclaimer-bar'
-import { DynamicAd } from '@/components/ads/dynamic-ad'
 import { Toaster } from '@/components/ui/toaster'
 import { ShareButtons } from '@/components/shared/share-buttons'
 import { useAppStore } from '@/store/app-store'
 import { useEffect } from 'react'
-import { useMounted } from '@/hooks/use-mounted'
 import { usePathname } from 'next/navigation'
+
+const MGID_WIDGET_ID = '2056714'
 
 export function ToolPageLayout({ children }: { children: React.ReactNode }) {
   const { sidebarOpen, setSidebarOpen, colorTheme, theme } = useAppStore()
-  const mounted = useMounted()
   const pathname = usePathname()
 
   useEffect(() => {
     document.documentElement.setAttribute('data-color-theme', colorTheme)
     document.documentElement.classList.toggle('dark', theme === 'dark')
   }, [colorTheme, theme])
-
-  // Server renders a simple shell to prevent hydration mismatch.
-  // Client immediately renders the full interactive content.
-  if (!mounted) {
-    return (
-      <div className="min-h-screen flex flex-col bg-background grid-pattern relative">
-        <div className="flex-1 flex items-center justify-center">
-          <div className="flex flex-col items-center gap-3">
-            <div className="h-8 w-8 rounded-lg gradient-neon flex items-center justify-center animate-pulse">
-              <span className="text-black font-bold text-sm">BC</span>
-            </div>
-          </div>
-        </div>
-        <Footer />
-      </div>
-    )
-  }
 
   return (
     <div className="min-h-screen flex flex-col bg-background grid-pattern relative">
@@ -59,11 +41,19 @@ export function ToolPageLayout({ children }: { children: React.ReactNode }) {
                 variant="compact"
               />
             </div>
-            <DynamicAd position="header_banner" className="mb-4" />
+            {/* Ad — Header Banner */}
+            <div className="mgid-ad-container mb-4" style={{ minHeight: 90 }}>
+              <div data-type="_mgwidget" data-widget-id={MGID_WIDGET_ID} />
+            </div>
             {children}
-            <DynamicAd position="below_article" className="my-8" />
-            <DynamicAd position="feed" className="my-8" />
-            <DynamicAd position="mobile_widget" className="mt-6" mobileOnly />
+            {/* Ad — Below content */}
+            <div className="mgid-ad-container my-8" style={{ minHeight: 90 }}>
+              <div data-type="_mgwidget" data-widget-id={MGID_WIDGET_ID} />
+            </div>
+            {/* Mobile-only Widget */}
+            <div className="mgid-ad-container mt-6 lg:hidden" style={{ minHeight: 90 }}>
+              <div data-type="_mgwidget" data-widget-id={MGID_WIDGET_ID} />
+            </div>
           </div>
         </main>
       </div>

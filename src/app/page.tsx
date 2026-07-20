@@ -13,36 +13,14 @@ import { UpdateDetector } from '@/components/shared/update-detector'
 import { Toaster } from '@/components/ui/toaster'
 import { useAppStore } from '@/store/app-store'
 import { useEffect } from 'react'
-import { useMounted } from '@/hooks/use-mounted'
 
 export default function Home() {
   const { sidebarOpen, setSidebarOpen, colorTheme, theme } = useAppStore()
-  const mounted = useMounted()
 
-  // Sync color theme to DOM
   useEffect(() => {
     document.documentElement.setAttribute('data-color-theme', colorTheme)
     document.documentElement.classList.toggle('dark', theme === 'dark')
   }, [colorTheme, theme])
-
-  // Server renders a simple shell to prevent hydration mismatch.
-  // Client immediately renders the full interactive content.
-  if (!mounted) {
-    return (
-      <div className="min-h-screen flex flex-col bg-background grid-pattern relative">
-        <div className="flex-1 flex items-center justify-center">
-          <div className="flex flex-col items-center gap-3">
-            <img
-              src="/logo-icon.png"
-              alt="BetCalc Pro"
-              className="h-8 w-8 rounded-lg object-cover animate-pulse"
-            />
-          </div>
-        </div>
-        <Footer />
-      </div>
-    )
-  }
 
   return (
     <div className="min-h-screen flex flex-col bg-background grid-pattern relative">

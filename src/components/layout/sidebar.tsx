@@ -6,7 +6,7 @@ import { useAppStore, toolInfo, toolHref, type ToolPage } from '@/store/app-stor
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
-import { DynamicAd } from '@/components/ads/dynamic-ad'
+
 import { X, Home, TrendingUp, Wallet, BarChart3, Calculator, Coins, Shield, ShieldCheck, Search, Percent, Sparkles, User, Star, ChevronRight, BookOpen, RefreshCw } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -118,7 +118,9 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                 {group.label !== 'Conta' && <Separator className="my-3 bg-border/50" />}
               </div>
             ))}
-            <DynamicAd position="sidebar" className="mt-4" minH={250} />
+            <div className="mgid-ad-container mt-4" style={{ minHeight: 250 }}>
+              <div data-type="_mgwidget" data-widget-id="2056714" />
+            </div>
           </div>
         </ScrollArea>
       </aside>
