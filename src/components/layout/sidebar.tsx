@@ -118,7 +118,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                 {group.label !== 'Conta' && <Separator className="my-3 bg-border/50" />}
               </div>
             ))}
-            <DynamicAd position="sidebar_ad" className="mt-4" minH={250} />
+            <DynamicAd position="sidebar" className="mt-4" minH={250} />
           </div>
         </ScrollArea>
       </aside>

@@ -1045,7 +1045,7 @@ export function ArticleContent({ slug }: { slug: string }) {
       {article.content}
 
       {/* Ad — Mid article (only 1 ad per article) */}
-      <DynamicAd position="in_article" className="my-6" />
+      <DynamicAd position="below_article" className="my-6" />
 
       {/* CTA — Experimente na Prática */}
       <ArticleCTA links={ctaLinks} />

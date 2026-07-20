@@ -4,27 +4,28 @@ import { useEffect, useState, useCallback, useRef } from 'react'
 import { X, Clock } from 'lucide-react'
 import { useAdConfig, triggerAdskeeperScan } from './ad-config-provider'
 
-const SESSION_KEY = 'betcalc_videowall_shown'
-const COUNTDOWN_SECONDS = 5
-
 /**
- * Videowall — tela cheia na entrada do site.
- * Usa o AdConfigProvider (slot 'videowall'). Mostra 1x por sessão.
+ * Interstitial — tela cheia entre páginas.
+ * Mostra 1x por sessão, com countdown de 5s.
  */
-export function VideowallOverlay() {
-  const slot = useAdConfig('videowall')
+export function AdInterstitial() {
+  const slot = useAdConfig('interstitial')
   const [visible, setVisible] = useState(false)
-  const [countdown, setCountdown] = useState(COUNTDOWN_SECONDS)
+  const [countdown, setCountdown] = useState(5)
   const [canClose, setCanClose] = useState(false)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   useEffect(() => {
     if (!slot) return
-    if (sessionStorage.getItem(SESSION_KEY)) return
+    if (sessionStorage.getItem('betcalc_ad_interstitial_shown')) return
 
-    // Small delay to not block initial paint
-    const t = setTimeout(() => setVisible(true), 500)
-    return () => clearTimeout(t)
+    // Mostra após 3s na página
+    const showTimer = setTimeout(() => {
+      setVisible(true)
+      sessionStorage.setItem('betcalc_ad_interstitial_shown', '1')
+    }, 3000)
+
+    return () => clearTimeout(showTimer)
   }, [slot])
 
   // Countdown
@@ -43,7 +44,7 @@ export function VideowallOverlay() {
     return () => { if (timerRef.current) clearInterval(timerRef.current) }
   }, [visible])
 
-  // Scan MGID when visible
+  // Scan MGID
   useEffect(() => {
     if (!visible || !slot) return
     triggerAdskeeperScan()
@@ -53,11 +54,10 @@ export function VideowallOverlay() {
 
   const close = useCallback(() => {
     if (!canClose) return
-    sessionStorage.setItem(SESSION_KEY, '1')
     setVisible(false)
   }, [canClose])
 
-  // Escape key
+  // Escape
   useEffect(() => {
     if (!visible || !canClose) return
     const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') close() }
@@ -69,19 +69,20 @@ export function VideowallOverlay() {
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200"
+      className="fixed inset-0 z-[9800] flex items-center justify-center bg-black/85 animate-in fade-in duration-200"
       onClick={canClose ? close : undefined}
     >
       <div
-        className="relative w-full max-w-4xl mx-4 bg-background rounded-xl overflow-hidden shadow-2xl"
+        className="relative w-full max-w-3xl mx-4 bg-card rounded-xl overflow-hidden shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Close / countdown */}
         <div className="absolute top-3 right-3 z-10">
           {canClose ? (
             <button
               onClick={close}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-black/60 hover:bg-black/80 text-white text-sm font-medium transition-colors cursor-pointer"
-              aria-label="Fechar anúncio"
+              aria-label="Fechar"
             >
               <X className="h-4 w-4" />
               Fechar
@@ -94,7 +95,8 @@ export function VideowallOverlay() {
           )}
         </div>
 
-        <div className="min-h-[300px] sm:min-h-[400px] flex items-center justify-center">
+        {/* Ad */}
+        <div className="min-h-[350px] sm:min-h-[450px] flex items-center justify-center">
           <div data-type="_mgwidget" data-widget-id={slot.widgetId} />
         </div>
       </div>

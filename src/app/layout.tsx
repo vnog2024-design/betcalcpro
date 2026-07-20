@@ -1,7 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
+import { AdConfigProvider } from "@/components/ads/ad-config-provider";
 import { VideowallOverlay } from "@/components/ads/videowall-overlay";
+import { AdNotification } from "@/components/ads/ad-notification";
+import { AdExitPopup } from "@/components/ads/ad-exit-popup";
+import { AdInterstitial } from "@/components/ads/ad-interstitial";
 import "./globals.css";
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -267,8 +271,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
-        {children}
-        <VideowallOverlay />
+        <AdConfigProvider>
+          {children}
+          <VideowallOverlay />
+          <AdNotification />
+          <AdExitPopup />
+          <AdInterstitial />
+        </AdConfigProvider>
       </body>
     </html>
   );

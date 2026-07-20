@@ -246,25 +246,25 @@ export const AdsStore = {
   },
 
   getDefaults(): AdConfigData[] {
-    // Adskeeper configuration — site ID 1104734, widget ID 2056131
-    // Same widget can be placed in multiple positions
     const preloader = '<script src="https://jsc.adskeeper.com/site/1104734.js" async></' + 'script>'
-    const placement = '<div data-type="_mgwidget" data-widget-id="2056131"></div><script>(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");</' + 'script>'
 
-    // Google policy: max 3 ads per page
-    // Ativos: header_code (preloader), banner_top, sidebar_ad, in_article, in_feed
-    // Desativados: videowall (bloqueia o site), banner_middle, banner_bottom, in_content
     return [
-      { key: 'header_code', label: 'Header (<head>) — Adskeeper preloader script', value: preloader, enabled: true },
-      { key: 'ads_txt', label: 'Ads.txt — Conteudo do arquivo ads.txt para verificacao de anunciantes (Google AdSense + Adskeeper)', value: '', enabled: false },
-      { key: 'banner_top', label: 'Banner Topo — Adskeeper widget', value: placement, enabled: true },
-      { key: 'banner_middle', label: 'Banner Meio — Adskeeper widget (desativado — politica Google)', value: placement, enabled: false },
-      { key: 'banner_bottom', label: 'Banner Rodape — Adskeeper widget (paginas legais)', value: placement, enabled: true },
-      { key: 'in_content', label: 'In-Content — Adskeeper widget (paginas de ferramentas)', value: placement, enabled: true },
-      { key: 'in_article', label: 'In-Article — Adskeeper widget', value: placement, enabled: true },
-      { key: 'sidebar_ad', label: 'Sidebar — Adskeeper widget', value: placement, enabled: true },
-      { key: 'in_feed', label: 'In-Feed — Adskeeper widget', value: placement, enabled: true },
-      { key: 'videowall_code', label: 'Videowall — Adskeeper widget (desativado — bloqueia navegação)', value: placement, enabled: false },
+      // ── Código no Header (obrigatório para MGID funcionar) ──
+      { key: 'header_code', label: 'Código no Header', value: preloader, enabled: true },
+
+      // ── Widgets Adskeeper (valor = widget ID do MGID) ──
+      { key: 'header_banner',  label: 'Widget do Cabeçalho',          value: '', enabled: false },
+      { key: 'sidebar',        label: 'Widget da Barra Lateral',      value: '', enabled: false },
+      { key: 'below_article',  label: 'Widget Embaixo do Artigo',    value: '', enabled: false },
+      { key: 'feed',           label: 'Feed',                         value: '', enabled: false },
+      { key: 'standard_block', label: 'Bloco de Anúncios Padrão',    value: '', enabled: false },
+      { key: 'mobile_widget',  label: 'Widget de Site para Celular', value: '', enabled: false },
+
+      // ── Formatos Especiais ──
+      { key: 'notification',   label: 'Notificação no Site',          value: '', enabled: false },
+      { key: 'exit_popup',     label: 'Sair do Pop-up',              value: '', enabled: false },
+      { key: 'interstitial',   label: 'Interstitial',                 value: '', enabled: false },
+      { key: 'videowall',      label: 'Videowall',                    value: '', enabled: false },
     ]
   },
 
