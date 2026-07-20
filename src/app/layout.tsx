@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
+import { VideowallOverlay } from "@/components/ads/videowall-overlay";
 import "./globals.css";
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -267,6 +268,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
         {children}
+        <VideowallOverlay />
       </body>
     </html>
   );
