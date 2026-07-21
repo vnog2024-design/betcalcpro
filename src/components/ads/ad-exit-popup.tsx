@@ -2,16 +2,18 @@
 
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { X, ExternalLink } from 'lucide-react'
-import { useAdConfig, triggerAdskeeperScan } from './ad-config-provider'
+import { useAdConfig } from './ad-config-provider'
 
 /**
- * Exit Popup — aparece quando o usuário move o mouse para fora da janela (exit intent).
- * Mostra apenas 1x por sessão.
+ * Exit Popup — aparece quando o usuário move o mouse para fora da janela.
+ * Usa o padrão Adskeeper: div + script individual via useEffect.
  */
 export function AdExitPopup() {
   const slot = useAdConfig('exit_popup')
   const [visible, setVisible] = useState(false)
   const triggered = useRef(false)
+  const widgetRef = useRef<HTMLDivElement>(null)
+  const loadedRef = useRef(false)
 
   const close = useCallback(() => {
     setVisible(false)
@@ -34,11 +36,20 @@ export function AdExitPopup() {
   }, [slot])
 
   useEffect(() => {
-    if (!visible || !slot) return
-    triggerAdskeeperScan()
-    const t = setTimeout(triggerAdskeeperScan, 1000)
-    return () => clearTimeout(t)
-  }, [visible, slot?.widgetId])
+    if (!visible || !slot || !widgetRef.current || loadedRef.current) return
+    loadedRef.current = true
+
+    const container = widgetRef.current
+
+    const widgetDiv = document.createElement('div')
+    widgetDiv.id = `adskeeper-${slot.widgetType}-${slot.widgetId}`
+    container.appendChild(widgetDiv)
+
+    const script = document.createElement('script')
+    script.src = `https://widget.adskeeper.com.br/${slot.widgetType}.js?id=${slot.widgetId}`
+    script.async = true
+    container.appendChild(script)
+  }, [visible, slot])
 
   useEffect(() => {
     if (!visible) return
@@ -75,12 +86,7 @@ export function AdExitPopup() {
         </div>
 
         <div className="min-h-[300px] sm:min-h-[350px] flex items-center justify-center">
-          <div data-type="_mgwidget" data-widget-id={slot.widgetId} />
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");`,
-            }}
-          />
+          <div ref={widgetRef} />
         </div>
 
         <div className="px-4 py-2 border-t border-border/30 flex justify-end">

@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { ArrowLeft, BookOpen, Calculator, TrendingUp, BarChart3, Lightbulb, AlertTriangle } from 'lucide-react'
-import { MgidWidget } from '@/components/ads/mgid-widget'
+import { AdskeeperWidget } from '@/components/ads/adskeeper-widget'
 import { ArticleCTA } from '@/components/shared/article-cta'
 import { ShareButtons } from '@/components/shared/share-buttons'
 
@@ -1044,8 +1044,8 @@ export function ArticleContent({ slug }: { slug: string }) {
       {/* Article content */}
       {article.content}
 
-      {/* Ad — Mid article (only 1 ad per article) */}
-      <MgidWidget widgetId="2056714" className="my-6" />
+      {/* Ad — Mid article */}
+      <AdskeeperWidget widgetType="article" widgetId="2056707" className="my-6" />
 
       {/* CTA — Experimente na Prática */}
       <ArticleCTA links={ctaLinks} />

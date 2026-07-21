@@ -2,17 +2,19 @@
 
 import { useEffect, useState, useRef } from 'react'
 import { X } from 'lucide-react'
-import { useAdConfig, triggerAdskeeperScan } from './ad-config-provider'
+import { useAdConfig } from './ad-config-provider'
 
 /**
  * Notificação no Site — barra fixa na parte inferior da tela.
- * Pode ser fechada pelo usuário (salva em sessionStorage).
+ * Usa o padrão Adskeeper: div + script individual via useEffect.
  */
 export function AdNotification() {
   const slot = useAdConfig('notification')
   const [visible, setVisible] = useState(false)
   const [height, setHeight] = useState(0)
   const barRef = useRef<HTMLDivElement>(null)
+  const widgetRef = useRef<HTMLDivElement>(null)
+  const loadedRef = useRef(false)
 
   useEffect(() => {
     if (!slot) return
@@ -33,11 +35,20 @@ export function AdNotification() {
   }, [visible])
 
   useEffect(() => {
-    if (!visible || !slot) return
-    triggerAdskeeperScan()
-    const t = setTimeout(triggerAdskeeperScan, 1000)
-    return () => clearTimeout(t)
-  }, [visible, slot?.widgetId])
+    if (!visible || !slot || !widgetRef.current || loadedRef.current) return
+    loadedRef.current = true
+
+    const container = widgetRef.current
+
+    const widgetDiv = document.createElement('div')
+    widgetDiv.id = `adskeeper-${slot.widgetType}-${slot.widgetId}`
+    container.appendChild(widgetDiv)
+
+    const script = document.createElement('script')
+    script.src = `https://widget.adskeeper.com.br/${slot.widgetType}.js?id=${slot.widgetId}`
+    script.async = true
+    container.appendChild(script)
+  }, [visible, slot])
 
   if (!visible || !slot) return null
 
@@ -60,12 +71,7 @@ export function AdNotification() {
         <X className="h-4 w-4" />
       </button>
       <div className="max-w-5xl mx-auto px-4 py-2">
-        <div data-type="_mgwidget" data-widget-id={slot.widgetId} />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");`,
-          }}
-        />
+        <div ref={widgetRef} />
       </div>
     </div>
   )

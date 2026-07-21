@@ -1,18 +1,18 @@
-import { MgidWidget } from '@/components/ads/mgid-widget'
+import { AdskeeperWidget } from '@/components/ads/adskeeper-widget'
 
 /**
- * Facade components — mapeiam para posições MGID.
- * Cada uma usa um widget ID fixo (configurável via admin).
+ * Facade components — mapeiam para posições Adskeeper.
+ * Cada uma usa o widget ID e tipo correto do painel.
  */
 
 export function AdInContent({ className = '' }: { className?: string }) {
-  return <MgidWidget widgetId="2056714" className={`my-6 ${className}`} />
+  return <AdskeeperWidget widgetType="article" widgetId="2056707" className={`my-6 ${className}`} />
 }
 
 export function AdBanner({ className = '' }: { className?: string }) {
-  return <MgidWidget widgetId="2056714" className={className} />
+  return <AdskeeperWidget widgetType="header" widgetId="2056709" className={className} />
 }
 
 export function AdSidebar({ className = '' }: { className?: string }) {
-  return <MgidWidget widgetId="2056714" className={className} minH={250} />
+  return <AdskeeperWidget widgetType="sidebar" widgetId="2056711" className={className} minH={250} />
 }

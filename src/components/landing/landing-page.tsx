@@ -6,7 +6,7 @@ import { toolInfo, toolHref, type ToolPage } from '@/store/app-store'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { HeroVisual } from '@/components/shared/hero-visual'
-import { MgidWidget } from '@/components/ads/mgid-widget'
+import { AdskeeperWidget } from '@/components/ads/adskeeper-widget'
 import {
   TrendingUp, BarChart3, Calculator, Sparkles,
   ArrowRight, ChevronRight, Target, Coins, AlertTriangle,
@@ -102,7 +102,7 @@ export function LandingPage() {
       </section>
 
       {/* Ad — Header Banner */}
-      <MgidWidget widgetId="2056714" className="my-6" />
+      <AdskeeperWidget widgetType="header" widgetId="2056709" className="my-6" />
 
       {/* Calculators */}
       <section>
@@ -134,8 +134,8 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Ad — Standard Block */}
-      <MgidWidget widgetId="2056714" className="my-8" />
+      {/* Ad — Standard Block (reutiliza feed) */}
+      <AdskeeperWidget widgetType="feed" widgetId="2056705" className="my-8" />
 
       {/* Simulators */}
       <section>
@@ -203,7 +203,7 @@ export function LandingPage() {
       </section>
 
       {/* Ad — Feed */}
-      <MgidWidget widgetId="2056714" className="my-8" />
+      <AdskeeperWidget widgetType="feed" widgetId="2056705" className="my-8" />
 
       {/* Risk Management */}
       <section>
@@ -264,7 +264,7 @@ export function LandingPage() {
       </section>
 
       {/* Mobile-only Widget */}
-      <MgidWidget widgetId="2056714" className="mb-6 lg:hidden" />
+      <AdskeeperWidget widgetType="feed" widgetId="2056705" className="mb-6 lg:hidden" />
     </div>
   )
 }

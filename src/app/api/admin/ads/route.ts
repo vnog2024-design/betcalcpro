@@ -6,17 +6,13 @@ import { NextRequest, NextResponse } from 'next/server'
  */
 
 const DEFAULT_ADS: Record<string, { value: string; enabled: boolean; label: string }> = {
-  header_code:    { value: '<script src="https://jsc.adskeeper.com/site/1104734.js" async></' + 'script>', enabled: true,  label: 'Código no Header' },
-  header_banner:  { value: '2056714', enabled: true,  label: 'Widget do Cabeçalho' },
-  sidebar:        { value: '2056714', enabled: true,  label: 'Widget da Barra Lateral' },
-  below_article:  { value: '2056714', enabled: true,  label: 'Widget Embaixo do Artigo' },
-  feed:           { value: '2056714', enabled: true,  label: 'Feed' },
-  standard_block: { value: '2056714', enabled: true,  label: 'Bloco de Anúncios Padrão' },
-  mobile_widget:  { value: '2056714', enabled: true,  label: 'Widget de Site para Celular' },
-  notification:   { value: '2056714', enabled: false, label: 'Notificação no Site' },
-  exit_popup:     { value: '2056714', enabled: false, label: 'Sair do Pop-up' },
-  interstitial:   { value: '2056714', enabled: false, label: 'Interstitial' },
-  videowall:      { value: '2056714', enabled: false, label: 'Videowall' },
+  header_banner:  { value: '2056709', enabled: true,  label: 'Widget do Cabeçalho' },
+  sidebar:        { value: '2056711', enabled: true,  label: 'Widget da Barra Lateral' },
+  below_article:  { value: '2056706', enabled: true,  label: 'Widget Embaixo do Artigo' },
+  in_article:     { value: '2056707', enabled: true,  label: 'Widget no Artigo' },
+  feed:           { value: '2056705', enabled: true,  label: 'Feed' },
+  notification:   { value: '2056713', enabled: true,  label: 'Notificação no Site' },
+  exit_popup:     { value: '2056714', enabled: true,  label: 'Sair do Pop-up' },
 }
 
 async function requireAuth(): Promise<boolean> {

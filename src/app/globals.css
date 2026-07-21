@@ -748,24 +748,12 @@ input:focus, select:focus, textarea:focus {
 }
 
 /* ── Adskeeper widget — sem limite de altura, sem clip ── */
-.mgid-ad-container {
+.adskeeper-ad-container {
   width: 100%;
   overflow: visible !important;
   max-height: none !important;
 }
 
-div[data-type="_mgwidget"] {
-  width: 100%;
-  overflow: visible !important;
-  max-height: none !important;
-}
-
-/* Garante que cards internos do MGID não sejam cortados */
-div[data-type="_mgwidget"] * {
-  overflow: visible !important;
-  max-height: none !important;
-}
-
-.mgid-ad-container > div[data-type="_mgwidget"] {
+.adskeeper-ad-container > div {
   min-height: 90px;
 }

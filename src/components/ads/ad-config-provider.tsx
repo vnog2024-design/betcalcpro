@@ -1,25 +1,31 @@
 'use client'
 
-import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react'
+import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
 
 export interface AdSlot {
   widgetId: string
+  widgetType: string
   enabled: boolean
   label: string
 }
 
-/** Defaults hardcoded — garante que os widgets renderizem na primeira paint */
+/**
+ * Configuração padrão com os IDs REAIS do painel Adskeeper.
+ * Cada posição tem seu próprio widget ID e tipo.
+ *
+ * Widgets criados no Adskeeper:
+ *   feed (2056705) / article-bottom (2056706) / article (2056707)
+ *   header (2056709) / sidebar (2056711) / notification (2056713)
+ *   pop-up-exit (2056714)
+ */
 const DEFAULT_CONFIG: Record<string, AdSlot> = {
-  header_banner:  { widgetId: '2056714', enabled: true,  label: 'Widget do Cabeçalho' },
-  sidebar:        { widgetId: '2056714', enabled: true,  label: 'Widget da Barra Lateral' },
-  below_article:  { widgetId: '2056714', enabled: true,  label: 'Widget Embaixo do Artigo' },
-  feed:           { widgetId: '2056714', enabled: true,  label: 'Feed' },
-  standard_block: { widgetId: '2056714', enabled: true,  label: 'Bloco de Anúncios Padrão' },
-  mobile_widget:  { widgetId: '2056714', enabled: true,  label: 'Widget de Site para Celular' },
-  notification:   { widgetId: '2056714', enabled: false, label: 'Notificação no Site' },
-  exit_popup:     { widgetId: '2056714', enabled: false, label: 'Sair do Pop-up' },
-  interstitial:   { widgetId: '2056714', enabled: false, label: 'Interstitial' },
-  videowall:      { widgetId: '2056714', enabled: false, label: 'Videowall' },
+  header_banner:  { widgetId: '2056709', widgetType: 'header',         enabled: true,  label: 'Widget do Cabeçalho' },
+  sidebar:        { widgetId: '2056711', widgetType: 'sidebar',       enabled: true,  label: 'Widget da Barra Lateral' },
+  below_article:  { widgetId: '2056706', widgetType: 'article-bottom', enabled: true,  label: 'Widget Embaixo do Artigo' },
+  in_article:     { widgetId: '2056707', widgetType: 'article',       enabled: true,  label: 'Widget no Artigo' },
+  feed:           { widgetId: '2056705', widgetType: 'feed',          enabled: true,  label: 'Feed' },
+  notification:   { widgetId: '2056713', widgetType: 'notification',  enabled: true,  label: 'Notificação no Site' },
+  exit_popup:     { widgetId: '2056714', widgetType: 'pop-up-exit',   enabled: true,  label: 'Sair do Pop-up' },
 }
 
 const AdConfigContext = createContext<Record<string, AdSlot>>(DEFAULT_CONFIG)
@@ -27,7 +33,6 @@ const AdConfigContext = createContext<Record<string, AdSlot>>(DEFAULT_CONFIG)
 export function AdConfigProvider({ children }: { children: ReactNode }) {
   const [config, setConfig] = useState<Record<string, AdSlot>>(DEFAULT_CONFIG)
 
-  // Busca config da API (para pegar overrides do admin)
   useEffect(() => {
     fetch('/api/ads/config')
       .then((r) => r.json())
@@ -53,14 +58,4 @@ export function useAdConfig(position: string): AdSlot | null {
   if (!slot) return null
   if (!slot.enabled || !slot.widgetId) return null
   return slot
-}
-
-/** Dispara o scan do Adskeeper — usado pelos formatos especiais (popup, interstitial, etc.) */
-export function triggerAdskeeperScan() {
-  const w = window as any
-  if (!w._mgq) w._mgq = []
-  w._mgq.push(['_mgc.load'])
-  if (w._mgc && typeof w._mgc.load === 'function') {
-    w._mgc.load()
-  }
 }

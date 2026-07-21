@@ -8,7 +8,7 @@ import { CookieConsent } from '@/components/shared/cookie-consent'
 import { AgeGate } from '@/components/shared/age-gate'
 import { DisclaimerBar } from '@/components/shared/disclaimer-bar'
 import { Toaster } from '@/components/ui/toaster'
-import { MgidWidget } from '@/components/ads/mgid-widget'
+import { AdskeeperWidget } from '@/components/ads/adskeeper-widget'
 import { useAppStore } from '@/store/app-store'
 import { useEffect } from 'react'
 
@@ -31,12 +31,12 @@ export function ToolPageLayout({ children }: { children: React.ReactNode }) {
         <main className="flex-1 min-h-0 overflow-y-auto">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             {/* Ad — Header Banner */}
-            <MgidWidget widgetId="2056714" className="mb-4" />
+            <AdskeeperWidget widgetType="header" widgetId="2056709" className="mb-4" />
             {children}
             {/* Ad — Below content */}
-            <MgidWidget widgetId="2056714" className="my-8" />
+            <AdskeeperWidget widgetType="article-bottom" widgetId="2056706" className="my-8" />
             {/* Mobile-only Widget */}
-            <MgidWidget widgetId="2056714" className="mt-6 lg:hidden" />
+            <AdskeeperWidget widgetType="feed" widgetId="2056705" className="mt-6 lg:hidden" />
           </div>
         </main>
       </div>

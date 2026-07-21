@@ -2,10 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import { AdConfigProvider } from "@/components/ads/ad-config-provider";
-import { VideowallOverlay } from "@/components/ads/videowall-overlay";
 import { AdNotification } from "@/components/ads/ad-notification";
 import { AdExitPopup } from "@/components/ads/ad-exit-popup";
-import { AdInterstitial } from "@/components/ads/ad-interstitial";
 import "./globals.css";
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -136,7 +134,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <head>
-        {/* Adskeeper/MGID preloader — obrigatório no <head> */}
+        {/* Adskeeper preloader — carrega a infraestrutura base */}
         <script src="https://jsc.adskeeper.com/site/1104734.js" async />
 
         <Script id="sw-register" strategy="afterInteractive">
@@ -247,10 +245,8 @@ export default function RootLayout({
       >
         <AdConfigProvider>
           {children}
-          <VideowallOverlay />
           <AdNotification />
           <AdExitPopup />
-          <AdInterstitial />
         </AdConfigProvider>
       </body>
     </html>

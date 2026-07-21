@@ -1,37 +1,21 @@
 import { NextResponse } from 'next/server'
 
 /**
- * Public endpoint — returns ad slot configs for the frontend.
- * Uses defaults directly (no slow storage lookup) for fast response.
- * Format: { [position]: { widgetId, enabled, label } }
+ * Public endpoint — retorna configs de ad slots para o frontend.
+ * Usa os IDs reais do painel Adskeeper com widgetType.
  */
 export async function GET() {
-  const preloader = '<script src="https://jsc.adskeeper.com/site/1104734.js" async></' + 'script>'
-
-  const defaults = [
-    { key: 'header_code',    label: 'Código no Header',             value: preloader,  enabled: true },
-    { key: 'header_banner',  label: 'Widget do Cabeçalho',          value: '2056714',  enabled: true },
-    { key: 'sidebar',        label: 'Widget da Barra Lateral',      value: '2056714',  enabled: true },
-    { key: 'below_article',  label: 'Widget Embaixo do Artigo',    value: '2056714',  enabled: true },
-    { key: 'feed',           label: 'Feed',                         value: '2056714',  enabled: true },
-    { key: 'standard_block', label: 'Bloco de Anúncios Padrão',    value: '2056714',  enabled: true },
-    { key: 'mobile_widget',  label: 'Widget de Site para Celular', value: '2056714',  enabled: true },
-    { key: 'notification',   label: 'Notificação no Site',          value: '2056714',  enabled: false },
-    { key: 'exit_popup',     label: 'Sair do Pop-up',              value: '2056714',  enabled: false },
-    { key: 'interstitial',   label: 'Interstitial',                 value: '2056714',  enabled: false },
-    { key: 'videowall',      label: 'Videowall',                    value: '2056714',  enabled: false },
-  ]
-
-  const result: Record<string, { widgetId: string; enabled: boolean; label: string }> = {}
-  for (const ad of defaults) {
-    result[ad.key] = {
-      widgetId: ad.value,
-      enabled: ad.enabled,
-      label: ad.label,
-    }
+  const defaults: Record<string, { widgetId: string; widgetType: string; enabled: boolean; label: string }> = {
+    header_banner: { widgetId: '2056709', widgetType: 'header',         enabled: true,  label: 'Widget do Cabeçalho' },
+    sidebar:       { widgetId: '2056711', widgetType: 'sidebar',       enabled: true,  label: 'Widget da Barra Lateral' },
+    below_article: { widgetId: '2056706', widgetType: 'article-bottom', enabled: true,  label: 'Widget Embaixo do Artigo' },
+    in_article:    { widgetId: '2056707', widgetType: 'article',       enabled: true,  label: 'Widget no Artigo' },
+    feed:          { widgetId: '2056705', widgetType: 'feed',          enabled: true,  label: 'Feed' },
+    notification:  { widgetId: '2056713', widgetType: 'notification',  enabled: true,  label: 'Notificação no Site' },
+    exit_popup:    { widgetId: '2056714', widgetType: 'pop-up-exit',   enabled: true,  label: 'Sair do Pop-up' },
   }
 
-  return NextResponse.json(result, {
+  return NextResponse.json(defaults, {
     headers: { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300' }
   })
 }
