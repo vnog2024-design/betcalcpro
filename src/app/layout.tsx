@@ -2,10 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import { AdConfigProvider } from "@/components/ads/ad-config-provider";
-import { AdInitializer } from "@/components/ads/ad-initializer";
-import { AdNotification } from "@/components/ads/ad-notification";
-import { AdExitPopup } from "@/components/ads/ad-exit-popup";
-import { AdVideowall } from "@/components/ads/ad-videowall";
+import { AdsWrapper } from "@/components/ads/ads-wrapper";
 import "./globals.css";
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -247,10 +244,7 @@ export default function RootLayout({
       >
         <AdConfigProvider>
           {children}
-          <AdVideowall />
-          <AdInitializer />
-          <AdNotification />
-          <AdExitPopup />
+          <AdsWrapper />
         </AdConfigProvider>
       </body>
     </html>
