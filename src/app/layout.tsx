@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import { AdConfigProvider } from "@/components/ads/ad-config-provider";
+import { AdInitializer } from "@/components/ads/ad-initializer";
 import { AdNotification } from "@/components/ads/ad-notification";
 import { AdExitPopup } from "@/components/ads/ad-exit-popup";
 import "./globals.css";
@@ -245,6 +246,7 @@ export default function RootLayout({
       >
         <AdConfigProvider>
           {children}
+          <AdInitializer />
           <AdNotification />
           <AdExitPopup />
         </AdConfigProvider>

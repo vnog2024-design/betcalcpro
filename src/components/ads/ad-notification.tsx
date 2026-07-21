@@ -5,8 +5,8 @@ import { X } from 'lucide-react'
 import { useAdConfig } from './ad-config-provider'
 
 /**
- * Notificação no Site — barra fixa na parte inferior da tela.
- * Usa o padrão MGID: div data-type="_mgwidget" + _mgc.load via useEffect.
+ * Notificacao no Site — barra fixa na parte inferior da tela.
+ * Cria o div MGID mas o trigger e chamado pelo AdInitializer.
  */
 export function AdNotification() {
   const slot = useAdConfig('notification')
@@ -14,12 +14,12 @@ export function AdNotification() {
   const [height, setHeight] = useState(0)
   const barRef = useRef<HTMLDivElement>(null)
   const widgetRef = useRef<HTMLDivElement>(null)
-  const loadedRef = useRef(false)
+  const mountedRef = useRef(false)
 
   useEffect(() => {
     if (!slot) return
     if (sessionStorage.getItem('betcalc_ad_notif_dismissed')) return
-    const t = setTimeout(() => setVisible(true), 2000)
+    const t = setTimeout(() => setVisible(true), 3000)
     return () => clearTimeout(t)
   }, [slot])
 
@@ -34,20 +34,24 @@ export function AdNotification() {
     return () => observer.disconnect()
   }, [visible])
 
+  // Cria o div do widget MGID quando visivel
   useEffect(() => {
-    if (!visible || !slot || !widgetRef.current || loadedRef.current) return
-    loadedRef.current = true
-
-    const container = widgetRef.current
+    if (!visible || !slot || !widgetRef.current || mountedRef.current) return
+    mountedRef.current = true
 
     const widgetDiv = document.createElement('div')
     widgetDiv.setAttribute('data-type', '_mgwidget')
     widgetDiv.setAttribute('data-widget-id', slot.widgetId)
-    container.appendChild(widgetDiv)
+    widgetRef.current.appendChild(widgetDiv)
 
-    const script = document.createElement('script')
-    script.textContent = `(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");`
-    container.appendChild(script)
+    // Dispara load extra para este widget que apareceu depois
+    setTimeout(() => {
+      if (typeof window !== 'undefined' && (window as Record<string, unknown>)._mgc) {
+        const script = document.createElement('script')
+        script.textContent = `(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");`
+        document.body.appendChild(script)
+      }
+    }, 500)
   }, [visible, slot])
 
   if (!visible || !slot) return null
@@ -66,7 +70,7 @@ export function AdNotification() {
       <button
         onClick={close}
         className="absolute top-1 right-2 p-1 rounded-md hover:bg-muted/50 text-muted-foreground hover:text-foreground transition-colors cursor-pointer z-10"
-        aria-label="Fechar notificação"
+        aria-label="Fechar notificacao"
       >
         <X className="h-4 w-4" />
       </button>

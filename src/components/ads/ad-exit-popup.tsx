@@ -5,15 +5,15 @@ import { X, ExternalLink } from 'lucide-react'
 import { useAdConfig } from './ad-config-provider'
 
 /**
- * Exit Popup — aparece quando o usuário move o mouse para fora da janela.
- * Usa o padrão MGID: div data-type="_mgwidget" + _mgc.load via useEffect.
+ * Exit Popup — aparece quando o usuario move o mouse para fora da janela.
+ * Cria o div MGID mas o trigger e chamado apos a div aparecer.
  */
 export function AdExitPopup() {
   const slot = useAdConfig('exit_popup')
   const [visible, setVisible] = useState(false)
   const triggered = useRef(false)
   const widgetRef = useRef<HTMLDivElement>(null)
-  const loadedRef = useRef(false)
+  const mountedRef = useRef(false)
 
   const close = useCallback(() => {
     setVisible(false)
@@ -35,20 +35,24 @@ export function AdExitPopup() {
     return () => document.removeEventListener('mouseleave', handleMouseLeave)
   }, [slot])
 
+  // Cria o div do widget MGID quando visivel
   useEffect(() => {
-    if (!visible || !slot || !widgetRef.current || loadedRef.current) return
-    loadedRef.current = true
-
-    const container = widgetRef.current
+    if (!visible || !slot || !widgetRef.current || mountedRef.current) return
+    mountedRef.current = true
 
     const widgetDiv = document.createElement('div')
     widgetDiv.setAttribute('data-type', '_mgwidget')
     widgetDiv.setAttribute('data-widget-id', slot.widgetId)
-    container.appendChild(widgetDiv)
+    widgetRef.current.appendChild(widgetDiv)
 
-    const script = document.createElement('script')
-    script.textContent = `(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");`
-    container.appendChild(script)
+    // Dispara load extra para este widget que apareceu depois
+    setTimeout(() => {
+      if (typeof window !== 'undefined' && (window as Record<string, unknown>)._mgc) {
+        const script = document.createElement('script')
+        script.textContent = `(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");`
+        document.body.appendChild(script)
+      }
+    }, 500)
   }, [visible, slot])
 
   useEffect(() => {
@@ -74,7 +78,7 @@ export function AdExitPopup() {
         <div className="flex items-center justify-between px-4 py-2 border-b border-border/30 bg-muted/20">
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <ExternalLink className="h-3.5 w-3.5" />
-            Recomendado para você
+            Recomendado para voce
           </div>
           <button
             onClick={close}
