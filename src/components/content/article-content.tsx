@@ -1045,7 +1045,7 @@ export function ArticleContent({ slug }: { slug: string }) {
       {article.content}
 
       {/* Ad — Mid article */}
-      <AdskeeperWidget widgetType="article" widgetId="2056707" className="my-6" />
+      <AdskeeperWidget widgetId="2056707" className="my-6" />
 
       {/* CTA — Experimente na Prática */}
       <ArticleCTA links={ctaLinks} />

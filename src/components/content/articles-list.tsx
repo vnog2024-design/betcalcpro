@@ -140,7 +140,7 @@ export function ArticlesList() {
               {/* In-Feed ads: a cada 4 artigos (posicoes 3, 7) — respeita politica Google */}
               {(index === 3 || index === 7) && (
                 <div className="md:col-span-2">
-                  <AdskeeperWidget widgetType="feed" widgetId="2056705" minH={120} />
+                  <AdskeeperWidget widgetId="2056705" minH={120} />
                 </div>
               )}
               <Link href={`/artigos/${article.slug}`}>

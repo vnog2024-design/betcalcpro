@@ -1,18 +1,13 @@
 import { AdskeeperWidget } from '@/components/ads/adskeeper-widget'
 
-/**
- * Facade components — mapeiam para posições Adskeeper.
- * Cada uma usa o widget ID e tipo correto do painel.
- */
-
 export function AdInContent({ className = '' }: { className?: string }) {
-  return <AdskeeperWidget widgetType="article" widgetId="2056707" className={`my-6 ${className}`} />
+  return <AdskeeperWidget widgetId="2056707" className={`my-6 ${className}`} />
 }
 
 export function AdBanner({ className = '' }: { className?: string }) {
-  return <AdskeeperWidget widgetType="header" widgetId="2056709" className={className} />
+  return <AdskeeperWidget widgetId="2056709" className={className} />
 }
 
 export function AdSidebar({ className = '' }: { className?: string }) {
-  return <AdskeeperWidget widgetType="sidebar" widgetId="2056711" className={className} minH={250} />
+  return <AdskeeperWidget widgetId="2056711" className={className} minH={250} />
 }

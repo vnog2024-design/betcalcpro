@@ -31,12 +31,12 @@ export function ToolPageLayout({ children }: { children: React.ReactNode }) {
         <main className="flex-1 min-h-0 overflow-y-auto">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             {/* Ad — Header Banner */}
-            <AdskeeperWidget widgetType="header" widgetId="2056709" className="mb-4" />
+            <AdskeeperWidget widgetId="2056709" className="mb-4" />
             {children}
             {/* Ad — Below content */}
-            <AdskeeperWidget widgetType="article-bottom" widgetId="2056706" className="my-8" />
+            <AdskeeperWidget widgetId="2056706" className="my-8" />
             {/* Mobile-only Widget */}
-            <AdskeeperWidget widgetType="feed" widgetId="2056705" className="mt-6 lg:hidden" />
+            <AdskeeperWidget widgetId="2056705" className="mt-6 lg:hidden" />
           </div>
         </main>
       </div>

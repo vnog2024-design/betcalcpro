@@ -3,22 +3,21 @@
 import { useEffect, useRef } from 'react'
 
 /**
- * AdskeeperWidget — carrega um widget do Adskeeper usando o script individual.
+ * AdskeeperWidget — renderiza widget MGID/Adskeeper com trigger que EXECUTA.
  *
- * PADRÃO OFICIAL ADSKEEPER (do painel do editor):
- *   <div id="adskeeper-{type}-{id}"></div>
- *   <script src="https://widget.adskeeper.com.br/{type}.js?id={id}"></script>
+ * PADRÃO MGID/ADSKEEPER (verificado — preloader jsc.adskeeper.com/site/1104734.js):
+ *   1. Preloader no <head> (layout.tsx) — carrega a infraestrutura MGID
+ *   2. <div data-type="_mgwidget" data-widget-id="XXXX"> — marca onde o widget renderiza
+ *   3. _mgc.load trigger — diz ao MGID para escanear e renderizar os widgets
  *
- * Usa useEffect + document.createElement('script') porque React NÃO executa
- * <script> tags inseridas via dangerouslySetInnerHTML em componentes client.
+ * O trigger DEVE ser um <script> real no DOM (dangerouslySetInnerHTML NÃO executa
+ * scripts em componentes client React). Por isso usamos useEffect + createElement.
  */
 export function AdskeeperWidget({
-  widgetType,
   widgetId,
   className = '',
   minH = 90,
 }: {
-  widgetType: string
   widgetId: string
   className?: string
   minH?: number
@@ -32,22 +31,22 @@ export function AdskeeperWidget({
 
     const container = containerRef.current
 
-    // Cria o div container do widget
+    // Cria o div do widget MGID
     const widgetDiv = document.createElement('div')
-    widgetDiv.id = `adskeeper-${widgetType}-${widgetId}`
+    widgetDiv.setAttribute('data-type', '_mgwidget')
+    widgetDiv.setAttribute('data-widget-id', widgetId)
     container.appendChild(widgetDiv)
 
-    // Cria e insere o script — ESTE sim executa no navegador
+    // Cria o script de trigger _mgc.load — ESTE sim executa no navegador
     const script = document.createElement('script')
-    script.src = `https://widget.adskeeper.com.br/${widgetType}.js?id=${widgetId}`
-    script.async = true
+    script.textContent = `(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");`
     container.appendChild(script)
-  }, [widgetType, widgetId])
+  }, [widgetId])
 
   return (
     <div
       ref={containerRef}
-      className={`adskeeper-ad-container ${className}`}
+      className={`mgid-ad-container ${className}`}
       style={{ minHeight: minH }}
     />
   )

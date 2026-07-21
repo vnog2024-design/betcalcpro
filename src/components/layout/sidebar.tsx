@@ -119,7 +119,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                 {group.label !== 'Conta' && <Separator className="my-3 bg-border/50" />}
               </div>
             ))}
-            <AdskeeperWidget widgetType="sidebar" widgetId="2056711" className="mt-4" minH={250} />
+            <AdskeeperWidget widgetId="2056711" className="mt-4" minH={250} />
           </div>
         </ScrollArea>
       </aside>

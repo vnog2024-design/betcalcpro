@@ -12,8 +12,7 @@ import { Badge } from '@/components/ui/badge'
 import { Textarea } from '@/components/ui/textarea'
 import {
   Save, Loader2, CheckCircle2, Code, Monitor, RectangleVertical,
-  List, Film, Bell, ArrowRightLeft, Maximize2, LayoutGrid,
-  PanelTop, Rows3, Columns, Smartphone, Newspaper, Rss, Megaphone,
+  Rss, Bell, ArrowRightLeft, Megaphone,
 } from 'lucide-react'
 
 /* ───────────── Types ───────────── */
@@ -26,7 +25,7 @@ interface AdConfigItem {
 
 type AdConfigs = Record<string, AdConfigItem>
 
-/* ───────────── Slot Definitions (100% Adskeeper-compatible) ───────────── */
+/* ───────────── Slot Definitions —-widgets reais do Adskeeper ───────────── */
 
 interface SlotDef {
   key: string
@@ -35,35 +34,28 @@ interface SlotDef {
   icon: React.ElementType
   color: string
   bg: string
-  group: 'widget' | 'special' | 'system'
+  group: 'widget' | 'special'
   placeholder: string
 }
 
 const SLOTS: SlotDef[] = [
-  // Widgets
-  { key: 'header_banner',  label: 'Widget do Cabeçalho',          description: 'Banner no topo da área de conteúdo, antes das ferramentas.',          icon: PanelTop,        color: 'text-blue-400',    bg: 'bg-blue-500/10',    group: 'widget',  placeholder: 'Ex: 2056131' },
-  { key: 'sidebar',        label: 'Widget da Barra Lateral',      description: 'Widget na barra lateral de navegação, visível em todas as páginas.',   icon: RectangleVertical, color: 'text-purple-400',  bg: 'bg-purple-500/10',  group: 'widget',  placeholder: 'Ex: 2056238' },
-  { key: 'below_article',  label: 'Widget Embaixo do Artigo',    description: 'Aparece após o conteúdo de cada artigo educacional.',                   icon: Newspaper,        color: 'text-green-400',   bg: 'bg-green-500/10',   group: 'widget',  placeholder: 'Ex: 2056236' },
-  { key: 'feed',           label: 'Feed',                         description: 'Anúncios nativos entre os cards de conteúdo (calculadoras, artigos).',  icon: Rss,             color: 'text-cyan-400',    bg: 'bg-cyan-500/10',    group: 'widget',  placeholder: 'Ex: 2056237' },
-  { key: 'standard_block', label: 'Bloco de Anúncios Padrão',    description: 'Bloco de exibição padrão entre seções do site.',                        icon: LayoutGrid,      color: 'text-amber-400',   bg: 'bg-amber-500/10',   group: 'widget',  placeholder: 'Ex: 2056131' },
-  { key: 'mobile_widget',  label: 'Widget de Site para Celular', description: 'Widget otimizado para dispositivos móveis, visível apenas no mobile.',  icon: Smartphone,       color: 'text-pink-400',    bg: 'bg-pink-500/10',    group: 'widget',  placeholder: 'Ex: 2056209' },
+  // Widgets normais
+  { key: 'header_banner',  label: 'Widget do Cabeçalho',       description: 'Banner no topo da área de conteúdo, antes das ferramentas.',          icon: Monitor,          color: 'text-blue-400',   bg: 'bg-blue-500/10',   group: 'widget',  placeholder: '2056709' },
+  { key: 'sidebar',        label: 'Widget da Barra Lateral',     description: 'Widget na barra lateral de navegação, visível em todas as páginas.',   icon: RectangleVertical, color: 'text-purple-400', bg: 'bg-purple-500/10', group: 'widget',  placeholder: '2056711' },
+  { key: 'below_article',  label: 'Widget Embaixo do Artigo',   description: 'Aparece após o conteúdo de cada artigo educacional.',                   icon: Rss,              color: 'text-green-400',  bg: 'bg-green-500/10',  group: 'widget',  placeholder: '2056706' },
+  { key: 'in_article',     label: 'Widget no Artigo',           description: 'Aparece no meio do conteúdo do artigo.',                                icon: Rss,              color: 'text-cyan-400',   bg: 'bg-cyan-500/10',   group: 'widget',  placeholder: '2056707' },
+  { key: 'feed',           label: 'Feed',                        description: 'Anúncios nativos entre os cards de conteúdo (calculadoras, artigos).',  icon: Rss,              color: 'text-cyan-400',   bg: 'bg-cyan-500/10',   group: 'widget',  placeholder: '2056705' },
 
   // Formatos Especiais
-  { key: 'notification',   label: 'Notificação no Site',          description: 'Barra fixa na parte inferior da tela. Fecha com um clique (1x por sessão).', icon: Bell,            color: 'text-orange-400',  bg: 'bg-orange-500/10',  group: 'special', placeholder: 'Ex: 2056200' },
-  { key: 'exit_popup',     label: 'Sair do Pop-up',              description: 'Popup que aparece quando o usuário move o mouse para sair do site (exit intent).', icon: ArrowRightLeft, color: 'text-red-400',     bg: 'bg-red-500/10',     group: 'special', placeholder: 'Ex: 2056201' },
-  { key: 'interstitial',   label: 'Interstitial',                 description: 'Tela cheia entre páginas, com countdown de 5 segundos (1x por sessão).', icon: Maximize2,       color: 'text-yellow-400',  bg: 'bg-yellow-500/10',  group: 'special', placeholder: 'Ex: 2056202' },
-  { key: 'videowall',      label: 'Videowall',                    description: 'Tela cheia na entrada do site, com countdown de 5 segundos (1x por sessão).', icon: Film,            color: 'text-rose-400',    bg: 'bg-rose-500/10',    group: 'special', placeholder: 'Ex: 2056203' },
+  { key: 'notification',   label: 'Notificação no Site',        description: 'Barra fixa na parte inferior da tela. Fecha com um clique (1x por sessão).', icon: Bell,             color: 'text-orange-400', bg: 'bg-orange-500/10', group: 'special', placeholder: '2056713' },
+  { key: 'exit_popup',     label: 'Sair do Pop-up',             description: 'Popup que aparece quando o usuário move o mouse para sair do site (exit intent).', icon: ArrowRightLeft,  color: 'text-red-400',    bg: 'bg-red-500/10',    group: 'special', placeholder: '2056714' },
 ]
 
-const HEADER_SLOT: SlotDef = {
+const HEADER_SLOT = {
   key: 'header_code',
   label: 'Código no Header',
   description: 'Script de carregamento do Adskeeper (obrigatório para todos os widgets funcionarem).',
-  icon: Code,
-  color: 'text-gray-400',
-  bg: 'bg-gray-500/10',
-  group: 'system',
-  placeholder: '<script src="https://jsc.adskeeper.com/site/SEU_SITE_ID.js" async></script>',
+  placeholder: '<script src="https://jsc.adskeeper.com/site/1104734.js" async></script>',
 }
 
 /* ───────────── Component ───────────── */
@@ -144,7 +136,7 @@ export default function AdminAnunciosPage() {
           <div>
             <h1 className="text-2xl font-bold text-white">Anúncios</h1>
             <p className="text-gray-400 mt-1">
-              {enabledCount}/{totalCount} posições ativas — Formatos Adskeeper
+              {enabledCount}/{totalCount} posições ativas — Adskeeper (MGID)
             </p>
           </div>
           <Button
@@ -178,7 +170,7 @@ export default function AdminAnunciosPage() {
           </div>
         ) : (
           <>
-            {/* ── Código no Header ── */}
+            {/* Código no Header */}
             <section>
               <div className="flex items-center gap-2 mb-4">
                 <Code className="h-5 w-5 text-gray-400" />
@@ -190,9 +182,7 @@ export default function AdminAnunciosPage() {
               <Card className="border-gray-800 bg-gray-900/50">
                 <CardContent className="p-5 space-y-4">
                   <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-gray-300">{HEADER_SLOT.description}</p>
-                    </div>
+                    <p className="text-sm text-gray-300">{HEADER_SLOT.description}</p>
                     <Switch
                       checked={configs.header_code?.enabled ?? false}
                       onCheckedChange={() => toggleEnabled('header_code')}
@@ -211,12 +201,12 @@ export default function AdminAnunciosPage() {
 
             <Separator className="bg-gray-800" />
 
-            {/* ── Widgets Adskeeper ── */}
+            {/* Widgets Adskeeper */}
             <section>
               <div className="flex items-center gap-2 mb-4">
                 <Monitor className="h-5 w-5 text-blue-400" />
                 <h2 className="text-lg font-semibold text-white">Widgets Adskeeper</h2>
-                <span className="text-xs text-gray-500">Cole o Widget ID de cada posição</span>
+                <span className="text-xs text-gray-500">Widget ID de cada posição</span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {widgetSlots.map((slot) => (
@@ -234,12 +224,12 @@ export default function AdminAnunciosPage() {
 
             <Separator className="bg-gray-800" />
 
-            {/* ── Formatos Especiais ── */}
+            {/* Formatos Especiais */}
             <section>
               <div className="flex items-center gap-2 mb-4">
-                <Film className="h-5 w-5 text-rose-400" />
+                <Bell className="h-5 w-5 text-orange-400" />
                 <h2 className="text-lg font-semibold text-white">Formatos Especiais</h2>
-                <span className="text-xs text-gray-500">Mostram 1x por sessão</span>
+                <span className="text-xs text-gray-500">1x por sessão</span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {specialSlots.map((slot) => (
@@ -257,20 +247,20 @@ export default function AdminAnunciosPage() {
 
             <Separator className="bg-gray-800" />
 
-            {/* ── Info ── */}
+            {/* Info */}
             <Card className="border-gray-800 bg-gray-900/50">
               <CardContent className="p-5 space-y-3">
                 <div className="flex items-start gap-3">
                   <Megaphone className="h-5 w-5 text-neon mt-0.5 shrink-0" />
                   <div className="space-y-2 text-sm text-gray-400">
                     <p>
-                      <strong className="text-gray-300">Como configurar:</strong> Acesse o painel do Adskeeper, crie um widget para cada formato desejado e cole o <strong className="text-white">Widget ID</strong> (número) no campo correspondente acima.
+                      <strong className="text-gray-300">Como funciona:</strong> O preloader do Adskeeper é carregado no header. Cada widget usa um <code className="text-neon bg-neon/10 px-1 rounded">div data-type="_mgwidget"</code> com o Widget ID correspondente, seguido de um trigger <code className="text-neon bg-neon/10 px-1 rounded">_mgc.load</code>.
                     </p>
                     <p>
-                      <strong className="text-gray-300">Política Google:</strong> Máximo de 3 anúncios por página. Os widgets desativados não contam.
+                      <strong className="text-gray-300">Painel Adskeeper:</strong> Acesse <a href="https://dashboard.adskeeper.com" target="_blank" className="text-neon hover:underline">dashboard.adskeeper.com</a> para ver métricas e criar novos widgets.
                     </p>
                     <p>
-                      <strong className="text-gray-300">Formatos especiais</strong> (Notificação, Pop-up, Interstitial, Videowall) aparecem apenas 1 vez por sessão e não afetam a contagem por página.
+                      <strong className="text-gray-300">Widget ID:</strong> É o número identificador de cada widget (ex: 2056705). Cole apenas o número no campo acima.
                     </p>
                   </div>
                 </div>

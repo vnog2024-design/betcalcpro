@@ -6,7 +6,7 @@ import { useAdConfig } from './ad-config-provider'
 
 /**
  * Notificação no Site — barra fixa na parte inferior da tela.
- * Usa o padrão Adskeeper: div + script individual via useEffect.
+ * Usa o padrão MGID: div data-type="_mgwidget" + _mgc.load via useEffect.
  */
 export function AdNotification() {
   const slot = useAdConfig('notification')
@@ -41,12 +41,12 @@ export function AdNotification() {
     const container = widgetRef.current
 
     const widgetDiv = document.createElement('div')
-    widgetDiv.id = `adskeeper-${slot.widgetType}-${slot.widgetId}`
+    widgetDiv.setAttribute('data-type', '_mgwidget')
+    widgetDiv.setAttribute('data-widget-id', slot.widgetId)
     container.appendChild(widgetDiv)
 
     const script = document.createElement('script')
-    script.src = `https://widget.adskeeper.com.br/${slot.widgetType}.js?id=${slot.widgetId}`
-    script.async = true
+    script.textContent = `(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");`
     container.appendChild(script)
   }, [visible, slot])
 

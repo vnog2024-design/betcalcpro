@@ -747,13 +747,20 @@ input:focus, select:focus, textarea:focus {
   50% { filter: brightness(1.05); }
 }
 
-/* ── Adskeeper widget — sem limite de altura, sem clip ── */
-.adskeeper-ad-container {
+/* ── MGID/Adskeeper widget — sem limite de altura, sem clip ── */
+.mgid-ad-container {
   width: 100%;
   overflow: visible !important;
   max-height: none !important;
 }
 
-.adskeeper-ad-container > div {
-  min-height: 90px;
+div[data-type="_mgwidget"] {
+  width: 100%;
+  overflow: visible !important;
+  max-height: none !important;
+}
+
+div[data-type="_mgwidget"] * {
+  overflow: visible !important;
+  max-height: none !important;
 }

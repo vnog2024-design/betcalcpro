@@ -6,7 +6,7 @@ import { useAdConfig } from './ad-config-provider'
 
 /**
  * Exit Popup — aparece quando o usuário move o mouse para fora da janela.
- * Usa o padrão Adskeeper: div + script individual via useEffect.
+ * Usa o padrão MGID: div data-type="_mgwidget" + _mgc.load via useEffect.
  */
 export function AdExitPopup() {
   const slot = useAdConfig('exit_popup')
@@ -42,12 +42,12 @@ export function AdExitPopup() {
     const container = widgetRef.current
 
     const widgetDiv = document.createElement('div')
-    widgetDiv.id = `adskeeper-${slot.widgetType}-${slot.widgetId}`
+    widgetDiv.setAttribute('data-type', '_mgwidget')
+    widgetDiv.setAttribute('data-widget-id', slot.widgetId)
     container.appendChild(widgetDiv)
 
     const script = document.createElement('script')
-    script.src = `https://widget.adskeeper.com.br/${slot.widgetType}.js?id=${slot.widgetId}`
-    script.async = true
+    script.textContent = `(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");`
     container.appendChild(script)
   }, [visible, slot])
 

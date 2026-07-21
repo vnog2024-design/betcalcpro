@@ -102,7 +102,7 @@ export function LandingPage() {
       </section>
 
       {/* Ad — Header Banner */}
-      <AdskeeperWidget widgetType="header" widgetId="2056709" className="my-6" />
+      <AdskeeperWidget widgetId="2056709" className="my-6" />
 
       {/* Calculators */}
       <section>
@@ -135,7 +135,7 @@ export function LandingPage() {
       </section>
 
       {/* Ad — Standard Block (reutiliza feed) */}
-      <AdskeeperWidget widgetType="feed" widgetId="2056705" className="my-8" />
+      <AdskeeperWidget widgetId="2056705" className="my-8" />
 
       {/* Simulators */}
       <section>
@@ -203,7 +203,7 @@ export function LandingPage() {
       </section>
 
       {/* Ad — Feed */}
-      <AdskeeperWidget widgetType="feed" widgetId="2056705" className="my-8" />
+      <AdskeeperWidget widgetId="2056705" className="my-8" />
 
       {/* Risk Management */}
       <section>
@@ -264,7 +264,7 @@ export function LandingPage() {
       </section>
 
       {/* Mobile-only Widget */}
-      <AdskeeperWidget widgetType="feed" widgetId="2056705" className="mb-6 lg:hidden" />
+      <AdskeeperWidget widgetId="2056705" className="mb-6 lg:hidden" />
     </div>
   )
 }
