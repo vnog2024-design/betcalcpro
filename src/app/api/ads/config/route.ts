@@ -9,6 +9,7 @@ const REAL_DEFAULTS = [
   { key: 'feed',           value: '2056705', label: 'Feed',                         enabled: true },
   { key: 'notification',   value: '2056713', label: 'Notificacao no Site',          enabled: true },
   { key: 'exit_popup',     value: '2056714', label: 'Sair do Pop-up',              enabled: true },
+  { key: 'videowall',      value: '2057343', label: 'Videowall',                   enabled: true },
 ]
 
 /** Public endpoint — reads ad config from database (admin-managed).

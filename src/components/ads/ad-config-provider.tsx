@@ -14,7 +14,7 @@ export interface AdSlot {
  * Widgets criados no Adskeeper (verificados no dashboard):
  *   feed (2056705) / article-bottom (2056706) / article (2056707)
  *   header (2056709) / sidebar (2056711) / notification (2056713)
- *   pop-up-exit (2056714)
+ *   pop-up-exit (2056714) / videowall (2057343)
  */
 const DEFAULT_CONFIG: Record<string, AdSlot> = {
   header_banner:  { widgetId: '2056709', enabled: true,  label: 'Widget do Cabeçalho' },
@@ -24,6 +24,7 @@ const DEFAULT_CONFIG: Record<string, AdSlot> = {
   feed:           { widgetId: '2056705', enabled: true,  label: 'Feed' },
   notification:   { widgetId: '2056713', enabled: true,  label: 'Notificação no Site' },
   exit_popup:     { widgetId: '2056714', enabled: true,  label: 'Sair do Pop-up' },
+  videowall:      { widgetId: '2057343', enabled: true,  label: 'Videowall' },
 }
 
 const AdConfigContext = createContext<Record<string, AdSlot>>(DEFAULT_CONFIG)

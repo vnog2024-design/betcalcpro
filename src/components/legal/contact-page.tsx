@@ -20,7 +20,7 @@ import {
   Building2,
   AlertCircle,
 } from 'lucide-react'
-import { AdBanner } from '@/components/shared/ad-banner'
+// AdBanner removido — paginas legais nao devem exibir anuncios
 
 export function ContactPage() {
   const { toast } = useToast()
@@ -380,7 +380,6 @@ export function ContactPage() {
         </CardContent>
       </Card>
 
-      <AdBanner className="mt-6" />
 
       <div className="text-center space-y-2">
         <p className="text-xs text-muted-foreground">

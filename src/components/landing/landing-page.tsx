@@ -134,8 +134,8 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Ad — Standard Block (reutiliza feed) */}
-      <AdskeeperWidget widgetId="2056705" className="my-8" />
+      {/* Ad — After Calculators */}
+      <AdskeeperWidget widgetId="2056706" className="my-8" />
 
       {/* Simulators */}
       <section>
@@ -202,8 +202,8 @@ export function LandingPage() {
         </Link>
       </section>
 
-      {/* Ad — Feed */}
-      <AdskeeperWidget widgetId="2056705" className="my-8" />
+      {/* Ad — After Articles */}
+      <AdskeeperWidget widgetId="2056706" className="my-8" />
 
       {/* Risk Management */}
       <section>

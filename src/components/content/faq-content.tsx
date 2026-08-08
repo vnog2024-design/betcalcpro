@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
-import { AdBanner } from '@/components/shared/ad-banner'
+// AdBanner removido — paginas informativas nao devem exibir anuncios
 import { HelpCircle, Calculator, Shield, BookOpen, Smartphone, CreditCard, BarChart3, AlertTriangle } from 'lucide-react'
 
 const faqSections = [
@@ -159,8 +159,7 @@ export function FAQContent() {
         </div>
       ))}
 
-      {/* Ad */}
-      <AdBanner className="mt-6" />
+
 
       {/* Still have questions */}
       <div className="rounded-xl border border-neon/20 bg-neon/5 p-6 text-center">

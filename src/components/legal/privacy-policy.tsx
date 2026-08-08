@@ -16,7 +16,7 @@ import {
   Globe,
   AlertTriangle,
 } from 'lucide-react'
-import { AdBanner } from '@/components/shared/ad-banner'
+// AdBanner removido — paginas legais nao devem exibir anuncios
 
 export function PrivacyPolicy() {
   return (
@@ -417,8 +417,7 @@ export function PrivacyPolicy() {
         </CardContent>
       </Card>
 
-      {/* Ad */}
-      <AdBanner className="mt-6" />
+
     </div>
   )
 }

@@ -17,7 +17,7 @@ import {
   Brain,
   Scale,
 } from 'lucide-react'
-import { AdBanner } from '@/components/shared/ad-banner'
+// AdBanner removido — paginas legais nao devem exibir anuncios
 
 export function ResponsibleGaming() {
   return (
@@ -360,8 +360,7 @@ export function ResponsibleGaming() {
         </CardContent>
       </Card>
 
-      {/* Ad */}
-      <AdBanner className="mt-6" />
+
     </div>
   )
 }
