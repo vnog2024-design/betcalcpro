@@ -1,9 +1,10 @@
 import bcrypt from 'bcryptjs'
 import { SignJWT, jwtVerify } from 'jose'
 
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || 'betcalc-admin-secret-key-2024-change-in-production'
-)
+if (!process.env.JWT_SECRET) {
+  throw new Error('JWT_SECRET environment variable is required. Generate one with: node -e "console.log(require(\'crypto\').randomBytes(32).toString(\'hex\'))"')
+}
+const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET)
 
 export async function hashPassword(password: string): Promise<string> {
   return bcrypt.hash(password, 12)
@@ -37,7 +38,6 @@ export function getSessionCookieName(): string {
 // Admin credentials from environment (works on Vercel without DB)
 export function getAdminCredentials(): { username: string; passwordHash: string } {
   const username = process.env.ADMIN_USERNAME || 'admin'
-  // In production, use the hash from env. In dev, use default.
   const passwordHash = process.env.ADMIN_PASSWORD_HASH || ''
   return { username, passwordHash }
 }
@@ -61,14 +61,14 @@ export async function verifyAdminLogin(username: string, password: string): Prom
       return verifyPassword(password, data.hash)
     }
   } catch {
-    // DB unavailable
+    // Store unavailable
   }
   
-  // 3. Fallback: default password for first setup
-  return password === 'admin123'
+  // No valid hash found — reject login (no more default password fallback)
+  return false
 }
 
-// Check if default password is still in use
+// Check if no custom password has been configured yet
 export function isUsingDefaultPassword(): boolean {
   return !process.env.ADMIN_PASSWORD_HASH
 }

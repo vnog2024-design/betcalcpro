@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { verifyAdminLogin, createToken, getSessionCookieName, isUsingDefaultPassword } from '@/lib/auth'
+import { verifyAdminLogin, createToken, getSessionCookieName } from '@/lib/auth'
 
 export const runtime = 'nodejs'
 export const maxDuration = 10
@@ -22,7 +22,6 @@ export async function POST(request: NextRequest) {
     const response = NextResponse.json({
       success: true,
       username,
-      defaultPassword: isUsingDefaultPassword(),
     })
 
     response.cookies.set(getSessionCookieName(), token, {
@@ -36,11 +35,9 @@ export async function POST(request: NextRequest) {
     return response
   } catch (error) {
     // Log the FULL error for debugging
-    const errMsg = error instanceof Error ? error.message : String(error)
-    const errStack = error instanceof Error ? error.stack : ''
-    console.error('[LOGIN ERROR]', errMsg, errStack)
+    console.error('[LOGIN ERROR]')
     return NextResponse.json(
-      { error: 'Erro interno do servidor', debug: errMsg },
+      { error: 'Erro interno do servidor' },
       { status: 500 }
     )
   }
