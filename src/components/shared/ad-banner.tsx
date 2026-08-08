@@ -4,8 +4,9 @@ export function AdInContent({ className = '' }: { className?: string }) {
   return <AdskeeperWidget widgetId="2056707" className={`my-6 ${className}`} />
 }
 
+/** Header/banner — above the fold, no lazy loading */
 export function AdBanner({ className = '' }: { className?: string }) {
-  return <AdskeeperWidget widgetId="2056709" className={className} />
+  return <AdskeeperWidget widgetId="2056709" className={className} lazy={false} />
 }
 
 export function AdSidebar({ className = '' }: { className?: string }) {

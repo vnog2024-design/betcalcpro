@@ -8,9 +8,10 @@ import { AdExitPopup } from '@/components/ads/ad-exit-popup'
 import { AdVideowall } from '@/components/ads/ad-videowall'
 
 /**
- * AdsWrapper — renderiza todos os componentes de anuncio EXCETO nas rotas de admin.
- * O admin layout do Next.js aninha dentro do root layout, entao precisamos
- * verificar o pathname para decidir se mostra anuncios ou nao.
+ * AdsWrapper — renders all ad components.
+ * - Admin routes: no ads at all
+ * - Non-admin: ads only load AFTER cookie consent is given
+ * - AdInitializer handles consent check and dynamic preloader loading
  */
 export function AdsWrapper({ children }: { children?: ReactNode }) {
   const pathname = usePathname()
@@ -22,8 +23,8 @@ export function AdsWrapper({ children }: { children?: ReactNode }) {
 
   return (
     <>
-      <AdVideowall />
       <AdInitializer />
+      <AdVideowall />
       <AdNotification />
       <AdExitPopup />
     </>

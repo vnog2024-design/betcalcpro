@@ -102,7 +102,7 @@ export function LandingPage() {
       </section>
 
       {/* Ad — Header Banner */}
-      <AdskeeperWidget widgetId="2056709" className="my-6" />
+      <AdskeeperWidget widgetId="2056709" className="my-6" lazy={false} />
 
       {/* Calculators */}
       <section>

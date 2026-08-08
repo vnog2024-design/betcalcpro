@@ -133,8 +133,6 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <head>
-        {/* Adskeeper preloader — carrega a infraestrutura base */}
-        <script src="https://jsc.adskeeper.com/site/1104734.js" async />
 
         <Script id="sw-register" strategy="afterInteractive">
           {`

@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { X, ExternalLink } from 'lucide-react'
 import { useAdConfig } from './ad-config-provider'
+import { triggerLateLoad } from './ad-initializer'
 
 /**
  * Exit Popup — aparece quando o usuario move o mouse para fora da janela.
@@ -45,14 +46,8 @@ export function AdExitPopup() {
     widgetDiv.setAttribute('data-widget-id', slot.widgetId)
     widgetRef.current.appendChild(widgetDiv)
 
-    // Dispara load extra para este widget que apareceu depois
-    setTimeout(() => {
-      if (typeof window !== 'undefined' && (window as Record<string, unknown>)._mgc) {
-        const script = document.createElement('script')
-        script.textContent = `(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");`
-        document.body.appendChild(script)
-      }
-    }, 500)
+    // Dispara load para este widget que apareceu depois do trigger inicial
+    setTimeout(() => triggerLateLoad(), 500)
   }, [visible, slot])
 
   useEffect(() => {

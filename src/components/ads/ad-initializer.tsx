@@ -1,59 +1,133 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 /**
- * AdInitializer — chama _mgc.load UMA VEZ após tudo estar pronto.
+ * AdInitializer — centralized ad loading with consent, adblock detection, and single trigger.
  *
- * O MGID SDK funciona assim:
- * - O preloader (jsc.adskeeper.com/site/1104734.js) cria _mgc e _mgq
- * - Quando _mgc.load é chamado, o SDK escaneia o DOM inteiro
- *   procurando por divs com data-type="_mgwidget"
- * - Ele então renderiza os anúncios em cada div encontrado
- *
- * Por isso, o trigger deve ser chamado UMA ÚNICA VEZ, depois que:
- * 1. O preloader já carregou e inicializou _mgc
- * 2. Todos os widgets divs já estão no DOM
- *
- * Chamamos com um delay de 2s para garantir ambas as condições.
+ * 1. Checks cookie consent before loading Adskeeper
+ * 2. Loads the Adskeeper preloader dynamically (not in <head>)
+ * 3. Fires _mgc.load exactly ONCE for all visible widgets
+ * 4. Provides triggerMgcLoad() for late-appearing widgets (notification, exit popup)
+ * 5. Detects adblockers and exposes status
  */
+
+let globalTriggered = false
+let preloadPromise: Promise<void> | null = null
+let adblockDetected = false
+
+/** Check if user has accepted ad consent (LGPD) */
+function hasAdConsent(): boolean {
+  if (typeof window === 'undefined') return false
+  try {
+    const raw = localStorage.getItem('cookie-consent')
+    if (!raw) return false
+    const data = JSON.parse(raw)
+    return data.accepted === true
+  } catch {
+    return false
+  }
+}
+
+/** Load the Adskeeper preloader script (only once) */
+function loadPreloader(): Promise<void> {
+  if (preloadPromise) return preloadPromise
+
+  preloadPromise = new Promise((resolve) => {
+    // Check if already loaded
+    if ((window as Record<string, unknown>)._mgc) {
+      resolve()
+      return
+    }
+
+    const script = document.createElement('script')
+    script.src = 'https://jsc.adskeeper.com/site/1104734.js'
+    script.async = true
+    script.onload = () => resolve()
+    script.onerror = () => {
+      adblockDetected = true
+      resolve()
+    }
+    document.head.appendChild(script)
+
+    // Timeout: if script doesn't load in 8s, assume blocked
+    setTimeout(() => {
+      if (!(window as Record<string, unknown>)._mgc) {
+        adblockDetected = true
+      }
+      resolve()
+    }, 8000)
+  })
+
+  return preloadPromise
+}
+
+/** Fire _mgc.load — the single trigger that makes MGID scan and render widgets */
+async function triggerMgcLoad(): Promise<void> {
+  if (typeof window === 'undefined') return
+  if (!(window as Record<string, unknown>)._mgc) return
+
+  const script = document.createElement('script')
+  script.textContent = `(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");`
+  document.body.appendChild(script)
+}
+
+export function useAdConsent() {
+  const [consent, setConsent] = useState(false)
+  useEffect(() => {
+    setConsent(hasAdConsent())
+
+    // Listen for consent changes (cookie banner sets localStorage)
+    const handler = () => setConsent(hasAdConsent())
+    window.addEventListener('storage', handler)
+    const interval = setInterval(() => setConsent(hasAdConsent()), 2000)
+    return () => {
+      window.removeEventListener('storage', handler)
+      clearInterval(interval)
+    }
+  }, [])
+  return consent
+}
+
+export function isAdblocked(): boolean {
+  return adblockDetected
+}
+
 export function AdInitializer() {
   const triggeredRef = useRef(false)
 
   useEffect(() => {
     if (triggeredRef.current) return
 
-    // Função que dispara o load do MGID
-    const triggerLoad = () => {
-      if (triggeredRef.current) return
-      triggeredRef.current = true
+    if (!hasAdConsent()) return
 
-      // Verifica se o _mgc existe (preloader carregou)
-      if (typeof window !== 'undefined' && (window as Record<string, unknown>)._mgc) {
-        const script = document.createElement('script')
-        script.textContent = `(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");`
-        document.body.appendChild(script)
-        console.log('[BetCalc Ads] _mgc.load triggered')
-      } else {
-        console.warn('[BetCalc Ads] _mgc not found, preloader may not have loaded')
+    triggeredRef.current = true
+
+    const init = async () => {
+      await loadPreloader()
+
+      // Wait a bit for React to finish rendering widget divs
+      await new Promise(r => setTimeout(r, 500))
+
+      if (!globalTriggered) {
+        globalTriggered = true
+        await triggerMgcLoad()
       }
     }
 
-    // Espera 2 segundos para garantir que o preloader e React terminaram
-    const timer = setTimeout(triggerLoad, 2000)
-
-    // Fallback: se depois de 5s ainda não disparou (preloader demorou), tenta de novo
-    const fallback = setTimeout(() => {
-      if (!triggeredRef.current) {
-        triggerLoad()
-      }
-    }, 5000)
-
-    return () => {
-      clearTimeout(timer)
-      clearTimeout(fallback)
-    }
+    init()
   }, [])
 
-  return null // Componente invisível
+  return null
+}
+
+/** Trigger _mgc.load for late-appearing widgets (notification, exit popup, lazy-loaded) */
+export async function triggerLateLoad() {
+  await loadPreloader()
+  // Small delay to ensure the widget div is in the DOM
+  await new Promise(r => setTimeout(r, 300))
+  if (!globalTriggered) {
+    globalTriggered = true
+  }
+  await triggerMgcLoad()
 }

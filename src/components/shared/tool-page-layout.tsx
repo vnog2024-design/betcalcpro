@@ -31,7 +31,7 @@ export function ToolPageLayout({ children }: { children: React.ReactNode }) {
         <main className="flex-1 min-h-0 overflow-y-auto">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             {/* Ad — Header Banner */}
-            <AdskeeperWidget widgetId="2056709" className="mb-4" />
+            <AdskeeperWidget widgetId="2056709" className="mb-4" lazy={false} />
             {children}
             {/* Ad — Below content */}
             <AdskeeperWidget widgetId="2056706" className="my-8" />
