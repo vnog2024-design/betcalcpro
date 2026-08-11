@@ -84,50 +84,43 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const jsonLd = {
+  // Site-wide structured data: Organization + WebSite + WebApplication
+  const siteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "BetCalc Pro",
+    url: "https://betcalcpro.com.br",
+    description: "Calculadoras gratuitas de probabilidade, gestão de risco e análise estatística.",
+    inLanguage: "pt-BR",
+    publisher: {
+      "@type": "Organization",
+      name: "BetCalc Pro",
+      url: "https://betcalcpro.com.br",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://betcalcpro.com.br/logo-icon.png",
+      },
+    },
+    potentialAction: {
+      "@type": "SearchAction",
+      target: "https://betcalcpro.com.br/artigos?q={search_term_string}",
+      "query-input": "required name=search_term_string",
+    },
+  };
+
+  const webAppJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: "BetCalc Pro",
-    description:
-      "Ferramentas gratuitas de probabilidade e gestão de risco",
-    applicationCategory: "UtilityApplication",
+    url: "https://betcalcpro.com.br",
+    description: "Plataforma educacional gratuita com calculadoras de probabilidade, gestão de risco, simuladores e artigos sobre matemática e estatística.",
+    applicationCategory: "EducationalApplication",
     operatingSystem: "Any",
     offers: {
       "@type": "Offer",
       price: "0",
       priceCurrency: "BRL",
     },
-  };
-
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "Início",
-        "item": "https://betcalcpro.com.br"
-      },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "name": "Ferramentas",
-        "item": "https://betcalcpro.com.br/martingale"
-      },
-      {
-        "@type": "ListItem",
-        "position": 3,
-        "name": "Artigos",
-        "item": "https://betcalcpro.com.br/artigos"
-      },
-      {
-        "@type": "ListItem",
-        "position": 4,
-        "name": "FAQ",
-        "item": "https://betcalcpro.com.br/faq"
-      }
-    ]
   };
 
   return (
@@ -165,11 +158,11 @@ export default function RootLayout({
         </Script>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(siteJsonLd) }}
         />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppJsonLd) }}
         />
         <script
           dangerouslySetInnerHTML={{

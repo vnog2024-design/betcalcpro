@@ -561,3 +561,37 @@ Stage Summary:
 - Login dialog no longer creates "Usuário Demo" — user enters their real name
 - Achievement progress indicators show how close user is to unlocking each one
 - No existing configurations broken
+---
+Task ID: 2
+Agent: Main
+Task: FASE 2 — SEO Técnico (Schema.org, metadata, sitemap, robots.txt)
+
+Work Log:
+- Audited all 22 page.tsx files: 21 had metadata, 1 (home) was 'use client' with no export — falls back to root layout defaults (acceptable)
+- Found 0 Twitter Cards across all pages — critical gap
+- Found FAQPage JSON-LD had only 5 of 15 real FAQ items
+- Found global BreadcrumbList in root layout was static/wrong (showed generic items on every page)
+- Found no robots.txt — admin and API routes were open to crawlers
+- Found sitemap missing user-panel, tools at priority 0.7 (undervalued)
+
+Changes Made:
+1. **src/lib/seo-utils.ts** (NEW): Centralized SEO utility with generateToolMetadata, generateToolJsonLd, generateBreadcrumbJsonLd, generateWebPageJsonLd
+2. **src/components/seo/json-ld.tsx** (NEW): Reusable JSON-LD schemas (Organization, WebSite, WebApplication, FAQPage with all 15 Q&As)
+3. **src/app/robots.ts** (NEW): Blocks /admin/ and /api/ from all crawlers, points to sitemap
+4. **src/app/layout.tsx**: Replaced old WebApplication+BreadcrumbList with WebSite (with Organization+SearchAction) + WebApplication (EducationalApplication, enhanced description)
+5. **11 tool pages** (martingale, bankroll, fibonacci, masaniello, soros, recovery, sequence-analyzer, probability-simulator, strategy-generator, hedging, ciclos): Added SoftwareApplication + WebPage + BreadcrumbList JSON-LD per page; enriched descriptions; added Twitter Cards + OG images
+6. **FAQ page**: Synced FAQPage schema from 5 → 15 real questions; added WebPage + BreadcrumbList JSON-LD; added Twitter Cards
+7. **7 info pages** (about, contact, privacy, terms, cookies, responsible-gaming, user-panel): Added WebPage + BreadcrumbList JSON-LD; added Twitter Cards + OG images
+8. **artigos/page.tsx**: Added WebPage + BreadcrumbList JSON-LD; added Twitter Cards
+9. **artigos/[slug]/page.tsx**: Added BreadcrumbList JSON-LD; added Twitter Cards + OG images to dynamic metadata
+10. **src/app/sitemap.ts**: Added user-panel; bumped tool priority 0.7→0.8; added FAQ at 0.7
+
+Lint: 0 new errors (2 pre-existing in ad components)
+
+Stage Summary:
+- Schema.org coverage: WebSite + Organization + WebApplication (global), SoftwareApplication + WebPage + BreadcrumbList (per page), FAQPage (15 Q&As), Article (per article)
+- Twitter Cards: 0 → 21 pages covered
+- OG images: added to all pages that were missing them
+- robots.txt: now blocks /admin/ and /api/
+- Breadcrumbs: removed incorrect global breadcrumb, added correct per-page breadcrumbs
+- Descriptions: enriched for all 11 tool pages with specific educational value propositions

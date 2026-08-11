@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import { ArticlePageClient } from './client'
+import { generateBreadcrumbJsonLd } from '@/lib/seo-utils'
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -74,6 +75,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description: article.description,
       url,
       type: 'article',
+      siteName: 'BetCalc Pro',
+      images: [{ url: 'https://betcalcpro.com.br/og-image.png', width: 1344, height: 768 }],
+      locale: 'pt_BR',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: article.title,
+      description: article.description,
+      images: ['https://betcalcpro.com.br/og-image.png'],
     },
   }
 }
@@ -115,6 +125,15 @@ export default async function ArticlePage({ params }: PageProps) {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+        />
+      )}
+      {article && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(generateBreadcrumbJsonLd([
+            { name: 'Artigos', url: 'https://betcalcpro.com.br/artigos' },
+            { name: article.title, url: `https://betcalcpro.com.br/artigos/${slug}` },
+          ])) }}
         />
       )}
       <ArticlePageClient params={params} />

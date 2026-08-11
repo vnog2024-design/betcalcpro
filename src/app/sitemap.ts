@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://betcalcpro.com.br'
-  
+
   const tools = [
     'martingale',
     'bankroll',
@@ -57,11 +57,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly',
       priority: 0.8,
     },
+    {
+      url: `${baseUrl}/faq`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/user-panel`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.4,
+    },
     ...tools.map((tool) => ({
       url: `${baseUrl}/${tool}`,
       lastModified: now,
       changeFrequency: 'monthly' as const,
-      priority: 0.7,
+      priority: 0.8,
     })),
     ...legal.map((page) => ({
       url: `${baseUrl}/${page}`,
