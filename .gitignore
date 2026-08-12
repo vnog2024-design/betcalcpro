@@ -55,3 +55,6 @@ server.log
 
 # Auto-deploy scripts (contains token)
 .zscripts/
+# temp working files
+scripts/
+tool-results/
