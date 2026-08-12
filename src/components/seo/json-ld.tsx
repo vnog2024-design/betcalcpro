@@ -1,23 +1,8 @@
-'use client'
-
 /**
- * Reusable JSON-LD structured data component.
- * Renders a <script type="application/ld+json"> tag.
- * Must be 'use client' because it uses dangerouslySetInnerHTML
- * and is rendered inside server component pages.
+ * Server-safe JSON-LD schema generators.
+ * These return plain objects and can be used in Server Components.
  */
-export function JsonLd({ data }: { data: Record<string, unknown> | Record<string, unknown>[] }) {
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
-    />
-  )
-}
 
-/**
- * Generates the Organization schema for BetCalc Pro.
- */
 export function organizationSchema() {
   return {
     '@context': 'https://schema.org',
@@ -37,9 +22,6 @@ export function organizationSchema() {
   }
 }
 
-/**
- * Generates the WebSite schema with SearchAction.
- */
 export function webSiteSchema() {
   return {
     '@context': 'https://schema.org',
@@ -57,9 +39,6 @@ export function webSiteSchema() {
   }
 }
 
-/**
- * Generates the WebApplication schema (enhanced version of existing).
- */
 export function webApplicationSchema() {
   return {
     '@context': 'https://schema.org',
@@ -91,9 +70,6 @@ export function webApplicationSchema() {
   }
 }
 
-/**
- * Generates a SoftwareApplication schema for a specific tool page.
- */
 export function toolPageSchema(props: {
   name: string
   description: string
@@ -123,9 +99,6 @@ export function toolPageSchema(props: {
   }
 }
 
-/**
- * Generates a WebPage schema with breadcrumb.
- */
 export function webPageSchema(props: {
   name: string
   description: string
@@ -164,9 +137,6 @@ export function webPageSchema(props: {
   ]
 }
 
-/**
- * Complete FAQ schema synced with the real FAQ content.
- */
 export function faqPageSchema() {
   return {
     '@context': 'https://schema.org',
