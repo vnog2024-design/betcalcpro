@@ -53,6 +53,43 @@ const ctaLinksMap: Record<string, { name: string; href: string; description: str
     { name: 'Gerador de Estratégias', href: '/strategy-generator', description: 'Crie estratégias com teoria dos jogos' },
     { name: 'Calculadora de Hedging', href: '/hedging', description: 'Estratégias de cobertura de risco' },
   ],
+
+  'como-calcular-probabilidades-odds': [
+    { name: 'Simulador de Probabilidades', href: '/probability-simulator', description: 'Converta odds em probabilidades na prática' },
+    { name: 'Gestão de Capital', href: '/bankroll', description: 'Defina o tamanho ideal da aposta' },
+  ],
+  'o-que-e-drawdown': [
+    { name: 'Gestão de Capital', href: '/bankroll', description: 'Calcule limites de risco por aposta' },
+    { name: 'Recuperação de Capital', href: '/recovery', description: 'Planeje a recuperação após drawdowns' },
+  ],
+  'guia-gestao-bankroll-apostas': [
+    { name: 'Gestão de Capital', href: '/bankroll', description: 'Calcule o tamanho ideal da posição' },
+    { name: 'Calculadora Martingale', href: '/martingale', description: 'Teste progressões com bankroll real' },
+    { name: 'Calculadora Fibonacci', href: '/fibonacci', description: 'Aplique Fibonacci ao seu bankroll' },
+  ],
+  'sistema-masaniello-pratica': [
+    { name: 'Calculadora Masaniello', href: '/masaniello', description: 'Simule o sistema Masaniello' },
+    { name: 'Calculadora de Ciclos', href: '/ciclos', description: 'Masaniello com ciclos de recuperação' },
+  ],
+  'hedging-apostas-guia-completo': [
+    { name: 'Calculadora de Hedging', href: '/hedging', description: 'Calcule coberturas automaticamente' },
+    { name: 'Gestão de Capital', href: '/bankroll', description: 'Proteja seu capital com gestão' },
+  ],
+  'fibonacci-vs-martingale': [
+    { name: 'Calculadora Fibonacci', href: '/fibonacci', description: 'Simule a progressão Fibonacci' },
+    { name: 'Calculadora Martingale', href: '/martingale', description: 'Simule a progressão Martingale' },
+    { name: 'Calculadora de Ciclos', href: '/ciclos', description: 'Compare com ciclos de recuperação' },
+  ],
+  'como-identificar-value-bets': [
+    { name: 'Simulador de Probabilidades', href: '/probability-simulator', description: 'Calcule probabilidades e compare odds' },
+    { name: 'Gerador de Estratégias', href: '/strategy-generator', description: 'Crie estratégias com valor esperado' },
+    { name: 'Analisador de Sequências', href: '/sequence-analyzer', description: 'Analise seu histórico de apostas' },
+  ],
+  'lucro-esperado-vs-retorno': [
+    { name: 'Gestão de Capital', href: '/bankroll', description: 'Otimize gestão com métricas corretas' },
+    { name: 'Calculadora de Hedging', href: '/hedging', description: 'Proteja retornos com cobertura' },
+    { name: 'Analisador de Sequências', href: '/sequence-analyzer', description: 'Analise o ROI real das apostas' },
+  ],
 }
 
 const articles: Record<string, {
@@ -985,6 +1022,814 @@ const articles: Record<string, {
             garante que todo jogo de soma zero com dois jogadores tem um equilíbrio em estratégias mistas.
           </p>
         </div>
+      </div>
+    ),
+  },
+
+    'como-calcular-probabilidades-odds': {
+    title: 'Como Calcular Probabilidades a Partir de Odds',
+    category: 'Fundamentos',
+    readTime: '10 min',
+    icon: Calculator,
+    content: (
+      <div className="prose prose-sm dark:prose-invert max-w-none space-y-6">
+        <p className="text-base leading-relaxed">
+          Converter odds em probabilidades é uma das habilidades mais essenciais para qualquer apostador que deseja tomar decisões
+          informadas. As odds oferecidas pelas casas de apostas não são apenas números — elas representam a estimativa
+          de probabilidade de um evento, ajustada pela margem de lucro da casa. Entender essa conversão permite que você identifique
+          quando uma odd está sobrevalorizada ou subvalorizada, abrindo espaço para encontrar value bets e melhorar seus resultados a longo prazo.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Odds Decimais para Probabilidade</h2>
+        <p className="text-base leading-relaxed">
+          As odds decimais (formato mais comum no Brasil) são as mais fáceis de converter. A fórmula é direta: basta dividir 1 pelo
+          valor da odd decimal. O resultado será a probabilidade implícita, ou seja, o que a casa de apostas estima como chance do evento ocorrer.
+          Por exemplo, uma odd de 2.50 implica uma probabilidade de 1/2.50 = 0.40, ou seja, 40% de chance.
+        </p>
+        <div className="p-4 rounded-lg bg-muted/30 border border-border/50">
+          <p className="text-center font-mono text-lg">
+            Probabilidade (%) = (1 / Odd Decimal) x 100
+          </p>
+        </div>
+        <p className="text-base leading-relaxed">
+          Veja um exemplo prático com um jogo de futebol. Se Flamengo tem odd de 1.80 para vencer, a probabilidade implícita é 1/1.80 = 55,6%.
+          Se o empate está em 3.50, a probabilidade implícita é 28,6%. E se o Grêmio está em 4.50, a probabilidade implícita é 22,2%.
+          Some essas três probabilidades: 55,6 + 28,6 + 22,2 = 106,4%. Esse valor acima de 100% é a margem de lucro da casa de apostas,
+          também conhecida como overround ou vig. No Brasil, essa margem costuma ficar entre 5% e 12%, dependendo da casa e do mercado.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Odds Fracionárias (Britânicas)</h2>
+        <p className="text-base leading-relaxed">
+          As odds fracionárias são populares no Reino Unido e em sites internacionais. Elas são expressas como uma fração (por exemplo, 5/2,
+          que se lê "cinco para dois"). Para converter para probabilidade, use a fórmula: o denominador dividido pela soma do numerador com o denominador.
+          No exemplo 5/2: 2 / (5 + 2) = 2/7 = 28,6%. Para converter para odd decimal, basta somar 1 ao resultado da fração: 5/2 + 1 = 3.50.
+        </p>
+        <div className="p-4 rounded-lg bg-muted/30 border border-border/50">
+          <p className="text-center font-mono text-lg">
+            Prob. (%) = denominador / (numerador + denominador) x 100<br />
+            Odd Decimal = (numerador / denominador) + 1
+          </p>
+        </div>
+        <p className="text-base leading-relaxed">
+          Tabela de conversão rápida: 1/1 (Evens) = 2.00 decimal = 50%; 2/1 = 3.00 = 33,3%; 5/2 = 3.50 = 28,6%;
+          10/1 = 11.00 = 9,1%; 1/2 = 1.50 = 66,7%; 4/6 = 1.67 = 60%. Quanto menor a fração, maior a probabilidade implícita.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Odds Americanas (+/-)</h2>
+        <p className="text-base leading-relaxed">
+          As odds americanas usam sinais positivos e negativos. Odds positivas (como +200) indicam quanto você lucra em uma aposta de 100 unidades.
+          Odds negativas (como -150) indicam quanto precisa apostar para lucrar 100 unidades. Para odds positivas:
+          probabilidade = 100 / (odd + 100). Para odds negativas: probabilidade = |odd| / (|odd| + 100).
+        </p>
+        <div className="p-4 rounded-lg bg-muted/30 border border-border/50">
+          <p className="text-center font-mono text-lg">
+            Odd +: Prob. (%) = 100 / (odd + 100) x 100<br />
+            Odd -: Prob. (%) = |odd| / (|odd| + 100) x 100
+          </p>
+        </div>
+        <p className="text-base leading-relaxed">
+          Exemplos: +200 = 33,3%; -150 = 60%; +500 = 16,7%; -400 = 80%.
+          Odds acima de +300 representam eventos improváveis, odds abaixo de -200 indicam fortes favoritos.
+          Plataformas como DraftKings e BetMGM usam esse formato — saber converter é fundamental.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Removendo a Margem da Casa (Overround)</h2>
+        <p className="text-base leading-relaxed">
+          A soma das probabilidades implícitas sempre ultrapassa 100% por causa da margem da casa.
+          Para obter as probabilidades reais, divida cada probabilidade individual pela soma total.
+        </p>
+        <div className="p-4 rounded-lg bg-muted/30 border border-border/50">
+          <p className="text-center font-mono text-lg">
+            Prob. real (%) = (Prob. implícita / Soma total) x 100
+          </p>
+        </div>
+        <p className="text-base leading-relaxed">
+          No exemplo do Flamengo vs Grêmio (soma 106,4%): probabilidade real do Flamengo = 55,6/106,4 = 52,3%;
+          empate = 28,6/106,4 = 26,9%; Grêmio = 22,2/106,4 = 20,9%. Se você estima que o Flamengo tem 60% de chance
+          e a odd paga como se fossem 52,3%, você encontrou uma value bet.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Probabilidade Implícita vs Probabilidade Real</h2>
+        <p className="text-base leading-relaxed">
+          A probabilidade implícita é o que a casa de apostas "diz" sobre um evento. A probabilidade real é o que você estima.
+          Se sua estimativa é maior que a implícita, a odd está subvalorizada — é uma oportunidade.
+          Na prática, isso exige um modelo próprio — análise estatística, modelos de Poisson ou Elo ratings.
+          Use nosso Simulador de Probabilidades para testar diferentes cenários.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Tabela de Conversão Rápida</h2>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm border-collapse">
+            <thead>
+              <tr className="border-b border-border/50">
+                <th className="text-left p-2 font-bold">Decimal</th>
+                <th className="text-left p-2 font-bold">Fracionária</th>
+                <th className="text-left p-2 font-bold">Americana</th>
+                <th className="text-left p-2 font-bold">Prob. Implícita</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-b border-border/30"><td className="p-2">1.10</td><td className="p-2">1/10</td><td className="p-2">-1000</td><td className="p-2">90,9%</td></tr>
+              <tr className="border-b border-border/30"><td className="p-2">1.50</td><td className="p-2">1/2</td><td className="p-2">-200</td><td className="p-2">66,7%</td></tr>
+              <tr className="border-b border-border/30"><td className="p-2">2.00</td><td className="p-2">1/1 (Evens)</td><td className="p-2">+100</td><td className="p-2">50,0%</td></tr>
+              <tr className="border-b border-border/30"><td className="p-2">2.50</td><td className="p-2">3/2</td><td className="p-2">+150</td><td className="p-2">40,0%</td></tr>
+              <tr className="border-b border-border/30"><td className="p-2">3.00</td><td className="p-2">2/1</td><td className="p-2">+200</td><td className="p-2">33,3%</td></tr>
+              <tr className="border-b border-border/30"><td className="p-2">5.00</td><td className="p-2">4/1</td><td className="p-2">+400</td><td className="p-2">20,0%</td></tr>
+              <tr><td className="p-2">10.00</td><td className="p-2">9/1</td><td className="p-2">+900</td><td className="p-2">10,0%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="text-base leading-relaxed">
+          Guarde esta tabela como referência. Com o tempo, você desenvolve a intuição para converter mentalmente,
+          mas nos primeiros meses é essencial ter essa referência. Quanto mais pratica a conversão, mais rápido
+          identifica quando uma odd oferece valor real ou quando a margem absorve o lucro.
+        </p>
+      </div>
+    ),
+  },
+
+  'o-que-e-drawdown': {
+    title: 'O que é Drawdown e Como Proteger Seu Capital',
+    category: 'Gestão',
+    readTime: '9 min',
+    icon: TrendingUp,
+    content: (
+      <div className="prose prose-sm dark:prose-invert max-w-none space-y-6">
+        <p className="text-base leading-relaxed">
+          Drawdown é um dos conceitos mais importantes na gestão de risco, e surpreendentemente um dos mais ignorados por apostadores
+          iniciantes. Em termos simples, o drawdown representa a queda máxima do seu capital a partir do pico histórico. Se você começou
+          com R$ 1.000, chegou a R$ 1.500 e caiu para R$ 1.100, seu drawdown foi de R$ 400 (de R$ 1.500 para R$ 1.100), o que representa
+          26,7% do pico. Entender esse conceito é crucial porque os drawdowns são inevitáveis — toda estratégia, por melhor que seja,
+          passará por períodos de perdas.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">O que Exatamente é Drawdown?</h2>
+        <p className="text-base leading-relaxed">
+          O drawdown mede a perda acumulada desde o ponto mais alto (peak) do seu capital até o ponto mais baixo subsequente (trough).
+          Ele é diferente da perda simples porque é calculado a partir do máximo histórico, não do saldo inicial. Por exemplo, se você
+          depositou R$ 1.000 e após vitórias subiu para R$ 2.000, mas então perdeu até R$ 1.400, seu drawdown
+          é de R$ 600 (30% do pico de R$ 2.000), não de R$ 400 (perda em relação ao depósito inicial).
+        </p>
+        <div className="p-4 rounded-lg bg-muted/30 border border-border/50">
+          <p className="text-center font-mono text-lg">
+            Drawdown (%) = ((Peak - Trough) / Peak) x 100<br />
+            Drawdown (R$) = Peak - Trough
+          </p>
+        </div>
+        <p className="text-base leading-relaxed">
+          Existem dois tipos: drawdown de capital (queda em valor do bankroll) e drawdown operacional (sequência máxima de derrotas).
+          Uma sequência de 10 derrotas com apostas de 2% gera um drawdown de aproximadamente 18,3%, enquanto com 5%
+          gera um drawdown devastador de 40,1%. A diferença é enorme e explica por que o tamanho da aposta é tão importante.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">A Matemática da Recuperação</h2>
+        <p className="text-base leading-relaxed">
+          Para entender a gravidade dos drawdowns, considere a matemática da recuperação. Se você sofre um drawdown de 10%, precisa de
+          um ganho de 11,1% para voltar ao pico (não é 10%, pois a base agora é menor). Para 25%, precisa de 33,3%. Para 50%, precisa de 100%
+          — precisa dobrar o capital restante. Para 75%, precisa de 300%. Essa assimetria mostra por que drawdowns grandes são destrutivos:
+          a recuperação exponencial exigida torna cada vez mais difícil retornar ao nível anterior.
+        </p>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm border-collapse">
+            <thead>
+              <tr className="border-b border-border/50">
+                <th className="text-left p-2 font-bold">Drawdown</th>
+                <th className="text-left p-2 font-bold">Ganho Necessário</th>
+                <th className="text-left p-2 font-bold">Dificuldade</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-b border-border/30"><td className="p-2">10%</td><td className="p-2">11,1%</td><td className="p-2">Fácil</td></tr>
+              <tr className="border-b border-border/30"><td className="p-2">20%</td><td className="p-2">25,0%</td><td className="p-2">Moderada</td></tr>
+              <tr className="border-b border-border/30"><td className="p-2">33%</td><td className="p-2">50,0%</td><td className="p-2">Difícil</td></tr>
+              <tr className="border-b border-border/30"><td className="p-2">50%</td><td className="p-2">100,0%</td><td className="p-2">Muito Difícil</td></tr>
+              <tr><td className="p-2">75%</td><td className="p-2">300,0%</td><td className="p-2">Quase Impossível</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Como Limitar o Drawdown</h2>
+        <div className="space-y-4">
+          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+            <h3 className="font-bold text-base mb-2">1. Defina um Stop Loss de Bankroll</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Estabeleça um limite máximo de perda, como 20% ou 30% do bankroll. Quando atingir esse limite, pare completamente
+              por um período determinado. Use a Calculadora de Gestão de Capital para simular diferentes cenários de stop loss.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+            <h3 className="font-bold text-base mb-2">2. Reduza Apostas Durante Perdas</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Quando estiver em drawdown, reduza o tamanho de cada aposta. Se aposta 2% normalmente, reduza para 1%.
+              Isso diminui a velocidade da queda e preserva capital para a recuperação. É contra-intuitivo, mas matematicamente correto.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+            <h3 className="font-bold text-base mb-2">3. Diversifique Mercados e Estratégias</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Não concentre todo o risco em um único tipo de aposta. Combine mercados (over/under, handicaps, ambos marcam)
+              e esportes para reduzir a correlação entre as apostas e suavizar a curva de capital.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+            <h3 className="font-bold text-base mb-2">4. Monitore o Maximum Drawdown (MDD)</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Registre todos os seus drawdowns. O MDD histórico é essencial para calibrar sua estratégia.
+              Se seu MDD é de 25%, planeje assumindo que drawdowns desse tamanho vão ocorrer novamente.
+            </p>
+          </div>
+        </div>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">A Psicologia do Drawdown</h2>
+        <p className="text-base leading-relaxed">
+          O aspecto psicológico é tão importante quanto o matemático. Durante um drawdown, o apostador enfrenta o medo
+          de perder tudo, a frustração de ver o trabalho desaparecer e a tentação de "recuperar tudo de uma vez" aumentando as apostas
+          — o que geralmente leva a drawdowns ainda maiores. Uma técnica eficaz é ter um "plano de drawdown" pré-definido:
+          quando perder 15%, reduzir apostas pela metade por 2 semanas; ao perder 25%, parar por 1 mês; ao perder 40%,
+          reavaliar toda a estratégia. Ter esse plano escrito remove a decisão emocional do momento crítico.
+        </p>
+      </div>
+    ),
+  },
+
+  'guia-gestao-bankroll-apostas': {
+    title: 'Guia Completo de Gestão de Bankroll',
+    category: 'Gestão',
+    readTime: '12 min',
+    icon: TrendingUp,
+    content: (
+      <div className="prose prose-sm dark:prose-invert max-w-none space-y-6">
+        <p className="text-base leading-relaxed">
+          Gestão de bankroll é, sem exagero, a habilidade mais importante que um apostador pode desenvolver. Não importa quão bom
+          você seja em identificar resultados — sem gestão de capital adequada, uma sequência de perdas inevitável vai destruir
+          seu bankroll. Pesquisas com apostadores profissionais mostram que a gestão de capital responde por até 60% do sucesso
+          a longo prazo, superando até a qualidade da análise esportiva. Este guia cobre os princípios, fórmulas e estratégias
+          que profissionais usam para gerir seu capital de forma sustentável.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">O que é Bankroll?</h2>
+        <p className="text-base leading-relaxed">
+          Bankroll é o montante total de dinheiro que você separou exclusivamente para apostas. Não é seu saldo bancário, não é
+          seu salário — é um fundo dedicado que, se perdido inteiramente, não afetaria sua vida financeira. Se você tem R$ 5.000
+          e decide que R$ 1.000 é seu bankroll, os R$ 4.000 restantes são intocáveis. Essa separação mental e financeira é fundamental
+          para evitar decisões desesperadas.
+        </p>
+        <p className="text-base leading-relaxed">
+          Regra prática: seu bankroll deve ser dinheiro que pode perder sem alterar seu padrão de vida.
+          Se perder vai causar estresse, é grande demais. Se for tão pequeno que uma aposta mínima já compromete
+          uma porção significativa, é pequeno demais.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">As 5 Regras de Ouro</h2>
+        <div className="space-y-4">
+          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+            <h3 className="font-bold text-base mb-2">Regra 1: Aposte entre 1% e 3% do bankroll por aposta</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              A regra mais citada por profissionais. Com 2% por aposta, 10 derrotas consecutivas reduzem o bankroll em 18,3%.
+              Com 5%, a redução seria de 40,1% — praticamente impossível de recuperar. Use a Calculadora de Gestão de Capital
+              para encontrar o percentual ideal baseado em seu perfil de risco.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+            <h3 className="font-bold text-base mb-2">Regra 2: Nunca aumente apostas para "recuperar" perdas</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              A tentação de dobrar após uma perda é o erro número 1. Isso transforma uma sequência normal em catástrofe.
+              A recuperação vem pelo volume de apostas com valor positivo, não pelo aumento do risco unitário.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+            <h3 className="font-bold text-base mb-2">Regra 3: Ajuste apostas conforme o bankroll muda</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Se o bankroll cresce de R$ 1.000 para R$ 1.500, suas apostas de 2% passam de R$ 20 para R$ 30.
+              Se cai para R$ 800, reduzem para R$ 16. Esse "apostamento proporcional" permite crescimento exponencial
+              quando há vantagem, limitando perdas quando a sorte vira.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+            <h3 className="font-bold text-base mb-2">Regra 4: Pense em unidades, não em reais</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Divida o bankroll em unidades. R$ 1.000 com 2% por aposta = 50 unidades.
+              "Perdi 3 unidades" soa menos ameaçador do que "perdi R$ 60" — mesmo sendo a mesma coisa.
+              Essa abstração emocional é crucial para a disciplina.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+            <h3 className="font-bold text-base mb-2">Regra 5: Registre todas as apostas</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Um bankroll não gerenciado com dados é cego. Registre data, evento, odd, valor, resultado e lucro/prejuízo.
+              Esses dados permitem calcular ROI real, identificar pontos fortes e fracos, e ajustar com base em evidências.
+            </p>
+          </div>
+        </div>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Critério de Kelly: O Cálculo Científico</h2>
+        <p className="text-base leading-relaxed">
+          O Critério de Kelly (1956, Bell Labs) calcula o tamanho ótimo de uma aposta para maximizar o crescimento do bankroll.
+          A fórmula: f* = (bp - q) / b, onde f* é a fração do bankroll, b é a odd decimal menos 1,
+          p é sua probabilidade de vitória e q = 1 - p.
+        </p>
+        <div className="p-4 rounded-lg bg-muted/30 border border-border/50">
+          <p className="text-center font-mono text-lg">
+            f* = (b x p - q) / b<br />
+            Onde: b = odd - 1, p = prob. vitória, q = 1 - p
+          </p>
+        </div>
+        <p className="text-base leading-relaxed">
+          Exemplo: você estima 55% de chance e a odd é 2.10. Então b = 1.10, p = 0.55, q = 0.45.
+          f* = (1.10 x 0.55 - 0.45) / 1.10 = 14,1%. Kelly sugere 14,1% — agressivo demais para a maioria.
+          Profissionais usam "meio-Kelly" (7%) ou "um quarto de Kelly" (3,5%) para reduzir volatilidade.
+          O Critério é poderoso, mas sensível a erros na estimativa de probabilidade.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Simulação: 1% vs 3% vs 5%</h2>
+        <p className="text-base leading-relaxed">
+          Considere 1.000 apostas, taxa de acerto 54%, odd média 1.90. Com 1%: bankroll final esperado ~280% do inicial,
+          drawdown máximo raramente acima de 15%. Com 3%: ~520%, drawdown 35-40%. Com 5%: até 900% em cenários favoráveis,
+          mas drawdown acima de 60% com risco real de ruína. A lição: tamanhos maiores amplificam tanto ganhos quanto perdas,
+          e o risco de ruína cresce de forma não-linear. Use a Calculadora de Gestão de Capital para simular.
+        </p>
+      </div>
+    ),
+  },
+
+  'sistema-masaniello-pratica': {
+    title: 'Como Funciona o Sistema Masaniello na Prática',
+    category: 'Análise',
+    readTime: '11 min',
+    icon: BarChart3,
+    content: (
+      <div className="prose prose-sm dark:prose-invert max-w-none space-y-6">
+        <p className="text-base leading-relaxed">
+          O sistema Masaniello é um método de gestão de bankroll desenvolvido na Itália que se tornou popular entre apostadores
+          europeus e brasileiros. Diferente da Martingale (que dobra após perda) ou da Fibonacci (sequência matemática),
+          o Masaniello define uma meta de lucro total para um ciclo de apostas e calcula o valor de cada aposta
+          com base no que resta para atingir essa meta. É mais sofisticado porque leva em conta tanto o objetivo de lucro
+          quanto o número total de apostas planejadas, redistribuindo o risco ao longo do ciclo.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Como Funciona o Masaniello</h2>
+        <p className="text-base leading-relaxed">
+          O sistema parte de três parâmetros: o bankroll disponível, o percentual de lucro alvo (ex: 20%)
+          e o número total de apostas no ciclo (ex: 10). A partir desses valores,
+          calcula quanto apostar em cada jogada usando binômio de Newton e probabilidade condicional.
+          Se está ganhando, as apostas podem diminuir; se está perdendo, podem aumentar para tentar atingir a meta.
+        </p>
+        <div className="p-4 rounded-lg bg-muted/30 border border-border/50">
+          <p className="text-center font-mono text-lg">
+            Parâmetros: Bankroll + % alvo + Nº de apostas<br />
+            Cada aposta = f(resultados anteriores, lucro restante, apostas restantes)
+          </p>
+        </div>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Exemplo Prático Passo a Passo</h2>
+        <p className="text-base leading-relaxed">
+          Simulemos um ciclo com: bankroll R$ 1.000, meta 25% (R$ 250), 8 apostas com odd média 2.00.
+          A primeira aposta pode ser de R$ 100. Se ganha (recebe R$ 200), bankroll sobe para R$ 1.100.
+          Agora precisa de R$ 150 em 7 apostas — o sistema recalcula e pode sugerir aposta menor.
+        </p>
+        <p className="text-base leading-relaxed">
+          Se perder as primeiras 3, o bankroll cai. Agora precisa de todo o lucro alvo em menos apostas
+          — o sistema aumenta o tamanho das seguintes. É aqui que reside o risco: após sequências de perdas,
+          as apostas necessárias podem ficar muito grandes em relação ao bankroll restante.
+          A escolha da meta e do número de apostas é crucial.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Vantagens e Desvantagens</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="p-4 rounded-lg bg-green-500/5 border border-green-500/20">
+            <h3 className="font-bold text-base mb-2 text-green-500">Vantagens</h3>
+            <ul className="text-sm text-muted-foreground space-y-2">
+              <li>Meta de lucro clara e definida antes de começar</li>
+              <li>Adapta o tamanho das apostas dinamicamente</li>
+              <li>Se atingir a meta antes, o ciclo encerra com lucro</li>
+              <li>Menos agressivo que Martingale na maioria dos cenários</li>
+              <li>Permite planejar ciclos de forma estruturada</li>
+            </ul>
+          </div>
+          <div className="p-4 rounded-lg bg-red-500/5 border border-red-500/20">
+            <h3 className="font-bold text-base mb-2 text-red-500">Desvantagens</h3>
+            <ul className="text-sm text-muted-foreground space-y-2">
+              <li>Após perdas, as apostas podem crescer muito</li>
+              <li>Presume odd média constante (na prática variam)</li>
+              <li>Não garante lucro — depende da taxa de acerto</li>
+              <li>Mais complexo de implementar manualmente</li>
+              <li>Pode dar falsa sensação de segurança</li>
+            </ul>
+          </div>
+        </div>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Como Escolher os Parâmetros Ideais</h2>
+        <p className="text-base leading-relaxed">
+          Meta baixa (10-15%) com muitas apostas (12-15) resulta em apostas pequenas e estáveis.
+          Meta alta (30-50%) com poucas apostas (5-7) gera apostas maiores e voláteis.
+          O sweet spot para a maioria é 15-25% com 8-12 apostas. O Masaniello funciona melhor com odds
+          entre 1.80 e 2.50, onde a probabilidade implícita está entre 40% e 55%. Use a Calculadora Masaniello
+          para testar combinações antes de começar um ciclo real.
+        </p>
+      </div>
+    ),
+  },
+
+  'hedging-apostas-guia-completo': {
+    title: 'Hedging em Apostas: Guia Completo',
+    category: 'Gestão',
+    readTime: '10 min',
+    icon: TrendingUp,
+    content: (
+      <div className="prose prose-sm dark:prose-invert max-w-none space-y-6">
+        <p className="text-base leading-relaxed">
+          Hedging, ou aposta de cobertura, consiste em fazer uma aposta oposta à original para garantir
+          lucro ou minimizar perdas, independentemente do resultado final. É uma das ferramentas mais poderosas
+          na gestão de risco de apostadores experientes, mas também uma das mais mal compreendidas.
+          Muitos fazem hedging sem calcular os valores corretos, transformando uma boa estratégia em operação
+          com valor esperado negativo.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">O que é Hedging?</h2>
+        <p className="text-base leading-relaxed">
+          O exemplo mais clássico é em apostas de longo prazo (futures). Imagine que apostou R$ 100 na vitória
+          do Palmeiras no Brasileirão a odd de 8.00 antes do campeonato. Após 20 rodadas, o Palmeiras é líder.
+          A odd caiu para 1.50, e a do segundo colocado (Flamengo) está em 4.00.
+        </p>
+        <p className="text-base leading-relaxed">
+          Agora você pode fazer hedging apostando R$ 200 no Flamengo a 4.00. Se o Palmeiras ganha:
+          lucro de R$ 800 - R$ 200 - R$ 100 = R$ 500. Se o Flamengo ganha:
+          lucro de R$ 800 - R$ 200 - R$ 100 = R$ 500. Lucro garantido de R$ 500 independente do resultado.
+          O lucro garantido é menor que o potencial original (R$ 700), mas elimina o risco completamente.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">A Matemática do Hedging</h2>
+        <div className="p-4 rounded-lg bg-muted/30 border border-border/50">
+          <p className="text-center font-mono text-lg">
+            H = (A x O1) / O2<br />
+            Lucro garantido = (A x O1) - A - H
+          </p>
+        </div>
+        <p className="text-base leading-relaxed">
+          Onde A = valor apostado originalmente, O1 = odd original, O2 = odd da aposta de cobertura, H = valor da cobertura.
+          No exemplo: H = (100 x 8.00) / 4.00 = R$ 200. Lucro = 800 - 100 - 200 = R$ 500 em ambos os cenários.
+        </p>
+        <p className="text-base leading-relaxed">
+          Na prática, as odds disponíveis nem sempre permitem lucro igual em ambos os lados. Muitas vezes,
+          o melhor é garantir lucro menor em um cenário e pequeno prejuízo no outro — o que ainda pode valer a pena.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Quando Fazer Hedging</h2>
+        <div className="space-y-4">
+          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+            <h3 className="font-bold text-base mb-2">1. Futures com Valor Alto</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Quando sua aposta de longo prazo está prestes a vencer e o ganho é significativo.
+              Garantir parte desse lucro é quase sempre boa ideia, especialmente se representa
+              porção substancial do bankroll.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+            <h3 className="font-bold text-base mb-2">2. Cash Out é Pior que Hedging Manual</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              O botão "Cash Out" das casas tem comissão de 5-15%. Calcular o hedging manualmente
+              em outra casa frequentemente resulta em valor melhor. Sempre compare antes de aceitar o Cash Out.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+            <h3 className="font-bold text-base mb-2">3. Para Limitar Perdas</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Hedging também minimiza perdas. Se sua aposta original vai perder, uma cobertura pode reduzir
+              a perda total de R$ 100 para R$ 30. Útil em acumuladores, onde uma perda elimina o bilhete.
+            </p>
+          </div>
+        </div>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Erros Comuns no Hedging</h2>
+        <p className="text-base leading-relaxed">
+          O erro mais frequente é fazer hedging sem calcular — apostar um valor "de olho". Isso quase
+          sempre resulta em valor esperado negativo, pois a margem da casa é aplicada duas vezes.
+          Outro erro é fazer hedging demais: toda vez que faz, aceita retorno menor por segurança.
+          Se fizer em toda aposta, garantirá perdas a longo prazo. O hedging deve ser seletivo e calculado.
+          Use a Calculadora de Hedging para automatizar esses cálculos instantaneamente.
+        </p>
+      </div>
+    ),
+  },
+
+  'fibonacci-vs-martingale': {
+    title: 'Fibonacci vs Martingale: Comparativo Completo',
+    category: 'Análise',
+    readTime: '13 min',
+    icon: BarChart3,
+    content: (
+      <div className="prose prose-sm dark:prose-invert max-w-none space-y-6">
+        <p className="text-base leading-relaxed">
+          Fibonacci e Martingale são as duas progressões de apostas mais conhecidas. Ambas prometem
+          recuperar perdas aumentando o tamanho das apostas após derrotas, mas funcionam de formas
+          fundamentalmente diferentes. Este comparativo ajuda a entender os prós, contras e quando cada
+          um é mais adequado — e por que nenhum é a "bala de prata" que muitos buscam.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Como Funciona Cada Sistema</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+            <h3 className="font-bold text-base mb-2">Martingale</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Aposta 1 unidade. Cada perda, dobra. Cada vitória, volta a 1.<br /><br />
+              Sequência: 1, 2, 4, 8, 16, 32, 64, 128, 256, 512...<br /><br />
+              Uma única vitória recupera todas as perdas + 1 unidade de lucro.
+              É o sistema mais agressivo.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+            <h3 className="font-bold text-base mb-2">Fibonacci</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Segue a sequência de Fibonacci. Cada perda, avança uma posição.
+              Cada vitória, volta duas posições.<br /><br />
+              Sequência: 1, 1, 2, 3, 5, 8, 13, 21, 34, 55...<br /><br />
+              Crescimento mais suave, mas recuperação mais lenta.
+            </p>
+          </div>
+        </div>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Comparativo Numérico</h2>
+        <p className="text-base leading-relaxed">
+          Tabela com unidade base de R$ 10. A diferença cresce dramaticamente após 6-7 perdas.
+        </p>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm border-collapse">
+            <thead>
+              <tr className="border-b border-border/50">
+                <th className="text-left p-2 font-bold">Perdas</th>
+                <th className="text-left p-2 font-bold">Martingale</th>
+                <th className="text-left p-2 font-bold">Fibonacci</th>
+                <th className="text-left p-2 font-bold">Diferença</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-b border-border/30"><td className="p-2">1</td><td className="p-2">R$ 20</td><td className="p-2">R$ 10</td><td className="p-2">2,0x</td></tr>
+              <tr className="border-b border-border/30"><td className="p-2">2</td><td className="p-2">R$ 40</td><td className="p-2">R$ 20</td><td className="p-2">2,0x</td></tr>
+              <tr className="border-b border-border/30"><td className="p-2">3</td><td className="p-2">R$ 80</td><td className="p-2">R$ 30</td><td className="p-2">2,7x</td></tr>
+              <tr className="border-b border-border/30"><td className="p-2">4</td><td className="p-2">R$ 160</td><td className="p-2">R$ 50</td><td className="p-2">3,2x</td></tr>
+              <tr className="border-b border-border/30"><td className="p-2">5</td><td className="p-2">R$ 320</td><td className="p-2">R$ 80</td><td className="p-2">4,0x</td></tr>
+              <tr className="border-b border-border/30"><td className="p-2">6</td><td className="p-2">R$ 640</td><td className="p-2">R$ 130</td><td className="p-2">4,9x</td></tr>
+              <tr className="border-b border-border/30"><td className="p-2">7</td><td className="p-2">R$ 1.280</td><td className="p-2">R$ 210</td><td className="p-2">6,1x</td></tr>
+              <tr><td className="p-2">8</td><td className="p-2">R$ 2.560</td><td className="p-2">R$ 340</td><td className="p-2">7,5x</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="text-base leading-relaxed">
+          Após 8 perdas, Martingale exige R$ 2.560 (256x a unidade inicial!), Fibonacci pede R$ 340 (34x).
+          Total investido: R$ 5.110 vs R$ 870. A diferença é colossal.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">O Problema Comum: Ruína Certeira</h2>
+        <p className="text-base leading-relaxed">
+          Ambos sofrem do mesmo problema: a premissa de que "eventualmente você ganha" não garante capital suficiente.
+          Com odds de 2.00, a probabilidade de 8 perdas seguidas é 0,39% — mas em 1.000 apostas, há 98% de chance de ocorrer.
+          Com odds de 1.80, a probabilidade sobe para 1,7% — em 500 apostas, 57% de chance.
+        </p>
+        <p className="text-base leading-relaxed">
+          A Fibonacci é menos vulnerável (crescimento mais lento), mas recupera mais devagar.
+          A Martingale recupera tudo com uma vitória; a Fibonacci precisa de múltiplas vitórias.
+          Em fase ruim, a Fibonacci fica presa no meio da sequência por muitas apostas.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Veredito: Quando Usar Cada Um</h2>
+        <div className="space-y-4">
+          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+            <h3 className="font-bold text-base mb-2">Use Martingale se:</h3>
+            <ul className="text-sm text-muted-foreground space-y-1">
+              <li>Tem bankroll grande e limite de apostas alto</li>
+              <li>Aposta em odds baixas (1.30-1.60) com alta taxa de acerto</li>
+              <li>Quer recuperação rápida e entende o risco de ruína</li>
+              <li>Usa com stop loss rigoroso (máximo 5-6 derrotas)</li>
+            </ul>
+          </div>
+          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+            <h3 className="font-bold text-base mb-2">Use Fibonacci se:</h3>
+            <ul className="text-sm text-muted-foreground space-y-1">
+              <li>Prefere crescimento mais controlado</li>
+              <li>Bankroll moderado (não suporta dobradas consecutivas)</li>
+              <li>Aposta em odds médias (1.80-2.50)</li>
+              <li>Quer mais "fôlego" antes de atingir limites de tabela</li>
+            </ul>
+          </div>
+          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+            <h3 className="font-bold text-base mb-2">Use nenhum dos dois se:</h3>
+            <ul className="text-sm text-muted-foreground space-y-1">
+              <li>Quer apostar de forma profissional a longo prazo</li>
+              <li>Seu objetivo é lucro consistente, não recuperação de perdas</li>
+              <li>Prefere apostamento fixo (flat) baseado em porcentagem do bankroll</li>
+            </ul>
+          </div>
+        </div>
+        <p className="text-base leading-relaxed">
+          Na prática, profissionais raramente usam qualquer progressão de recuperação.
+          O apostamento fixo (1-3% do bankroll por aposta) é o padrão da indústria.
+          Use nossas calculadoras Martingale e Fibonacci para simular ambos e ver com seus próprios números.
+        </p>
+      </div>
+    ),
+  },
+
+  'como-identificar-value-bets': {
+    title: 'Como Identificar Value Bets: Guia Prático',
+    category: 'Análise',
+    readTime: '11 min',
+    icon: Lightbulb,
+    content: (
+      <div className="prose prose-sm dark:prose-invert max-w-none space-y-6">
+        <p className="text-base leading-relaxed">
+          Value bet é o conceito mais importante para quem quer lucrar consistentemente com apostas.
+          Em termos simples, uma value bet ocorre quando a probabilidade real de um evento é maior do que
+          a probabilidade implícita nas odds oferecidas pela casa de apostas. Se você identifica essas
+          oportunidades sistematicamente e aposta nelas ao longo do tempo, o lucro matemático é inevitável.
+          O problema é que identificá-las requer disciplina, modelo analítico e muita paciência.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">O que é Value Bet?</h2>
+        <p className="text-base leading-relaxed">
+          Imagine que uma casa oferece odd de 2.20 para a vitória do Corinthians. A probabilidade implícita é 1/2.20 = 45,5%.
+          Após remover a margem da casa (digamos 8%), a probabilidade real da odd é 42,1%. Se sua análise indica
+          que o Corinthians tem 50% de chance de ganhar, você encontrou uma value bet: 50% &gt; 42,1%.
+        </p>
+        <div className="p-4 rounded-lg bg-muted/30 border border-border/50">
+          <p className="text-center font-mono text-lg">
+            Value = (Sua prob. x Odd) - 1<br />
+            Se Value &gt; 0, existe valor na aposta
+          </p>
+        </div>
+        <p className="text-base leading-relaxed">
+          No exemplo: (0.50 x 2.20) - 1 = 1.10 - 1 = 0.10 (ou 10% de valor).
+          Isso significa que para cada R$ 100 apostados em value bets desse tamanho, o lucro esperado é R$ 10 a longo prazo.
+          Parece pouco, mas acumulado em centenas de apostas, é o que separa apostadores lucrativos dos perdedores.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Como Calcular Valor Esperado (EV)</h2>
+        <p className="text-base leading-relaxed">
+          O Valor Esperado (Expected Value) é a métrica fundamental. A fórmula:
+          EV = (Probabilidade de ganho x Lucro potencial) - (Probabilidade de perda x Valor apostado).
+        </p>
+        <div className="p-4 rounded-lg bg-muted/30 border border-border/50">
+          <p className="text-center font-mono text-lg">
+            EV = (p x (odd - 1) x A) - ((1 - p) x A)<br />
+            Onde: p = sua prob. estimada, odd, A = valor apostado
+          </p>
+        </div>
+        <p className="text-base leading-relaxed">
+          Exemplo: você estima 50% para Corinthians (odd 2.20), aposta R$ 100.
+          EV = (0.50 x 1.20 x 100) - (0.50 x 100) = R$ 60 - R$ 50 = +R$ 10.
+          EV positivo indica value. EV negativo indica que a aposta é prejudicial a longo prazo.
+          O segredo é acumular muitos EVs positivos — a variância de curto prazo é inevitável,
+          mas a matemática favorece quem consistentemente aposta em EV positivo.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">5 Métodos para Encontrar Value Bets</h2>
+        <div className="space-y-4">
+          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+            <h3 className="font-bold text-base mb-2">1. Compare odds entre casas</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Diferentes casas oferecem odds diferentes para o mesmo evento. Se a maioria oferece 2.00
+              e uma oferece 2.30, a última pode estar subvalorizando o resultado. Use comparadores de odds
+              como primeiro filtro para encontrar discrepâncias.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+            <h3 className="font-bold text-base mb-2">2. Modele suas próprias probabilidades</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Use estatísticas (xG, forma recente, confrontos diretos) para estimar suas probabilidades.
+              Um modelo simples de Poisson para gols ou um sistema de Elo ratings já são melhores
+              do que seguir intuição. Compare suas estimativas com as odds do mercado.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+            <h3 className="font-bold text-base mb-2">3. Acompanhe movimentos de odds</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Quando uma odd cai rapidamente sem motivo esportivo óbvio, pode indicar que dinheiro
+              institucional está entrando. A odd original pode ter tido valor que está desaparecendo.
+              Monitorar movimentos ajuda a identificar value antes que o mercado se ajuste.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+            <h3 className="font-bold text-base mb-2">4. Foque em mercados menos eficientes</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Mercados de resultado final são muito eficientes. Mercados como escanteios, cartões
+              ou ligas menores têm menos liquidez e mais ineficiências.
+              É onde apostadores informados encontram value mais facilmente.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+            <h3 className="font-bold text-base mb-2">5. Mantenha registros e calcule seu CLV</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Closing Line Value (CLV) mede se suas apostas batem consistentemente a odd de fechamento.
+              Se suas odds médias são 2.10 e a odd de fechamento é 2.00, você tem CLV positivo —
+              indicador forte de que está encontrando value real.
+            </p>
+          </div>
+        </div>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Erros que Destroem Value</h2>
+        <p className="text-base leading-relaxed">
+          O maior erro é confundir "time que vai ganhar" com "value bet". Um favorito pode vencer frequentemente,
+          mas se a odd é muito baixa, pode não ter valor. O segundo erro é não remover a margem da casa antes de comparar
+          probabilidades. O terceiro é superestimar a qualidade da própria análise — lembre que as casas têm modelos
+          sofisticados e equipes de traders. Use o Simulador de Probabilidades e o Gerador de Estratégias
+          para testar suas estimativas antes de apostar dinheiro real.
+        </p>
+      </div>
+    ),
+  },
+
+  'lucro-esperado-vs-retorno': {
+    title: 'Lucro Esperado vs Retorno: Entenda a Diferença',
+    category: 'Fundamentos',
+    readTime: '9 min',
+    icon: Lightbulb,
+    content: (
+      <div className="prose prose-sm dark:prose-invert max-w-none space-y-6">
+        <p className="text-base leading-relaxed">
+          "Ganhei R$ 500 esse mês" soa bem, mas sem contexto é inútil. Ganhou R$ 500 apostando R$ 1.000
+          (50% de retorno) ou apostando R$ 50.000 (1% de retorno)? Entender as diferenças entre lucro esperado,
+          ROI, yield e retorno é fundamental para avaliar se sua estratégia realmente funciona ou se foi sorte.
+          Este artigo esclarece cada métrica e mostra qual usar em cada situação.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">As 4 Métricas Essenciais</h2>
+        <div className="space-y-4">
+          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+            <h3 className="font-bold text-base mb-2">1. Lucro/Prejuízo (L/P)</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              O valor absoluto ganho ou perdido. Ganhou R$ 500 = L/P de +R$ 500. Simples, mas não considera
+              quanto foi apostado. R$ 500 de lucro em R$ 1.000 apostado é excelente; em R$ 100.000 é ruim.
+              Sozinho, o L/P não permite comparações nem avaliação de eficiência.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+            <h3 className="font-bold text-base mb-2">2. ROI (Return on Investment)</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              ROI = (Lucro / Total Apostado) x 100. Se apostou R$ 10.000 e lucrou R$ 500, ROI = 5%.
+              É a métrica mais usada porque é proporcional — permite comparação entre apostadores
+              com bankrolls diferentes. Um ROI de 5% a longo prazo é excelente no mundo das apostas.
+            </p>
+            <div className="p-2 rounded bg-muted/30 mt-2">
+              <p className="text-center font-mono text-sm">ROI = (Lucro Líquido / Total Apostado) x 100</p>
+            </div>
+          </div>
+          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+            <h3 className="font-bold text-base mb-2">3. Yield (Retorno por Aposta)</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Yield = (Lucro / Soma das Stake Retornadas) x 100. O denominador inclui o valor apostado MAIS
+              o lucro (ou seja, o retorno total). Se apostou R$ 10.000 e retornou R$ 10.500,
+              Yield = 500/10.500 = 4,76%. É muito similar ao ROI mas com denominador ligeiramente maior,
+              resultando em número um pouco menor. Usado mais na Europa.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+            <h3 className="font-bold text-base mb-2">4. Lucro Esperado (EV)</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              EV = Soma de (Probabilidade x Retorno) para cada aposta. É uma métrica prospectiva —
+              estima quanto você deve ganhar antes de os eventos acontecerem. Diferente do ROI e Yield,
+              que são retrospectivos (medem o passado), o EV avalia a qualidade das decisões,
+              não apenas os resultados. Um EV positivo consistente indica boa tomada de decisão,
+              mesmo que o ROI de curto prazo seja negativo por variância.
+            </p>
+          </div>
+        </div>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Qual Métrica Usar Quando?</h2>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm border-collapse">
+            <thead>
+              <tr className="border-b border-border/50">
+                <th className="text-left p-2 font-bold">Situação</th>
+                <th className="text-left p-2 font-bold">Métrica Ideal</th>
+                <th className="text-left p-2 font-bold">Por quê</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-b border-border/30"><td className="p-2">Avaliar eficiência geral</td><td className="p-2">ROI</td><td className="p-2">Proporcional, comparável</td></tr>
+              <tr className="border-b border-border/30"><td className="p-2">Relatórios europeus</td><td className="p-2">Yield</td><td className="p-2">Padrão em sites europeus</td></tr>
+              <tr className="border-b border-border/30"><td className="p-2">Decidir se deve apostar</td><td className="p-2">EV</td><td className="p-2">Prospectivo, avalia decisão</td></tr>
+              <tr className="border-b border-border/30"><td className="p-2">Conversa com amigos</td><td className="p-2">L/P</td><td className="p-2">Fácil de entender</td></tr>
+              <tr><td className="p-2">Gestão de bankroll</td><td className="p-2">ROI + EV</td><td className="p-2">Combina resultado e qualidade</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">O Perigo do Pequeno Número de Amostras</h2>
+        <p className="text-base leading-relaxed">
+          Um ROI de 15% em 50 apostas significa muito pouco — pode ser pura sorte. Um ROI de 3% em 2.000 apostas
+          é estatisticamente significativo e indica edge real. Para ter confiança de 95% de que seu ROI reflete
+          habilidade (não sorte), você precisa de centenas a milhares de apostas, dependendo do ROI observado
+          e da odd média. Use o Analisador de Sequências para calcular a significância estatística dos seus resultados.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Lucro Esperado vs Realizado</h2>
+        <p className="text-base leading-relaxed">
+          A diferença entre EV e resultado real é a variância. Em 100 apostas com EV de +5%, seu resultado real
+          pode variar de -20% a +30%. Em 1.000 apostas, a variação cai para -2% a +12%. Em 10.000, converge
+          para perto dos 5%. Essa é a Lei dos Grandes Números em ação. Por isso, nunca julgue uma estratégia
+          com menos de 500-1.000 apostas. A gestão de bankroll adequada (1-3% por aposta) garante que você
+          sobreviva à variância negativa até que o EV se manifeste. Use a Gestão de Capital e o Analisador
+          de Sequências para acompanhar essas métricas.
+        </p>
       </div>
     ),
   },

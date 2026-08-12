@@ -55,6 +55,39 @@ const articles: Record<string, { title: string; description: string }> = {
     title: 'Introdução à Teoria dos Jogos',
     description: 'Conheça os conceitos fundamentais da teoria dos jogos e suas aplicações práticas.',
   },
+
+  'como-calcular-probabilidades-odds': {
+    title: 'Como Calcular Probabilidades a Partir de Odds',
+    description: 'Guia completo para converter odds decimais, fracionárias e americanas em probabilidades com exemplos práticos.',
+  },
+  'o-que-e-drawdown': {
+    title: 'O que é Drawdown e Como Proteger Seu Capital',
+    description: 'Entenda o conceito de drawdown, como calculá-lo e estratégias para limitar perdas no bankroll.',
+  },
+  'guia-gestao-bankroll-apostas': {
+    title: 'Guia Completo de Gestão de Bankroll',
+    description: 'As 5 regras de ouro da gestão de bankroll, Critério de Kelly e como definir o tamanho ideal de cada aposta.',
+  },
+  'sistema-masaniello-pratica': {
+    title: 'Como Funciona o Sistema Masaniello na Prática',
+    description: 'Guia prático do sistema Masaniello: parâmetros, cálculos e estratégias para ciclos de apostas.',
+  },
+  'hedging-apostas-guia-completo': {
+    title: 'Hedging em Apostas: Guia Completo',
+    description: 'Aprenda o que é hedging, como calcular aposta de cobertura e quando vale a pena fazer.',
+  },
+  'fibonacci-vs-martingale': {
+    title: 'Fibonacci vs Martingale: Comparativo Completo',
+    description: 'Compare as progressões Fibonacci e Martingale em risco, requisitos de capital e resultados.',
+  },
+  'como-identificar-value-bets': {
+    title: 'Como Identificar Value Bets: Guia Prático',
+    description: 'Aprenda a calcular valor esperado e identificar value bets com exemplos práticos.',
+  },
+  'lucro-esperado-vs-retorno': {
+    title: 'Lucro Esperado vs Retorno: Entenda a Diferença',
+    description: 'Diferença entre ROI, yield, lucro esperado e retorno — qual métrica usar e quando.',
+  },
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

@@ -40,6 +40,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     'lei-grandes-numeros',
     'distribuicao-normal-gaussiana',
     'introducao-teoria-jogos',
+    'como-calcular-probabilidades-odds',
+    'o-que-e-drawdown',
+    'guia-gestao-bankroll-apostas',
+    'sistema-masaniello-pratica',
+    'hedging-apostas-guia-completo',
+    'fibonacci-vs-martingale',
+    'como-identificar-value-bets',
+    'lucro-esperado-vs-retorno',
   ]
 
   const now = new Date()
