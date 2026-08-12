@@ -1,0 +1,1055 @@
+     1→'use client'
+     2→
+     3→import Link from 'next/link'
+     4→import { Card, CardContent } from '@/components/ui/card'
+     5→import { Badge } from '@/components/ui/badge'
+     6→import { ArrowLeft, BookOpen, Calculator, TrendingUp, BarChart3, Lightbulb, AlertTriangle } from 'lucide-react'
+     7→import { AdskeeperWidget } from '@/components/ads/adskeeper-widget'
+     8→import { ArticleCTA } from '@/components/shared/article-cta'
+     9→import { ShareButtons } from '@/components/shared/share-buttons'
+    10→
+    11→const ctaLinksMap: Record<string, { name: string; href: string; description: string }[]> = {
+    12→  'introducao-probabilidade': [
+    13→    { name: 'Simulador de Probabilidades', href: '/probability-simulator', description: 'Simule eventos e calcule probabilidades' },
+    14→    { name: 'Calculadora Martingale', href: '/martingale', description: 'Analise a progressão Martingale' },
+    15→  ],
+    16→  'gestao-risco-capital': [
+    17→    { name: 'Gestão de Capital', href: '/bankroll', description: 'Calcule o tamanho ideal da posição' },
+    18→    { name: 'Recuperação de Capital', href: '/recovery', description: 'Planeje a recuperação de perdas' },
+    19→  ],
+    20→  'sequencia-fibonacci-matematica': [
+    21→    { name: 'Calculadora Fibonacci', href: '/fibonacci', description: 'Gere e analise a sequência Fibonacci' },
+    22→    { name: 'Calculadora Martingale', href: '/martingale', description: 'Compare com a progressão Martingale' },
+    23→  ],
+    24→  'progressao-martingale-analise': [
+    25→    { name: 'Calculadora Martingale', href: '/martingale', description: 'Simule a progressão Martingale' },
+    26→    { name: 'Calculadora de Ciclos', href: '/ciclos', description: 'Martingale com ciclos de recuperação' },
+    27→  ],
+    28→  'estatistica-descritiva-basica': [
+    29→    { name: 'Simulador de Probabilidades', href: '/probability-simulator', description: 'Explore conceitos estatísticos na prática' },
+    30→  ],
+    31→  'simulacao-monte-carlo': [
+    32→    { name: 'Simulador de Probabilidades', href: '/probability-simulator', description: 'Simule eventos aleatórios' },
+    33→    { name: 'Gerador de Estratégias', href: '/strategy-generator', description: 'Crie estratégias com simulação' },
+    34→  ],
+    35→  'falacias-estatisticas': [
+    36→    { name: 'Simulador de Probabilidades', href: '/probability-simulator', description: 'Teste falácias com simulação' },
+    37→  ],
+    38→  'valor-esperado-matematico': [
+    39→    { name: 'Gestão de Capital', href: '/bankroll', description: 'Aplique valor esperado na gestão' },
+    40→    { name: 'Calculadora de Hedging', href: '/hedging', description: 'Calcule coberturas de risco' },
+    41→  ],
+    42→  'paradoxo-monty-hall': [
+    43→    { name: 'Simulador de Probabilidades', href: '/probability-simulator', description: 'Simule o paradoxo de Monty Hall' },
+    44→  ],
+    45→  'lei-grandes-numeros': [
+    46→    { name: 'Simulador de Probabilidades', href: '/probability-simulator', description: 'Veja a LGN em ação' },
+    47→    { name: 'Gerador de Estratégias', href: '/strategy-generator', description: 'Estratégias baseadas em simulação' },
+    48→  ],
+    49→  'distribuicao-normal-gaussiana': [
+    50→    { name: 'Simulador de Probabilidades', href: '/probability-simulator', description: 'Explore a distribuição normal' },
+    51→  ],
+    52→  'introducao-teoria-jogos': [
+    53→    { name: 'Gerador de Estratégias', href: '/strategy-generator', description: 'Crie estratégias com teoria dos jogos' },
+    54→    { name: 'Calculadora de Hedging', href: '/hedging', description: 'Estratégias de cobertura de risco' },
+    55→  ],
+    56→}
+    57→
+    58→const articles: Record<string, {
+    59→  title: string
+    60→  category: string
+    61→  readTime: string
+    62→  icon: React.ComponentType<{ className?: string }>
+    63→  content: React.ReactNode
+    64→}> = {
+    65→  'introducao-probabilidade': {
+    66→    title: 'Introdução à Teoria das Probabilidades',
+    67→    category: 'Fundamentos',
+    68→    readTime: '8 min',
+    69→    icon: Calculator,
+    70→    content: (
+    71→      <div className="prose prose-sm dark:prose-invert max-w-none space-y-6">
+    72→        <p className="text-base leading-relaxed">
+    73→          A teoria das probabilidades é um ramo da matemática que estuda a ocorrência de eventos aleatórios. 
+    74→          Desenvolvida inicialmente no século XVII por matemáticos como Pascal e Fermat, a teoria das probabilidades 
+    75→          tornou-se uma das áreas mais importantes da matemática moderna, com aplicações que vão desde a física 
+    76→          até a economia e a ciência da computação.
+    77→        </p>
+    78→
+    79→        <h2 className="text-xl font-bold mt-8 mb-3">🎲 O que é Probabilidade?</h2>
+    80→        <p className="text-base leading-relaxed">
+    81→          Probabilidade é uma medida numérica que quantifica a chance de um evento ocorrer. Ela é expressa como 
+    82→          um número entre 0 e 1 (ou 0% a 100%), onde 0 significa que o evento é impossível e 1 significa que 
+    83→          o evento é certo. A fórmula básica da probabilidade clássica é:
+    84→        </p>
+    85→        <div className="p-4 rounded-lg bg-muted/30 border border-border/50">
+    86→          <p className="text-center font-mono text-lg">
+    87→            P(A) = número de resultados favoráveis / número total de resultados possíveis
+    88→          </p>
+    89→        </div>
+    90→
+    91→        <h2 className="text-xl font-bold mt-8 mb-3">📐 Conceitos Fundamentais</h2>
+    92→        <div className="space-y-4">
+    93→          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+    94→            <h3 className="font-bold text-base mb-2">Espaço Amostral (Ω)</h3>
+    95→            <p className="text-sm text-muted-foreground leading-relaxed">
+    96→              O espaço amostral é o conjunto de todos os resultados possíveis de um experimento aleatório. 
+    97→              Por exemplo, ao lançar um dado, o espaço amostral é Ω = {'{1, 2, 3, 4, 5, 6}'}. Ao lançar uma moeda, 
+    98→              Ω = {'{cara, coroa}'}. O conceito de espaço amostral é fundamental para calcular qualquer probabilidade.
+    99→            </p>
+   100→          </div>
+   101→          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+   102→            <h3 className="font-bold text-base mb-2">Evento</h3>
+   103→            <p className="text-sm text-muted-foreground leading-relaxed">
+   104→              Um evento é qualquer subconjunto do espaço amostral. Por exemplo, &quot;sair um número par&quot; no lançamento 
+   105→              de um dado é o evento E = {'{2, 4, 6}'}. A probabilidade desse evento é P(E) = 3/6 = 0,5 (50%).
+   106→            </p>
+   107→          </div>
+   108→          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+   109→            <h3 className="font-bold text-base mb-2">Eventos Mutuamente Exclusivos</h3>
+   110→            <p className="text-sm text-muted-foreground leading-relaxed">
+   111→              Dois eventos são mutuamente exclusivos quando não podem ocorrer simultaneamente. Por exemplo, 
+   112→              &quot;sair 1&quot; e &quot;sair 6&quot; em um único lançamento de dado são mutuamente exclusivos. 
+   113→              Para eventos mutuamente exclusivos: P(A ou B) = P(A) + P(B).
+   114→            </p>
+   115→          </div>
+   116→          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+   117→            <h3 className="font-bold text-base mb-2">Eventos Independentes</h3>
+   118→            <p className="text-sm text-muted-foreground leading-relaxed">
+   119→              Dois eventos são independentes quando a ocorrência de um não afeta a probabilidade do outro. 
+   120→              Por exemplo, o resultado de um lançamento de dado não afeta o próximo. Para eventos independentes: 
+   121→              P(A e B) = P(A) × P(B). Essa é a chamada regra da multiplicação.
+   122→            </p>
+   123→          </div>
+   124→        </div>
+   125→
+   126→        <h2 className="text-xl font-bold mt-8 mb-3">🔗 Probabilidade Condicional</h2>
+   127→        <p className="text-base leading-relaxed">
+   128→          A probabilidade condicional P(A|B) é a probabilidade do evento A ocorrer, sabendo que o evento B já ocorreu. 
+   129→          A fórmula é: P(A|B) = P(A e B) / P(B). Este conceito é fundamental para o Teorema de Bayes, que permite 
+   130→          atualizar probabilidades com base em novas informações. O Teorema de Bayes tem aplicações em diagnóstico 
+   131→          médico, filtros de spam, inteligência artificial e muitas outras áreas.
+   132→        </p>
+   133→
+   134→        <h2 className="text-xl font-bold mt-8 mb-3">🚀 Aplicações Práticas</h2>
+   135→        <p className="text-base leading-relaxed">
+   136→          A teoria das probabilidades tem inúmeras aplicações práticas no dia a dia: previsão do tempo (probabilidade 
+   137→          de chuva), análise de risco em seguros e finanças, controle de qualidade na indústria, algoritmos de 
+   138→          machine learning, criptografia, e muito mais. Compreender os fundamentos da probabilidade é essencial 
+   139→          para tomar decisões mais informadas em qualquer área que envolva incerteza.
+   140→        </p>
+   141→
+   142→        <div className="flex gap-3 p-4 rounded-lg bg-neon/5 border border-neon/20 my-4">
+   143→          <span className="text-lg">💡</span>
+   144→          <div className="text-sm text-muted-foreground">Use o Simulador de Probabilidades para visualizar como a frequência relativa de eventos converge para a probabilidade teórica à medida que o número de tentativas aumenta.</div>
+   145→        </div>
+   146→
+   147→        <div className="mt-8 p-4 rounded-lg border border-amber-500/30 bg-amber-500/5">
+   148→          <div className="flex items-center gap-2 mb-2">
+   149→            <AlertTriangle className="h-5 w-5 text-amber-500" />
+   150→            <h3 className="font-bold text-amber-500">Nota Importante</h3>
+   151→          </div>
+   152→          <p className="text-sm text-muted-foreground leading-relaxed">
+   153→            Entender probabilidade não significa poder prever resultados individuais. A probabilidade descreve 
+   154→            o comportamento de longo prazo de eventos aleatórios, não resultados específicos. A falácia do 
+   155→            jogador consiste em acreditar que resultados passados influenciam resultados futuros em eventos independentes.
+   156→          </p>
+   157→        </div>
+   158→      </div>
+   159→    ),
+   160→  },
+   161→  'gestao-risco-capital': {
+   162→    title: 'Gestão de Risco e Capital',
+   163→    category: 'Gestão',
+   164→    readTime: '10 min',
+   165→    icon: TrendingUp,
+   166→    content: (
+   167→      <div className="prose prose-sm dark:prose-invert max-w-none space-y-6">
+   168→        <p className="text-base leading-relaxed">
+   169→          A gestão de risco e capital é um conjunto de práticas e técnicas utilizadas para proteger recursos 
+   170→          financeiros contra perdas excessivas. Seja em investimentos, negócios ou qualquer atividade que envolva 
+   171→          incerteza financeira, a gestão adequada do risco é fundamental para a sustentabilidade a longo prazo.
+   172→        </p>
+   173→
+   174→        <h2 className="text-xl font-bold mt-8 mb-3">🛡️ Princípios Fundamentais</h2>
+   175→        <div className="space-y-4">
+   176→          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+   177→            <h3 className="font-bold text-base mb-2">1. Proteção do Capital</h3>
+   178→            <p className="text-sm text-muted-foreground leading-relaxed">
+   179→              O princípio mais importante da gestão de risco é proteger o capital. Sem capital, não há como 
+   180→              se recuperar de perdas. A regra prática é nunca arriscar mais do que uma pequena porcentagem 
+   181→              do capital total em uma única operação — geralmente entre 1% e 2%. Isso garante que mesmo uma 
+   182→              sequência de perdas não elimine seu capital.
+   183→            </p>
+   184→          </div>
+   185→          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+   186→            <h3 className="font-bold text-base mb-2">2. Diversificação</h3>
+   187→            <p className="text-sm text-muted-foreground leading-relaxed">
+   188→              Não coloque todos os ovos na mesma cesta. A diversificação reduz o risco concentrado distribuindo 
+   189→              o capital entre diferentes tipos de operações ou investimentos. Matematicamente, a diversificação 
+   190→              pode reduzir a variância total do portfólio sem necessariamente reduzir o retorno esperado.
+   191→            </p>
+   192→          </div>
+   193→          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+   194→            <h3 className="font-bold text-base mb-2">3. Relação Risco-Retorno</h3>
+   195→            <p className="text-sm text-muted-foreground leading-relaxed">
+   196→              Toda decisão financeira envolve uma relação entre o risco assumido e o retorno esperado. 
+   197→              O princípio fundamental é que riscos maiores devem ser compensados por retornos potenciais maiores. 
+   198→              A análise risco-retorno permite avaliar se uma operação vale a pena do ponto de vista matemático.
+   199→            </p>
+   200→          </div>
+   201→        </div>
+   202→
+   203→        <h2 className="text-xl font-bold mt-8 mb-3">📏 Calculando o Tamanho da Posição</h2>
+   204→        <p className="text-base leading-relaxed">
+   205→          O cálculo do tamanho da posição é uma das aplicações mais práticas da gestão de risco. A fórmula básica é:
+   206→        </p>
+   207→        <div className="p-4 rounded-lg bg-muted/30 border border-border/50">
+   208→          <p className="text-center font-mono text-lg">
+   209→            Tamanho da Posição = (Capital × Risco por Operação) / Risco da Operação
+   210→          </p>
+   211→        </div>
+   212→        <p className="text-base leading-relaxed mt-4">
+   213→          Por exemplo, se você tem R$10.000 de capital, arrisca 1% por operação (R$100) e a operação tem um 
+   214→          risco de R$5, o tamanho da posição seria 100/5 = 20 unidades. Este cálculo garante que uma perda 
+   215→          na operação não exceda o valor predeterminado.
+   216→        </p>
+   217→
+   218→        <h2 className="text-xl font-bold mt-8 mb-3">🎯 Stop Loss e Take Profit</h2>
+   219→        <p className="text-base leading-relaxed">
+   220→          Stop loss é o nível de preço onde você automaticamente sai de uma operação para limitar perdas. 
+   221→          Take profit é o nível onde você garante o lucro. A relação entre o take profit e o stop loss 
+   222→          (chamada de relação risco-retorno) deve ser favorável — geralmente busca-se pelo menos 2:1, 
+   223→          ou seja, o ganho potencial deve ser pelo menos o dobro da perda potencial.
+   224→        </p>
+   225→
+   226→        <h2 className="text-xl font-bold mt-8 mb-3">📉 O Drawdown Máximo</h2>
+   227→        <p className="text-base leading-relaxed">
+   228→          Drawdown é a maior queda percentual do capital desde um ponto máximo até um ponto mínimo. É uma medida 
+   229→          fundamental de risco que mostra o pior cenário já vivido. Um drawdown de 50% exige um retorno de 100% 
+   230→          para recuperação — por isso é tão importante limitar o tamanho das perdas. A gestão de risco eficaz 
+   231→          visa manter o drawdown máximo em níveis aceitáveis (geralmente abaixo de 20-30%).
+   232→        </p>
+   233→
+   234→        <div className="mt-8 p-4 rounded-lg border border-neon-blue/30 bg-neon-blue/5">
+   235→          <div className="flex items-center gap-2 mb-2">
+   236→            <Lightbulb className="h-5 w-5 text-neon-blue" />
+   237→            <h3 className="font-bold text-neon-blue">Dica Importante</h3>
+   238→          </div>
+   239→          <p className="text-sm text-muted-foreground leading-relaxed">
+   240→            A gestão de risco não é sobre evitar perdas — é sobre controlá-las. Perdas são parte natural de 
+   241→            qualquer atividade que envolva incerteza. O segredo está em garantir que as perdas sejam pequenas 
+   242→            o suficiente para que você possa continuar operando até que as operações favoráveis compensem.
+   243→          </p>
+   244→        </div>
+   245→      </div>
+   246→    ),
+   247→  },
+   248→  'sequencia-fibonacci-matematica': {
+   249→    title: 'A Sequência Fibonacci na Matemática',
+   250→    category: 'Matemática',
+   251→    readTime: '7 min',
+   252→    icon: BarChart3,
+   253→    content: (
+   254→      <div className="prose prose-sm dark:prose-invert max-w-none space-y-6">
+   255→        <p className="text-base leading-relaxed">
+   256→          A sequência de Fibonacci é uma das sequências matemáticas mais famosas do mundo. Descrita pelo 
+   257→          matemático italiano Leonardo Fibonacci no século XIII, ela começa com 0 e 1, e cada número 
+   258→          subsequente é a soma dos dois anteriores: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, ...
+   259→        </p>
+   260→
+   261→        <h2 className="text-xl font-bold mt-8 mb-3">🔢 Propriedades Matemáticas</h2>
+   262→        <p className="text-base leading-relaxed">
+   263→          A sequência de Fibonacci possui propriedades matemáticas notáveis:
+   264→        </p>
+   265→        <ul className="space-y-2 text-base text-muted-foreground">
+   266→          <li className="flex gap-2"><span className="text-neon">•</span> A razão entre termos consecutivos converge para o número áureo (φ ≈ 1,618033988...)</li>
+   267→          <li className="flex gap-2"><span className="text-neon">•</span> A soma dos primeiros n termos é igual ao termo (n+2) menos 1</li>
+   268→          <li className="flex gap-2"><span className="text-neon">•</span> O quadrado de qualquer termo é aproximadamente igual ao produto dos termos adjacentes, mais ou menos 1</li>
+   269→          <li className="flex gap-2"><span className="text-neon">•</span> Dois termos consecutivos são sempre primos entre si (não têm divisores comuns)</li>
+   270→        </ul>
+   271→
+   272→        <h2 className="text-xl font-bold mt-8 mb-3">✨ O Número Áureo (φ)</h2>
+   273→        <p className="text-base leading-relaxed">
+   274→          A proporção áurea, representada pela letra grega φ (phi), é aproximadamente 1,618. Ela surge 
+   275→          naturalmente na sequência de Fibonacci: à medida que os números crescem, a razão entre termos 
+   276→          consecutivos se aproxima cada vez mais de φ. Este número aparece em incontáveis fenômenos 
+   277→          naturais e é considerado uma das proporções mais harmônicas da matemática.
+   278→        </p>
+   279→
+   280→        <Card className="bg-neon/5 border-neon/20 p-4 my-4">
+   281→          <CardContent className="p-0">
+   282→            <p className="text-center font-mono text-lg">φ = (1 + √5) / 2 ≈ 1,6180339887...</p>
+   283→            <p className="text-center text-sm text-muted-foreground mt-2">A proporção áurea — o limite da razão entre termos consecutivos de Fibonacci</p>
+   284→          </CardContent>
+   285→        </Card>
+   286→
+   287→        <h2 className="text-xl font-bold mt-8 mb-3">🌻 Fibonacci na Natureza</h2>
+   288→        <p className="text-base leading-relaxed">
+   289→          A sequência de Fibonacci aparece em diversos fenômenos naturais: o número de pétalas de muitas 
+   290→          flores (3, 5, 8, 13, 21), a disposição das sementes no girassol, as espirais de conchas marinhas 
+   291→          (nautilus), a ramificação de árvores e até a estrutura de furacões. A natureza parece &quot;preferir&quot; 
+   292→          esta sequência por sua eficiência matemática no empacotamento e crescimento.
+   293→        </p>
+   294→
+   295→        <h2 className="text-xl font-bold mt-8 mb-3">🛠️ Aplicações Práticas</h2>
+   296→        <p className="text-base leading-relaxed">
+   297→          A sequência de Fibonacci e o número áureo têm aplicações em diversas áreas: análise técnica de 
+   298→          mercados financeiros (níveis de suporte e resistência), design e arquitetura (proporções áureas), 
+   299→          algoritmos de computação (busca fibonacci), e como base para sistemas de progressão em gestão 
+   300→          de capital. É importante notar que, embora fascinante, a sequência de Fibonacci não possui 
+   301→          propriedades mágicas — sua utilidade vem de suas propriedades matemáticas reais.
+   302→        </p>
+   303→
+   304→        <div className="flex gap-3 p-4 rounded-lg bg-amber-500/5 border border-amber-500/20 my-4">
+   305→          <span className="text-lg">⚠️</span>
+   306→          <div className="text-sm text-muted-foreground">Embora a sequência de Fibonacci apareça em muitos fenômenos naturais, nem toda ocorrência de números de Fibonacci na natureza é significativa. Cuidado para não ver padrões onde não existem — isso é chamado de apofenia.</div>
+   307→        </div>
+   308→      </div>
+   309→    ),
+   310→  },
+   311→  'progressao-martingale-analise': {
+   312→    title: 'Análise Matemática da Progressão Martingale',
+   313→    category: 'Análise',
+   314→    readTime: '12 min',
+   315→    icon: TrendingUp,
+   316→    content: (
+   317→      <div className="prose prose-sm dark:prose-invert max-w-none space-y-6">
+   318→        <p className="text-base leading-relaxed">
+   319→          A progressão Martingale é um dos sistemas de progressão mais conhecidos e estudados na matemática. 
+   320→          Originalmente concebida na França do século XVIII, a Martingale baseia-se em um princípio simples: 
+   321→          após uma perda, dobra-se o valor da próxima operação, de forma que uma vitória recupere todas as 
+   322→          perdas anteriores e gere um lucro igual à aposta inicial.
+   323→        </p>
+   324→
+   325→        <h2 className="text-xl font-bold mt-8 mb-3">⚙️ Como Funciona a Progressão</h2>
+   326→        <div className="p-4 rounded-lg bg-muted/30 border border-border/50">
+   327→          <p className="text-center font-mono">
+   328→            Nível 1: R$10 → Perda → Saldo: -R$10<br/>
+   329→            Nível 2: R$20 → Perda → Saldo: -R$30<br/>
+   330→            Nível 3: R$40 → Perda → Saldo: -R$70<br/>
+   331→            Nível 4: R$80 → Ganho (+R$80) → Saldo: +R$10
+   332→          </p>
+   333→        </div>
+   334→        <p className="text-base leading-relaxed mt-4">
+   335→          Em cada nível, o valor apostado é o dobro do anterior. A ideia é que eventualmente uma vitória 
+   336→          ocorrerá, cobrindo todas as perdas e gerando lucro. No exemplo acima, com uma aposta inicial de 
+   337→          R$10, após 3 perdas consecutivas seguidas de uma vitória no nível 4, o resultado líquido é +R$10.
+   338→        </p>
+   339→
+   340→        <h2 className="text-xl font-bold mt-8 mb-3">📊 Análise Estatística</h2>
+   341→        <p className="text-base leading-relaxed">
+   342→          A progressão Martingale tem uma propriedade teórica interessante: em um cenário com probabilidade 
+   343→          de vitória de 50% e recursos infinitos, o valor esperado é positivo. No entanto, na prática, 
+   344→          existem limitações críticas:
+   345→        </p>
+   346→        <ul className="space-y-2 text-base text-muted-foreground">
+   347→          <li className="flex gap-2"><span className="text-amber-500">•</span> <strong>Capital finito:</strong> Ninguém tem recursos infinitos. Após n perdas, a aposta necessária é 2^(n-1) × aposta inicial</li>
+   348→          <li className="flex gap-2"><span className="text-amber-500">•</span> <strong>Limites de mesa:</strong> Cassinos e plataformas impõem limites máximos de aposta</li>
+   349→          <li className="flex gap-2"><span className="text-amber-500">•</span> <strong>Crescimento exponencial:</strong> O valor necessário dobra a cada nível, crescendo rapidamente</li>
+   350→          <li className="flex gap-2"><span className="text-amber-500">•</span> <strong>Probabilidade de ruína:</strong> A probabilidade de uma sequência longa de perdas não é tão baixa quanto parece</li>
+   351→        </ul>
+   352→
+   353→        <h2 className="text-xl font-bold mt-8 mb-3">💥 A Matemática da Ruína</h2>
+   354→        <p className="text-base leading-relaxed">
+   355→          Com probabilidade de 50% por evento, a chance de 10 perdas consecutivas é (0,5)^10 = 0,0977%, 
+   356→          ou aproximadamente 1 em 1.024. Isso parece pequeno, mas considere que em 1.000 sequências de 
+   357→          operações, é estatisticamente esperado que pelo menos uma sequência de 10 perdas ocorra. Com uma 
+   358→          aposta inicial de R$10, 10 perdas consecutivas exigiriam uma aposta de R$5.120 no 11º nível, 
+   359→          com um prejuízo acumulado de R$10.230.
+   360→        </p>
+   361→
+   362→        <h2 className="text-xl font-bold mt-8 mb-3">🎓 A Martingale como Ferramenta Educacional</h2>
+   363→        <p className="text-base leading-relaxed">
+   364→          Embora a Martingale seja frequentemente discutida no contexto de apostas, ela é primeiramente um 
+   365→          conceito matemático importante. Estudar a Martingale ensina sobre progressões geométricas, 
+   366→          crescimento exponencial, probabilidade de ruína e os limites da intuição humana em relação a 
+   367→          eventos aleatórios. É um excelente exercício de pensamento matemático crítico.
+   368→        </p>
+   369→
+   370→        <div className="mt-8 p-4 rounded-lg border border-amber-500/30 bg-amber-500/5">
+   371→          <div className="flex items-center gap-2 mb-2">
+   372→            <AlertTriangle className="h-5 w-5 text-amber-500" />
+   373→            <h3 className="font-bold text-amber-500">Aviso Matemático</h3>
+   374→          </div>
+   375→          <p className="text-sm text-muted-foreground leading-relaxed">
+   376→            A progressão Martingale é um conceito matemático com limitações práticas severas. O crescimento 
+   377→            exponencial dos valores necessários e os limites de capital a tornam insustentável a longo prazo. 
+   378→            Este artigo é para fins educacionais — não é uma recomendação de uso.
+   379→          </p>
+   380→        </div>
+   381→      </div>
+   382→    ),
+   383→  },
+   384→  'estatistica-descritiva-basica': {
+   385→    title: 'Estatística Descritiva Básica',
+   386→    category: 'Estatística',
+   387→    readTime: '9 min',
+   388→    icon: BarChart3,
+   389→    content: (
+   390→      <div className="prose prose-sm dark:prose-invert max-w-none space-y-6">
+   391→        <p className="text-base leading-relaxed">
+   392→          A estatística descritiva é o ramo da estatística que organiza, resume e apresenta dados de forma 
+   393→          compreensível. Antes de fazer inferências ou previsões, é fundamental entender os dados que você 
+   394→          tem — e é aí que a estatística descritiva entra.
+   395→        </p>
+   396→
+   397→        <h2 className="text-xl font-bold mt-8 mb-3">📏 Medidas de Tendência Central</h2>
+   398→        <div className="space-y-4">
+   399→          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+   400→            <h3 className="font-bold text-base mb-2">Média Aritmética</h3>
+   401→            <p className="text-sm text-muted-foreground leading-relaxed">
+   402→              A média é a soma de todos os valores dividida pelo número de observações. É a medida mais 
+   403→              comum, mas pode ser distorcida por valores extremos (outliers). Exemplo: a média de 
+   404→              {'{2, 4, 6, 8, 100}'} é 24, mas isso não representa bem o &quot;centro&quot; dos dados devido ao valor 100.
+   405→            </p>
+   406→          </div>
+   407→          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+   408→            <h3 className="font-bold text-base mb-2">Mediana</h3>
+   409→            <p className="text-sm text-muted-foreground leading-relaxed">
+   410→              A mediana é o valor central quando os dados estão ordenados. Metade dos valores fica acima 
+   411→              e metade abaixo. Ao contrário da média, a mediana não é afetada por outliers. No exemplo 
+   412→              acima, a mediana seria 6, uma representação mais fiel do &quot;centro&quot;.
+   413→            </p>
+   414→          </div>
+   415→          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+   416→            <h3 className="font-bold text-base mb-2">Moda</h3>
+   417→            <p className="text-sm text-muted-foreground leading-relaxed">
+   418→              A moda é o valor que mais se repete no conjunto de dados. Um conjunto pode ser unimodal 
+   419→              (uma moda), bimodal (duas modas) ou multimodal. É útil para dados categóricos.
+   420→            </p>
+   421→          </div>
+   422→        </div>
+   423→
+   424→        <h2 className="text-xl font-bold mt-8 mb-3">📊 Medidas de Dispersão</h2>
+   425→        <div className="space-y-4">
+   426→          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+   427→            <h3 className="font-bold text-base mb-2">Variância</h3>
+   428→            <p className="text-sm text-muted-foreground leading-relaxed">
+   429→              A variância mede o quão dispersos os valores estão em relação à média. É calculada como a 
+   430→              média dos quadrados das diferenças entre cada valor e a média. Uma variância alta indica 
+   431→              dados muito espalhados; uma variância baixa indica dados concentrados.
+   432→            </p>
+   433→          </div>
+   434→          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+   435→            <h3 className="font-bold text-base mb-2">Desvio Padrão</h3>
+   436→            <p className="text-sm text-muted-foreground leading-relaxed">
+   437→              O desvio padrão é a raiz quadrada da variância. É mais intuitivo que a variância porque 
+   438→              está na mesma unidade dos dados originais. Na distribuição normal, cerca de 68% dos dados 
+   439→              ficam a um desvio padrão da média, 95% a dois, e 99,7% a três.
+   440→            </p>
+   441→          </div>
+   442→        </div>
+   443→
+   444→        <h2 className="text-xl font-bold mt-8 mb-3">🔔 Distribuição Normal</h2>
+   445→        <p className="text-base leading-relaxed">
+   446→          A distribuição normal (ou gaussiana) é a distribuição mais importante da estatística. Sua forma 
+   447→          de &quot;sino&quot; simétrico aparece naturalmente em muitos fenômenos. As propriedades da distribuição 
+   448→          normal — 68-95-99,7 — são fundamentais para análise de dados e testes de hipóteses.
+   449→        </p>
+   450→      </div>
+   451→    ),
+   452→  },
+   453→  'simulacao-monte-carlo': {
+   454→    title: 'Simulação de Monte Carlo',
+   455→    category: 'Simulação',
+   456→    readTime: '11 min',
+   457→    icon: Calculator,
+   458→    content: (
+   459→      <div className="prose prose-sm dark:prose-invert max-w-none space-y-6">
+   460→        <p className="text-base leading-relaxed">
+   461→          A simulação de Monte Carlo é um método computacional que utiliza amostragem aleatória repetida 
+   462→          para obter resultados numéricos. Desenvolvido durante o Projeto Manhattan na década de 1940, 
+   463→          o método recebeu esse nome em homenagem ao famoso cassino de Monte Carlo, devido à natureza 
+   464→          aleatória das simulações.
+   465→        </p>
+   466→
+   467→        <h2 className="text-xl font-bold mt-8 mb-3">🔄 Como Funciona</h2>
+   468→        <p className="text-base leading-relaxed">
+   469→          O método de Monte Carlo funciona em três passos básicos:
+   470→        </p>
+   471→        <ol className="space-y-3 text-base text-muted-foreground list-decimal list-inside">
+   472→          <li><strong className="text-foreground">Definir o modelo:</strong> Especificar as variáveis de entrada e suas distribuições de probabilidade</li>
+   473→          <li><strong className="text-foreground">Gerar amostras aleatórias:</strong> Simular milhares ou milhões de cenários possíveis usando números aleatórios</li>
+   474→          <li><strong className="text-foreground">Analisar os resultados:</strong> Calcular estatísticas (média, variância, percentis) a partir dos resultados simulados</li>
+   475→        </ol>
+   476→
+   477→        <h2 className="text-xl font-bold mt-8 mb-3">🎯 Exemplo Prático: Estimativa de Pi</h2>
+   478→        <p className="text-base leading-relaxed">
+   479→          Uma das demonstrações mais elegantes do método Monte Carlo é a estimativa do valor de π. 
+   480→          Imagine um quadrado de lado 1 com um círculo inscrito. A razão entre as áreas é π/4. 
+   481→          Gerando pontos aleatórios dentro do quadrado e contando quantos caem dentro do círculo, 
+   482→          podemos estimar π. Com 1 milhão de pontos, a estimativa converge para 3,14159... com 
+   483→          precisão crescente.
+   484→        </p>
+   485→
+   486→        <h2 className="text-xl font-bold mt-8 mb-3">🚀 Aplicações</h2>
+   487→        <ul className="space-y-2 text-base text-muted-foreground">
+   488→          <li className="flex gap-2"><span className="text-neon">•</span> Finanças: precificação de derivativos, análise de risco de portfólio (VaR)</li>
+   489→          <li className="flex gap-2"><span className="text-neon">•</span> Engenharia: análise de confiabilidade de sistemas complexos</li>
+   490→          <li className="flex gap-2"><span className="text-neon">•</span> Física: simulação de partículas, termodinâmica</li>
+   491→          <li className="flex gap-2"><span className="text-neon">•</span> Logística: otimização de rotas e cadeias de suprimento</li>
+   492→          <li className="flex gap-2"><span className="text-neon">•</span> Inteligência artificial: métodos de amostragem em ML</li>
+   493→        </ul>
+   494→
+   495→        <h2 className="text-xl font-bold mt-8 mb-3">⚠️ Limitações</h2>
+   496→        <p className="text-base leading-relaxed">
+   497→          A principal limitação do Monte Carlo é a necessidade de muitas simulações para convergir, 
+   498→          especialmente para eventos raros. A qualidade dos resultados depende da qualidade do modelo 
+   499→          e das distribuições de probabilidade escolhidas. Além disso, eventos com probabilidade muito 
+   500→          baixa podem não ser adequadamente representados sem um número extremamente alto de simulações.
+   501→        </p>
+   502→
+   503→        <div className="flex gap-3 p-4 rounded-lg bg-neon/5 border border-neon/20 my-4">
+   504→          <span className="text-lg">💡</span>
+   505→          <div className="text-sm text-muted-foreground">Você pode experimentar simulações de Monte Carlo diretamente no nosso Simulador de Probabilidades — tente aumentar o número de simulações e observe como os resultados convergem!</div>
+   506→        </div>
+   507→      </div>
+   508→    ),
+   509→  },
+   510→  'falacias-estatisticas': {
+   511→    title: 'Falácias Estatísticas Comuns',
+   512→    category: 'Estatística',
+   513→    readTime: '8 min',
+   514→    icon: AlertTriangle,
+   515→    content: (
+   516→      <div className="prose prose-sm dark:prose-invert max-w-none space-y-6">
+   517→        <p className="text-base leading-relaxed">
+   518→          Nossos cérebros não são naturalmente bons com probabilidade e estatística. Somos vítimas de 
+   519→          vieses cognitivos que nos levam a conclusões erradas. Conhecer as falácias estatísticas mais 
+   520→          comuns é essencial para pensar de forma mais racional e tomar decisões melhores.
+   521→        </p>
+   522→
+   523→        <h2 className="text-xl font-bold mt-8 mb-3">🛩️ 1. Viés do Sobrevivente</h2>
+   524→        <p className="text-base leading-relaxed">
+   525→          O viés do sobrevivente ocorre quando focamos apenas nos &quot;sobreviventes&quot; de um processo e 
+   526→          ignoramos os que falharam. Exemplo clássico: durante a Segunda Guerra, analistas queriam 
+   527→          reforçar as partes dos aviões que voltavam com mais buracos. O estatístico Abraham Wald 
+   528→          mostrou que deveriam reforçar as partes SEM buracos — os aviões que voltaram sobreviveram 
+   529→          apesar dos danos; os que foram atingidos nas partes intactas não voltaram.
+   530→        </p>
+   531→
+   532→        <h2 className="text-xl font-bold mt-8 mb-3">🎰 2. Falácia do Jogador</h2>
+   533→        <p className="text-base leading-relaxed">
+   534→          A falácia do jogador é a crença de que resultados passados de eventos independentes influenciam 
+   535→          resultados futuros. &quot;Saiu vermelho 5 vezes seguidas, então a próxima deve ser preto&quot; — errado! 
+   536→          Cada evento é independente. A roleta não tem memória. A probabilidade é sempre a mesma, 
+   537→          independentemente do histórico. Essa falácia é extremamente comum e pode levar a decisões ruins.
+   538→        </p>
+   539→
+   540→        <h2 className="text-xl font-bold mt-8 mb-3">📉 3. Regressão à Média</h2>
+   541→        <p className="text-base leading-relaxed">
+   542→          A regressão à média é o fenômeno onde valores extremos tendem a ser seguidos por valores mais 
+   543→          próximos da média. Se alguém tem um desempenho excepcional, é provável que o próximo desempenho 
+   544→          seja mais próximo da média — não porque a pessoa piorou, mas porque o desempenho extremo 
+   545→          envolve sorte que não se repete. Ignorar a regressão à média leva a falsas causalidades.
+   546→        </p>
+   547→
+   548→        <h2 className="text-xl font-bold mt-8 mb-3">🔗 4. Correlação não é Causalidade</h2>
+   549→        <p className="text-base leading-relaxed">
+   550→          Duas variáveis podem estar correlacionadas sem que uma cause a outra. O número de afogamentos 
+   551→          e vendas de sorvete estão correlacionados — não porque sorvete causa afogamento, mas porque 
+   552→          ambos aumentam no verão. Sempre questione se uma correlação implica causalidade ou se há uma 
+   553→          variável confundidora (neste caso, a temperatura).
+   554→        </p>
+   555→
+   556→        <h2 className="text-xl font-bold mt-8 mb-3">🔄 5. Lei dos Grandes Números Mal Compreendida</h2>
+   557→        <p className="text-base leading-relaxed">
+   558→          A lei dos grandes números diz que a média de muitos eventos converge para a probabilidade teórica. 
+   559→          Isso NÃO significa que desvios serão &quot;compensados&quot;. Se uma moeda cai 10 vezes em cara, 
+   560→          não é verdade que as próximas 10 serão coroa para &quot;equilibrar&quot;. A convergência ocorre 
+   561→          pela diluição, não pela compensação — as 10 caras extras se tornam insignificantes 
+   562→          quando divididas por milhares de lançamentos.
+   563→        </p>
+   564→
+   565→        <div className="flex gap-3 p-4 rounded-lg bg-amber-500/5 border border-amber-500/20 my-4">
+   566→          <span className="text-lg">⚠️</span>
+   567→          <div className="text-sm text-muted-foreground">A falácia do jogador é uma das armadilhas cognitivas mais perigosas. Ela nos faz acreditar que &quot;estamos devendo&quot; uma vitória após uma sequência de perdas, mas cada evento é independente. Use nosso Simulador de Probabilidades para ver isso na prática!</div>
+   568→        </div>
+   569→      </div>
+   570→    ),
+   571→  },
+   572→  'valor-esperado-matematico': {
+   573→    title: 'Valor Esperado Matemático',
+   574→    category: 'Fundamentos',
+   575→    readTime: '7 min',
+   576→    icon: Lightbulb,
+   577→    content: (
+   578→      <div className="prose prose-sm dark:prose-invert max-w-none space-y-6">
+   579→        <p className="text-base leading-relaxed">
+   580→          O valor esperado (ou esperança matemática) é um dos conceitos mais fundamentais da teoria 
+   581→          das probabilidades. Ele representa a média dos resultados possíveis de um experimento 
+   582→          aleatório, ponderada por suas probabilidades. Em termos simples: é o que você pode esperar 
+   583→          &quot;em média&quot; se repetir um experimento muitas vezes.
+   584→        </p>
+   585→
+   586→        <h2 className="text-xl font-bold mt-8 mb-3">📐 Fórmula do Valor Esperado</h2>
+   587→        <div className="p-4 rounded-lg bg-muted/30 border border-border/50">
+   588→          <p className="text-center font-mono text-lg">
+   589→            E(X) = Σ (xᵢ × P(xᵢ))
+   590→          </p>
+   591→          <p className="text-center text-sm text-muted-foreground mt-2">
+   592→            Onde xᵢ são os valores possíveis e P(xᵢ) são suas probabilidades
+   593→          </p>
+   594→        </div>
+   595→
+   596→        <h2 className="text-xl font-bold mt-8 mb-3">🧮 Exemplo Prático</h2>
+   597→        <p className="text-base leading-relaxed">
+   598→          Imagine uma aposta onde você paga R$10 para jogar. Se sair cara, ganha R$15; se sair coroa, 
+   599→          ganha R$0. O valor esperado é:
+   600→        </p>
+   601→        <div className="p-4 rounded-lg bg-muted/30 border border-border/50">
+   602→          <p className="text-center font-mono">
+   603→            E(X) = (15 × 0,5) + (0 × 0,5) = 7,50
+   604→          </p>
+   605→          <p className="text-center text-sm text-muted-foreground mt-2">
+   606→            Você paga R$10 e o valor esperado de retorno é R$7,50 → Valor esperado líquido = -R$2,50
+   607→          </p>
+   608→        </div>
+   609→        <p className="text-base leading-relaxed mt-4">
+   610→          Isso significa que, em média, a cada vez que você faz essa aposta, perde R$2,50. No curto 
+   611→          prazo você pode ganhar ou perder, mas no longo prazo o resultado converge para o valor esperado. 
+   612→          Qualquer aposta com valor esperado negativo é matematicamente desfavorável a longo prazo.
+   613→        </p>
+   614→
+   615→        <h2 className="text-xl font-bold mt-8 mb-3">💼 Aplicações do Valor Esperado</h2>
+   616→        <ul className="space-y-2 text-base text-muted-foreground">
+   617→          <li className="flex gap-2"><span className="text-neon">•</span> <strong className="text-foreground">Seguros:</strong> Prêmios são calculados com base no valor esperado de sinistros</li>
+   618→          <li className="flex gap-2"><span className="text-neon">•</span> <strong className="text-foreground">Investimentos:</strong> Retorno esperado de um ativo é seu valor esperado</li>
+   619→          <li className="flex gap-2"><span className="text-neon">•</span> <strong className="text-foreground">Decisões empresariais:</strong> Avaliar projetos pelo valor esperado de retorno</li>
+   620→          <li className="flex gap-2"><span className="text-neon">•</span> <strong className="text-foreground">Análise de risco:</strong> Comparar valor esperado com variância para decisões informadas</li>
+   621→        </ul>
+   622→
+   623→        <h2 className="text-xl font-bold mt-8 mb-3">⚖️ Valor Esperado e Variância</h2>
+   624→        <p className="text-base leading-relaxed">
+   625→          O valor esperado sozinho não conta a história completa. Duas distribuições podem ter o mesmo 
+   626→          valor esperado mas riscos muito diferentes. A variância (e o desvio padrão) complementa o 
+   627→          valor esperado, medindo a dispersão dos resultados em torno da média. Uma decisão racional 
+   628→          deve considerar tanto o valor esperado quanto o risco (variância).
+   629→        </p>
+   630→
+   631→        <div className="mt-8 p-4 rounded-lg border border-neon-blue/30 bg-neon-blue/5">
+   632→          <div className="flex items-center gap-2 mb-2">
+   633→            <Lightbulb className="h-5 w-5 text-neon-blue" />
+   634→            <h3 className="font-bold text-neon-blue">Insight Importante</h3>
+   635→          </div>
+   636→          <p className="text-sm text-muted-foreground leading-relaxed">
+   637→            O valor esperado é uma ferramenta matemática poderosa, mas não prevê resultados individuais. 
+   638→            Ele descreve o comportamento de longo prazo. No curto prazo, resultados podem se desviar 
+   639→            significativamente do valor esperado — isso é a essência da variância e da aleatoriedade.
+   640→          </p>
+   641→        </div>
+   642→      </div>
+   643→    ),
+   644→  },
+   645→  'paradoxo-monty-hall': {
+   646→    title: 'O Paradoxo de Monty Hall',
+   647→    category: 'Probabilidade',
+   648→    readTime: '6 min',
+   649→    icon: Lightbulb,
+   650→    content: (
+   651→      <div className="prose prose-sm dark:prose-invert max-w-none space-y-6">
+   652→        <p className="text-base leading-relaxed">
+   653→          O paradoxo de Monty Hall é um dos problemas de probabilidade mais contra-intuitivos já formulados. 
+   654→          Baseado no programa de TV americano &quot;Let&apos;s Make a Deal&quot; apresentado por Monty Hall, este problema 
+   655→          desafia nossa intuição sobre probabilidade de forma surpreendente.
+   656→        </p>
+   657→
+   658→        <h2 className="text-xl font-bold mt-8 mb-3">🚪 O Problema</h2>
+   659→        <p className="text-base leading-relaxed">
+   660→          Imagine que você está em um programa de TV e há 3 portas. Atrás de uma porta há um prêmio (um carro) 
+   661→          e atrás das outras duas há bodes. Você escolhe uma porta (digamos, a porta 1). O apresentador, que 
+   662→          sabe o que está atrás de cada porta, abre uma das outras portas revelando um bode (digamos, a porta 3). 
+   663→          Ele então pergunta: &quot;Você quer trocar para a porta 2?&quot;
+   664→        </p>
+   665→
+   666→        <h2 className="text-xl font-bold mt-8 mb-3">🤯 A Resposta Contra-Intuitiva</h2>
+   667→        <p className="text-base leading-relaxed">
+   668→          A maioria das pessoas acredita que, com duas portas restantes, a probabilidade é 50-50, então tanto 
+   669→          faz trocar ou não. Mas a resposta correta é: <strong className="text-foreground">você deve sempre trocar</strong>, 
+   670→          pois trocar dá 2/3 de chance de ganhar, enquanto manter dá apenas 1/3.
+   671→        </p>
+   672→
+   673→        <div className="p-4 rounded-lg bg-muted/30 border border-border/50">
+   674→          <p className="text-center font-mono text-lg">
+   675→            Manter a escolha: 1/3 ≈ 33,3% de chance de ganhar
+   676→          </p>
+   677→          <p className="text-center font-mono text-lg">
+   678→            Trocar de porta: 2/3 ≈ 66,7% de chance de ganhar
+   679→          </p>
+   680→        </div>
+   681→
+   682→        <h2 className="text-xl font-bold mt-8 mb-3">🔍 Por Que Funciona?</h2>
+   683→        <p className="text-base leading-relaxed">
+   684→          A chave está em entender que o apresentador NÃO abre uma porta aleatoriamente — ele sempre abre 
+   685→          uma porta com bode. Quando você escolhe inicialmente, há 1/3 de chance de ter escolhido o carro 
+   686→          e 2/3 de chance de ter escolhido um bode. Se escolheu o carro (1/3), trocar faz você perder. 
+   687→          Se escolheu um bode (2/3), trocar faz você ganhar, pois o apresentador já eliminou o outro bode.
+   688→        </p>
+   689→
+   690→        <h2 className="text-xl font-bold mt-8 mb-3">💯 Simulação com 100 Portas</h2>
+   691→        <p className="text-base leading-relaxed">
+   692→          Para entender melhor, imagine 100 portas: 1 carro e 99 bodes. Você escolhe uma porta (1% de chance 
+   693→          de ser o carro). O apresentador abre 98 portas com bodes, restando apenas a sua porta e mais uma. 
+   694→          Trocar? É óbvio que sim — há 99% de chance de que o carro esteja na outra porta. O mesmo princípio 
+   695→          se aplica com 3 portas, apenas com probabilidades menores.
+   696→        </p>
+   697→
+   698→        <div className="mt-8 p-4 rounded-lg border border-neon-blue/30 bg-neon-blue/5">
+   699→          <div className="flex items-center gap-2 mb-2">
+   700→            <Lightbulb className="h-5 w-5 text-neon-blue" />
+   701→            <h3 className="font-bold text-neon-blue">Lição Importante</h3>
+   702→          </div>
+   703→          <p className="text-sm text-muted-foreground leading-relaxed">
+   704→            O paradoxo de Monty Hall ilustra como informações adicionais (a ação do apresentador) mudam 
+   705→            as probabilidades. Nossa intuição frequentemente falha com probabilidade condicional — por isso 
+   706→            é tão importante usar matemática rigorosa em vez de &quot;bom senso&quot; quando lidamos com incerteza.
+   707→          </p>
+   708→        </div>
+   709→      </div>
+   710→    ),
+   711→  },
+   712→  'lei-grandes-numeros': {
+   713→    title: 'A Lei dos Grandes Números',
+   714→    category: 'Estatística',
+   715→    readTime: '8 min',
+   716→    icon: BarChart3,
+   717→    content: (
+   718→      <div className="prose prose-sm dark:prose-invert max-w-none space-y-6">
+   719→        <p className="text-base leading-relaxed">
+   720→          A Lei dos Grandes Números (LGN) é um dos teoremas mais importantes da teoria das probabilidades. 
+   721→          Ela afirma que, à medida que o número de tentativas de um experimento aleatório aumenta, a média 
+   722→          dos resultados observados converge para o valor esperado teórico. Em termos simples: quanto mais 
+   723→          você repete um experimento, mais a média se aproxima do que a teoria prevê.
+   724→        </p>
+   725→
+   726→        <h2 className="text-xl font-bold mt-8 mb-3">🪙 Exemplo com Moeda</h2>
+   727→        <p className="text-base leading-relaxed">
+   728→          Se você lançar uma moeda justa 10 vezes, pode obter 7 caras (70%). Com 100 lançamentos, talvez 
+   729→          55 caras (55%). Com 1.000 lançamentos, provavelmente algo como 505 caras (50,5%). Com 1.000.000 
+   730→          de lançamentos, a proporção será extremamente próxima de 50%. A LGN garante essa convergência.
+   731→        </p>
+   732→
+   733→        <div className="p-4 rounded-lg bg-muted/30 border border-border/50">
+   734→          <p className="text-center font-mono">
+   735→            10 lançamentos: ~70% possível<br/>
+   736→            100 lançamentos: ~55% provável<br/>
+   737→            1.000 lançamentos: ~50,5% esperado<br/>
+   738→            1.000.000 lançamentos: ~50,01% praticamente certo
+   739→          </p>
+   740→        </div>
+   741→
+   742→        <h2 className="text-xl font-bold mt-8 mb-3">🔬 LGN Fraca vs. Forte</h2>
+   743→        <div className="space-y-4">
+   744→          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+   745→            <h3 className="font-bold text-base mb-2">Lei Fraca (Convergência em Probabilidade)</h3>
+   746→            <p className="text-sm text-muted-foreground leading-relaxed">
+   747→              A LGN fraca diz que, para qualquer ε {'>'} 0, a probabilidade de |X̄ₙ - μ| {'>'} ε tende a zero 
+   748→              quando n → ∞. Ou seja, a média amostral se aproxima do valor esperado em probabilidade — 
+   749→              fica cada vez mais improvável que esteja longe do valor verdadeiro.
+   750→            </p>
+   751→          </div>
+   752→          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+   753→            <h3 className="font-bold text-base mb-2">Lei Forte (Convergência Quase Certa)</h3>
+   754→            <p className="text-sm text-muted-foreground leading-relaxed">
+   755→              A LGN forte vai além: diz que X̄ₙ converge para μ com probabilidade 1. Isso significa que 
+   756→              a média amostral quase certamente se estabiliza no valor esperado. A LGN forte implica a fraca, 
+   757→              mas não o contrário.
+   758→            </p>
+   759→          </div>
+   760→        </div>
+   761→
+   762→        <h2 className="text-xl font-bold mt-8 mb-3">🚀 Aplicações Práticas</h2>
+   763→        <ul className="space-y-2 text-base text-muted-foreground">
+   764→          <li className="flex gap-2"><span className="text-neon">•</span> <strong className="text-foreground">Seguros:</strong> Com muitos segurados, o custo médio por apólice converge para o previsto</li>
+   765→          <li className="flex gap-2"><span className="text-neon">•</span> <strong className="text-foreground">Qualidade:</strong> Amostras grandes representam melhor a população</li>
+   766→          <li className="flex gap-2"><span className="text-neon">•</span> <strong className="text-foreground">Pesquisas:</strong> Mais entrevistados = resultados mais precisos</li>
+   767→          <li className="flex gap-2"><span className="text-neon">•</span> <strong className="text-foreground">Casinos:</strong> A &quot;vantagem da casa&quot; se manifesta no longo prazo</li>
+   768→        </ul>
+   769→
+   770→        <h2 className="text-xl font-bold mt-8 mb-3">⚠️ Interpretação Equivocada Comum</h2>
+   771→        <p className="text-base leading-relaxed">
+   772→          A LGN NÃO diz que desvios serão &quot;compensados&quot;. Se uma moeda cair 10 vezes em cara, a LGN não 
+   773→          garante que as próximas 10 serão coroa. A convergência ocorre pela diluição: as 10 caras extras 
+   774→          se tornam insignificantes quando divididas por milhares de lançamentos. A moeda não tem memória — 
+   775→          cada lançamento é independente.
+   776→        </p>
+   777→
+   778→        <div className="flex gap-3 p-4 rounded-lg bg-neon/5 border border-neon/20 my-4">
+   779→          <span className="text-lg">💡</span>
+   780→          <div className="text-sm text-muted-foreground">A LGN é a base matemática que explica por que casinos sempre lucram a longo prazo. A &quot;vantagem da casa&quot; em cada aposta é pequena, mas com milhões de apostas, o resultado converge para o valor esperado — garantindo lucro para o casino.</div>
+   781→        </div>
+   782→
+   783→        <div className="mt-8 p-4 rounded-lg border border-amber-500/30 bg-amber-500/5">
+   784→          <div className="flex items-center gap-2 mb-2">
+   785→            <AlertTriangle className="h-5 w-5 text-amber-500" />
+   786→            <h3 className="font-bold text-amber-500">Atenção</h3>
+   787→          </div>
+   788→          <p className="text-sm text-muted-foreground leading-relaxed">
+   789→            Confundir a LGN com a &quot;falácia do apostador&quot; é um erro grave. A LGN descreve convergência 
+   790→            estatística no longo prazo, não compensação de desvios no curto prazo. Resultados passados 
+   791→            de eventos independentes não influenciam resultados futuros.
+   792→          </p>
+   793→        </div>
+   794→      </div>
+   795→    ),
+   796→  },
+   797→  'distribuicao-normal-gaussiana': {
+   798→    title: 'A Distribuição Normal (Gaussiana)',
+   799→    category: 'Estatística',
+   800→    readTime: '9 min',
+   801→    icon: BarChart3,
+   802→    content: (
+   803→      <div className="prose prose-sm dark:prose-invert max-w-none space-y-6">
+   804→        <p className="text-base leading-relaxed">
+   805→          A distribuição normal, também chamada de distribuição gaussiana, é a mais importante da estatística. 
+   806→          Sua forma de &quot;sino&quot; simétrico aparece naturalmente em inúmeros fenômenos: alturas de pessoas, 
+   807→          erros de medição, notas de provas, pressão arterial e muito mais. Entendê-la é essencial para 
+   808→          qualquer análise estatística.
+   809→        </p>
+   810→
+   811→        <h2 className="text-xl font-bold mt-8 mb-3">📐 Características da Distribuição Normal</h2>
+   812→        <div className="space-y-4">
+   813→          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+   814→            <h3 className="font-bold text-base mb-2">Simetria</h3>
+   815→            <p className="text-sm text-muted-foreground leading-relaxed">
+   816→              A distribuição normal é perfeitamente simétrica em torno da média. A metade esquerda é espelho 
+   817→              da metade direita. A média, mediana e moda são iguais e estão no centro da distribuição.
+   818→            </p>
+   819→          </div>
+   820→          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+   821→            <h3 className="font-bold text-base mb-2">Parâmetros: μ e σ</h3>
+   822→            <p className="text-sm text-muted-foreground leading-relaxed">
+   823→              A distribuição normal é completamente definida por dois parâmetros: a média (μ), que define 
+   824→              o centro, e o desvio padrão (σ), que define a dispersão. A notação é N(μ, σ²). 
+   825→              A distribuição padrão é N(0, 1), com média zero e desvio padrão 1.
+   826→            </p>
+   827→          </div>
+   828→        </div>
+   829→
+   830→        <h2 className="text-xl font-bold mt-8 mb-3">📊 A Regra 68-95-99,7</h2>
+   831→        <p className="text-base leading-relaxed">
+   832→          Esta é a propriedade mais útil da distribuição normal:
+   833→        </p>
+   834→        <div className="p-4 rounded-lg bg-muted/30 border border-border/50">
+   835→          <p className="text-center font-mono">
+   836→            68,27% dos dados estão entre μ-1σ e μ+1σ<br/>
+   837→            95,45% dos dados estão entre μ-2σ e μ+2σ<br/>
+   838→            99,73% dos dados estão entre μ-3σ e μ+3σ
+   839→          </p>
+   840→        </div>
+   841→        <p className="text-base leading-relaxed mt-4">
+   842→          Por exemplo, se a altura média de adultos é 170cm com desvio padrão de 10cm, então 68% das pessoas 
+   843→          têm entre 160cm e 180cm, 95% entre 150cm e 190cm, e 99,7% entre 140cm e 200cm.
+   844→        </p>
+   845→
+   846→        <h2 className="text-xl font-bold mt-8 mb-3">🌟 Teorema Central do Limite</h2>
+   847→        <p className="text-base leading-relaxed">
+   848→          O Teorema Central do Limite (TCL) explica por que a distribuição normal aparece em tantos lugares. 
+   849→          Ele afirma que a média de um grande número de variáveis aleatórias independentes, independentemente 
+   850→          de suas distribuições individuais, converge para uma distribuição normal. É por isso que a 
+   851→          distribuição normal é tão ubíqua — ela emerge naturalmente quando muitos fatores independentes 
+   852→          se combinam.
+   853→        </p>
+   854→
+   855→        <h2 className="text-xl font-bold mt-8 mb-3">📐 Pontuação Z (Z-Score)</h2>
+   856→        <p className="text-base leading-relaxed">
+   857→          A pontuação Z mede quantos desvios padrão um valor está acima ou abaixo da média. A fórmula é:
+   858→        </p>
+   859→        <Card className="bg-neon/5 border-neon/20 p-4 my-4">
+   860→          <CardContent className="p-0">
+   861→            <p className="text-center font-mono text-lg">Z = (X - μ) / σ</p>
+   862→            <p className="text-center text-sm text-muted-foreground mt-2">Onde X é o valor, μ é a média e σ é o desvio padrão</p>
+   863→          </CardContent>
+   864→        </Card>
+   865→
+   866→        <p className="text-base leading-relaxed mt-4">
+   867→          Um Z-score de 2 significa que o valor está 2 desvios padrão acima da média. Isso permite comparar 
+   868→          valores de distribuições diferentes e calcular probabilidades usando a tabela Z padrão.
+   869→        </p>
+   870→
+   871→        <div className="mt-8 p-4 rounded-lg border border-neon-blue/30 bg-neon-blue/5">
+   872→          <div className="flex items-center gap-2 mb-2">
+   873→            <Lightbulb className="h-5 w-5 text-neon-blue" />
+   874→            <h3 className="font-bold text-neon-blue">Aplicação Prática</h3>
+   875→          </div>
+   876→          <p className="text-sm text-muted-foreground leading-relaxed">
+   877→            A distribuição normal é a base de testes de hipóteses, intervalos de confiança, controle 
+   878→            estatístico de qualidade e análise de risco. Compreender seus princípios permite interpretar 
+   879→            dados e tomar decisões baseadas em evidência estatística.
+   880→          </p>
+   881→        </div>
+   882→      </div>
+   883→    ),
+   884→  },
+   885→  'introducao-teoria-jogos': {
+   886→    title: 'Introdução à Teoria dos Jogos',
+   887→    category: 'Matemática',
+   888→    readTime: '10 min',
+   889→    icon: Calculator,
+   890→    content: (
+   891→      <div className="prose prose-sm dark:prose-invert max-w-none space-y-6">
+   892→        <p className="text-base leading-relaxed">
+   893→          A teoria dos jogos é o estudo matemático de situações estratégicas, onde o resultado para cada 
+   894→          participante depende das ações de todos os outros. Desenvolvida por John von Neumann e Oskar 
+   895→          Morgenstern na década de 1940, a teoria dos jogos revolucionou a economia, a ciência política, 
+   896→          a biologia evolutiva e muitas outras áreas.
+   897→        </p>
+   898→
+   899→        <h2 className="text-xl font-bold mt-8 mb-3">🔒 O Dilema do Prisioneiro</h2>
+   900→        <p className="text-base leading-relaxed">
+   901→          O dilema do prisioneiro é o exemplo mais famoso da teoria dos jogos. Dois suspeitos são presos 
+   902→          e interrogados separadamente. Cada um pode cooperar (ficar em silêncio) ou trair (confessar). 
+   903→          Se ambos cooperarem, cada um pega 1 ano. Se ambos traírem, cada um pega 5 anos. Se um trair e 
+   904→          o outro cooperar, o traidor sai livre e o cooperador pega 10 anos.
+   905→        </p>
+   906→        <div className="p-4 rounded-lg bg-muted/30 border border-border/50">
+   907→          <table className="w-full text-sm text-center">
+   908→            <thead>
+   909→              <tr className="border-b border-border/50">
+   910→                <th className="p-2"></th>
+   911→                <th className="p-2">B Cooperar</th>
+   912→                <th className="p-2">B Trair</th>
+   913→              </tr>
+   914→            </thead>
+   915→            <tbody>
+   916→              <tr className="border-b border-border/30">
+   917→                <td className="p-2 font-semibold">A Cooperar</td>
+   918→                <td className="p-2">A: 1 ano, B: 1 ano</td>
+   919→                <td className="p-2">A: 10 anos, B: livre</td>
+   920→              </tr>
+   921→              <tr>
+   922→                <td className="p-2 font-semibold">A Trair</td>
+   923→                <td className="p-2">A: livre, B: 10 anos</td>
+   924→                <td className="p-2">A: 5 anos, B: 5 anos</td>
+   925→              </tr>
+   926→            </tbody>
+   927→          </table>
+   928→        </div>
+   929→        <p className="text-base leading-relaxed mt-4">
+   930→          O resultado racional individual (ambos traem) é pior para ambos do que se cooperassem. 
+   931→          Esse paradoxo está no coração de muitos problemas do mundo real, da política ambiental 
+   932→          às corridas armamentistas.
+   933→        </p>
+   934→
+   935→        <h2 className="text-xl font-bold mt-8 mb-3">🧠 Conceitos Fundamentais</h2>
+   936→        <div className="space-y-4">
+   937→          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+   938→            <h3 className="font-bold text-base mb-2">Equilíbrio de Nash</h3>
+   939→            <p className="text-sm text-muted-foreground leading-relaxed">
+   940→              Um equilíbrio de Nash ocorre quando nenhum jogador pode melhorar seu resultado mudando 
+   941→              sua estratégia unilateralmente. No dilema do prisioneiro, ambos traírem é o equilíbrio 
+   942→              de Nash — mesmo sendo subótimo. John Nash recebeu o Nobel de Economia por esta contribuição.
+   943→            </p>
+   944→          </div>
+   945→          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+   946→            <h3 className="font-bold text-base mb-2">Jogos de Soma Zero</h3>
+   947→            <p className="text-sm text-muted-foreground leading-relaxed">
+   948→              Em um jogo de soma zero, o ganho de um jogador é exatamente a perda do outro. Xadrez, 
+   949→              por exemplo, é um jogo de soma zero. Já negociações comerciais geralmente não são — ambos 
+   950→              podem se beneficiar (soma positiva). Identificar o tipo de jogo é crucial para escolher 
+   951→              a estratégia adequada.
+   952→            </p>
+   953→          </div>
+   954→          <div className="p-4 rounded-lg bg-muted/20 border border-border/30">
+   955→            <h3 className="font-bold text-base mb-2">Estratégia Dominante</h3>
+   956→            <p className="text-sm text-muted-foreground leading-relaxed">
+   957→              Uma estratégia dominante é aquela que produz o melhor resultado independente do que o 
+   958→              outro jogador fizer. No dilema do prisioneiro, trair é a estratégia dominante — sempre 
+   959→              produz resultado igual ou melhor que cooperar, não importa o que o outro faça.
+   960→            </p>
+   961→          </div>
+   962→        </div>
+   963→
+   964→        <h2 className="text-xl font-bold mt-8 mb-3">🌍 Aplicações no Mundo Real</h2>
+   965→        <ul className="space-y-2 text-base text-muted-foreground">
+   966→          <li className="flex gap-2"><span className="text-neon">•</span> <strong className="text-foreground">Economia:</strong> Leilões, negociação, oligopólios, regulação</li>
+   967→          <li className="flex gap-2"><span className="text-neon">•</span> <strong className="text-foreground">Biologia:</strong> Evolução, seleção natural, comportamento animal</li>
+   968→          <li className="flex gap-2"><span className="text-neon">•</span> <strong className="text-foreground">Ciência Política:</strong> Votação, negociações internacionais, dissuasão</li>
+   969→          <li className="flex gap-2"><span className="text-neon">•</span> <strong className="text-foreground">Tecnologia:</strong> Design de mecanismos, sistemas de reputação, blockchain</li>
+   970→        </ul>
+   971→
+   972→        <div className="flex gap-3 p-4 rounded-lg bg-neon/5 border border-neon/20 my-4">
+   973→          <span className="text-lg">💡</span>
+   974→          <div className="text-sm text-muted-foreground">A teoria dos jogos se aplica diretamente à gestão de risco: ao decidir quanto apostar, você está jogando um jogo contra a variância. Estratégias de cobertura (hedging) são uma forma de mudar as regras do jogo a seu favor.</div>
+   975→        </div>
+   976→
+   977→        <div className="mt-8 p-4 rounded-lg border border-neon-blue/30 bg-neon-blue/5">
+   978→          <div className="flex items-center gap-2 mb-2">
+   979→            <Lightbulb className="h-5 w-5 text-neon-blue" />
+   980→            <h3 className="font-bold text-neon-blue">Conexão com Probabilidade</h3>
+   981→          </div>
+   982→          <p className="text-sm text-muted-foreground leading-relaxed">
+   983→            A teoria dos jogos se conecta profundamente com probabilidade quando os jogadores usam 
+   984→            estratégias mistas (escolhendo ações com certas probabilidades). O Minimax de von Neumann 
+   985→            garante que todo jogo de soma zero com dois jogadores tem um equilíbrio em estratégias mistas.
+   986→          </p>
+   987→        </div>
+   988→      </div>
+   989→    ),
+   990→  },
+   991→}
+   992→
+   993→export function ArticleContent({ slug }: { slug: string }) {
+   994→  const article = articles[slug]
+   995→  
+   996→  if (!article) {
+   997→    return (
+   998→      <div className="text-center py-16">
+   999→        <h1 className="text-2xl font-bold mb-4">Artigo não encontrado</h1>
+  1000→        <p className="text-muted-foreground mb-6">O artigo que você procura não existe.</p>
+  1001→        <Link href="/artigos" className="text-neon hover:underline flex items-center justify-center gap-2">
+  1002→          <ArrowLeft className="h-4 w-4" /> Voltar para artigos
+  1003→        </Link>
+  1004→      </div>
+  1005→    )
+  1006→  }
+  1007→
+  1008→  const Icon = article.icon
+  1009→  const ctaLinks = ctaLinksMap[slug] || []
+  1010→  const articleUrl = typeof window !== 'undefined' ? window.location.href : ''
+  1011→
+  1012→  return (
+  1013→    <div className="space-y-6">
+  1014→      {/* Back link */}
+  1015→      <Link href="/artigos" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-neon transition-colors">
+  1016→        <ArrowLeft className="h-4 w-4" /> Voltar para artigos
+  1017→      </Link>
+  1018→
+  1019→      {/* Article header */}
+  1020→      <div className="space-y-3">
+  1021→        <div className="flex items-center gap-2">
+  1022→          <Badge variant="outline" className="text-xs bg-neon/10 text-neon border-neon/20">
+  1023→            {article.category}
+  1024→          </Badge>
+  1025→          <span className="text-xs text-muted-foreground">{article.readTime} de leitura</span>
+  1026→        </div>
+  1027→        <div className="flex items-center gap-3">
+  1028→          <div className="p-2.5 rounded-lg bg-muted/30">
+  1029→            <Icon className="h-6 w-6 text-neon" />
+  1030→          </div>
+  1031→          <h1 className="text-2xl sm:text-3xl font-bold">{article.title}</h1>
+  1032→        </div>
+  1033→        <div className="flex items-center justify-between flex-wrap gap-2">
+  1034→          <div className="text-xs text-muted-foreground">
+  1035→            Atualizado em {new Date().toLocaleDateString('pt-BR', { year: 'numeric', month: 'long', day: 'numeric' })}
+  1036→          </div>
+  1037→          <ShareButtons url={articleUrl} title={article.title} />
+  1038→        </div>
+  1039→      </div>
+  1040→
+  1041→      {/* Separator */}
+  1042→      <hr className="border-border/50" />
+  1043→
+  1044→      {/* Article content */}
+  1045→      {article.content}
+  1046→
+  1047→      {/* Ad — Mid article */}
+  1048→      <AdskeeperWidget widgetId="2056707" className="my-6" />
+  1049→
+  1050→      {/* CTA — Experimente na Prática */}
+  1051→      <ArticleCTA links={ctaLinks} />
+  1052→    </div>
+  1053→  )
+  1054→}
+  1055→

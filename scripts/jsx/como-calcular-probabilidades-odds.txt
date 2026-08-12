@@ -1,0 +1,113 @@
+<div className="prose prose-sm dark:prose-invert max-w-none space-y-6">
+        <p className="text-base leading-relaxed">
+          Converter odds em probabilidades é uma das habilidades mais essenciais para qualquer apostador que deseja tomar decisões
+          informadas. As odds oferecidas pelas casas de apostas não são apenas números — elas representam a estimativa
+          de probabilidade de um evento, ajustada pela margem de lucro da casa. Entender essa conversão permite que você identifique
+          quando uma odd está sobrevalorizada ou subvalorizada, abrindo espaço para encontrar value bets e melhorar seus resultados a longo prazo.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Odds Decimais para Probabilidade</h2>
+        <p className="text-base leading-relaxed">
+          As odds decimais (formato mais comum no Brasil) são as mais fáceis de converter. A fórmula é direta: basta dividir 1 pelo
+          valor da odd decimal. O resultado será a probabilidade implícita, ou seja, o que a casa de apostas estima como chance do evento ocorrer.
+          Por exemplo, uma odd de 2.50 implica uma probabilidade de 1/2.50 = 0.40, ou seja, 40% de chance.
+        </p>
+        <div className="p-4 rounded-lg bg-muted/30 border border-border/50">
+          <p className="text-center font-mono text-lg">
+            Probabilidade (%) = (1 / Odd Decimal) x 100
+          </p>
+        </div>
+        <p className="text-base leading-relaxed">
+          Veja um exemplo prático com um jogo de futebol. Se Flamengo tem odd de 1.80 para vencer, a probabilidade implícita é 1/1.80 = 55,6%.
+          Se o empate está em 3.50, a probabilidade implícita é 28,6%. E se o Grêmio está em 4.50, a probabilidade implícita é 22,2%.
+          Some essas três probabilidades: 55,6 + 28,6 + 22,2 = 106,4%. Esse valor acima de 100% é a margem de lucro da casa de apostas,
+          também conhecida como overround ou vig. No Brasil, essa margem costuma ficar entre 5% e 12%, dependendo da casa e do mercado.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Odds Fracionárias (Britânicas)</h2>
+        <p className="text-base leading-relaxed">
+          As odds fracionárias são populares no Reino Unido e em sites internacionais. Elas são expressas como uma fração (por exemplo, 5/2,
+          que se lê "cinco para dois"). Para converter para probabilidade, use a fórmula: o denominador dividido pela soma do numerador com o denominador.
+          No exemplo 5/2: 2 / (5 + 2) = 2/7 = 28,6%. Para converter para odd decimal, basta somar 1 ao resultado da fração: 5/2 + 1 = 3.50.
+        </p>
+        <div className="p-4 rounded-lg bg-muted/30 border border-border/50">
+          <p className="text-center font-mono text-lg">
+            Prob. (%) = denominador / (numerador + denominador) x 100<br />
+            Odd Decimal = (numerador / denominador) + 1
+          </p>
+        </div>
+        <p className="text-base leading-relaxed">
+          Tabela de conversão rápida: 1/1 (Evens) = 2.00 decimal = 50%; 2/1 = 3.00 = 33,3%; 5/2 = 3.50 = 28,6%;
+          10/1 = 11.00 = 9,1%; 1/2 = 1.50 = 66,7%; 4/6 = 1.67 = 60%. Quanto menor a fração, maior a probabilidade implícita.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Odds Americanas (+/-)</h2>
+        <p className="text-base leading-relaxed">
+          As odds americanas usam sinais positivos e negativos. Odds positivas (como +200) indicam quanto você lucra em uma aposta de 100 unidades.
+          Odds negativas (como -150) indicam quanto precisa apostar para lucrar 100 unidades. Para odds positivas:
+          probabilidade = 100 / (odd + 100). Para odds negativas: probabilidade = |odd| / (|odd| + 100).
+        </p>
+        <div className="p-4 rounded-lg bg-muted/30 border border-border/50">
+          <p className="text-center font-mono text-lg">
+            Odd +: Prob. (%) = 100 / (odd + 100) x 100<br />
+            Odd -: Prob. (%) = |odd| / (|odd| + 100) x 100
+          </p>
+        </div>
+        <p className="text-base leading-relaxed">
+          Exemplos: +200 = 33,3%; -150 = 60%; +500 = 16,7%; -400 = 80%.
+          Odds acima de +300 representam eventos improváveis, odds abaixo de -200 indicam fortes favoritos.
+          Plataformas como DraftKings e BetMGM usam esse formato — saber converter é fundamental.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Removendo a Margem da Casa (Overround)</h2>
+        <p className="text-base leading-relaxed">
+          A soma das probabilidades implícitas sempre ultrapassa 100% por causa da margem da casa.
+          Para obter as probabilidades reais, divida cada probabilidade individual pela soma total.
+        </p>
+        <div className="p-4 rounded-lg bg-muted/30 border border-border/50">
+          <p className="text-center font-mono text-lg">
+            Prob. real (%) = (Prob. implícita / Soma total) x 100
+          </p>
+        </div>
+        <p className="text-base leading-relaxed">
+          No exemplo do Flamengo vs Grêmio (soma 106,4%): probabilidade real do Flamengo = 55,6/106,4 = 52,3%;
+          empate = 28,6/106,4 = 26,9%; Grêmio = 22,2/106,4 = 20,9%. Se você estima que o Flamengo tem 60% de chance
+          e a odd paga como se fossem 52,3%, você encontrou uma value bet.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Probabilidade Implícita vs Probabilidade Real</h2>
+        <p className="text-base leading-relaxed">
+          A probabilidade implícita é o que a casa de apostas "diz" sobre um evento. A probabilidade real é o que você estima.
+          Se sua estimativa é maior que a implícita, a odd está subvalorizada — é uma oportunidade.
+          Na prática, isso exige um modelo próprio — análise estatística, modelos de Poisson ou Elo ratings.
+          Use nosso Simulador de Probabilidades para testar diferentes cenários.
+        </p>
+
+        <h2 className="text-xl font-bold mt-8 mb-3">Tabela de Conversão Rápida</h2>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm border-collapse">
+            <thead>
+              <tr className="border-b border-border/50">
+                <th className="text-left p-2 font-bold">Decimal</th>
+                <th className="text-left p-2 font-bold">Fracionária</th>
+                <th className="text-left p-2 font-bold">Americana</th>
+                <th className="text-left p-2 font-bold">Prob. Implícita</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-b border-border/30"><td className="p-2">1.10</td><td className="p-2">1/10</td><td className="p-2">-1000</td><td className="p-2">90,9%</td></tr>
+              <tr className="border-b border-border/30"><td className="p-2">1.50</td><td className="p-2">1/2</td><td className="p-2">-200</td><td className="p-2">66,7%</td></tr>
+              <tr className="border-b border-border/30"><td className="p-2">2.00</td><td className="p-2">1/1 (Evens)</td><td className="p-2">+100</td><td className="p-2">50,0%</td></tr>
+              <tr className="border-b border-border/30"><td className="p-2">2.50</td><td className="p-2">3/2</td><td className="p-2">+150</td><td className="p-2">40,0%</td></tr>
+              <tr className="border-b border-border/30"><td className="p-2">3.00</td><td className="p-2">2/1</td><td className="p-2">+200</td><td className="p-2">33,3%</td></tr>
+              <tr className="border-b border-border/30"><td className="p-2">5.00</td><td className="p-2">4/1</td><td className="p-2">+400</td><td className="p-2">20,0%</td></tr>
+              <tr><td className="p-2">10.00</td><td className="p-2">9/1</td><td className="p-2">+900</td><td className="p-2">10,0%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="text-base leading-relaxed">
+          Guarde esta tabela como referência. Com o tempo, você desenvolve a intuição para converter mentalmente,
+          mas nos primeiros meses é essencial ter essa referência. Quanto mais pratica a conversão, mais rápido
+          identifica quando uma odd oferece valor real ou quando a margem absorve o lucro.
+        </p>
+      </div>
