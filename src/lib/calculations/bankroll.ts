@@ -35,8 +35,8 @@ export interface BankrollResult {
 
 const RISK_LEVELS: RiskLevel[] = [
   { name: 'Conservador', percent: 1, color: 'text-green-500' },
-  { name: 'Moderado', percent: 2, color: 'text-yellow-500' },
-  { name: 'Agressivo', percent: 5, color: 'text-red-500' },
+  { name: 'Moderado', percent: 1.5, color: 'text-yellow-500' },
+  { name: 'Agressivo', percent: 2, color: 'text-red-500' },
 ]
 
 export function calculateBankroll(

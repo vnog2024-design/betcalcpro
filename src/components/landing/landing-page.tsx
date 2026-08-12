@@ -1,21 +1,31 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { toolInfo, toolHref, type ToolPage } from '@/store/app-store'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { HeroVisual } from '@/components/shared/hero-visual'
+import dynamic from 'next/dynamic'
+const HeroVisual = dynamic(
+  () => import('@/components/shared/hero-visual').then(m => ({ default: m.HeroVisual })),
+  { ssr: false }
+)
 import { AdskeeperWidget } from '@/components/ads/adskeeper-widget'
+import { trackToolOpen, trackNewsletterSubscribe } from '@/lib/analytics'
 import {
   TrendingUp, BarChart3, Calculator, Sparkles,
   ArrowRight, ChevronRight, Target, Coins, AlertTriangle,
-  Search, Percent, Shield, ShieldCheck, BookOpen, Lightbulb, RefreshCw
+  Search, Percent, Shield, ShieldCheck, BookOpen, Lightbulb, RefreshCw,
+  Mail, Loader2, CheckCircle2,
 } from 'lucide-react'
+import { useToast } from '@/hooks/use-toast'
 
-const allTools: { id: ToolPage; icon: React.ComponentType<{ className?: string }>; color: string }[] = [
-  { id: 'martingale', icon: TrendingUp, color: 'neon' },
-  { id: 'bankroll', icon: Coins, color: 'neon-blue' },
+type ToolBadge = { label: string; variant: 'neon' | 'neon-blue' | 'amber' | 'purple' } | null
+
+const allTools: { id: ToolPage; icon: React.ComponentType<{ className?: string }>; color: string; badge?: ToolBadge }[] = [
+  { id: 'martingale', icon: TrendingUp, color: 'neon', badge: { label: 'Popular', variant: 'neon' } },
+  { id: 'bankroll', icon: Coins, color: 'neon-blue', badge: { label: 'Recomendado', variant: 'neon-blue' } },
   { id: 'fibonacci', icon: BarChart3, color: 'purple-500' },
   { id: 'soros', icon: Coins, color: 'neon' },
   { id: 'masaniello', icon: Calculator, color: 'neon-blue' },
@@ -26,6 +36,13 @@ const allTools: { id: ToolPage; icon: React.ComponentType<{ className?: string }
   { id: 'probability-simulator', icon: Percent, color: 'amber-500' },
   { id: 'strategy-generator', icon: Sparkles, color: 'purple-500' },
 ]
+
+const badgeStyles: Record<string, string> = {
+  'neon': 'bg-neon/15 text-neon border-neon/30',
+  'neon-blue': 'bg-neon-blue/15 text-neon-blue border-neon-blue/30',
+  'amber': 'bg-amber-500/15 text-amber-500 border-amber-500/30',
+  'purple': 'bg-purple-500/15 text-purple-500 border-purple-500/30',
+}
 
 const colorMap: Record<string, { bg: string; text: string; border: string }> = {
   'neon': { bg: 'bg-neon/10', text: 'text-neon', border: 'border-neon/20' },
@@ -42,6 +59,83 @@ const featuredArticles = [
 ]
 
 const HERO_TITLE_HTML = 'Ferramentas de <span class="gradient-neon-text">Probabilidade</span> e <span class="gradient-neon-text">Gestão de Risco</span>'
+
+function NewsletterSection() {
+  const [email, setEmail] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState(false)
+  const { toast } = useToast()
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!email.includes('@') || email.length < 5) {
+      toast({ title: 'E-mail inválido', description: 'Digite um e-mail válido.', variant: 'destructive' })
+      return
+    }
+    setLoading(true)
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, source: 'landing' }),
+      })
+      if (res.ok) {
+        setSuccess(true)
+        trackNewsletterSubscribe('landing')
+        toast({ title: 'Inscrito!', description: 'Você receberá novidades do BetCalc Pro.' })
+      } else {
+        toast({ title: 'Erro', description: 'Tente novamente mais tarde.', variant: 'destructive' })
+      }
+    } catch {
+      toast({ title: 'Erro de conexão', description: 'Verifique sua internet.', variant: 'destructive' })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (success) {
+    return (
+      <section className="rounded-2xl border border-neon/20 bg-neon/5 p-8 sm:p-10 text-center">
+        <CheckCircle2 className="h-10 w-10 text-neon mx-auto mb-3" />
+        <h2 className="text-xl font-bold mb-2">Inscrição confirmada!</h2>
+        <p className="text-sm text-muted-foreground max-w-md mx-auto">
+          Você receberá novidades sobre novas ferramentas e artigos educacionais.
+        </p>
+      </section>
+    )
+  }
+
+  return (
+    <section className="rounded-2xl border border-neon-blue/20 bg-neon-blue/5 p-8 sm:p-10">
+      <div className="max-w-xl mx-auto text-center">
+        <div className="inline-flex p-2.5 rounded-lg bg-neon-blue/10 mb-4">
+          <Mail className="h-6 w-6 text-neon-blue" />
+        </div>
+        <h2 className="text-xl sm:text-2xl font-bold mb-2">Fique por dentro das novidades</h2>
+        <p className="text-sm text-muted-foreground mb-6">
+          Receba atualizações sobre novas ferramentas, artigos e melhorias diretamente no seu e-mail.
+        </p>
+        <form onSubmit={handleSubmit} className="flex gap-2 max-w-md mx-auto">
+          <input
+            type="email"
+            placeholder="seu@email.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="flex-1 px-4 py-2.5 rounded-lg bg-background border border-border text-sm focus:outline-none focus:ring-2 focus:ring-neon-blue/50"
+            required
+            disabled={loading}
+          />
+          <Button type="submit" disabled={loading} className="bg-neon-blue hover:bg-neon-blue/80 text-black font-bold shrink-0">
+            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Inscrever-se'}
+          </Button>
+        </form>
+        <p className="text-[11px] text-muted-foreground/60 mt-3">
+          Sem spam. Cancele quando quiser.
+        </p>
+      </div>
+    </section>
+  )
+}
 
 export function LandingPage() {
   const router = useRouter()
@@ -115,13 +209,18 @@ export function LandingPage() {
             const color = colorMap[tool.color]
             const href = toolHref[tool.id] || `/${tool.id}`
             return (
-              <Card key={tool.id} className={`card-hover border-border/50 bg-card/50 backdrop-blur cursor-pointer group h-full ${color.border}`} onClick={() => router.push(href)}>
+              <Card key={tool.id} className={`card-hover border-border/50 bg-card/50 backdrop-blur cursor-pointer group h-full ${color.border}`} onClick={() => { trackToolOpen(info.name); router.push(href) }}>
                 <CardContent className="p-5 flex flex-col h-full">
                   <div className="flex items-center gap-3 mb-3">
                     <div className={`inline-flex p-2.5 rounded-lg ${color.bg}`}>
                       <tool.icon className={`h-5 w-5 ${color.text}`} />
                     </div>
-                    <h3 className="text-lg font-bold group-hover:text-neon transition-colors">{info.name}</h3>
+                    <h3 className="text-lg font-bold group-hover:text-neon transition-colors flex-1">{info.name}</h3>
+                    {tool.badge && (
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold border shrink-0 ${badgeStyles[tool.badge.variant]}`}>
+                        {tool.badge.label}
+                      </span>
+                    )}
                   </div>
                   <p className="text-sm text-muted-foreground leading-relaxed flex-1">{info.description}</p>
                   <div className="flex items-center gap-1 mt-3 text-sm text-neon font-medium">
@@ -148,13 +247,18 @@ export function LandingPage() {
             const color = colorMap[tool.color]
             const href = toolHref[tool.id] || `/${tool.id}`
             return (
-              <Card key={tool.id} className={`card-hover border-border/50 bg-card/50 backdrop-blur cursor-pointer group h-full ${color.border}`} onClick={() => router.push(href)}>
+              <Card key={tool.id} className={`card-hover border-border/50 bg-card/50 backdrop-blur cursor-pointer group h-full ${color.border}`} onClick={() => { trackToolOpen(info.name); router.push(href) }}>
                 <CardContent className="p-5 flex flex-col h-full">
                   <div className="flex items-center gap-3 mb-3">
                     <div className={`inline-flex p-2.5 rounded-lg ${color.bg}`}>
                       <tool.icon className={`h-5 w-5 ${color.text}`} />
                     </div>
-                    <h3 className="text-lg font-bold group-hover:text-neon transition-colors">{info.name}</h3>
+                    <h3 className="text-lg font-bold group-hover:text-neon transition-colors flex-1">{info.name}</h3>
+                    {tool.badge && (
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold border shrink-0 ${badgeStyles[tool.badge.variant]}`}>
+                        {tool.badge.label}
+                      </span>
+                    )}
                   </div>
                   <p className="text-sm text-muted-foreground leading-relaxed flex-1">{info.description}</p>
                   <div className="flex items-center gap-1 mt-3 text-sm text-neon font-medium">
@@ -262,6 +366,9 @@ export function LandingPage() {
           </Card>
         </div>
       </section>
+
+      {/* Newsletter Section */}
+      <NewsletterSection />
 
       {/* Mobile-only Widget */}
       <AdskeeperWidget widgetId="2056705" className="mb-6 lg:hidden" />

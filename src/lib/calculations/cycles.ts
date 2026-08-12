@@ -60,7 +60,7 @@ export function calculateCycles(
     let cycleInvested = 0
     let lastBet = currentBet
 
-    for (let g = 0; g < galesPerCycle; g++) {
+    for (let g = 0; g <= galesPerCycle; g++) {
       cycleInvested += currentBet
       const potentialReturn = currentBet * payout
       const totalInvested = cycleInvested + totalLossFromPrevCycles

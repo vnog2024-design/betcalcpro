@@ -221,20 +221,20 @@ describe('Bankroll Calculator', () => {
     expect(conservative.betsBeforeBust).toBe(20)      // 200 / 10
   })
 
-  it('moderate (2%): betSize = 2% of bankroll', () => {
+  it('moderate (1.5%): betSize = 1.5% of bankroll', () => {
     const result = calculateBankroll(1000, 2, 10, 20)
     expect(result).not.toBeNull()
     const moderate = result!.results.find((r) => r.riskLevel.name === 'Moderado')!
-    expect(moderate.betSize).toBe(20)  // 1000 * 0.02
-    expect(moderate.betsBeforeBust).toBe(10) // 200 / 20
+    expect(moderate.betSize).toBe(15)  // 1000 * 0.015
+    expect(moderate.betsBeforeBust).toBe(Math.floor(200 / 15)) // 13
   })
 
-  it('aggressive (5%): betSize = 5% of bankroll', () => {
+  it('aggressive (2%): betSize = 2% of bankroll', () => {
     const result = calculateBankroll(1000, 2, 10, 20)
     expect(result).not.toBeNull()
     const aggressive = result!.results.find((r) => r.riskLevel.name === 'Agressivo')!
-    expect(aggressive.betSize).toBe(50)  // 1000 * 0.05
-    expect(aggressive.betsBeforeBust).toBe(4)   // 200 / 50
+    expect(aggressive.betSize).toBe(20)  // 1000 * 0.02
+    expect(aggressive.betsBeforeBust).toBe(10)   // 200 / 20
   })
 
   it('custom risk percentage', () => {
@@ -539,37 +539,41 @@ describe('Cycles Calculator', () => {
     expect(groups.length).toBe(4)
   })
 
-  it('each cycle has correct number of gales', () => {
+  it('each cycle has correct number of gales (entrada + N gales)', () => {
     const groups = calculateCycles(10, 2, 2, 3, 2, 2)
+    // galesPerCycle=3 → loop g=0,1,2,3 → 4 steps (entrada + 3 gales)
     groups.forEach((g) => {
-      expect(g.gales.length).toBe(3)
+      expect(g.gales.length).toBe(4)
     })
   })
 
   it('bet doubles within a cycle (multiplier=2)', () => {
     const groups = calculateCycles(10, 2, 2, 3, 2, 2)
-    // Cycle 1
+    // Cycle 1: 4 steps (entrada + 3 gales)
     expect(groups[0].gales[0].bet).toBe(10)
     expect(groups[0].gales[1].bet).toBe(20)
     expect(groups[0].gales[2].bet).toBe(40)
+    expect(groups[0].gales[3].bet).toBe(80)
   })
 
   it('next cycle entry = last bet * cycleMultiplier', () => {
     const groups = calculateCycles(10, 2, 2, 3, 2, 2)
-    // Last bet of cycle 1 = 40, cycleMultiplier = 2 → next = 80
-    expect(groups[0].nextEntryBet).toBe(80)
-    // Cycle 2 starts with 80
-    expect(groups[1].gales[0].bet).toBe(80)
+    // Last bet of cycle 1 = 80 (4th step), cycleMultiplier = 2 → next = 160
+    expect(groups[0].nextEntryBet).toBe(160)
+    // Cycle 2 starts with 160
+    expect(groups[1].gales[0].bet).toBe(160)
   })
 
   it('totalInvested includes losses from previous cycles', () => {
     const groups = calculateCycles(10, 2, 2, 2, 2, 2)
-    // Cycle 1: invested = 10 + 20 = 30, totalInvested = 30
+    // galesPerCycle=2 → 3 steps per cycle (entrada + 2 gales)
+    // Cycle 1: invested = 10 + 20 + 40 = 70
     expect(groups[0].gales[0].totalInvested).toBe(10)
     expect(groups[0].gales[1].totalInvested).toBe(30)
-    // Cycle 2: invested = 40 + 80 = 120, totalInvested = 120 + 30 = 150
-    expect(groups[1].gales[0].totalInvested).toBe(40 + 30)
-    expect(groups[1].gales[1].totalInvested).toBe(40 + 80 + 30)
+    expect(groups[0].gales[2].totalInvested).toBe(70)
+    // Cycle 1 cycleLoss = 70, cycle 2 starts at 80 (lastBet * mult = 40 * 2)
+    // Cycle 2: gales[0] bet=80, totalInvested = 80 + 70 = 150
+    expect(groups[1].gales[0].totalInvested).toBe(80 + 70)
   })
 
   describe('minCycleMultiplier', () => {

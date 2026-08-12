@@ -41,6 +41,8 @@ export function Header() {
             <img 
               src="/logo-icon.png" 
               alt="BetCalc Pro" 
+              width={36}
+              height={36}
               className="h-9 w-9 rounded-lg object-cover"
             />
             <div className="hidden sm:block">

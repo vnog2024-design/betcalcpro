@@ -10,10 +10,12 @@ import { DisclaimerBar } from '@/components/shared/disclaimer-bar'
 import { Toaster } from '@/components/ui/toaster'
 import { AdskeeperWidget } from '@/components/ads/adskeeper-widget'
 import { useAppStore } from '@/store/app-store'
+import { useAchievementToasts } from '@/hooks/use-achievement-toasts'
 import { useEffect } from 'react'
 
 export function ToolPageLayout({ children }: { children: React.ReactNode }) {
   const { sidebarOpen, setSidebarOpen, colorTheme, theme } = useAppStore()
+  useAchievementToasts()
 
   useEffect(() => {
     document.documentElement.setAttribute('data-color-theme', colorTheme)

@@ -150,7 +150,11 @@ export default function RootLayout({
                   }).catch(function() {});
                 });
                 navigator.serviceWorker.addEventListener('controllerchange', function() {
-                  window.location.reload();
+                  if ('requestIdleCallback' in window) {
+                    requestIdleCallback(function() { window.location.reload(); });
+                  } else {
+                    setTimeout(function() { window.location.reload(); }, 2000);
+                  }
                 });
               }
             })();
@@ -169,10 +173,18 @@ export default function RootLayout({
             __html: `
               (function() {
                 try {
-                  var stored = JSON.parse(localStorage.getItem('betcalc-storage'));
-                  var state = stored && stored.state ? stored.state : {};
-                  var theme = state.theme || 'dark';
-                  var colorTheme = state.colorTheme || 'neon-green';
+                  // Read only theme/colorTheme — avoid parsing the full Zustand store
+                  var theme = 'dark';
+                  var colorTheme = 'neon-green';
+                  try {
+                    var raw = localStorage.getItem('betcalc-storage');
+                    if (raw) {
+                      var tIdx = raw.indexOf('"theme":"');
+                      if (tIdx > -1) { theme = raw.substring(tIdx + 9, raw.indexOf('"', tIdx + 9)) || 'dark'; }
+                      var cIdx = raw.indexOf('"colorTheme":"');
+                      if (cIdx > -1) { colorTheme = raw.substring(cIdx + 14, raw.indexOf('"', cIdx + 14)) || 'neon-green'; }
+                    }
+                  } catch(e) {}
 
                   window.dataLayer = window.dataLayer || [];
                   function gtag(){dataLayer.push(arguments);}

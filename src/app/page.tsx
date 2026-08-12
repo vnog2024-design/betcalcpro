@@ -12,10 +12,12 @@ import { DisclaimerBar } from '@/components/shared/disclaimer-bar'
 import { UpdateDetector } from '@/components/shared/update-detector'
 import { Toaster } from '@/components/ui/toaster'
 import { useAppStore } from '@/store/app-store'
+import { useAchievementToasts } from '@/hooks/use-achievement-toasts'
 import { useEffect } from 'react'
 
 export default function Home() {
   const { sidebarOpen, setSidebarOpen, colorTheme, theme } = useAppStore()
+  useAchievementToasts()
 
   useEffect(() => {
     document.documentElement.setAttribute('data-color-theme', colorTheme)

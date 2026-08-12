@@ -1,10 +1,30 @@
 'use client'
 
 import { AlertTriangle, X } from 'lucide-react'
-import { useState } from 'react'
+import { useSyncExternalStore } from 'react'
+
+const DISCLAIMER_KEY = 'betcalc-disclaimer-dismissed'
+
+function subscribeToStorage(cb: () => void) {
+  window.addEventListener('storage', cb)
+  return () => window.removeEventListener('storage', cb)
+}
+
+function getSnapshot() {
+  return localStorage.getItem(DISCLAIMER_KEY) === 'true'
+}
+
+function getServerSnapshot() {
+  return false
+}
 
 export function DisclaimerBar() {
-  const [dismissed, setDismissed] = useState(false)
+  const dismissed = useSyncExternalStore(subscribeToStorage, getSnapshot, getServerSnapshot)
+
+  const handleDismiss = () => {
+    localStorage.setItem(DISCLAIMER_KEY, 'true')
+    window.dispatchEvent(new StorageEvent('storage', { key: DISCLAIMER_KEY }))
+  }
 
   if (dismissed) return null
 
@@ -16,7 +36,7 @@ export function DisclaimerBar() {
           Ferramentas educacionais de probabilidade e gestão de risco. Não garantem resultados. +18 anos.
         </span>
         <button
-          onClick={() => setDismissed(true)}
+          onClick={handleDismiss}
           className="ml-2 hover:text-amber-500 transition-colors"
           aria-label="Fechar aviso"
         >
